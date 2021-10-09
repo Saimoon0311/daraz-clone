@@ -108,14 +108,20 @@ return AsyncStorage.clear();
 }
 
 export function setUserData(data) {
+// data = JSON.stringify(data);
 data = JSON.stringify(data);
-console.log("dataaa==>>",data)
-return AsyncStorage.setItem('userData', data);
+	return AsyncStorage.setItem('userData', data);
+
 
 }
 
 export async function getUserData() {
-    console.log("dataaa= get =>>",data)
+    // return new Promise((resolve, reject) => {
+	// 	AsyncStorage.getItem('userData').then(data => {
+	// 		resolve(JSON.parse(data));
+	// 	});
+	// });
+    // console.log("dataaa= get =>>",data)
 return new Promise((resolve, reject) => {
 AsyncStorage.getItem('userData').then(data => {
 resolve(JSON.parse(data));

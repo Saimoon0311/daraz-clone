@@ -31,21 +31,19 @@ import FlashMessage from "react-native-flash-message";
 import { Provider } from 'react-redux';
 import store from './resources/redux/store';
 import { getUserData } from './resources/utils/utils';
+import { saveUserData } from './resources/redux/action/auth';
 
 
 
 function App() {
   useEffect(()=>{
-    (
-      async()=>{
+    (async()=>{
       const userData = await getUserData()
       console.log("user data App.js",userData)
-    //   if(!!userData){
-    //     saveUserData(userData)
-    //   }  
-    })
-    // ();
-      
+      if(!!userData){
+        saveUserData(userData)
+      }  
+    })();
   },[])
   return (
     <Provider store={store} > 

@@ -20,7 +20,7 @@ export default function Login() {
                  showMessage({
                      type:"danger",
                      icon:"danger",
-                     message:"Please enter yor name"
+                     message:"Please enter yor email"
                  })
              )
          } else if(password==""){
@@ -64,14 +64,14 @@ export default function Login() {
                     <TextInput label="Password" style={styles.te} selectionColor="#FF7E33" secureTextEntry={true} onChangeText={(password) => updateState({password})} />
                 </View>
                 <TouchableOpacity>
-                    <Text style={{ paddingTop: 36.5, marginLeft: "auto", color: "#B64400", fontSize: 14, fontWeight: "bold" }} >Forget Your Password?</Text>
+                    <Text style={{ paddingTop: 36.5,color: "#B64400", fontSize: 14, fontWeight: "bold",textAlign:"center" }} >Forget Your Password?</Text>
                 </TouchableOpacity>
                 <View>
                     <TouchableOpacity style={styles.but} onPress={loginss} >
                         <View style={{ marginLeft: 20, justifyContent: "center" }}>
                             <Ionicons name="mail" size={18} color={"white"} />
                         </View>
-                        <View style={{ justifyContent: "center", marginLeft: 107 }} >
+                        <View style={{ justifyContent: "center", marginLeft: 90 }} >
                             <Text style={{ fontSize: 18, textAlign: "center", color: "white", fontWeight: "bold" }} >Login</Text>
                         </View>
                     </TouchableOpacity>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     but: {
         flexDirection: "row",
         marginLeft: 10,
-        width: 334,
+        width: 290,
         backgroundColor: "#FF7E33",
         height: 41,
         marginTop: 30,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     buts: {
         flexDirection: "row",
         marginLeft: 10,
-        width: 334,
+        width: 290,
         backgroundColor: "#1873EB",
         height: 41,
         marginTop: 30,

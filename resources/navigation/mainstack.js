@@ -6,10 +6,10 @@ import order from "../screens/order"
 import setting from "../screens/setting"
 
 
-export default function (Stack){
+export default function (Stack,options){
     return(
         <>
-        <Stack.Screen  name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen  name="Deal" component={Deal} />
         <Stack.Screen  name="cate" component={cate} />
         <Stack.Screen  name="order" component={order} />

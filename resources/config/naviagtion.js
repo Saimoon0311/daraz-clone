@@ -7,6 +7,14 @@ import MyTabs from './topbarnaviagtion';
 import mainstack from '../navigation/mainstack';
 import { useSelector } from 'react-redux';
 // import userData from "../redux/reducer/auth"
+import Home from "../screens/home"
+import Deal from "../screens/deal"
+import cate from "../screens/catagery"
+import order from "../screens/order"
+import setting from "../screens/setting"
+import MybottomTabs from './bottomtabnavigaton';
+import Details from '../screens/productdetails';
+
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
 
@@ -19,13 +27,17 @@ export default function Navigation() {
         <Stack.Navigator
             screenOptions={({
                 headerTitleAlign: "center",
-                // headerShown: false
+                headerShown: false
             })}   
         >
             {/*  */}
-           {!! userData && userData.id? mainstack(Stack):      
+           {!! userData && userData.id?
+               <Stack.Screen  name="MybottomTabs" component={MybottomTabs} />
+           :
+           <>      
         <Stack.Screen options={{
             title: 'Sign In',
+            headerShown:true,
             headerStyle: {
                 backgroundColor: '#FFDDC9',
 
@@ -39,8 +51,9 @@ export default function Navigation() {
 
             },
         }} name="MyTabs" component={MyTabs} />
-        
+        </>
         } 
+        <Stack.Screen name="Details" component={Details}  />
            
         </Stack.Navigator>
     );

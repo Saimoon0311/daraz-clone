@@ -24,7 +24,7 @@ export default function Signup() {
             showMessage({
                 type:"danger",
                 icon:"danger",
-                message:"Please Enter Your Name"
+                message:"Please Enter The correct Email"
             })
           }
         else if(email===null){
@@ -52,6 +52,11 @@ export default function Signup() {
                 phone_number
 
             })
+            setEmail(""),
+            setConfirm(""),
+            setPassword(""),
+            setPhone_number(""),
+            setUsername("")
             console.log("res=== ",res)
            showMessage({
                type:"success",
@@ -127,7 +132,7 @@ export default function Signup() {
                         <View style={{ marginLeft: 20, justifyContent: "center" }}>
                             <Ionicons name="mail" size={18} color={"white"} />
                         </View>
-                        <View style={{ justifyContent: "center", marginLeft: 75 }} >
+                        <View style={{ justifyContent: "center", marginLeft: 60 }} >
                             <Text style={{ fontSize: 18, textAlign: "center", color: "white", fontWeight: "bold" }} >Create Account</Text>
                         </View>
                     </TouchableOpacity>
@@ -135,7 +140,7 @@ export default function Signup() {
                         <View style={{ marginLeft: 20, justifyContent: "center" }}>
                             <Ionicons name="logo-facebook" size={18} color={"white"} />
                         </View>
-                        <View style={{ justifyContent: "center", marginLeft: 42 }} >
+                        <View style={{ justifyContent: "center", marginLeft: 35 }} >
                             <Text style={{ fontSize: 18, textAlign: "center", color: "white", fontWeight: "bold" }} >Connect With Facebook</Text>
                         </View>
                     </TouchableOpacity>
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     but: {
         flexDirection: "row",
         marginLeft: 10,
-        width: 334,
+        width: 290,
         backgroundColor: "#FF7E33",
         height: 41,
         marginTop: 30,
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     buts: {
         flexDirection: "row",
         marginLeft: 10,
-        width: 334,
+        width: 290,
         backgroundColor: "#1873EB",
         height: 41,
         marginTop: 30,
