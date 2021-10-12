@@ -24,7 +24,7 @@ function MybottomTabs() {
           headerShown: false,
           tabBarHideOnKeyboard:true,
           tabBarActiveTintColor:"#512500",
-          tabBarInactiveTintColor:"#919191",
+          tabBarInactiveTintColor:"#FFDDC9",
           swipeEnabled:true,
           animationEnabled:true,
           tabBarActiveBackgroundColor:"#FFDDC9",

@@ -18,7 +18,7 @@ export default function Home({navigation}) {
                 <TouchableOpacity>
                     <Ionicons name="search" size={30} color="#512500" />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate("Cart")} >
                     <Ionicons name="cart" size={30} color="#512500" />
                 </TouchableOpacity>
             </View>

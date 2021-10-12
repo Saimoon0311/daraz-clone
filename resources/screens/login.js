@@ -14,6 +14,7 @@ export default function Login() {
     })
     const {email,password} =state
      const updateState =(data) =>setState (()=> ({...state,...data}))
+     const [isShow,setisShow] =useState(false)
      const loginss =async()=>{
          if (email=="") {
              return(
@@ -62,6 +63,13 @@ export default function Login() {
                     <TextInput label="Email" style={styles.te}  onChangeText={(email) => updateState({email})} />
                     <Text style={{ marginBottom: 30.4 }}></Text>
                     <TextInput label="Password" style={styles.te} selectionColor="#FF7E33" secureTextEntry={true} onChangeText={(password) => updateState({password})} />
+                    {/* <TouchableOpacity onPress={() =>setisShow({ isShow: !isShow })}>
+            {isShow ? (
+              <Ionicons active name="eye" size={25} color="grey" />
+            ) : (
+              <Ionicons active name="eye-off" size={25} color="grey" />
+            )}
+          </TouchableOpacity> */}
                 </View>
                 <TouchableOpacity>
                     <Text style={{ paddingTop: 36.5,color: "#B64400", fontSize: 14, fontWeight: "bold",textAlign:"center" }} >Forget Your Password?</Text>

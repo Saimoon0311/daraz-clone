@@ -14,6 +14,7 @@ import order from "../screens/order"
 import setting from "../screens/setting"
 import MybottomTabs from './bottomtabnavigaton';
 import Details from '../screens/productdetails';
+import Cart from '../screens/cart';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ export default function Navigation() {
         </>
         } 
         <Stack.Screen name="Details" component={Details}  />
+        <Stack.Screen name="Cart" component={Cart}  />
            
         </Stack.Navigator>
     );

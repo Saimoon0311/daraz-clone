@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList ,ActivityIndicator} from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GETPRODUCT } from "../config/url";
+import { GETPRODUCT, Images_API } from "../config/url";
 import { VStack, Box, Divider } from 'native-base';
-
 export default function Alldata(prop,{navigation}){
     // const da = ()=>{
     //     prop.detailss()
@@ -14,7 +13,7 @@ const [data, setData] = useState();
 useEffect(() => {
     fetch(GETPRODUCT)
         .then((response) => response.json())
-        .then((json) => setData(json))
+        .then((json) => setData(json[0]))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
 })
@@ -32,7 +31,7 @@ return (
                                 <ScrollView  showsHorizontalScrollIndicator={false} >
                                 <TouchableOpacity  onPress={()=>prop.detailss(item)}>
                     <View style={{justifyContent:"center",alignItems:"center",borderRadius:18,backgroundColor:"#F3F5F7",marginRight:10}} >
-                     {/* <Image style={{width:172,height:125,borderRadius:20}} source={{uri:`https://test-urls.com/elitedesignhub/moyen-express/public/storage/public/products/${item.images[0].name}`}} /> */}
+                     <Image style={{width:172,height:125,borderRadius:20}} source={{uri:`${Images_API}/${item.images[0].name}`}} />
                      <Text></Text>
                      <Text style={{color:"#512500",fontSize:14,fontWeight:"bold"}} >{item.name}</Text>
                     <Text></Text>
