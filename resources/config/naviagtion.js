@@ -1,20 +1,20 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from "../screens/login"
-import Signup from '../screens/signup';
+import Login from "../screens/Login/login"
+import Signup from '../screens/Signup/signup';
 import MyTabs from './topbarnaviagtion';
 import mainstack from '../navigation/mainstack';
 import { useSelector } from 'react-redux';
 // import userData from "../redux/reducer/auth"
 import Home from "../screens/home"
-import Deal from "../screens/deal"
-import cate from "../screens/catagery"
-import order from "../screens/order"
-import setting from "../screens/setting"
+import Deal from "../screens/Deal/deal"
+import cate from "../screens/Catergory/catagery"
+import order from "../screens/Order/order"
+import setting from "../screens/Setting/setting"
 import MybottomTabs from './bottomtabnavigaton';
-import Details from '../screens/productdetails';
-import Cart from '../screens/cart';
+import Details from '../screens/Product details/productdetails';
+import Cart from '../screens/Cart/cart';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();

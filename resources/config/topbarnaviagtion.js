@@ -1,8 +1,8 @@
 
 import React from "react"
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Signup from "../screens/signup";
-import Login from "../screens/login";
+import Signup from "../screens/Signup/signup";
+import Login from "../screens/Login/login";
 import { style } from "styled-system";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 

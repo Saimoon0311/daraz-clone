@@ -7,3 +7,4 @@ export const LOGIN = getApi('login-api?email=testvendor@gmail.com&password=passw
 export const SIGNUP = getApi('sing-up-api')
 export const GETPRODUCT = getApi('get-product')
 export const CART = getApi('get-cart-api')
+export const testCART = getApi('get-cart-api-test')

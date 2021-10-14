@@ -1,11 +1,12 @@
 
 import React,{useState} from "react"
 import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView} from "react-native"
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
 import { color } from "styled-system";
-import { Images_API } from "../config/url";
+import { Images_API } from "../../config/url";
 
 export default function Details ({ route, navigation }){
     const item = route.params;
@@ -37,7 +38,7 @@ export default function Details ({ route, navigation }){
       renderItem={({ item }) => {
           return(
 
-              <Image source={{uri:`${Images_API}/${item.name}`}} style={{width:320,height:250,marginRight:20}} />
+              <Image source={{uri:`${Images_API}/${item.name}`}} style={styles.imm} />
           )
       }}
    />
@@ -56,10 +57,23 @@ export default function Details ({ route, navigation }){
         <View style={[styles.box,{marginBottom:60}]} >
         <Text style={{color:"#512500",fontSize:12,fontWeight:"bold"}} >Choose Your Location</Text>
         </View>
-
-
+        
         </View>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
         </ScrollView>
+        <View style={{ position: "absolute", bottom: 80, alignSelf: "center"}} >
+        <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
+          <TouchableOpacity style={{ backgroundColor: "#E9691D", width: wp("85%"), height: hp("7%"), alignItems: "center", justifyContent: "center", borderRadius: 10 }} >
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <Text style={{ color: "white", fontSize: 20,  fontWeight: "bold" }} >Add To Cart</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+      </View> 
  </View>
     )
 }
@@ -82,16 +96,12 @@ const styles = StyleSheet.create({
     },
     container: {
         borderWidth: 0,
-        borderBottomWidth:1,
-        // borderColor: '#CECECE',
-        // // width: 250,
-        // // height: 50,
-        // alignSelf: 'center',
-        // justifyContent: 'space-between',
-        // alignItems: 'center',
-        // flexDirection: 'row',
-        // marginTop: 30,
-        // padding: 5,
+      },
+      imm:{
+        width:wp("90%"),
+        height:hp("40%"),
+        marginRight:20,
+        borderRadius:20
       }
 })
 

@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native"
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GETPRODUCT } from "../config/url";
 import {NativeBaseProvider,Box,Center} from "native-base"
 import Alldata from "../data/alldata";
 
 export default function Home({navigation}) {
+    const [data,setData]=useState()
+    const [isLoading, setLoading] = useState(true);
     const detailss = (item)=> {
         navigation.navigate("Details",item)
     }
+    useEffect(() => {
+        fetch(GETPRODUCT)
+            .then((response) => response.json())
+            .then((json) => setData(json[0]) ,console.log(17,data))
+            .catch((error) => console.error(17,error))
+            .finally(() => setLoading(false));
+    },[])
     return (
         <View style={{ margin: 37 }} >
             <View  >
@@ -29,7 +39,7 @@ export default function Home({navigation}) {
                 </Text>
                 {/* <View> */}
                 <NativeBaseProvider>
-                   <Alldata detailss={detailss} />
+                   <Alldata detailss={detailss} data={data} isLoading={isLoading} />
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>
@@ -40,7 +50,7 @@ export default function Home({navigation}) {
                    Apparels
                 </Text>
                    <NativeBaseProvider>
-                   <Alldata/>
+                   <Alldata detailss={detailss} data={data} isLoading={isLoading}/>
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>
@@ -51,7 +61,7 @@ export default function Home({navigation}) {
                     Top sellers
                 </Text>
                    <NativeBaseProvider>
-                   <Alldata/>
+                   <Alldata detailss={detailss} data={data} isLoading={isLoading}/>
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>
@@ -62,7 +72,7 @@ export default function Home({navigation}) {
                     Top sellers
                 </Text>
                    <NativeBaseProvider>
-                   <Alldata/>
+                   <Alldata detailss={detailss} data={data} isLoading={isLoading}/>
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>
@@ -95,6 +105,8 @@ const styles = StyleSheet.create({
         height:23,
         justifyContent:"center",
         alignItems:"center",
-        borderRadius:12
-    }
+        borderRadius:12,
+        borderWidth:0.1,
+        
+    },
 })

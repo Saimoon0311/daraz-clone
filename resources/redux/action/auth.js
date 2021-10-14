@@ -32,6 +32,7 @@ export const saveUserData = (data) => {
 
 export function login(data) {
     return new Promise((resolve, reject) => {
+        
         return apiPost(LOGIN, data).then((res) => {
             if (res[0].message) {
                 data =res[0].user

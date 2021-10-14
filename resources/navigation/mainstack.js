@@ -1,9 +1,9 @@
 import React from "react"
 import Home from "../screens/home"
-import Deal from "../screens/deal"
-import cate from "../screens/catagery"
-import order from "../screens/order"
-import setting from "../screens/setting"
+import Deal from "../screens/Deal/deal"
+import cate from "../screens/Catergory/catagery"
+import order from "../screens/Order/order"
+import setting from "../screens/Setting/setting"
 
 
 export default function (Stack,options){

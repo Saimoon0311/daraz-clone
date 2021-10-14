@@ -28,7 +28,7 @@ headers = {
 // ...getTokenHeader,
 ...headers
 };
-if (method === 'get' || method === 'delete') {
+if (method === 'get' || method === 'delete' || method === 'post') {
 data = {
 ...requestOptions,
 ...data,
