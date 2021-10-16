@@ -39,7 +39,8 @@ export default function Login() {
         icon: 'danger',
         message: 'Please enter you password',
       });
-    } else {
+    }
+     else {
       // setTimeout( async () => {
       //   loadingButton.showLoading(false);
       //   try {
@@ -58,22 +59,59 @@ export default function Login() {
       //     showMessage(error.message);
       //   }
       // }, 2000);
+    //   if (res[0].message=="Email not found") {
+    //     showMessage({
+    //       type:"danger",
+    //       icon:"danger",
+    //       message:"Email is incorectt"
+    //   })
+    //   }else if(res[0].message=="Password is incorrect"){
+    //     showMessage({
+    //         type:"danger",
+    //         icon:"danger",
+    //         message:"Password is incorect"
+    //     })
+    // } else {
+        
       try {
-        const res = await action.login({
-          email,
-          password,
-        });
-        console.log('res=== ', res);
-        showMessage({
-          type: 'success',
-          icon: 'success',
-          message: 'User Login Success',
-        });
-      } catch (error) {
+      
+          
+          const res = await action.login({
+            email,
+            password,
+          })
+          console.log('res=== 83', res);
+          if(res[0].message=="Email not found"){
+              showMessage({
+                type:"danger",
+                icon:"danger",
+                message:res[0].message
+              })
+               console.log('res=== 86 ', res);
+          } else if(res[0].message=="Password is incorrect"){
+            showMessage({
+              type:"danger",
+              icon:"danger",
+              message:res[0].message
+            })
+             console.log('res=== 86 ', res);
+        }
+          else{
+
+            showMessage({
+              type: 'success',
+              icon: 'success',
+              message: 'User Login Success',
+            });
+          
+          }
+          }
+      catch (error) {
         console.log('errot', error);
         showMessage(error.message);
       }
     }
+      // }
   };
   return (
     <ScrollView>
@@ -96,16 +134,9 @@ export default function Login() {
             label="Password"
             style={styles.te}
             selectionColor="#FF7E33"
-            secureTextEntry={isShow ? true : false}
+            secureTextEntry={true}
             onChangeText={password => updateState({password})}
           />
-          <TouchableOpacity onPress={() => setisShow({isShow: !isShow})}>
-            {isShow ? (
-              <Ionicons active name="eye" size={25} color="grey" />
-            ) : (
-              <Ionicons active name="eye-off" size={25} color="grey" />
-            )}
-          </TouchableOpacity>
         </View>
         <TouchableOpacity>
           <Text
@@ -127,7 +158,7 @@ export default function Login() {
             <View style={{justifyContent: 'center', marginLeft: 90}}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: hp("3%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',
@@ -140,10 +171,10 @@ export default function Login() {
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
             </View>
-            <View style={{justifyContent: 'center', marginLeft: 42}}>
+            <View style={{justifyContent: 'center', marginLeft: 20}}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: hp("3%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',
@@ -193,6 +224,9 @@ const styles = StyleSheet.create({
   ty: {
     marginTop: 31,
   },
+  input:{
+    flexDirection:"row"
+  }
 });
 
 // try {

@@ -12,7 +12,7 @@ export default function Home({navigation}) {
     const detailss = (item)=> {
         navigation.navigate("Details",item)
     }
-    useEffect(() => {
+    useEffect(async() => {
         fetch(GETPRODUCT)
             .then((response) => response.json())
             .then((json) => setData(json[0]) ,console.log(17,data))
@@ -39,7 +39,7 @@ export default function Home({navigation}) {
                 </Text>
                 {/* <View> */}
                 <NativeBaseProvider>
-                   <Alldata detailss={detailss} data={data} isLoading={isLoading} />
+                   <Alldata detailss={detailss} data={data} isLoading={isLoading}  />
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>

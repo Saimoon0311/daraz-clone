@@ -18,7 +18,6 @@ import {
 import cate from '../screens/Catergory/catagery';
 import Order from '../screens/Order/order';
 import setting from '../screens/Setting/setting';
-
 const Tab = createBottomTabNavigator();
 
 function MybottomTabs() {
@@ -33,8 +32,8 @@ function MybottomTabs() {
         animationEnabled: true,
         tabBarActiveBackgroundColor: '#FFDDC9',
         tabBarInactiveBackgroundColor: '#FFDDC9',
-        tabBarIcon: {},
-      })}>
+      })}
+      >
       <Tab.Screen
         name="Home"
         options={{

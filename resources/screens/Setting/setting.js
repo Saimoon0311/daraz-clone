@@ -5,6 +5,7 @@ import actions from '../../redux/action';
 import {getUserData} from '../../utils/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { showMessage } from "react-native-flash-message";
 
 export default function setting ({navigation})  {
     const [names,setNames] =useState()
@@ -33,7 +34,12 @@ export default function setting ({navigation})  {
         
         setTimeout(() => {
             actions.logout()
-            
+           showMessage({
+            type:"success",
+            icon:"auto",
+            message:"Your are successfully logout!",
+            backgroundColor:"#E9691D"
+           })
         }, 100);
 
     }
@@ -74,12 +80,12 @@ export default function setting ({navigation})  {
 <Text style={styles.we} >Welcome</Text>
 <Text style={[styles.we,{color:"white",textDecorationLine:"underline"}]}>{names}</Text>
 </View>
-<ScrollView contentContainerStyle={{paddingBottom:120}} >
+<ScrollView contentContainerStyle={{paddingBottom:hp("20%")}} >
 <View style={styles.vacc} >
 <Text style={styles.acc} >My Moyen Account</Text>
 <View style={styles.box}>
 <TouchableOpacity style={styles.shadow} >
- <Ionicons name="albums-outline"  size={20} style={{marginRight:20}}/>
+ <Ionicons name="albums-outline" size={20} style={{marginRight:20}}/>
 <Text style={styles.orte} >Orders</Text>
 </TouchableOpacity>
 </View>
@@ -120,7 +126,7 @@ export default function setting ({navigation})  {
 </View>
 <Text></Text>
 <TouchableOpacity onPress={onLogoutAlert} style={[styles.shadows]}>
-    <Text  style={[styles.orte,{fontSize:30}]} >LogOut</Text>
+    <Text  style={[styles.orte,{fontSize:30,textDecorationLine:'underline'}]} >LogOut</Text>
     <Ionicons name="log-out-outline" color="#512500"  size={40}/>
 </TouchableOpacity>
 </View>

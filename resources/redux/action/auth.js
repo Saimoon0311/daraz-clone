@@ -2,6 +2,7 @@ import { apiPost, setUserData,clearUserData } from "../../utils/utils";
 import {LOGIN,SIGNUP} from "../../config/url"
 import store from "../store";
 import types from "../type"
+import { showMessage } from "react-native-flash-message";
 const {dispatch} = store
 
 export const saveUserData = (data) => {
@@ -34,14 +35,15 @@ export function login(data) {
     return new Promise((resolve, reject) => {
         
         return apiPost(LOGIN, data).then((res) => {
-            if (res[0].message) {
-                data =res[0].user
-                setUserData(data).then(() => {
-                    resolve(res)
-                    saveUserData(data)
-                });
-                return
-            }
+            if (res[0].status==1) {
+              data =res[0].user
+setUserData(data).then(() => {
+    resolve(res)
+    saveUserData(data)
+})
+               return
+}
+
             resolve(res)
         }).catch((error) => {
             reject(error)
@@ -73,3 +75,13 @@ export function logout(){
     dispatch({type: types.CLEAR_REDUX_STATE})
     clearUserData()
 }
+
+
+
+
+// data =res[0].user
+// setUserData(data).then(() => {
+//     resolve(res)
+//     saveUserData(data)
+// });
+// return
