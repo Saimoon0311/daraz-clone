@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native"
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList,Alert } from "react-native"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GETPRODUCT } from "../config/url";
 import {NativeBaseProvider,Box,Center} from "native-base"
 import Alldata from "../data/alldata";
+import NetInfo from "@react-native-community/netinfo";
 
 export default function Home({navigation}) {
     const [data,setData]=useState()
@@ -13,11 +14,28 @@ export default function Home({navigation}) {
         navigation.navigate("Details",item)
     }
     useEffect(async() => {
-        fetch(GETPRODUCT)
-            .then((response) => response.json())
-            .then((json) => setData(json[0]) ,console.log(17,data))
-            .catch((error) => console.error(17,error))
-            .finally(() => setLoading(false));
+
+        let netFlag     =   0;
+        await NetInfo.fetch("wifi").then(async state =>  {
+            if (state.isConnected)  {
+                netFlag     =   1;
+                fetch(GETPRODUCT)
+                .then((response) => response.json())
+                .then((json) => setData(json[0]) ,console.log(17,data))
+                .catch((error) => console.error(17,error))
+                .finally(() => setLoading(false));    
+            }
+        
+      else{
+        const title = 'Wifi Status';
+        const message = 'Warning, Please Check Your Internet Connection...';
+        const emptyArrayButtons = [];
+        const alertOptions = {
+          cancelable: true,
+        };
+        Alert.alert(title, message, emptyArrayButtons, alertOptions);
+    }
+        })
     },[])
     return (
         <View style={{ margin: 37 }} >

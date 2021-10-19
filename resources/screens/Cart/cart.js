@@ -37,18 +37,17 @@ export default function Cart({navigation}) {
     })
       .then(async response => await response.json())
       .then(json => {
-        if(json.message=="Cart is empty"){
+        if (json.message == 'Cart is empty') {
           //  setCartdata("null")
-           setLoading(false)
-        }else{
-
+          setLoading(false);
+        } else {
           setCartdata(json);
         }
       })
       .finally(() => setLoading(false));
   }, []);
 
-  const onLogoutAlert = id => {
+  const onDeleteAlert = id => {
     Alert.alert(
       'Warning ! ',
       'Are you sure, yout want to delete this Item ! ',
@@ -85,9 +84,9 @@ export default function Cart({navigation}) {
           justifyContent: 'space-between',
           backgroundColor: '#FFDDC9',
           shadowColor: '#000',
-          shadowOffset: { width: 1, height: 1 },
+          shadowOffset: {width: 1, height: 1},
           shadowOpacity: 10,
-          shadowRadius: 6,  
+          shadowRadius: 6,
           elevation: 5,
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -112,159 +111,155 @@ export default function Cart({navigation}) {
       </View>
       <View style={{paddingBottom: 150}}>
         <ScrollView>
-          {isLoading  ? (
+          {isLoading ? (
             <ActivityIndicator
               size={100}
               color="#512500"
               style={{marginTop: 100}}
             />
-            ) : !cartdata ? 
-            <View style={styles.imm} >
-              {/* <Image  source={require("../../images/Ellipse14.png")} style={styles.imm} /> */}
-              <Ionicons  name="cart" color="#E9691D" size={80} />
-              <Text style={styles.tee} >You have no items in the cart</Text>
+          ) : !cartdata ? (
+            <View style={styles.imm}>
+              <Ionicons name="cart" color="#E9691D" size={80} />
+              <Text style={styles.tee}>You have no items in the cart</Text>
               <Text>Add items you want to shop</Text>
-              <TouchableOpacity style={styles.maior} onPress={()=>navigation.goBack()} >
-              <Text style={styles.or}>Continue Shopping</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.maior}
+                onPress={() => navigation.goBack()}>
+                <Text style={styles.or}>Continue Shopping</Text>
+              </TouchableOpacity>
             </View>
-            :
-           ( <>
-            <FlatList
-              data={cartdata}
-              keyExtractor={item => item.key}
-              showsVerticalScrollIndicator={false}
-              renderItem={({item}) => {
-                return (
-                  <View style={styles.box}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Cartdetails', item)}>
+          ) : (
+            <>
+              <FlatList
+                data={cartdata}
+                keyExtractor={item => item.key}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => {
+                  return (
+                    <View style={styles.box}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('Cartdetails', item)
+                        }>
+                        <View style={{flexDirection: 'row'}}>
+                          <Image
+                            source={{
+                              uri: `${Images_API}/${item.get_products.images[0].name}`,
+                            }}
+                            style={{width: wp('30%'), height: hp('15%')}}
+                          />
+                          <View style={{marginTop: 20}}>
+                            <Text
+                              numberOfLines={2}
+                              style={{
+                                width: wp('40%'),
+                                fontSize: 14,
+                                color: '#B64400',
+                                marginLeft: 10,
+                              }}>
+                              {item.get_products.description}
+                            </Text>
+                            <Text></Text>
+                            <Text
+                              style={{
+                                width: wp('95%'),
+                                fontSize: 18,
+                                color: '#B64400',
+                                fontWeight: 'bold',
+                                marginLeft: 10,
+                              }}>
+                              Rs : {item.get_products.price}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                      <View
+                        style={{flex: 1, height: 1, backgroundColor: 'black'}}
+                      />
                       <View style={{flexDirection: 'row'}}>
-                        <Image
-                          source={{
-                            uri: `${Images_API}/${item.get_products.images[0].name}`,
-                          }}
-                          style={{width: wp('30%'), height: hp('15%')}}
-                        />
-                        <View style={{marginTop: 20}}>
+                        <TouchableOpacity>
+                          <Ionicons
+                            style={{paddingTop: 13}}
+                            name="heart-outline"
+                            color="#B64400"
+                            size={20}
+                          />
+                        </TouchableOpacity>
+                        <View style={styles.verticleLine}></View>
+                        <TouchableOpacity
+                          style={{flexDirection: 'row'}}
+                          onPress={() => onDeleteAlert(item.id)}>
+                          <Ionicons
+                            style={{paddingTop: 13, marginRight: 10}}
+                            name="trash"
+                            size={20}
+                            color="#B64400"
+                          />
+                          <Text style={styles.remov}>Remove</Text>
+                        </TouchableOpacity>
+                        <View
+                          style={{
+                            marginLeft: 'auto',
+                            justifyContent: 'space-between',
+                            flexDirection: 'row',
+                          }}>
+                          <TouchableOpacity>
+                            <Ionicons
+                              name="remove-circle-sharp"
+                              size={20}
+                              color="#512500"
+                              style={{paddingTop: 13, marginRight: 10}}
+                            />
+                          </TouchableOpacity>
                           <Text
-                            numberOfLines={2}
                             style={{
-                              width: wp('40%'),
+                              paddingTop: 13,
+                              marginRight: 10,
                               fontSize: 14,
-                              color: '#B64400',
-                              marginLeft: 10,
-                            }}>
-                            {item.get_products.description}
-                          </Text>
-                          <Text></Text>
-                          <Text
-                            style={{
-                              width: wp('95%'),
-                              fontSize: 18,
-                              color: '#B64400',
+                              color: '#EEB08B',
+                              textDecorationLine: 'underline',
                               fontWeight: 'bold',
-                              marginLeft: 10,
                             }}>
-                            Rs : {item.get_products.price}
+                            {' '}
+                            {item.quantity}{' '}
                           </Text>
+                          <TouchableOpacity>
+                            <Ionicons
+                              name="add-circle-sharp"
+                              size={20}
+                              color="#512500"
+                              style={{paddingTop: 13, marginRight: 10}}
+                            />
+                          </TouchableOpacity>
                         </View>
                       </View>
-                    </TouchableOpacity>
-                    <View
-                      style={{flex: 1, height: 1, backgroundColor: 'black'}}
-                    />
-                    <View style={{flexDirection: 'row'}}>
-                      <TouchableOpacity>
-                        <Ionicons
-                          style={{paddingTop: 13}}
-                          name="heart-outline"
-                          color="#B64400"
-                          size={20}
-                        />
-                      </TouchableOpacity>
-                      <View style={styles.verticleLine}></View>
-                      <TouchableOpacity
-                        style={{flexDirection: 'row'}}
-                        onPress={() => onLogoutAlert(item.id)}>
-                        <Ionicons
-                          style={{paddingTop: 13, marginRight: 10}}
-                          name="trash"
-                          size={20}
-                          color="#B64400"
-                        />
-                        <Text
-                          style={{
-                            color: '#B64400',
-                            fontSize: 16,
-                            fontWeight: 'bold',
-                            paddingTop: 13,
-                          }}>
-                          Remove
-                        </Text>
-                      </TouchableOpacity>
-                      {/* <View style={{flex: 1, height: 1, backgroundColor: 'black' ,flexDirection:"row"}} /> */}
-                      <View
-                        style={{
-                          marginLeft: 'auto',
-                          justifyContent: 'space-between',
-                          flexDirection: 'row',
-                        }}>
-                        <TouchableOpacity>
-                          <Ionicons
-                            name="remove-circle-sharp"
-                            size={20}
-                            color="#512500"
-                            style={{paddingTop: 13, marginRight: 10}}
-                          />
-                        </TouchableOpacity>
-                        <Text
-                          style={{
-                            paddingTop: 13,
-                            marginRight: 10,
-                            fontSize: 14,
-                            color: '#EEB08B',
-                            textDecorationLine: 'underline',
-                            fontWeight: 'bold',
-                          }}>
-                          {' '}
-                          {item.quantity}{' '}
-                        </Text>
-                        <TouchableOpacity>
-                          <Ionicons
-                            name="add-circle-sharp"
-                            size={20}
-                            color="#512500"
-                            style={{paddingTop: 13, marginRight: 10}}
-                          />
-                        </TouchableOpacity>
-                      </View>
                     </View>
-                  </View>
-                );
-              }}
-            />
-             <View style={styles.box}>
-            <View style={{flexDirection: 'row'}}>
-              <Text>Subtotal</Text>
-              <Text style={styles.ty}>7890</Text>
-            </View>
-            <Text></Text>
-            <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
-            <Text></Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{color: '#B64400', fontWeight: 'bold'}}>Total</Text>
-              <Text style={[styles.ty, {color: '#B64400', fontWeight: 'bold'}]}>
-                7890
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.maior}>
-              <Text style={styles.or}>Complete your order</Text>
-            </TouchableOpacity>
-          </View>
+                  );
+                }}
+              />
+              <View style={styles.box}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text>Subtotal</Text>
+                  <Text style={styles.ty}>7890</Text>
+                </View>
+                <Text></Text>
+                <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                <Text></Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{color: '#B64400', fontWeight: 'bold'}}>
+                    Total
+                  </Text>
+                  <Text
+                    style={[styles.ty, {color: '#B64400', fontWeight: 'bold'}]}>
+                    7890
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.maior}>
+                  <Text style={styles.or}>Complete your order</Text>
+                </TouchableOpacity>
+              </View>
             </>
           )}
-         
         </ScrollView>
       </View>
     </View>
@@ -320,15 +315,21 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
-  imm:{
-    justifyContent:"center",
-    alignContent:"center",
-    alignItems:"center",
-    marginTop:hp('20%')
+  imm: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('20%'),
   },
-  tee:{
-    color:"#512500",
-    fontSize:20,
-    marginBottom:10
-  }
+  tee: {
+    color: '#512500',
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  remov: {
+    color: '#B64400',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingTop: 10,
+  },
 });

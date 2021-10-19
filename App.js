@@ -33,6 +33,7 @@ import store from './resources/redux/store';
 import {getUserData} from './resources/utils/utils';
 import {saveUserData} from './resources/redux/action/auth';
 
+import NetInfo from "@react-native-community/netinfo";
 // export default class App extends Component
 // {
 //    constructor(){
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function App() {
+function App({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   Hide_Splash_Screen = () => {
     // setState({
@@ -117,7 +118,7 @@ function App() {
     setIsVisible(false);
   };
 
-  useEffect(() => {
+  useEffect( async () => {
     (async () => {
       const userData = await getUserData();
       console.log('user data App.js', userData);

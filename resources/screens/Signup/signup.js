@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import NetInfo from "@react-native-community/netinfo";
 import {
   View,
   Text,
@@ -22,91 +23,93 @@ export default function Signup() {
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();
   const savedata = async () => {
-    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (username === null) {
-      showMessage({
-        type: 'warning',
-        icon: 'warning',
-        message: 'Please Enter Your Name',
-      });
-    } else if (!email || reg.test(email) === false) {
-      showMessage({
-        type: 'warning',
-        icon: 'warning',
-        message: 'Please Enter The correct Email',
-      });
-    } else if (email === null) {
-      Alert.alert('Warning!', 'Please Enter Email');
-    } else if (password === null) {
-      Alert.alert('Warning!', 'Please Enter Password');
-    } else if (phone_number === null) {
-      Alert.alert('Warning!', 'Please Enter Your Number');
-    } else if (password != confirm) {
-      Alert.alert('Warning!', 'Please Enter The Correct Password');
-    } else if (password.length <= 5) {
-      Alert.alert('Warning!', 'The password must be at least 6 characters');
-    } else {
-      // try {
-      //     const res = await action.signup({
-      //         email,
-      //         password,
-      //         username,
-      //         phone_number
-
-      //     })
-      //     setEmail(""),
-      //     setConfirm(""),
-      //     setPassword(""),
-      //     setPhone_number(""),
-      //     setUsername("")
-      //     console.log("res=== ",res)
-      //    showMessage({
-      //        type:"success",
-      //        icon:"success",
-      //        message:"Register Successfully Created...!!!"
-      //    })
-      // } catch (error) {
-      //     console.log("errot",error)
-      //     showMessage(error.message)
-
-      //    }
-
-      fetch(SIGNUP, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-          phone_number,
-        }),
-      })
-        // console.log("res=== ",res)
-        .then(response => response.json())
-        .then(responseData => {
-          responseData[0]
-            ? showMessage({
-                type: 'success',
-                icon: 'auto',
-                message: responseData[0].message,
-              })
-            : showMessage({
+    let netFlag     =   0;
+    await NetInfo.fetch("wifi").then( async state =>  {
+        if (state.isConnected)  {
+            netFlag     =   1;
+            const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (username === null) {
+              showMessage({
                 type: 'warning',
-                icon: 'auto',
-                message: responseData.email,
+                icon: 'warning',
+                message: 'Please Enter Your Name',
               });
-          setEmail('');
-          setUsername('');
-          setPhone_number('');
-          setPassword('');
-          setConfirm('');
-          console.log('jijijijjijjiji', responseData);
-        })
-        .done();
-    }
+            } else if (!email || reg.test(email) === false) {
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'Please Enter The correct Email',
+              });
+            } else if (email === null) {
+              Alert.alert('Warning!', 'Please Enter Email');
+            } else if (password === null) {
+              Alert.alert('Warning!', 'Please Enter Password');
+            } else if (phone_number === null) {
+              Alert.alert('Warning!', 'Please Enter Your Number');
+            } else if (password != confirm) {
+              Alert.alert('Warning!', 'Please Enter The Correct Password');
+            } else if (password.length <= 5) {
+              Alert.alert('Warning!', 'The password must be at least 6 characters');
+            } else {
+        
+              fetch(SIGNUP, {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  username,
+                  email,
+                  password,
+                  phone_number,
+                }),
+              })
+                // console.log("res=== ",res)
+                .then(response => response.json())
+                .then(responseData => {
+                  responseData[0]
+                    ? showMessage({
+                        type: 'success',
+                        icon: 'auto',
+                        message: responseData[0].message,
+                      })
+                    : showMessage({
+                        type: 'warning',
+                        icon: 'auto',
+                        message: responseData.email,
+                      });
+                  setEmail('');
+                  setUsername('');
+                  setPhone_number('');
+                  setPassword('');
+                  setConfirm('');
+                  console.log('jijijijjijjiji', responseData);
+                })
+                .done();
+            }
+      
+          }
+      
+      
+          else{
+            const title = 'Wifi Status';
+            const message = 'Warning, Please Check Your Internet Connection...';
+            const emptyArrayButtons = [];
+            const alertOptions = {
+              cancelable: true,
+            };
+            Alert.alert(title, message, emptyArrayButtons, alertOptions);
+        }
+      
+      
+      })
+
+
+
+
+
+   
   };
   return (
     <ScrollView>
@@ -171,7 +174,7 @@ export default function Signup() {
             <View style={{justifyContent: 'center', marginLeft: 60}}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: hp("2%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',
@@ -187,7 +190,7 @@ export default function Signup() {
             <View style={{justifyContent: 'center', marginLeft: 35}}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: hp("2%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',

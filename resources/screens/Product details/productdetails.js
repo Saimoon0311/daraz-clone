@@ -94,16 +94,12 @@ export default function Details ({ route, navigation }){
 
 
 </View>
-<Text style={{fontSize:14,fontWeight:"bold",color:"#919191",marginTop:20}}> Delivery & Returns</Text>
-        <View style={[styles.box,{marginBottom:60}]} >
+<Text style={styles.delvery}> Delivery & Returns</Text>
+        <View style={[styles.box,{marginBottom:hp("25%")}]} >
         <Text style={[styles.tep,{fontWeight:"bold"}]} >Choose Your Location</Text>
         </View>
         
         </View>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
         </ScrollView>
         <View style={{ position: "absolute", bottom: 80, alignSelf: "center"}} >
         <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
@@ -179,6 +175,12 @@ const styles = StyleSheet.create({
           alignItems: "center",
            justifyContent: "center",
          borderRadius: 10
+      },
+      delvery:{
+        fontSize:14,
+        fontWeight:"bold",
+        color:"#919191",
+        marginTop:20
       }
 })
 

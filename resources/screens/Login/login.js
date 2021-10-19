@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import AnimateLoadingButton from 'react-native-animate-loading-button';
+import NetInfo from "@react-native-community/netinfo";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -10,7 +11,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,90 +29,74 @@ export default function Login() {
   const updateState = data => setState(() => ({...state, ...data}));
   const [isShow, setisShow] = useState(false);
   const loginss = async () => {
-    if (email == '') {
-      return showMessage({
-        type: 'danger',
-        icon: 'danger',
-        message: 'Please enter yor email',
-      });
-    } else if (password == '') {
-      showMessage({
-        type: 'danger',
-        icon: 'danger',
-        message: 'Please enter you password',
-      });
-    }
-     else {
-      // setTimeout( async () => {
-      //   loadingButton.showLoading(false);
-      //   try {
-      //     const res = await action.login({
-      //       email,
-      //       password,
-      //     });
-      //     console.log('res=== ', res);
-      //     showMessage({
-      //       type: 'success',
-      //       icon: 'success',
-      //       message: 'User Login Success',
-      //     });
-      //   } catch (error) {
-      //     console.log('errot', error);
-      //     showMessage(error.message);
-      //   }
-      // }, 2000);
-    //   if (res[0].message=="Email not found") {
-    //     showMessage({
-    //       type:"danger",
-    //       icon:"danger",
-    //       message:"Email is incorectt"
-    //   })
-    //   }else if(res[0].message=="Password is incorrect"){
-    //     showMessage({
-    //         type:"danger",
-    //         icon:"danger",
-    //         message:"Password is incorect"
-    //     })
-    // } else {
-        
-      try {
-      
-          
-          const res = await action.login({
-            email,
-            password,
-          })
-          console.log('res=== 83', res);
-          if(res[0].message=="Email not found"){
+    let netFlag     =   0;
+    await NetInfo.fetch("wifi").then(async state =>  {
+        if (state.isConnected)  {
+            netFlag     =   1;
+            if (email == '') {
+              return showMessage({
+                type: 'danger',
+                icon: 'danger',
+                message: 'Please enter yor email',
+              });
+            } else if (password == '') {
               showMessage({
-                type:"danger",
-                icon:"danger",
-                message:res[0].message
-              })
-               console.log('res=== 86 ', res);
-          } else if(res[0].message=="Password is incorrect"){
-            showMessage({
-              type:"danger",
-              icon:"danger",
-              message:res[0].message
-            })
-             console.log('res=== 86 ', res);
-        }
-          else{
-
-            showMessage({
-              type: 'success',
-              icon: 'success',
-              message: 'User Login Success',
-            });
-          
-          }
-          }
-      catch (error) {
-        console.log('errot', error);
-        showMessage(error.message);
+                type: 'danger',
+                icon: 'danger',
+                message: 'Please enter you password',
+              });
+            }
+             else {
+              try {
+              const  res  = await action.login({
+                  email,
+                  password,
+                })
+                console.log('res=== 83', res);
+                if(res[0].message=="Email not found"){
+                    showMessage({
+                      type:"danger",
+                      icon:"danger",
+                      message:res[0].message
+                    })
+                     console.log('res=== 86 ', res);
+                } else if(res[0].message=="Password is incorrect"){
+                  showMessage({
+                    type:"danger",
+                    icon:"danger",
+                    message:res[0].message
+                  })
+                   console.log('res=== 86 ', res);
+              }
+                else{
+      
+                  showMessage({
+                    type: 'success',
+                    icon: 'success',
+                    message: 'User Login Success',
+                  });
+                
+                }
+                }
+            catch (error) {
+              console.log('errot', error);
+              showMessage(error.message);
+            }
+            
+              }
       }
+  
+      else{
+        const title = 'Wifi Status';
+        const message = 'Warning, Please Check Your Internet Connection...';
+        const emptyArrayButtons = [];
+        const alertOptions = {
+          cancelable: true,
+        };
+        Alert.alert(title, message, emptyArrayButtons, alertOptions);
     }
+      });
+    
       // }
   };
   return (
@@ -158,7 +144,7 @@ export default function Login() {
             <View style={{justifyContent: 'center', marginLeft: 90}}>
               <Text
                 style={{
-                  fontSize: hp("3%"),
+                  fontSize: hp("2%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',
@@ -171,10 +157,10 @@ export default function Login() {
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
             </View>
-            <View style={{justifyContent: 'center', marginLeft: 20}}>
+            <View style={{justifyContent: 'center', marginLeft: wp("12%")}}>
               <Text
                 style={{
-                  fontSize: hp("3%"),
+                  fontSize: hp("2%"),
                   textAlign: 'center',
                   color: 'white',
                   fontWeight: 'bold',
