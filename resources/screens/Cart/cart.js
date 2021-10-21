@@ -22,13 +22,9 @@ import {getUserData} from '../../utils/utils';
 export default function Cart({navigation}) {
   const [cartdata, setCartdata] = useState(null);
   const add = () => {
-    setCartdata(cartdata.quantity + 1);
+    console.log(cartdata[0].quantity+1)
   };
   const [isLoading, setLoading] = useState(true);
-  // const cartss=()=>{
-
-  // // }
-  // console.log(24,cartdata);
   useEffect(async () => {
     const userId = await getUserData();
     const users = userId.id;
@@ -49,9 +45,9 @@ export default function Cart({navigation}) {
 
   const onDeleteAlert = id => {
     Alert.alert(
-      'Warning ! ',
-      'Are you sure, yout want to delete this Item ! ',
-      [{text: 'Yes', onPress: () => delet(id)}, {text: 'No'}],
+      'Remove from Cart ',
+      'Are you sure you want to remove this item from your cart !',
+      [{text: 'Yes', onPress: () => delet(id),style:"destructive"}, {text: 'No',style:"cancel"}],
       {cancelable: true},
     );
   };
@@ -223,7 +219,7 @@ export default function Cart({navigation}) {
                             {' '}
                             {item.quantity}{' '}
                           </Text>
-                          <TouchableOpacity>
+                          <TouchableOpacity onPress={add}>
                             <Ionicons
                               name="add-circle-sharp"
                               size={20}
@@ -330,6 +326,6 @@ const styles = StyleSheet.create({
     color: '#B64400',
     fontSize: 16,
     fontWeight: 'bold',
-    paddingTop: 10,
+    top:13
   },
 });

@@ -16,6 +16,7 @@ import MybottomTabs from './bottomtabnavigaton';
 import Details from '../screens/Product details/productdetails';
 import Cart from '../screens/Cart/cart';
 import Cartdetails from "../screens/Cardetails/cartdeatils"
+import Arrivals from '../data/arrivals';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();

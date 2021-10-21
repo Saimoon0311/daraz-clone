@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList,Alert } from "react-native"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GETPRODUCT } from "../config/url";
+import { ARRIVALS, FEATURED, GETPRODUCT } from "../config/url";
 import {NativeBaseProvider,Box,Center} from "native-base"
 import Alldata from "../data/alldata";
 import NetInfo from "@react-native-community/netinfo";
+import Arrivals from "../data/arrivals";
 
 export default function Home({navigation}) {
     const [data,setData]=useState()
+    const [arrivals,setArrvals] =useState()
     const [isLoading, setLoading] = useState(true);
     const detailss = (item)=> {
         navigation.navigate("Details",item)
@@ -19,10 +21,16 @@ export default function Home({navigation}) {
         await NetInfo.fetch("wifi").then(async state =>  {
             if (state.isConnected)  {
                 netFlag     =   1;
-                fetch(GETPRODUCT)
+                fetch(FEATURED)
                 .then((response) => response.json())
                 .then((json) => setData(json[0]) ,console.log(17,data))
-                .catch((error) => console.error(17,error))
+                .catch((error) => console.error(27,error))
+                .finally(() => setLoading(false));
+
+                fetch(ARRIVALS)
+                .then((response) => response.json())
+                .then((json) => setArrvals(json[0]) ,console.log(17,data))
+                .catch((error) => console.error(33,error))
                 .finally(() => setLoading(false));    
             }
         
@@ -65,10 +73,10 @@ export default function Home({navigation}) {
                 </TouchableOpacity>
             </View>
                    <Text style={styles.te} >
-                   Apparels
+                   New Arrivals
                 </Text>
                    <NativeBaseProvider>
-                   <Alldata detailss={detailss} data={data} isLoading={isLoading}/>
+                   <Arrivals detailss={detailss} arrivals={arrivals} isLoading={isLoading}/>
                    </NativeBaseProvider>
                    <View style={styles.see}>
                 <TouchableOpacity>

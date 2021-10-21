@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-import './alldata';
+// import './alldata';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,7 +18,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {GETPRODUCT, Images_API} from '../config/url';
 import {VStack, Box, Divider} from 'native-base';
-export default function Alldata(prop, {navigation}) {
+export default function Arrivals(prop, {navigation}) {
   return (
     <View>
       {prop.isLoading ? (
@@ -29,7 +29,7 @@ export default function Alldata(prop, {navigation}) {
         />
       ) : (
         <FlatList
-          data={prop.data}
+          data={prop.arrivals}
           keyExtractor={item => item.key}
           horizontal
           showsHorizontalScrollIndicator={false}

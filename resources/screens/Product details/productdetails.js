@@ -86,7 +86,63 @@ export default function Details ({ route, navigation }){
 <View style={styles.box}>
     <Text style={[styles.tep,{fontWeight:"bold"}]} >{item.name}</Text>
     <Text style={styles.tep}>Category : {item.getchildcategory.name}</Text>
-    <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text>
+    {item.is_discounted == 2 ? (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                        }}>
+                          <Text
+                          style={{
+                            color: '#512500',
+                            fontSize: 18,
+                            fontWeight: 'bold'}}
+                            >
+                            Price :    
+                          </Text>
+                        <Text
+                          style={{
+                            color: '#512500',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                            textDecorationLine: 'line-through',
+                          }}>
+                            $ {item.price}
+                        </Text>
+                        <Text
+                          style={{
+                            color: 'red',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                          }}>
+                          {' '}
+                          $ {item.discounted_price}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
+                      style={{
+                        flexDirection: 'row',
+                      }}>
+                        <Text
+                         style={{
+                          color: '#512500',
+                          fontSize: 18,
+                          fontWeight: 'bold'}}
+                        > 
+                          Prices : 
+                           </Text>
+
+                      <Text
+                        style={{
+                          color: '#512500',
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                        }}>
+                        $ {item.price}
+                      </Text>
+                      </View>
+                    )}
+    {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
     <Text style={styles.tep}>SKU : {item.sku}</Text>
     <Text style={[styles.tep,{fontWeight:"bold"}]}>Description :</Text>
     <Text style={{marginLeft:"auto",textAlign:"justify"}} > {item.description} </Text> 
@@ -102,6 +158,8 @@ export default function Details ({ route, navigation }){
         </View>
         </ScrollView>
         <View style={{ position: "absolute", bottom: 80, alignSelf: "center"}} >
+          {item.stock < 1 ? <Text style={styles.stock}>Out Of Stock</Text>:
+          
         <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
           <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -109,6 +167,7 @@ export default function Details ({ route, navigation }){
             </View>
           </TouchableOpacity>
         </View>
+          }
 
       </View> 
  </View>
@@ -181,6 +240,12 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         color:"#919191",
         marginTop:20
+      },
+      stock:{
+      color:"red",
+      fontSize:30,
+      fontWeight:"bold",
+      textDecorationLine:"underline"
       }
 })
 

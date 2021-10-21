@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert
+  Alert,
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,7 +20,7 @@ import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
 import {LOGIN} from '../../config/url';
 export default function Login() {
-  // const[loadingButton,setLoadingButton] =useState(true)
+  const[loadingButton,setLoadingButton] =useState(false)
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -29,22 +29,24 @@ export default function Login() {
   const updateState = data => setState(() => ({...state, ...data}));
   const [isShow, setisShow] = useState(false);
   const loginss = async () => {
+    setLoadingButton(true)
     let netFlag     =   0;
     await NetInfo.fetch("wifi").then(async state =>  {
-        if (state.isConnected)  {
-            netFlag     =   1;
-            if (email == '') {
-              return showMessage({
+      if (state.isConnected)  {
+          netFlag     =   1;
+          if (email == '') {
+            showMessage({
                 type: 'danger',
                 icon: 'danger',
                 message: 'Please enter yor email',
-              });
+              }) ,setLoadingButton(false)
+              
             } else if (password == '') {
               showMessage({
                 type: 'danger',
                 icon: 'danger',
                 message: 'Please enter you password',
-              });
+              }),setLoadingButton(false)
             }
              else {
               try {
@@ -54,11 +56,12 @@ export default function Login() {
                 })
                 console.log('res=== 83', res);
                 if(res[0].message=="Email not found"){
-                    showMessage({
-                      type:"danger",
-                      icon:"danger",
-                      message:res[0].message
-                    })
+                  showMessage({
+                    type:"danger",
+                    icon:"danger",
+                    message:res[0].message
+                  })
+                  setLoadingButton(false)
                      console.log('res=== 86 ', res);
                 } else if(res[0].message=="Password is incorrect"){
                   showMessage({
@@ -66,6 +69,7 @@ export default function Login() {
                     icon:"danger",
                     message:res[0].message
                   })
+                  setLoadingButton(false)
                    console.log('res=== 86 ', res);
               }
                 else{
@@ -75,7 +79,7 @@ export default function Login() {
                     icon: 'success',
                     message: 'User Login Success',
                   });
-                
+                setLoadingButton(false)
                 }
                 }
             catch (error) {
@@ -142,6 +146,7 @@ export default function Login() {
               <Ionicons name="mail" size={18} color={'white'} />
             </View>
             <View style={{justifyContent: 'center', marginLeft: 90}}>
+              {loadingButton? <ActivityIndicator size="large" color="white" />:
               <Text
                 style={{
                   fontSize: hp("2%"),
@@ -151,6 +156,7 @@ export default function Login() {
                 }}>
                 Login
               </Text>
+              }
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buts}>

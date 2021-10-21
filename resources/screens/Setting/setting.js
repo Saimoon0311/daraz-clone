@@ -40,7 +40,7 @@ export default function setting ({navigation})  {
             message:"Your are successfully logout!",
             backgroundColor:"#E9691D"
            })
-        }, 100);
+        }, 10);
 
     }
     return(

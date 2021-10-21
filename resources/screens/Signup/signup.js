@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,12 +18,14 @@ import action from '../../redux/action';
 import {SIGNUP} from '../../config/url';
 
 export default function Signup() {
+  const[loadingButton,setLoadingButton] =useState(false)
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [phone_number, setPhone_number] = useState();
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();
   const savedata = async () => {
+    setLoadingButton(true)
     let netFlag     =   0;
     await NetInfo.fetch("wifi").then( async state =>  {
         if (state.isConnected)  {
@@ -33,25 +36,27 @@ export default function Signup() {
                 type: 'warning',
                 icon: 'warning',
                 message: 'Please Enter Your Name',
-              });
+              })
+              setLoadingButton(false)
             } else if (!email || reg.test(email) === false) {
               showMessage({
                 type: 'warning',
                 icon: 'warning',
                 message: 'Please Enter The correct Email',
-              });
+              })
+              setLoadingButton(false)
             } else if (email === null) {
-              Alert.alert('Warning!', 'Please Enter Email');
+              Alert.alert('Warning!', 'Please Enter Email') , setLoadingButton(false)
             } else if (password === null) {
-              Alert.alert('Warning!', 'Please Enter Password');
+              Alert.alert('Warning!', 'Please Enter Password'),setLoadingButton(false)
             } else if (phone_number === null) {
-              Alert.alert('Warning!', 'Please Enter Your Number');
+              Alert.alert('Warning!', 'Please Enter Your Number'),setLoadingButton(false)
             } else if (password != confirm) {
-              Alert.alert('Warning!', 'Please Enter The Correct Password');
+              Alert.alert('Warning!', 'Please Enter The Correct Password'),setLoadingButton(false)
             } else if (password.length <= 5) {
-              Alert.alert('Warning!', 'The password must be at least 6 characters');
+              Alert.alert('Warning!', 'The password must be at least 6 characters'), setLoadingButton(false)
             } else {
-        
+               setLoadingButton(true)
               fetch(SIGNUP, {
                 method: 'POST',
                 headers: {
@@ -69,16 +74,23 @@ export default function Signup() {
                 .then(response => response.json())
                 .then(responseData => {
                   responseData[0]
-                    ? showMessage({
-                        type: 'success',
-                        icon: 'auto',
-                        message: responseData[0].message,
-                      })
-                    : showMessage({
-                        type: 'warning',
-                        icon: 'auto',
-                        message: responseData.email,
-                      });
+                    ? (
+                      showMessage({
+                          type: 'success',
+                          icon: 'auto',
+                          message: responseData[0].message,
+                        }),
+                      setLoadingButton(false)
+                    ) 
+                      
+                    : (
+                      showMessage({
+                          type: 'warning',
+                          icon: 'auto',
+                          message: responseData.email,
+                        }),
+                        setLoadingButton(false)
+                    ) 
                   setEmail('');
                   setUsername('');
                   setPhone_number('');
@@ -172,6 +184,7 @@ export default function Signup() {
               <Ionicons name="mail" size={18} color={'white'} />
             </View>
             <View style={{justifyContent: 'center', marginLeft: 60}}>
+            {loadingButton? <ActivityIndicator size="large" color="white" style={{marginLeft:30}} />:
               <Text
                 style={{
                   fontSize: hp("2%"),
@@ -180,7 +193,7 @@ export default function Signup() {
                   fontWeight: 'bold',
                 }}>
                 Create Account
-              </Text>
+              </Text>}
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buts}>
