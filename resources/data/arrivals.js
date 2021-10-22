@@ -10,14 +10,12 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-// import './alldata';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {GETPRODUCT, Images_API} from '../config/url';
-import {VStack, Box, Divider} from 'native-base';
+import {Images_API} from '../config/url';
 export default function Arrivals(prop, {navigation}) {
   return (
     <View>
@@ -37,72 +35,75 @@ export default function Arrivals(prop, {navigation}) {
             return (
               <ScrollView showsHorizontalScrollIndicator={false}>
                 <View style={styles.box}>
+                  {item.featured == 1 ? null:
                   <TouchableOpacity onPress={() => prop.detailss(item)}>
-                    <ImageBackground
-                      style={styles.im}
-                      imageStyle={{borderRadius: 20}}
-                      source={{uri: `${Images_API}/${item.images[0].name}`}}>
-                      {item.featured == 1 ? (
-                        <Text style={styles.fea}>Featured</Text>
-                      ) : null}
-                      {item.is_discounted == 2 ? (
-                        <Text
-                          style={[styles.fea, {backgroundColor: '#512500'}]}>
-                          {item.discounted_percentage}%OFF
-                        </Text>
-                      ) : null}
-                    </ImageBackground>
-                    <Text></Text>
-                    <Text
-                      style={{
-                        color: '#512500',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }}>
-                      {item.name}
-                    </Text>
-                    <Text></Text>
+                  <ImageBackground
+                    style={styles.im}
+                    imageStyle={{borderRadius: 20}}
+                    source={{uri: `${Images_API}/${item.images[0].name}`}}>
+                    {item.featured == 1 ? (
+                      <Text style={styles.fea}>Featured</Text>
+                    ) : null}
                     {item.is_discounted == 2 ? (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            textDecorationLine: 'line-through',
-                          }}>
-                          $ {item.price}
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'red',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                          }}>
-                          {' '}
-                          $ {item.discounted_price}
-                        </Text>
-                      </View>
-                    ) : (
+                      <Text
+                        style={[styles.fea, {backgroundColor: '#512500'}]}>
+                        {item.discounted_percentage}%OFF
+                      </Text>
+                    ) : null}
+                  </ImageBackground>
+                  <Text></Text>
+                  <Text
+                    style={{
+                      color: '#512500',
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}>
+                    {item.name}
+                  </Text>
+                  <Text></Text>
+                  {item.is_discounted == 2 ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                      }}>
                       <Text
                         style={{
                           color: '#512500',
                           fontSize: 18,
                           fontWeight: 'bold',
                           textAlign: 'center',
+                          textDecorationLine: 'line-through',
                         }}>
                         $ {item.price}
                       </Text>
-                    )}
-                    {/* </View> */}
-                  </TouchableOpacity>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }}>
+                        {' '}
+                        $ {item.discounted_price}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text
+                      style={{
+                        color: '#512500',
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      $ {item.price}
+                    </Text>
+                  )}
+                  {/* </View> */}
+                </TouchableOpacity>
+                  }
+                  
                 </View>
                 <Text></Text>
               </ScrollView>
@@ -126,17 +127,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   box: {
-    // justifyContent:"space-around",
-    alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: '#F3F5F7',
+    borderRadius: 18,backgroundColor: '#F3F5F7',
     marginRight: 10,
     shadowColor: '#000',
-    // width:354,
-    // shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.6,
     shadowRadius: 18,
     elevation: 5,
+    
   },
   im: {
     width: wp('50'),

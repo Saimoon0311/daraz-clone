@@ -49,7 +49,7 @@ export default function Home({navigation}) {
         <View style={{ margin: 37 }} >
             <View  >
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 90, shadowColor: '#000',borderBottomWidth:0.2, shadowColor: '#000',paddingBottom:10 }} >
+            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: wp("28%"), shadowColor: '#000',borderBottomWidth:0.2, shadowColor: '#000',paddingBottom:10 }} >
                 <Image source={require("../images/Group66.png")} style={{ width: 81, height: 36.5 }} />
                 <TouchableOpacity>
                     <Ionicons name="search" size={30} color="#512500" />
@@ -63,7 +63,6 @@ export default function Home({navigation}) {
                 <Text style={styles.te} >
                     Top sellers
                 </Text>
-                {/* <View> */}
                 <NativeBaseProvider>
                    <Alldata detailss={detailss} data={data} isLoading={isLoading}  />
                    </NativeBaseProvider>
@@ -105,7 +104,6 @@ export default function Home({navigation}) {
                     <Text style={{color:"#E9691D"}}>See All</Text>
                 </TouchableOpacity>
             </View>
-                {/* </View> */}
             </ScrollView>
         </View>
     )

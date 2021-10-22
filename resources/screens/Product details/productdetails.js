@@ -1,6 +1,6 @@
 
 import React,{useState,useEffect} from "react"
-import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView} from "react-native"
+import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView,ActivityIndicator} from "react-native"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
@@ -12,6 +12,7 @@ import { getUserData } from "../../utils/utils";
 
 export default function Details ({ route, navigation }){
   const [user_id,setUser_id] =useState()
+  const [loading,setLoading]=useState(false)
   useEffect(()=>{
  ff()
   })
@@ -29,6 +30,7 @@ export default function Details ({ route, navigation }){
     const product_id =item.id
 
     const cartadd =  ()=>{
+      setLoading(true)
       //  await ff()
      console.log(user_id)
        fetch(ADDTOCART, {
@@ -50,7 +52,9 @@ export default function Details ({ route, navigation }){
            icon:"auto",
            message:"Your Product Has Been Add To Cart",
            backgroundColor:"#E9691D"
-         })
+         }),
+         setLoading(false)
+
        })
        .done();
   }  
@@ -163,7 +167,9 @@ export default function Details ({ route, navigation }){
         <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
           <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              {loading? <ActivityIndicator size="large" color="white" />:
               <Text style={{ color: "white", fontSize: 20,  fontWeight: "bold" }} >Add To Cart</Text>
+              }
             </View>
           </TouchableOpacity>
         </View>

@@ -37,7 +37,15 @@ export default function MyTabs() {
 
 
     
-            <Tab.Screen name="Signup" component={Signup} />
+            <Tab.Screen name="Signup" options={{
+                    title: "Sign Up",
+                    tabBarLabelStyle: {
+                        fontWeight: "bold",
+                        // : {
+
+                        // }
+                    },
+                }} component={Signup} />
         </Tab.Navigator>
     );
 }

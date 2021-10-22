@@ -110,7 +110,7 @@ export default function setting ({navigation})  {
 <Text></Text>
 <Text  style={styles.acc}  >My Settings</Text>
 <View style={styles.box}>
-<TouchableOpacity style={styles.shadow} >
+<TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate("Userdeatils")} >
 <Text style={styles.orte} >Details</Text>
 </TouchableOpacity>
 </View>

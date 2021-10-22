@@ -164,7 +164,7 @@ export default function Cart({navigation}) {
                                 fontWeight: 'bold',
                                 marginLeft: 10,
                               }}>
-                              Rs : {item.get_products.price}
+                             Price : ${item.get_products.price}
                             </Text>
                           </View>
                         </View>
