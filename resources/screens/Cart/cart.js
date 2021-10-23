@@ -16,11 +16,12 @@ import {
   Alert,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
-import {CART, CARTDELEtE, Images_API, testCART} from '../../config/url';
+import {ADDTOWISHLIST, CART, CARTDELEtE, Images_API, testCART} from '../../config/url';
 import {getUserData} from '../../utils/utils';
 
 export default function Cart({navigation}) {
   const [cartdata, setCartdata] = useState(null);
+  const [user_id,setUser_id] =useState()
   const add = () => {
     console.log(cartdata[0].quantity+1)
   };
@@ -28,6 +29,7 @@ export default function Cart({navigation}) {
   useEffect(async () => {
     const userId = await getUserData();
     const users = userId.id;
+    setUser_id(users)
     fetch(`${testCART}/${users}`, {
       method: 'GET',
     })
@@ -71,7 +73,30 @@ export default function Cart({navigation}) {
       })
       .finally(() => setLoading(false));
   };
-
+  const addtowishlist =(id)=>{
+    var product_id =id
+    //  setCartloading(true)
+          //  await ff()
+         console.log("userid",user_id)
+         fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
+     .then(async response => await response.json())
+     .then(json =>{
+    if (json[0].message=="Added to wishlist") {
+    showMessage({
+    type:"success",
+    icon:"success",
+    message:json[0].message
+    }),console.log(json[0].message)
+    } else {
+    showMessage({
+    type:"warning",
+    icon:"warning",
+    message:json[0].message
+    }),console.log(json[0].message)
+    }}
+    )
+    //  .catch(error => console.error(17, error))
+    }
   return (
     <View>
       <View
@@ -173,7 +198,7 @@ export default function Cart({navigation}) {
                         style={{flex: 1, height: 1, backgroundColor: 'black'}}
                       />
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => addtowishlist(item.id)}>
                           <Ionicons
                             style={{paddingTop: 13}}
                             name="heart-outline"

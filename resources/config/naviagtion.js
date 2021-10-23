@@ -12,6 +12,7 @@ import Cart from '../screens/Cart/cart';
 import Cartdetails from "../screens/Cardetails/cartdeatils"
 import Arrivals from '../data/arrivals';
 import Userdeatils from '../screens/Userdetails/userdetails';
+import subcatdetails from '../screens/Sub Cat Product details/subcat';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ export default function Navigation() {
         <Stack.Screen name="Cart" component={Cart}  />
         <Stack.Screen name="Cartdetails" component={Cartdetails}  />
         <Stack.Screen name="Userdeatils" component={Userdeatils}  />
+        <Stack.Screen name="subcatdetails" component={subcatdetails}  />
            
         </Stack.Navigator>
     );

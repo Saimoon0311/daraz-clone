@@ -15,23 +15,36 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {alignContent, backgroundColor} from 'styled-system';
+import {alignContent, backgroundColor, color} from 'styled-system';
 import {CATEGORY, SUBCAT} from '../../config/url';
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
-  const [subloading, setSubloading] = useState(false);
+  const [subloading, setSubloading] = useState(true);
   const [catdata, setCatdata] = useState();
   const [subcatdata, setSubcatdata] = useState();
+  const [click, setClick] = useState(null);
   useEffect(() => {
     fetch(CATEGORY)
       .then(async response => await response.json())
       .then(json => setCatdata(json), console.log(28, catdata))
       .catch(error => console.error(17, error))
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(false))
+
+      const api = SUBCAT + 3;
+      console.log(api);
+      fetch(api)
+        .then(async response => await response.json())
+        .then(json => setSubcatdata(json))
+        .finally(() => setSubloading(false),setClick(0));
+    
+
   }, []);
-  const getData = async id => {
+  const getData = async (id,index) => {
+    // setStyless(true)
+    setClick(index)
     setSubloading(true);
+    console.log(39999999999,index)
     console.log('before ------->>>>>', catdata);
     const api = SUBCAT + id;
     console.log(api);
@@ -76,16 +89,17 @@ export default function cate({navigation}) {
               keyExtractor={item => item.key}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: 300}}
-              renderItem={({item}) => {
+              renderItem={({item,index}) => {
                 return (
                   <View>
-                    <TouchableOpacity
-                      style={styles.sidebox}
-                      onPress={() => getData(item.id)}>
-                      <View>
-                        <Text style={styles.cattext}>{item.name}</Text>
-                      </View>
-                    </TouchableOpacity>
+                   <TouchableOpacity
+                  style={index === click? styles.sidebox:styles.sideboxactive}
+                   onPress={() => getData(item.id,index)}>
+                   <View  >
+                   <Text style={styles.cattext}>{item.name}</Text>
+                   </View>
+                 </TouchableOpacity>
+
                   </View>
                 );
               }}
@@ -135,17 +149,18 @@ export default function cate({navigation}) {
                             keyExtractor={item => item.key}
                             numColumns={2}
                             showsVerticalScrollIndicator={false}
-                            maxToRenderPerBatch={4}
                             contentContainerStyle={{paddingBottom: '100%'}}
-                            renderItem={({item}) => (
+                            renderItem={({item}) =>  (
+                              
                               <View
                                 style={{
                                   flex: 1,
                                   flexDirection: 'column',
                                   margin: 3,
                                 }}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={()=>navigation.navigate("subcatdetails",item)} >
                                   <View style={styles.itss}>
+                                    <Image style={styles.img} source={require("../../images/yyy.png")} />
                                     <Text style={styles.insidetext}>
                                       {item.name}
                                     </Text>
@@ -206,13 +221,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sidebox: {
-    borderWidth: 1,
     borderColor: '#512500',
+    borderWidth: 1,
     paddingBottom: hp('2%'),
     paddingTop: hp('2%'),
     marginBottom: hp('2%'),
     borderRadius: 10,
     width: wp('30%'),
+    paddingLeft:wp('5%'),
+    paddingRight:wp('5%'),
+    backgroundColor:"white"
   },
   inside: {
     borderColor: '#512500',
@@ -242,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 10,
-    shadowRadius: 100,
+    shadowRadius: 10,
     elevation: 5,
     backgroundColor: 'white',
     alignContent: 'center',
@@ -261,10 +279,11 @@ const styles = StyleSheet.create({
   sideboxactive: {
     paddingBottom: hp('2%'),
     paddingTop: hp('2%'),
-    paddingLeft: wp('6%'),
-    paddingRight: wp('6%'),
     marginBottom: hp('2%'),
     borderRadius: 10,
+    width: wp('30%'),
+    paddingLeft:wp('5%'),
+    paddingRight:wp('5%'),
     backgroundColor: '#FFDDC9',
   },
   but: {
@@ -280,5 +299,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     left: 8,
   },
+  sideboxs:{
+    backgroundColor:"red"
+  }
 });
 
