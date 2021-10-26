@@ -24,6 +24,7 @@
     "react-native": "0.66.0",
     "react-native-animate-loading-button": "^1.0.3",
     "react-native-axios": "^0.17.1",
+    "react-native-elements": "github:react-native-elements/react-native-elements",
     "react-native-flash-message": "^0.2.0",
     "react-native-flatlist-picker": "^1.0.1",
     "react-native-gesture-handler": "^1.10.3",

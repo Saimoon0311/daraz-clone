@@ -13,6 +13,7 @@ import { getUserData } from "../../utils/utils";
 export default function Details ({ route, navigation }){
   const [user_id,setUser_id] =useState()
   const [loading,setLoading]=useState(false)
+
   useEffect(()=>{
  ff()
   })
@@ -219,8 +220,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 10,
         shadowRadius: 3,
         borderWidth:0.1,
-        borderColor:"gray"  
-        // elevation: 20,
+        borderColor:"gray"
       },
       te:{
         textAlign:"center",
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
 
 
 
-
+// const [itemcolor,setItemcolor] = useState()
 
 
 // for (let x = 0; x < atttri.length; x++) {
@@ -278,8 +278,8 @@ const styles = StyleSheet.create({
 //     "k","u","t"
 // ])
 
-
-
+// all:['a','b','c']
+// attribute:{'b':1,'c':2},
 {/* <FlatList
         data={atttri}
         keyExtractor={(item) => item.key}
@@ -290,12 +290,20 @@ const styles = StyleSheet.create({
                   return(
                       <View     style={styles.container}>
     <Picker
-    // selectedValue={itemcolor}
+    // selectedValue={itemcolor}                            color
     selectedValue={attr}
     
     onValueChange={(itemValue, itemIndex) =>{
         // setItemcolor[itemIndex](itemValue)
-        setAttr[item.key](itemValue)
+        for(let i =0; i<all.lenght;i++)
+        {
+          if(data-att== all[i])
+          {
+          attribute[''+all[i]+''] = itemValue;
+          }
+        }
+        
+        setItemcolor(attribute:{'b':1,'c':2})
     }}
     
     >

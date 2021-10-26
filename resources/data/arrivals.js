@@ -23,7 +23,7 @@ export default function Arrivals(prop, {navigation}) {
         <ActivityIndicator
           size={100}
           color="#512500"
-          style={{marginTop: 100}}
+          style={{marginTop: 40}}
         />
       ) : (
         <FlatList
@@ -40,7 +40,7 @@ export default function Arrivals(prop, {navigation}) {
                   <ImageBackground
                     style={styles.im}
                     imageStyle={{borderRadius: 20}}
-                    source={{uri: `${Images_API}/${item.images[0].name}`}}>
+                    source={{uri: `https://thumbor.forbes.com/thumbor/fit-in/1200x0/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F5d35eacaf1176b0008974b54%2F0x0.jpg%3FcropX1%3D790%26cropX2%3D5350%26cropY1%3D784%26cropY2%3D3349`}}>
                     {item.featured == 1 ? (
                       <Text style={styles.fea}>Featured</Text>
                     ) : null}
@@ -61,7 +61,6 @@ export default function Arrivals(prop, {navigation}) {
                     }}>
                     {item.name}
                   </Text>
-                  <Text></Text>
                   {item.is_discounted == 2 ? (
                     <View
                       style={{
@@ -100,6 +99,7 @@ export default function Arrivals(prop, {navigation}) {
                       $ {item.price}
                     </Text>
                   )}
+                  <Text></Text>
                   {/* </View> */}
                 </TouchableOpacity>
                   }
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
     
   },
   im: {
-    width: wp('50'),
-    height: hp('20'),
+    width: wp('40'),
+    height: hp('15'),
     borderRadius: 30,
     // shadowColor: '#000',
     // width:354,
@@ -154,5 +154,6 @@ const styles = StyleSheet.create({
     width: wp('18%'),
     borderRadius: 10,
     textAlign: 'center',
+    fontSize:10
   },
 });

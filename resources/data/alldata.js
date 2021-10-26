@@ -25,7 +25,7 @@ export default function Alldata(prop, {navigation}) {
         <ActivityIndicator
           size={100}
           color="#512500"
-          style={{marginTop: 100}}
+          style={{marginTop: 40}}
         />
       ) : (
         <FlatList
@@ -62,7 +62,6 @@ export default function Alldata(prop, {navigation}) {
                       }}>
                       {item.name}
                     </Text>
-                    <Text></Text>
                     {item.is_discounted == 2 ? (
                       <View
                         style={{
@@ -101,6 +100,7 @@ export default function Alldata(prop, {navigation}) {
                         $ {item.price}
                       </Text>
                     )}
+                    <Text></Text>
                     {/* </View> */}
                   </TouchableOpacity>
                 </View>
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   im: {
-    width: wp('50'),
-    height: hp('20'),
+    width: wp('40'),
+    height: hp('15'),
     borderRadius: 30,
     // shadowColor: '#000',
     // width:354,
@@ -154,8 +154,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: '#b64400',
     color: 'white',
-    width: wp('18%'),
+    width: wp('15%'),
     borderRadius: 10,
     textAlign: 'center',
+    fontSize:10
   },
 });
