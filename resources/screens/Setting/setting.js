@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
       margin: 20,
     },
     well:{
-        padding:10,
+        padding:5,
         backgroundColor:"black"
     },
     we:{
@@ -188,9 +188,3 @@ width:wp("80%"),
         
     }
 })
-
-
-    // {/* <Text>{users.username}</Text>
-    // <Text>
-    //     <Button title="log out" onPress={onLogoutAlert} />
-    // </Text> */}

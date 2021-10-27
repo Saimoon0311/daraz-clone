@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef,useCallback} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Animated,
   TextInput,
   SafeAreaView,
+  RefreshControl
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -22,6 +23,12 @@ import {NativeBaseProvider, Box, Center} from 'native-base';
 import Alldata from '../data/alldata';
 import NetInfo from '@react-native-community/netinfo';
 import Arrivals from '../data/arrivals';
+
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export default function Home({navigation}) {
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
   const [titleSearchValue, onChangeText] = useState('');
@@ -33,9 +40,47 @@ export default function Home({navigation}) {
   const detailss = item => {
     navigation.navigate('Details', item);
   };
+
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(  () => {
+    setRefreshing(true)
+    setLoading(true)
+    wait(2000).then( () => 
+     NetInfo.fetch().then(async state => {
+      let netFlag = 0
+      if (state.isConnected) {
+        netFlag = 1;
+        fetch(FEATURED)
+          .then(response => response.json())
+          .then(json => setData(json[0]), console.log(17, data))
+          .catch(error => console.error(27, error))
+          .finally(() => setLoading(false),setRefreshing(false));
+
+        fetch(ARRIVALS)
+          .then(response => response.json())
+          .then(json => setArrvals(json[0]), console.log(17, data))
+          .catch(error => console.error(33, error))
+          .finally(() => setLoading(false),setRefreshing(false));
+      } else {
+        const title = 'Wifi Status!';
+        const message = 'Warning, Please Check Your Internet Connection...';
+        const emptyArrayButtons = [];
+        const alertOptions = {
+          cancelable: true,
+        };
+        Alert.alert(title, message, emptyArrayButtons, alertOptions);
+      }
+    })
+    )
+  }, []);
+
+
+
   useEffect(async () => {
     let netFlag = 0;
-    await NetInfo.fetch('wifi').then(async state => {
+    await NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         netFlag = 1;
         fetch(FEATURED)
@@ -112,6 +157,12 @@ export default function Home({navigation}) {
         </Animated.View>
 
         <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 50, marginLeft: 30}}>
           <Text style={styles.te}>Top sellers</Text>
@@ -165,8 +216,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: wp('36%'),
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.5,
     paddingBottom: 10,
+    
   },
   ic: {
     marginLeft: 'auto',

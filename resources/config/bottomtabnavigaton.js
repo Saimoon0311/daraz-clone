@@ -60,7 +60,7 @@ function MybottomTabs() {
         component={cate}
       />
       {/* <BlurView   blurRadius={1} downsampleFactor={10} overlayColor={'rgba(0, 0, 255, .6)'}> */}
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Deal"
         options={{
           tabBarIcon: () => {
@@ -73,7 +73,7 @@ function MybottomTabs() {
           },
         }}
         component={Deal}
-      />
+      /> */}
       {/* </BlurView> */}
       <Tab.Screen
         name="setting"

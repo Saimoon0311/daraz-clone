@@ -16,15 +16,30 @@ import {
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Images_API} from '../config/url';
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect } from 'react-native-svg'
 export default function Arrivals(prop, {navigation}) {
   return (
     <View>
       {prop.isLoading ? (
-        <ActivityIndicator
-          size={100}
-          color="#512500"
-          style={{marginTop: 40}}
-        />
+        // <ActivityIndicator
+        //   size={60}
+        //   color="#512500"
+        //   style={{marginTop: 40}}
+        // />
+        <SvgAnimatedLinearGradient
+        primaryColor="#e1e6e2"
+        secondaryColor="#989c99"
+        height={80}>
+<Rect x="0" y="0" rx="3" ry="3" width="70" height="10"/>
+<Rect x="80" y="0" rx="3" ry="3" width="100" height="10"/>
+<Rect x="190" y="0" rx="3" ry="3" width="10" height="10"/>
+<Rect x="15" y="20" rx="3" ry="3" width="130" height="10"/>
+<Rect x="155" y="20" rx="3" ry="3" width="130" height="10"/>
+<Rect x="15" y="40" rx="3" ry="3" width="90" height="10"/>
+<Rect x="115" y="40" rx="3" ry="3" width="60" height="10"/>
+<Rect x="185" y="40" rx="3" ry="3" width="60" height="10"/>
+</SvgAnimatedLinearGradient>
       ) : (
         <FlatList
           data={prop.arrivals}
@@ -40,7 +55,7 @@ export default function Arrivals(prop, {navigation}) {
                   <ImageBackground
                     style={styles.im}
                     imageStyle={{borderRadius: 20}}
-                    source={{uri: `https://thumbor.forbes.com/thumbor/fit-in/1200x0/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F5d35eacaf1176b0008974b54%2F0x0.jpg%3FcropX1%3D790%26cropX2%3D5350%26cropY1%3D784%26cropY2%3D3349`}}>
+                    source={{uri: `${Images_API}/${item.images[0].name}`}}>
                     {item.featured == 1 ? (
                       <Text style={styles.fea}>Featured</Text>
                     ) : null}
@@ -127,24 +142,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   box: {
-    borderRadius: 18,backgroundColor: '#F3F5F7',
+    borderRadius: 18,
+    backgroundColor: '#ebeced',
     marginRight: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.6,
-    shadowRadius: 18,
-    elevation: 5,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.6,
+    // shadowRadius: 10,
+    // elevation: 5,
     
   },
   im: {
     width: wp('40'),
     height: hp('15'),
     borderRadius: 30,
-    // shadowColor: '#000',
-    // width:354,
-    // shadowOffset: { width: 1, height: 1 },
-    // shadowOpacity: 0.6,
-    // shadowRadius: 18,
-    // elevation: 5,
   },
   fea: {
     marginLeft: 10,

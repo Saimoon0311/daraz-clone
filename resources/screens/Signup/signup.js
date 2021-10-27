@@ -16,7 +16,7 @@ import {Picker} from '@react-native-picker/picker';
 import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
 import {SIGNUP} from '../../config/url';
-
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 export default function Signup() {
   const[loadingButton,setLoadingButton] =useState(false)
   const [username, setUsername] = useState();
@@ -46,15 +46,35 @@ export default function Signup() {
               })
               setLoadingButton(false)
             } else if (email === null) {
-              Alert.alert('Warning!', 'Please Enter Email') , setLoadingButton(false)
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'Please Enter Email',
+              }) , setLoadingButton(false)
             } else if (password === null) {
-              Alert.alert('Warning!', 'Please Enter Password'),setLoadingButton(false)
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'Please Enter Password',
+              }),setLoadingButton(false)
             } else if (phone_number === null) {
-              Alert.alert('Warning!', 'Please Enter Your Number'),setLoadingButton(false)
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'Please Enter Youe Number',
+              }),setLoadingButton(false)
             } else if (password != confirm) {
-              Alert.alert('Warning!', 'Please Enter The Correct Password'),setLoadingButton(false)
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'Please Enter The Correct Password',
+              }),setLoadingButton(false)
             } else if (password.length <= 5) {
-              Alert.alert('Warning!', 'The password must be at least 6 characters'), setLoadingButton(false)
+              showMessage({
+                type: 'warning',
+                icon: 'warning',
+                message: 'The password must be at least 6 characters',
+              }), setLoadingButton(false)
             } else {
                setLoadingButton(true)
               fetch(SIGNUP, {
@@ -124,7 +144,7 @@ export default function Signup() {
    
   };
   return (
-    <ScrollView>
+    <ScrollView  showsVerticalScrollIndicator={false} >
       <View
         style={{
           backgroundColor: 'white',
@@ -179,12 +199,18 @@ export default function Signup() {
           <Text style={{marginBottom: 20.4}}></Text>
         </View>
         <View>
+        {loadingButton? <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          message="Loading..."
+          />:
           <TouchableOpacity style={styles.but} onPress={savedata}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="mail" size={18} color={'white'} />
             </View>
             <View style={{justifyContent: 'center', marginLeft: 60}}>
-            {loadingButton? <ActivityIndicator size="large" color="white" style={{marginLeft:30}} />:
               <Text
                 style={{
                   fontSize: hp("2%"),
@@ -193,9 +219,9 @@ export default function Signup() {
                   fontWeight: 'bold',
                 }}>
                 Create Account
-              </Text>}
+              </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
@@ -254,4 +280,7 @@ const styles = StyleSheet.create({
   ty: {
     marginTop: 31,
   },
+  indicator:{
+    marginTop:35
+  }
 });

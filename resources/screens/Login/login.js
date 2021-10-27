@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
 import {LOGIN} from '../../config/url';
+import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 export default function Login() {
   const[loadingButton,setLoadingButton] =useState(false)
   const [state, setState] = useState({
@@ -104,7 +105,7 @@ export default function Login() {
       // }
   };
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false} >
       <View
         style={{
           backgroundColor: 'white',
@@ -141,12 +142,18 @@ export default function Login() {
           </Text>
         </TouchableOpacity>
         <View>
+              {loadingButton?  <OrientationLoadingOverlay
+          visible={true}
+          color="white"
+          indicatorSize="large"
+          messageFontSize={24}
+          message="Loading..."
+          />:
           <TouchableOpacity style={styles.but} onPress={loginss}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="mail" size={18} color={'white'} />
             </View>
             <View style={{justifyContent: 'center', marginLeft: 90}}>
-              {loadingButton? <ActivityIndicator size="large" color="white" />:
               <Text
                 style={{
                   fontSize: hp("2%"),
@@ -156,9 +163,9 @@ export default function Login() {
                 }}>
                 Login
               </Text>
-              }
+              
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
@@ -218,6 +225,9 @@ const styles = StyleSheet.create({
   },
   input:{
     flexDirection:"row"
+  },
+  indicator:{
+    marginTop:35
   }
 });
 

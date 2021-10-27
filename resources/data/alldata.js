@@ -18,15 +18,30 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {GETPRODUCT, Images_API} from '../config/url';
 import {VStack, Box, Divider} from 'native-base';
+import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient'
+import Svg, {Circle, Rect } from 'react-native-svg'
 export default function Alldata(prop, {navigation}) {
   return (
     <View>
       {prop.isLoading ? (
-        <ActivityIndicator
-          size={100}
-          color="#512500"
-          style={{marginTop: 40}}
-        />
+        // <ActivityIndicator
+        //   size={60}
+        //   color="#512500"
+        //   style={{marginTop: 40}}
+        // />
+        <SvgAnimatedLinearGradient
+            primaryColor="#e1e6e2"
+            secondaryColor="#989c99"
+            height={80}>
+    <Rect x="0" y="0" rx="3" ry="3" width="70" height="10"/>
+    <Rect x="80" y="0" rx="3" ry="3" width="100" height="10"/>
+    <Rect x="190" y="0" rx="3" ry="3" width="10" height="10"/>
+    <Rect x="15" y="20" rx="3" ry="3" width="130" height="10"/>
+    <Rect x="155" y="20" rx="3" ry="3" width="130" height="10"/>
+    <Rect x="15" y="40" rx="3" ry="3" width="90" height="10"/>
+    <Rect x="115" y="40" rx="3" ry="3" width="60" height="10"/>
+    <Rect x="185" y="40" rx="3" ry="3" width="60" height="10"/>
+</SvgAnimatedLinearGradient>
       ) : (
         <FlatList
           data={prop.data}
@@ -126,28 +141,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   box: {
-    // justifyContent:"space-around",
     alignItems: 'center',
     borderRadius: 18,
-    backgroundColor: '#F3F5F7',
+    backgroundColor: '#ebeced',
     marginRight: 10,
-    shadowColor: '#000',
-    // width:354,
-    // shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.6,
-    shadowRadius: 18,
-    elevation: 5,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.6,
+    // shadowRadius: 10,
+    // elevation: 5,
   },
   im: {
     width: wp('40'),
     height: hp('15'),
     borderRadius: 30,
-    // shadowColor: '#000',
-    // width:354,
-    // shadowOffset: { width: 1, height: 1 },
-    // shadowOpacity: 0.6,
-    // shadowRadius: 18,
-    // elevation: 5,
   },
   fea: {
     marginLeft: 10,
