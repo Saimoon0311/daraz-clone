@@ -31,7 +31,8 @@ export default function Alldata(prop, {navigation}) {
         // />
         <SvgAnimatedLinearGradient
             primaryColor="#e1e6e2"
-            secondaryColor="#989c99"
+            // secondaryColor="#989c99"
+            secondaryColor="#512500"
             height={80}>
     <Rect x="0" y="0" rx="3" ry="3" width="70" height="10"/>
     <Rect x="80" y="0" rx="3" ry="3" width="100" height="10"/>

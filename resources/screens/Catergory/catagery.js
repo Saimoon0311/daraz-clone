@@ -70,7 +70,7 @@ export default function cate({navigation}) {
             />
             <Ionicons name="search" color="#512500" size={20} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => navigation.navigate('Cart')}>
             <Ionicons size={37.5} color="#512500" name="cart" />
           </TouchableOpacity>
         </View>
@@ -120,9 +120,9 @@ export default function cate({navigation}) {
           </TouchableOpacity>
           {subloading ? (
             <ActivityIndicator
-              size={100}
+              size={50}
               color="#512500"
-              style={{marginTop: 50, right: 60}}
+              style={{marginTop: 50, right: 10}}
             />
           ) : (
             <FlatList
@@ -151,7 +151,6 @@ export default function cate({navigation}) {
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={{paddingBottom: '100%'}}
                             renderItem={({item}) =>  (
-                              
                               <View
                                 style={{
                                   flex: 1,
@@ -160,7 +159,7 @@ export default function cate({navigation}) {
                                 }}>
                                 <TouchableOpacity onPress={()=>navigation.navigate("subcatdetails",item)} >
                                   <View style={styles.itss}>
-                                    <Image style={styles.img} source={require("../../images/yyy.png")} />
+                                    {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
                                     <Text style={styles.insidetext}>
                                       {item.name}
                                     </Text>
@@ -263,9 +262,10 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
     backgroundColor: 'white',
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height:hp('8%'),
+    alignContent:"center",
+    alignItems:"center",
+    justifyContent:"center"
   },
   insidetext: {
     color: '#512500',
