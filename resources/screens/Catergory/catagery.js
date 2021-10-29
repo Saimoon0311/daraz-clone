@@ -17,7 +17,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {alignContent, backgroundColor, color} from 'styled-system';
 import {CATEGORY, SUBCAT} from '../../config/url';
-
+import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [subloading, setSubloading] = useState(true);
@@ -119,11 +119,7 @@ export default function cate({navigation}) {
             />
           </TouchableOpacity>
           {subloading ? (
-            <ActivityIndicator
-              size={50}
-              color="#512500"
-              style={{marginTop: 50, right: 10}}
-            />
+            <BubblesLoader size={50}  color="#512500" />
           ) : (
             <FlatList
               data={subcatdata}

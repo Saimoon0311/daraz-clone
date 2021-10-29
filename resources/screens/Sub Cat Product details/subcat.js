@@ -140,7 +140,7 @@ export default function subcatdetails({route, navigation}) {
             renderItem={({item, index}) => {
               return (
                 <View style={styles.box}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={()=>navigation.navigate("Details",item)} >
                     <ImageBackground
                       style={styles.im}
                       imageStyle={{borderRadius: 20}}

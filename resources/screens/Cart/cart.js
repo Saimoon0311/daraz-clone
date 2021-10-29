@@ -18,6 +18,7 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {ADDTOWISHLIST, CART, CARTDELEtE, Images_API, testCART} from '../../config/url';
 import {getUserData} from '../../utils/utils';
+import { NineCubesLoader,BubblesLoader } from 'react-native-indicator';
 
 export default function Cart({navigation}) {
   const [cartdata, setCartdata] = useState(null);
@@ -133,11 +134,15 @@ export default function Cart({navigation}) {
       <View style={{paddingBottom: 150}}>
         <ScrollView>
           {isLoading ? (
-            <ActivityIndicator
-              size={100}
-              color="#512500"
-              style={{marginTop: 100}}
-            />
+            // <ActivityIndicator
+            //   size={100}
+            //   color="#512500"
+            //   style={{marginTop: 100}}
+            // />
+            <View  style={{margin: 120}} >
+            <BubblesLoader size={100}
+              color="#512500" dotRadius={25} />
+           </View>
           ) : !cartdata ? (
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />

@@ -9,7 +9,8 @@ import { color } from "styled-system";
 import { ADDTOCART, Images_API } from "../../config/url";
 import { showMessage } from "react-native-flash-message";
 import { getUserData } from "../../utils/utils";
-
+import AnimatedLoader from "react-native-animated-loader";
+import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
 export default function Details ({ route, navigation }){
   const [user_id,setUser_id] =useState()
   const [loading,setLoading]=useState(false)
@@ -166,13 +167,16 @@ export default function Details ({ route, navigation }){
           {item.stock < 1 ? <Text style={styles.stock}>Out Of Stock</Text>:
           
         <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
+              {loading? 
+              <DotsLoader color="#E9691D" size={20}/>
+              :
           <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              {loading? <ActivityIndicator size="large" color="white" />:
+              {/* // <ActivityIndicator size="large" color="white" /> */}
               <Text style={{ color: "white", fontSize: 20,  fontWeight: "bold" }} >Add To Cart</Text>
-              }
             </View>
           </TouchableOpacity>
+              }
         </View>
           }
 
