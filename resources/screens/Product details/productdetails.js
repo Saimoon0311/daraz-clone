@@ -5,12 +5,14 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
-import { color } from "styled-system";
 import { ADDTOCART, Images_API } from "../../config/url";
 import { showMessage } from "react-native-flash-message";
 import { getUserData } from "../../utils/utils";
 import AnimatedLoader from "react-native-animated-loader";
+import {color} from "../../config/color"
 import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
+import { styles } from "./style";
+
 export default function Details ({ route, navigation }){
   const [user_id,setUser_id] =useState()
   const [loading,setLoading]=useState(false)
@@ -64,7 +66,7 @@ export default function Details ({ route, navigation }){
 
     console.log("tyuu======>>>>>>>>>>",item)
     return(
-        <View>
+        <View style={styles.main} >
              <View  style={styles.header} >
                 <TouchableOpacity onPress={()=>navigation.goBack()} >
                     <Ionicons name="arrow-back-sharp"  size={30} color="#512500" style={styles.icon} />
@@ -186,78 +188,7 @@ export default function Details ({ route, navigation }){
 }
 
 
-const styles = StyleSheet.create({
-  header:{
-    flexDirection: "row", 
-    justifyContent: "space-between",
-    backgroundColor:"#FFDDC9",
-    shadowColor: '#000',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 10,
-    shadowRadius: 6,  
-    elevation: 5,
-  },
-    icon:{
-        margin:20
-    },
-    box:{
-        padding:13,
-        marginTop:20,
-        backgroundColor:"#F3F5F7",
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5,
-        borderRadius:10,
-    },
-    container: {
-        borderWidth: 0,
-      },
-      imm:{
-        width:wp("88%"),
-        height:hp("40%"),
-        marginRight:20,
-        borderRadius:20,
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 10,
-        shadowRadius: 3,
-        borderWidth:0.1,
-        borderColor:"gray"
-      },
-      te:{
-        textAlign:"center",
-        fontSize:18,
-        color:"#512500",
-        fontWeight:"bold",
-        marginTop:25
-      },
-      tep:{
-        color:"#512500",
-        fontSize:14,
-      },
-      carttouch:{
-        backgroundColor: "#E9691D", 
-        width: wp("85%"),
-         height: hp("7%"),
-          alignItems: "center",
-           justifyContent: "center",
-         borderRadius: 10
-      },
-      delvery:{
-        fontSize:14,
-        fontWeight:"bold",
-        color:"#919191",
-        marginTop:20
-      },
-      stock:{
-      color:"red",
-      fontSize:30,
-      fontWeight:"bold",
-      textDecorationLine:"underline"
-      }
-})
+
 
 
 

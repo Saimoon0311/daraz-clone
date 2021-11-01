@@ -3,7 +3,8 @@ import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView} from "r
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Images_API } from "../../config/url";
-
+import {color} from "../../config/color"
+import { styles } from "./style";
 
 export default function Cartdetails({ route, navigation }){
 const item = route.params;
@@ -78,28 +79,3 @@ const imm = item.get_products.images
 
 
 
-const styles = StyleSheet.create({
-    icon:{
-        margin:20
-    },
-    box:{
-        padding:13,
-        marginTop:20,
-        backgroundColor:"#F3F5F7",
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5,
-        borderRadius:10,
-    },
-    container: {
-        borderWidth: 0,
-      },
-      imm:{
-        width:wp("90%"),
-        height:hp("40%"),
-        marginRight:20,
-        borderRadius:20
-      }
-})

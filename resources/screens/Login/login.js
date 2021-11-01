@@ -20,11 +20,14 @@ import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
 import {LOGIN} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
+import {color} from "../../config/color"
+import { styles } from './style';
+
 export default function Login() {
   const[loadingButton,setLoadingButton] =useState(false)
   const [state, setState] = useState({
-    email: '',
-    password: '',
+    email: 'testvendor@gmail.com',
+    password: 'password',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -198,38 +201,6 @@ export default function Login() {
   );
 }
 
-const styles = StyleSheet.create({
-  te: {
-    backgroundColor: 'white',
-  },
-  but: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    width: wp('80%'),
-    backgroundColor: '#FF7E33',
-    height: hp('6%'),
-    marginTop: 30,
-    borderRadius: 10,
-  },
-  buts: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    width: wp('80%'),
-    backgroundColor: '#1873EB',
-    height: hp('6%'),
-    marginTop: 30,
-    borderRadius: 10,
-  },
-  ty: {
-    marginTop: 31,
-  },
-  input:{
-    flexDirection:"row"
-  },
-  indicator:{
-    marginTop:35
-  }
-});
 
 // try {
 //   const res = await action.login({

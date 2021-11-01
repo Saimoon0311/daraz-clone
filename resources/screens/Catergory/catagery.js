@@ -15,9 +15,12 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {alignContent, backgroundColor, color} from 'styled-system';
 import {CATEGORY, SUBCAT} from '../../config/url';
 import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
+import {color} from "../../config/color"
+import { styles } from './style';
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [subloading, setSubloading] = useState(true);
@@ -45,7 +48,7 @@ export default function cate({navigation}) {
     setClick(index)
     setSubloading(true);
     console.log(39999999999,index)
-    console.log('before ------->>>>>', catdata);
+    // console.log('before ------->>>>>', catdata);
     const api = SUBCAT + id;
     console.log(api);
     fetch(api)
@@ -53,9 +56,9 @@ export default function cate({navigation}) {
       .then(json => setSubcatdata(json))
       .finally(() => setSubloading(false));
   };
-  console.log('=============.............', subcatdata);
+  // console.log('=============.............', subcatdata);
   return (
-    <View>
+    <View style={styles.mains} >
       <View style={styles.appbarStyle}>
         <Text style={styles.head}>Category</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
@@ -77,18 +80,33 @@ export default function cate({navigation}) {
       </View>
       <View style={styles.body}>
         {isLoading ? (
-          <ActivityIndicator
-            size={100}
-            color="#512500"
-            style={{marginTop: 100}}
-          />
+          // <ActivityIndicator
+          //   size={100}
+          //   color="#512500"
+          //   style={{marginTop: 100}}
+          // />
+          <SkeletonPlaceholder>
+          {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ width: 60, height: 60, borderRadius: 50 }} />
+            <View style={{ marginLeft: 20 }}>
+              <View style={{ width: 120, height: 20, borderRadius: 4 }} />
+              <View
+                style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}
+              />
+            </View>
+          </View> */}
+            <View style={{...styles.sidebox,height:hp('9%')}} />
+            <View style={{...styles.sidebox,height:hp('9%')}} />
+            <View style={{...styles.sidebox,height:hp('9%')}} />
+            <View style={{...styles.sidebox,height:hp('9%')}} />
+        </SkeletonPlaceholder>
         ) : (
           <View>
             <FlatList
               data={catdata}
               keyExtractor={item => item.key}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{paddingBottom: 300}}
+              contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item,index}) => {
                 return (
                   <View>
@@ -118,14 +136,16 @@ export default function cate({navigation}) {
               style={{marginLeft: 'auto'}}
             />
           </TouchableOpacity>
-          {subloading ? (
-            <BubblesLoader size={50}  color="#512500" />
-          ) : (
+          {subloading ? 
+            <View style={{marginTop:hp('15%')}} >
+            <BubblesLoader size={50} dotRadius={10}  color="#512500" />
+          </View>
+           : (
             <FlatList
               data={subcatdata}
               keyExtractor={item => item.key}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{paddingBottom: 300}}
+              contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item}) => {
                 return (
                   <View style={styles.main}>
@@ -145,7 +165,6 @@ export default function cate({navigation}) {
                             keyExtractor={item => item.key}
                             numColumns={2}
                             showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{paddingBottom: '100%'}}
                             renderItem={({item}) =>  (
                               <View
                                 style={{
@@ -177,126 +196,3 @@ export default function cate({navigation}) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  appbarStyle: {
-    backgroundColor: '#FFDDC9',
-    paddingBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 10,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  searchbar: {
-    width: wp('55%'),
-
-    height: hp('6%'),
-    backgroundColor: 'white',
-    borderRadius: 17,
-    paddingLeft: 15,
-  },
-  search: {
-    width: wp('65%'),
-    backgroundColor: 'white',
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderRadius: 17,
-  },
-  head: {
-    textAlign: 'center',
-    marginBottom: 10,
-    fontWeight: '400',
-    fontSize: 18,
-    color: '#512500',
-  },
-  body: {
-    margin: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  sidebox: {
-    borderColor: '#512500',
-    borderWidth: 1,
-    paddingBottom: hp('2%'),
-    paddingTop: hp('2%'),
-    marginBottom: hp('2%'),
-    borderRadius: 10,
-    width: wp('30%'),
-    paddingLeft:wp('5%'),
-    paddingRight:wp('5%'),
-    backgroundColor:"white"
-  },
-  inside: {
-    borderColor: '#512500',
-    borderWidth: 1,
-    marginBottom: hp('2%'),
-    padding: 10,
-    width: wp('60%'),
-    borderRadius: 10,
-  },
-  multibox: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  main: {
-    marginLeft: 10,
-  },
-  img: {
-    width: wp('10%'),
-    height: hp('10%'),
-  },
-  itss: {
-    borderWidth: 1,
-    borderColor: '#512500',
-    padding: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 10,
-    shadowRadius: 10,
-    elevation: 5,
-    backgroundColor: 'white',
-    height:hp('8%'),
-    alignContent:"center",
-    alignItems:"center",
-    justifyContent:"center"
-  },
-  insidetext: {
-    color: '#512500',
-    textAlign: 'center',
-  },
-  cattext: {
-    color: '#512500',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  sideboxactive: {
-    paddingBottom: hp('2%'),
-    paddingTop: hp('2%'),
-    marginBottom: hp('2%'),
-    borderRadius: 10,
-    width: wp('30%'),
-    paddingLeft:wp('5%'),
-    paddingRight:wp('5%'),
-    backgroundColor: '#FFDDC9',
-  },
-  but: {
-    flexDirection: 'row',
-    borderColor: '#512500',
-    borderWidth: 1,
-    marginBottom: 10,
-    marginRight: 10,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-    // textAlign: 'center',
-    borderRadius: 10,
-    left: 8,
-  },
-  sideboxs:{
-    backgroundColor:"red"
-  }
-});
-

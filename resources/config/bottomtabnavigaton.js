@@ -2,7 +2,7 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../screens/home';
+import Home from '../screens/Home/home';
 import Deal from '../screens/Deal/deal';
 import {
   View,
@@ -18,6 +18,8 @@ import {
 import cate from '../screens/Catergory/catagery';
 import Order from '../screens/Order/order';
 import setting from '../screens/Setting/setting';
+import {color} from "../config/color"
+
 const Tab = createBottomTabNavigator();
 
 function MybottomTabs() {
@@ -37,7 +39,7 @@ function MybottomTabs() {
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: () => <Ionicons name="home"  color="#512500" size={20} />,
+          tabBarIcon: () => <Ionicons name="home"  color={color.bottomNavColor} size={20} />,
           title: 'Home',
           tabBarLabelStyle: {
             fontSize: 15,
@@ -50,7 +52,7 @@ function MybottomTabs() {
       <Tab.Screen
         name="cate"
         options={{
-          tabBarIcon: () => <Ionicons name="list" color="#512500" size={30} />,
+          tabBarIcon: () => <Ionicons name="list" color={color.bottomNavColor} size={30} />,
           title: 'Category',
           tabBarLabelStyle: {
             fontSize: 15,
@@ -79,7 +81,7 @@ function MybottomTabs() {
         name="setting"
         options={{
           tabBarIcon: () => (
-            <Ionicons name="settings-sharp" color="#512500" size={25} />
+            <Ionicons name="settings-sharp" color={color.bottomNavColor} size={25} />
           ),
           title: 'Setting',
           tabBarLabelStyle: {

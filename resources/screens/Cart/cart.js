@@ -19,10 +19,14 @@ import {showMessage} from 'react-native-flash-message';
 import {ADDTOWISHLIST, CART, CARTDELEtE, Images_API, testCART} from '../../config/url';
 import {getUserData} from '../../utils/utils';
 import { NineCubesLoader,BubblesLoader } from 'react-native-indicator';
+import {color} from "../../config/color"
+import { styles } from './style';
 
 export default function Cart({navigation}) {
   const [cartdata, setCartdata] = useState(null);
   const [user_id,setUser_id] =useState()
+  const [total,setTotal]=useState('')
+  const [quantity,setQuantity]=useState(null)
   const add = () => {
     console.log(cartdata[0].quantity+1)
   };
@@ -41,11 +45,13 @@ export default function Cart({navigation}) {
           setLoading(false);
         } else {
           setCartdata(json);
+          // const tota= cartdata.created_at
+          // setTotal(tota)
         }
       })
       .finally(() => setLoading(false));
   }, []);
-
+// console.log("==================xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=============================",cartdata.created_at)
   const onDeleteAlert = id => {
     Alert.alert(
       'Remove from Cart ',
@@ -99,7 +105,7 @@ export default function Cart({navigation}) {
     //  .catch(error => console.error(17, error))
     }
   return (
-    <View>
+    <View style={styles.main} >
       <View
         style={{
           flexDirection: 'row',
@@ -131,17 +137,12 @@ export default function Cart({navigation}) {
         </Text>
         <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
       </View>
-      <View style={{paddingBottom: 150}}>
-        <ScrollView>
+      <View>
+        <ScrollView contentContainerStyle={{paddingBottom: 150}} >
           {isLoading ? (
-            // <ActivityIndicator
-            //   size={100}
-            //   color="#512500"
-            //   style={{marginTop: 100}}
-            // />
-            <View  style={{margin: 120}} >
-            <BubblesLoader size={100}
-              color="#512500" dotRadius={25} />
+            <View  style={{alignSelf:"center",marginTop:hp('20%')}} >
+            <BubblesLoader size={50}
+              color="#512500" dotRadius={10} />
            </View>
           ) : !cartdata ? (
             <View style={styles.imm}>
@@ -286,76 +287,36 @@ export default function Cart({navigation}) {
               </View>
             </>
           )}
+
+
+
+{/* <CardField
+      postalCodeEnabled={true}
+      placeholder={{
+        number: '4242 4242 4242 4242',
+      }}
+      cardStyle={{
+        backgroundColor: '#FFFFFF',
+        textColor: '#000000',
+      }}
+      style={{
+        width: '100%',
+        height: 50,
+        marginVertical: 30,
+      }}
+      onCardChange={(cardDetails) => {
+        console.log('cardDetails', cardDetails);
+      }}
+      onFocus={(focusedField) => {
+        console.log('focusField', focusedField);
+      }}
+    /> */}
+
+
+
         </ScrollView>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  icon: {
-    margin: 20,
-  },
-  box: {
-    padding: 13,
-    margin: 20,
-    backgroundColor: '#F3F5F7',
-    shadowColor: '#000',
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
-    borderRadius: 10,
-  },
-  container: {
-    borderWidth: 0,
-    borderBottomWidth: 1,
-  },
-  verticleLine: {
-    height: 30,
-    width: 1,
-    backgroundColor: '#909090',
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  ty: {
-    marginLeft: 'auto',
-  },
-  maior: {
-    width: wp('70%'),
-    height: hp('6%'),
-    backgroundColor: '#FF7E33',
-    alignItems: 'center',
-    marginTop: 42,
-    borderRadius: 10,
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
-  or: {
-    textAlign: 'center',
-    fontSize: 16,
-    color: 'white',
-    justifyContent: 'center',
-    fontWeight: 'bold',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  imm: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-    marginTop: hp('20%'),
-  },
-  tee: {
-    color: '#512500',
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  remov: {
-    color: '#B64400',
-    fontSize: 16,
-    fontWeight: 'bold',
-    top:13
-  },
-});

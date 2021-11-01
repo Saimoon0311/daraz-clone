@@ -7,12 +7,14 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android-build": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/netinfo": "^6.0.2",
+    "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-native-picker/picker": "^2.1.0",
     "@react-navigation/bottom-tabs": "^6.0.7",
     "@react-navigation/drawer": "^6.1.6",
@@ -20,6 +22,7 @@
     "@react-navigation/material-top-tabs": "^6.0.4",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
+    "@stripe/stripe-react-native": "^0.2.3",
     "native-base": "^3.2.0",
     "react": "17.0.2",
     "react-native": "0.66.0",
@@ -41,6 +44,7 @@
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
+    "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-svg": "^12.1.1",
     "react-native-svg-animated-linear-gradient": "^0.4.0",
     "react-native-tab-view": "^3.1.1",

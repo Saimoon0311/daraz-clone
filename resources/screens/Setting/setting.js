@@ -1,17 +1,19 @@
 import React,{useEffect,useState} from "react"
-import {View,Text,Alert,Button,StyleSheet,TouchableOpacity,ScrollView} from "react-native"
+import {View,Text,Alert,Button,StyleSheet,TouchableOpacity,ScrollView,StatusBar} from "react-native"
 import { useSelector } from 'react-redux';
 import actions from '../../redux/action';
 import {getUserData} from '../../utils/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { showMessage } from "react-native-flash-message";
+import {color} from "../../config/color"
+import { styles } from "./style";
+
 
 export default function setting ({navigation})  {
     const [names,setNames] =useState()
     const [users,setUsers] =useState()
     const user = async ()=>{
-
         const userId = await getUserData()
         const name = JSON.stringify(userId.username)
         setNames(name)
@@ -44,7 +46,8 @@ export default function setting ({navigation})  {
 
     }
     return(
-        <View>
+        <View style={styles.main} >
+<StatusBar  backgroundColor="#94725f" />
   <View
         style={{
           flexDirection: 'row',
@@ -137,54 +140,3 @@ export default function setting ({navigation})  {
 }
 
 
-const styles = StyleSheet.create({
-    icon: {
-      margin: 20,
-    },
-    well:{
-        padding:5,
-        backgroundColor:"black"
-    },
-    we:{
-        color:"#E9691D",
-        fontSize:18,
-        fontWeight:"bold",
-        textAlign:"center"
-    },
-    acc:{
-        color:"#512500",
-        fontSize:16,
-        fontWeight:"bold"
-    },
-    vacc:{
-        margin:30
-    },
-    box:{
-        padding:13,
-        marginTop:15,
-        backgroundColor:"#F3F5F7",
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5,
-        borderRadius:10,
-        flexDirection:"row",
-        // marginBottom:1
-    },
-    orte:{
-        color:"#512500",
-        fontSize:16,
-        fontWeight:"bold"
-    },
-    shadow:{
-flexDirection:"row",
-width:wp("80%"),
-    },
-    shadows:{
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"center",
-        
-    }
-})

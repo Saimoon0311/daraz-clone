@@ -5,6 +5,7 @@ import Signup from "../screens/Signup/signup";
 import Login from "../screens/Login/login";
 import { style } from "styled-system";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {color} from "../config/color"
 
 const Tab = createMaterialTopTabNavigator();
 

@@ -17,6 +17,9 @@ import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
 import {SIGNUP} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
+import { styles } from './style';
+
+
 export default function Signup() {
   const[loadingButton,setLoadingButton] =useState(false)
   const [username, setUsername] = useState();
@@ -255,32 +258,4 @@ export default function Signup() {
   );
 }
 
-const styles = StyleSheet.create({
-  te: {
-    backgroundColor: 'white',
-  },
-  but: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    width: wp('80%') ,
-    backgroundColor: '#FF7E33',
-    height:hp("6%"),
-    marginTop: 30,
-    borderRadius: 10,
-  },
-  buts: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    width: wp('80%') ,
-    backgroundColor: '#1873EB',
-    height:hp("6%"),
-    marginTop: 30,
-    borderRadius: 10,
-  },
-  ty: {
-    marginTop: 31,
-  },
-  indicator:{
-    marginTop:35
-  }
-});
+

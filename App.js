@@ -15,6 +15,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  LogBox
 } from 'react-native';
 import Navigation from './resources/config/naviagtion';
 import {NavigationContainer} from '@react-navigation/native';
@@ -120,6 +121,9 @@ function App({navigation}) {
 
   useEffect( async () => {
     (async () => {
+
+    LogBox.ignoreAllLogs()
+
       const userData = await getUserData();
       console.log('user data App.js', userData);
       if (!!userData) {
