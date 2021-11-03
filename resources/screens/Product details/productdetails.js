@@ -18,9 +18,9 @@ export default function Details ({ route, navigation }){
   const [loading,setLoading]=useState(false)
 
   useEffect(()=>{
- ff()
+    setUserId()
   })
-  const ff = async ()=>{
+  const setUserId = async ()=>{
   
     const userId = await getUserData();
     const users = userId.id;

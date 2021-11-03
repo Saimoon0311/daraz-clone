@@ -7,7 +7,8 @@ import {color} from "../../config/color"
 
 export const styles = StyleSheet.create({
   main:{
-backgroundColor:color.defaultBackgroundColor
+backgroundColor:color.defaultBackgroundColor,
+flex:1
   },
   header: {
     flexDirection: 'row',

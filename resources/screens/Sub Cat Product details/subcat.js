@@ -37,6 +37,10 @@ export default function subcatdetails({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [cartloading, setCartloading] = useState(false);
 
+const getData =async()=>{
+  
+}
+
   useEffect(async () => {
     // ${item.id}
     fetch(`${SUBCATPRODUCTDATA}/20`)

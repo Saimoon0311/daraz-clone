@@ -26,12 +26,13 @@ export default function Navigation() {
         <Stack.Navigator
             screenOptions={({
                 headerTitleAlign: "center",
-                headerShown: false
+                headerShown: false,
+                animation:"slide_from_right"
             })}   
         >
             {/*  */}
            {!! userData && userData.id?
-               <Stack.Screen  name="MybottomTabs" component={MybottomTabs} />
+               <Stack.Screen  name="MybottomTabs" component={MybottomTabs}  />
            :
            <>      
         <Stack.Screen options={{

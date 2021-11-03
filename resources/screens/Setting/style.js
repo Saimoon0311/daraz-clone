@@ -54,5 +54,10 @@ width:wp("80%"),
         alignItems:"center",
         justifyContent:"center",
         
-    }
+    },
+    buttonstyle:{
+        width:wp("20%"),
+        alignItems:"center",
+        justifyContent:"center"
+      }
 })

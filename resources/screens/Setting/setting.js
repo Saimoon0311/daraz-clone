@@ -8,11 +8,12 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { showMessage } from "react-native-flash-message";
 import {color} from "../../config/color"
 import { styles } from "./style";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
-
-export default function setting ({navigation})  {
+export default function setting ({navigation}){
     const [names,setNames] =useState()
     const [users,setUsers] =useState()
+    const [showAlert, setShowAlert] = useState(false);
     const user = async ()=>{
         const userId = await getUserData()
         const name = JSON.stringify(userId.username)
@@ -25,12 +26,7 @@ export default function setting ({navigation})  {
     },[])
     console.log(20,users)
     const onLogoutAlert = () => {
-        Alert.alert(
-            'Warning ! ',
-            'Are you sure, yout want to logout from this device ! ',
-            [{ text: 'Yes', onPress: logout }, { text: 'No', }],
-            { cancelable: true }
-        )
+    setShowAlert(true)
     }
     const logout = () => {
         
@@ -134,7 +130,32 @@ export default function setting ({navigation})  {
 </TouchableOpacity>
 </View>
 </ScrollView>
-
+<AwesomeAlert
+      show={showAlert}
+      showProgress={false}
+      title="Warning!"
+      message="Are you sure, yout want to logout from this device."
+      contentContainerStyle={{width:wp('80%')}}
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={true}
+      showConfirmButton={true}
+      confirmText="Yes"
+      cancelText="No"
+      confirmButtonStyle={styles.buttonstyle}
+      cancelButtonStyle={styles.buttonstyle}
+      cancelButtonTextStyle={{fontSize:hp('2.2%')}}
+      confirmButtonTextStyle={{fontSize:hp('2.2%')}}
+      confirmButtonColor={color.textColorRedCart}
+      cancelButtonColor={color.textColorRedCart}
+      onConfirmPressed={() => {
+        logout()
+        setShowAlert(false)
+      }}
+      onCancelPressed={()=>{
+        setShowAlert(false)
+      }}
+    />
         </View>
     )
 }

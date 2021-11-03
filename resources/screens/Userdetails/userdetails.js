@@ -25,8 +25,8 @@ export default function Userdeatils({navigation}){
 
 const [userdata,setUserdata] = useState();
   const [isLoading,setLoading] = useState(true);
-  useEffect( async () => {
-   const userId = await getUserData();
+  const getData = async ()=>{
+    const userId = await getUserData();
     const users = userId.id;
     console.log(286,users)
  fetch(`${USERDATA}/${users}`)
@@ -35,6 +35,11 @@ const [userdata,setUserdata] = useState();
     .catch((error) => console.error(33,error))
       .finally(() => setLoading(false));
       console.log(17,userdata)
+  }
+    useEffect( () => {
+    (async()=>{
+      getData()
+    })
   },[])
   console.log(454545,userdata)
 return(

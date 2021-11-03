@@ -27,6 +27,7 @@ import Arrivals from '../../data/arrivals';
 import {color} from "../../config/color"
 import {styles} from "./style"
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -39,6 +40,7 @@ export default function Home({navigation}) {
   const [data, setData] = useState();
   const [arrivals, setArrvals] = useState();
   const [isLoading, setLoading] = useState(true);
+  const [showAlert,setShowAlert]=useState(false)
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -75,13 +77,7 @@ const datacallss = async ()=>{
         .catch(error => console.error(33, error))
         .finally(() => setLoading(false));
     } else {
-      const title = 'Wifi Status';
-      const message = 'Warning, Please Check Your Internet Connection...';
-      const emptyArrayButtons = [];
-      const alertOptions = {
-        cancelable: true,
-      };
-      Alert.alert(title, message, emptyArrayButtons, alertOptions);
+      setShowAlert(true)
     }
   });
   if (toggleSearchBar) {
@@ -99,9 +95,10 @@ const datacallss = async ()=>{
   }
 }
 
-  useEffect(async () => {
-    console.log("jojojojojjjjo")
-    datacallss()
+  useEffect( () => {
+    (async()=>{
+      datacallss()
+    })()
   }, []);
   return (
     <SafeAreaView style={styles.main} >
@@ -150,7 +147,7 @@ const datacallss = async ()=>{
             />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: 50, marginLeft: 30}}>
+          contentContainerStyle={{paddingBottom: 100, marginLeft: 30}}>
           <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
             <Alldata detailss={detailss} data={data} isLoading={isLoading} />
@@ -192,6 +189,22 @@ const datacallss = async ()=>{
             </TouchableOpacity>
           </View>
         </ScrollView>
+        <AwesomeAlert
+      show={showAlert}
+      showProgress={false}
+      title="Warning!"
+      message="You are not connect to the internet."
+      contentContainerStyle={{width:wp('80%')}}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="Close"
+      confirmButtonColor="#DD6B55"
+      onConfirmPressed={() => {
+        setShowAlert(false);
+      }}
+    />
       </View>
     </SafeAreaView>
   );

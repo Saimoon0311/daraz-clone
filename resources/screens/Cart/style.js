@@ -38,6 +38,8 @@ flex:1
   },
   ty: {
     marginLeft: 'auto',
+    color:"gray",
+    fontSize:hp('2%')
   },
   maior: {
     width: wp('70%'),
@@ -76,4 +78,9 @@ flex:1
     fontWeight: 'bold',
     top:13
   },
+  buttonstyle:{
+    width:wp("20%"),
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });

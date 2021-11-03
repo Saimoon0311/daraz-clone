@@ -27,7 +27,7 @@ export default function cate({navigation}) {
   const [catdata, setCatdata] = useState();
   const [subcatdata, setSubcatdata] = useState();
   const [click, setClick] = useState(null);
-  useEffect(() => {
+  const apicall =()=>{
     fetch(CATEGORY)
       .then(async response => await response.json())
       .then(json => setCatdata(json), console.log(28, catdata))
@@ -40,8 +40,11 @@ export default function cate({navigation}) {
         .then(async response => await response.json())
         .then(json => setSubcatdata(json))
         .finally(() => setSubloading(false),setClick(0));
-    
-
+  }
+  useEffect(() => {
+    (async () => {
+      apicall();
+    })();
   }, []);
   const getData = async (id,index) => {
     // setStyless(true)
