@@ -18,6 +18,7 @@ import action from '../../redux/action';
 import {SIGNUP} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import { styles } from './style';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 export default function Signup() {
@@ -27,6 +28,11 @@ export default function Signup() {
   const [phone_number, setPhone_number] = useState();
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();
+  const [showAlert,setShowAlert]=useState(false)
+  const [show, setShow] = useState(false)
+  const handleClick = () => setShow(!show)
+  const [cshow, setCshow] = useState(false)
+  const handleClicks = () => setCshow(!cshow)
   const savedata = async () => {
     setLoadingButton(true)
     let netFlag     =   0;
@@ -125,16 +131,9 @@ export default function Signup() {
             }
       
           }
-      
-      
           else{
-            const title = 'Wifi Status';
-            const message = 'Warning, Please Check Your Internet Connection...';
-            const emptyArrayButtons = [];
-            const alertOptions = {
-              cancelable: true,
-            };
-            Alert.alert(title, message, emptyArrayButtons, alertOptions);
+            setShowAlert(true)
+            setLoadingButton(false)
         }
       
       
@@ -182,23 +181,29 @@ export default function Signup() {
             onChangeText={text => setPhone_number(text)}
           />
           <Text style={{marginBottom: 20.4}}></Text>
+          <View style={{flexDirection:"row"}}>
           <TextInput
             label="Password*"
-            style={styles.te}
-            secureTextEntry={true}
+            style={[styles.te,{width:wp('75%')}]}
+            secureTextEntry={show ? false : true}
             value={password}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword(text)}
           />
+           <Ionicons onPress={handleClick} color="gray" style={{top:30}} size={25} name={show ? "eye-outline" : "eye-off-outline" } />
+           </View>
           <Text style={{marginBottom: 20.4}}></Text>
+          <View style={{flexDirection:"row"}}>
           <TextInput
             label="Confirm Password*"
-            style={styles.te}
-            secureTextEntry={true}
+            style={[styles.te,{width:wp('75%')}]}
+            secureTextEntry={cshow ? false : true}
             value={confirm}
             selectionColor="#FF7E33"
             onChangeText={text => setConfirm(text)}
           />
+          <Ionicons onPress={handleClicks} color="gray" style={{top:30}} size={25} name={cshow ? "eye-outline" : "eye-off-outline" } />
+          </View>
           <Text style={{marginBottom: 20.4}}></Text>
         </View>
         <View>
@@ -225,7 +230,7 @@ export default function Signup() {
               </Text>
             </View>
           </TouchableOpacity>}
-          <TouchableOpacity style={styles.buts}>
+          {/* <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
             </View>
@@ -240,7 +245,7 @@ export default function Signup() {
                 Connect With Facebook
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <TouchableOpacity style={styles.ty}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
@@ -254,6 +259,22 @@ export default function Signup() {
           </Text>
         </TouchableOpacity>
       </View>
+      <AwesomeAlert
+      show={showAlert}
+      showProgress={false}
+      title="Warning!"
+      message="You are not connected to the internet."
+      contentContainerStyle={{width:wp('80%')}}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="Close"
+      confirmButtonColor="#DD6B55"
+      onConfirmPressed={() => {
+        setShowAlert(false);
+      }}
+    />
     </ScrollView>
   );
 }

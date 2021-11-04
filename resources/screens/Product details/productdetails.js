@@ -153,7 +153,7 @@ export default function Details ({ route, navigation }){
     {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
     <Text style={styles.tep}>SKU : {item.sku}</Text>
     <Text style={[styles.tep,{fontWeight:"bold"}]}>Description :</Text>
-    <Text style={{marginLeft:"auto",textAlign:"justify"}} > {item.description} </Text> 
+    <Text style={{marginLeft:"auto",textAlign:"justify",color:"gray"}} > {item.description} </Text> 
     
 
 

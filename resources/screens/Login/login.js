@@ -13,6 +13,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Button
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -22,9 +23,17 @@ import {LOGIN} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {color} from "../../config/color"
 import { styles } from './style';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default function Login() {
   const[loadingButton,setLoadingButton] =useState(false)
+  const [showAlert,setShowAlert]=useState(false)
+
+  const [show, setShow] = useState(false)
+
+  const handleClick = () => setShow(!show)
+
+
   const [state, setState] = useState({
     email: 'testvendor@gmail.com',
     password: 'password',
@@ -95,13 +104,8 @@ export default function Login() {
       }
   
       else{
-        const title = 'Wifi Status';
-        const message = 'Warning, Please Check Your Internet Connection...';
-        const emptyArrayButtons = [];
-        const alertOptions = {
-          cancelable: true,
-        };
-        Alert.alert(title, message, emptyArrayButtons, alertOptions);
+        setShowAlert(true)
+        setLoadingButton(false)
     }
       });
     
@@ -124,13 +128,16 @@ export default function Login() {
             onChangeText={email => updateState({email})}
           />
           <Text style={{marginBottom: 30.4}}></Text>
+          <View style={{flexDirection:"row"}}>
           <TextInput
             label="Password"
-            style={styles.te}
+            style={[styles.te,{width:wp('75%')}]}
             selectionColor="#FF7E33"
-            secureTextEntry={true}
+            secureTextEntry={show ? false : true}
             onChangeText={password => updateState({password})}
           />
+           <Ionicons onPress={handleClick} color="gray" style={{top:30}} size={25} name={show ? "eye-outline" : "eye-off-outline" } />
+        </View>
         </View>
         <TouchableOpacity>
           <Text
@@ -169,7 +176,7 @@ export default function Login() {
               
             </View>
           </TouchableOpacity>}
-          <TouchableOpacity style={styles.buts}>
+          {/* <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
             </View>
@@ -184,7 +191,7 @@ export default function Login() {
                 Connect With Facebook
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <TouchableOpacity style={styles.ty}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
@@ -197,6 +204,22 @@ export default function Login() {
           </Text>
         </TouchableOpacity>
       </View>
+      <AwesomeAlert
+      show={showAlert}
+      showProgress={false}
+      title="Warning!"
+      message="You are not connect to the internet."
+      contentContainerStyle={{width:wp('80%')}}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="Close"
+      confirmButtonColor="#DD6B55"
+      onConfirmPressed={() => {
+        setShowAlert(false);
+      }}
+    />
     </ScrollView>
   );
 }

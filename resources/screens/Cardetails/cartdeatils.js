@@ -47,7 +47,7 @@ const imm = item.get_products.images
     <Text style={{color:"#512500",fontSize:14}}>SKU : {item.get_products.sku}</Text>
     <Text style={{color:"#512500",fontSize:14}}>Quantity : {item.quantity}</Text>
     <Text style={{color:"#512500",fontSize:14}}>Description :</Text>
-    <Text style={{marginLeft:"auto",textAlign:"justify"}} > {item.get_products.description} </Text> 
+    <Text style={{marginLeft:"auto",textAlign:"justify",color:"gray"}} > {item.get_products.description} </Text> 
     
 
 

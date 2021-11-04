@@ -84,25 +84,25 @@ export default function setting ({navigation}){
 <Text style={styles.acc} >My Moyen Account</Text>
 <View style={styles.box}>
 <TouchableOpacity style={styles.shadow} >
- <Ionicons name="albums-outline" size={20} style={{marginRight:20}}/>
+ <Ionicons name="albums-outline" size={20} style={{marginRight:20}} color="gray" />
 <Text style={styles.orte} >Orders</Text>
 </TouchableOpacity>
 </View>
 <View style={styles.box}>
 <TouchableOpacity style={styles.shadow} >
- <Ionicons name="document-text-outline"  size={20} style={{marginRight:20}}/>
+ <Ionicons name="document-text-outline"  size={20} style={{marginRight:20}} color="gray"/>
 <Text style={styles.orte} >Ratings & Reviews</Text>
 </TouchableOpacity>
 </View>
 <View style={styles.box}>
 <TouchableOpacity style={styles.shadow} >
- <Ionicons name="heart-outline"  size={20} style={{marginRight:20}}/>
+ <Ionicons name="heart-outline"  size={20} style={{marginRight:20}} color="gray"/>
 <Text style={styles.orte} >Saved Items</Text>
 </TouchableOpacity>
 </View>
 <View style={styles.box}>
 <TouchableOpacity style={styles.shadow} >
- <Ionicons name="eye-outline"  size={20} style={{marginRight:20}}/>
+ <Ionicons name="eye-outline"  size={20} style={{marginRight:20}} color="gray"/>
 <Text style={styles.orte} >Recently Viewed</Text>
 </TouchableOpacity>
 </View>
