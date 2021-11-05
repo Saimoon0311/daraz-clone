@@ -20,6 +20,7 @@ import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from
 import {color} from "../../config/color"
 import { styles } from './style';
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -27,19 +28,20 @@ export default function cate({navigation}) {
   const [catdata, setCatdata] = useState();
   const [subcatdata, setSubcatdata] = useState();
   const [click, setClick] = useState(null);
+  const [nshowAlert, setNshowAlert] = useState(false);
   const apicall =()=>{
     fetch(CATEGORY)
       .then(async response => await response.json())
-      .then(json => setCatdata(json), console.log(28, catdata))
-      .catch(error => console.error(17, error))
-      .finally(() => setLoading(false))
+      .then(json =>{ setCatdata(json), console.log(28, catdata),setLoading(false)})
+      .catch(error => setNshowAlert(true))
 
       const api = SUBCAT + 3;
       console.log(api);
       fetch(api)
         .then(async response => await response.json())
-        .then(json => setSubcatdata(json))
-        .finally(() => setSubloading(false),setClick(0));
+        .then(json => {setSubcatdata(json),setClick(0),setSubloading(false)})
+        // .catch(error => setNshowAlert(true))
+        // .finally(() => setSubloading(false),setClick(0));
   }
   useEffect(() => {
     (async () => {
@@ -56,8 +58,8 @@ export default function cate({navigation}) {
     console.log(api);
     fetch(api)
       .then(async response => await response.json())
-      .then(json => setSubcatdata(json))
-      .finally(() => setSubloading(false));
+      .then(json => setSubcatdata(json),setSubloading(false))
+      .catch(error => setNshowAlert(true))
   };
   // console.log('=============.............', subcatdata);
   return (
@@ -83,21 +85,7 @@ export default function cate({navigation}) {
       </View>
       <View style={styles.body}>
         {isLoading ? (
-          // <ActivityIndicator
-          //   size={100}
-          //   color="#512500"
-          //   style={{marginTop: 100}}
-          // />
           <SkeletonPlaceholder>
-          {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={{ width: 60, height: 60, borderRadius: 50 }} />
-            <View style={{ marginLeft: 20 }}>
-              <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-              <View
-                style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}
-              />
-            </View>
-          </View> */}
             <View style={{...styles.sidebox,height:hp('9%')}} />
             <View style={{...styles.sidebox,height:hp('9%')}} />
             <View style={{...styles.sidebox,height:hp('9%')}} />
@@ -196,6 +184,22 @@ export default function cate({navigation}) {
           )}
         </View>
       </View>
+      <AwesomeAlert
+          show={nshowAlert}
+          showProgress={false}
+          title="Warning!"
+          message="You are not connect to the internet."
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="Close"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => {
+            setNshowAlert(false);
+          }}
+        />
     </View>
   );
 }

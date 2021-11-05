@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef,useCallback} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   TextInput,
   SafeAreaView,
   RefreshControl,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -24,14 +24,14 @@ import {NativeBaseProvider, Box, Center} from 'native-base';
 import Alldata from '../../data/alldata';
 import NetInfo from '@react-native-community/netinfo';
 import Arrivals from '../../data/arrivals';
-import {color} from "../../config/color"
-import {styles} from "./style"
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import {color} from '../../config/color';
+import {styles} from './style';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-const wait = (timeout) => {
+const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
-}
+};
 
 export default function Home({navigation}) {
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
@@ -40,68 +40,71 @@ export default function Home({navigation}) {
   const [data, setData] = useState();
   const [arrivals, setArrvals] = useState();
   const [isLoading, setLoading] = useState(true);
-  const [showAlert,setShowAlert]=useState(false)
+  const [aisLoading, setAloading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
   };
 
-
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(  () => {
-    setRefreshing(true)
-    setLoading(true)
-    wait(2000).then( () =>{
-      datacallss(),
-      setRefreshing(false)
-      // setLoading(false),
-    } 
-    )
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setLoading(true);
+    setAloading(true)
+    wait(2000).then(() => {
+      datacallss(), setRefreshing(false);
+    });
   }, []);
 
-const datacallss = async ()=>{
-  let netFlag = 0;
-  await NetInfo.fetch().then(async state => {
-    if (state.isConnected) {
-      netFlag = 1;
-      fetch(FEATURED)
-        .then(response => response.json())
-        .then(json => setData(json[0]), console.log(17, data))
-        .catch(error => console.error(27, error))
-        .finally(() => setLoading(false));
-
-      fetch(ARRIVALS)
-        .then(response => response.json())
-        .then(json => setArrvals(json[0]), console.log(17, data))
-        .catch(error => console.error(33, error))
-        .finally(() => setLoading(false));
+  const datacallss = async () => {
+    let netFlag = 0;
+    await NetInfo.fetch().then(async state => {
+      if (state.isConnected) {
+        netFlag = 1;
+        fetch(FEATURED)
+          .then(response => response.json())
+          .then(json => {
+            setData(json[0]),
+          setLoading(false);
+          })
+          .catch(e => {
+            setShowAlert(true)
+          });
+        fetch(ARRIVALS)
+          .then(response => response.json())
+          .then(json => {
+            setArrvals(json[0]),
+            setAloading(false);
+          }
+          )
+      } else {
+        setShowAlert(true);
+      }
+    });
+    if (toggleSearchBar) {
+      Animated.timing(searchBarAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
     } else {
-      setShowAlert(true)
+      Animated.timing(searchBarAnim, {
+        toValue: -45,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
     }
-  });
-  if (toggleSearchBar) {
-    Animated.timing(searchBarAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  } else {
-    Animated.timing(searchBarAnim, {
-      toValue: -45,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }
-}
+  };
 
-  useEffect( () => {
-    (async()=>{
-      datacallss()
-    })()
+  useEffect(() => {
+    (async () => {
+      datacallss();
+    })();
   }, []);
   return (
-    <SafeAreaView style={styles.main} >
+    <SafeAreaView style={styles.main}>
       <StatusBar backgroundColor={color.statusbarColor} />
       <View style={{marginTop: 9}}>
         <Animated.View>
@@ -116,7 +119,11 @@ const datacallss = async ()=>{
               />
               <TouchableOpacity
                 onPress={() => setToggleSearchBar(!toggleSearchBar)}>
-                <Ionicons name="close-outline" size={40} color={color.defaultcolor} />
+                <Ionicons
+                  name="close-outline"
+                  size={40}
+                  color={color.defaultcolor}
+                />
                 {/* <Text style={{color:"#512500",fontWeight:"bold",fontSize:18}} >Cancel</Text> */}
               </TouchableOpacity>
             </View>
@@ -141,10 +148,7 @@ const datacallss = async ()=>{
 
         <ScrollView
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 100, marginLeft: 30}}>
@@ -162,7 +166,7 @@ const datacallss = async ()=>{
             <Arrivals
               detailss={detailss}
               arrivals={arrivals}
-              isLoading={isLoading}
+              aisLoading={aisLoading}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
@@ -190,26 +194,24 @@ const datacallss = async ()=>{
           </View>
         </ScrollView>
         <AwesomeAlert
-      show={showAlert}
-      showProgress={false}
-      title="Warning!"
-      message="You are not connect to the internet."
-      contentContainerStyle={{width:wp('80%')}}
-      closeOnTouchOutside={true}
-      closeOnHardwareBackPress={false}
-      showCancelButton={false}
-      showConfirmButton={true}
-      confirmText="Close"
-      confirmButtonColor="#DD6B55"
-      onConfirmPressed={() => {
-        setShowAlert(false);
-      }}
-    />
+          show={showAlert}
+          showProgress={false}
+          title="Warning!"
+          message="You are not connect to the internet."
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="Close"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => {
+            setShowAlert(false);
+          }}
+        />
       </View>
     </SafeAreaView>
   );
 }
-
-
 
 // style={{ transform: [{ translateY: searchBarAnim }] }}

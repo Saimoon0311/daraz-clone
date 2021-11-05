@@ -51,7 +51,7 @@ flex:1
     // width:354,
     // shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.6,
-    shadowRadius: 18,
+    shadowRadius: 10,
     elevation: 5,
     marginBottom: 10,
   },

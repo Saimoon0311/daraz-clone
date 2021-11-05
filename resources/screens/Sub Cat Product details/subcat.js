@@ -26,7 +26,8 @@ import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import {color} from "../../config/color"
 import { styles } from './style';
-
+import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 export default function subcatdetails({route, navigation}) {
@@ -36,23 +37,22 @@ export default function subcatdetails({route, navigation}) {
   const [subcatdata, setSubcatdata] = useState();
   const [isLoading, setLoading] = useState(true);
   const [cartloading, setCartloading] = useState(false);
+  const [nshowAlert, setNshowAlert] = useState(false);
 
-const getData =async()=>{
-  
+const getDatass =()=>{
+  fetch(`${SUBCATPRODUCTDATA}/20`)
+  .then( response =>  response.json())
+  .then(json => {setSubcatdata(json[0]), setLoading(false)})
+  .catch(error => setNshowAlert(true))
+
 }
 
-  useEffect(async () => {
-    // ${item.id}
-    fetch(`${SUBCATPRODUCTDATA}/20`)
-      .then(async response => await response.json())
-      .then(json => setSubcatdata(json[0]))
-      .catch(error => console.error(17, error))
-      .finally(() => setLoading(false));
-
+  useEffect(async() => {
+    getDatass()
     const userId = await getUserData();
     const users = userId.id;
     setUser_id(users);
-  }, []);
+}, []);
 
   const addtowishlist = id => {
     var product_id = id;
@@ -136,7 +136,9 @@ const getData =async()=>{
       </View>
       <View style={styles.body}>
         {isLoading ? (
-          <ActivityIndicator size={100} color="#512500" style={styles.loader} />
+           <View style={{margin:hp('20%')}} >
+           <BubblesLoader size={50} dotRadius={10}  color="#512500" />
+         </View>
         ) : (
           <FlatList
             data={subcatdata}
@@ -182,6 +184,22 @@ const getData =async()=>{
           />
         )}
       </View>
+      <AwesomeAlert
+          show={nshowAlert}
+          showProgress={false}
+          title="Warning!"
+          message="You are not connect to the internet."
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="Close"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => {
+            setNshowAlert(false);
+          }}
+        />
     </View>
   );
 }

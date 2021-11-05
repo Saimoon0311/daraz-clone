@@ -36,6 +36,7 @@ export default function Cart({navigation}) {
   const [quantity, setQuantity] = useState(null);
   const [totalPriceShow, setTotalPrice] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
+  const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
   // const add = () => {
   //   console.log(cartdata[0].quantity + 1);
@@ -57,13 +58,13 @@ export default function Cart({navigation}) {
         } else {
           setCartdata(json);
           totalprice(json);
+          setLoading(false);
           // console.log(54);
         }
       })
       .catch(e => {
-        setLoading(false);
+        setNshowAlert(true)
       })
-      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -103,41 +104,7 @@ export default function Cart({navigation}) {
     );
   };
 
-  const onDeleteAlert = id => {
-    setShowAlert(true);
-    // return(
-    //   <AwesomeAlert
-    //   show={showAlert}
-    //   showProgress={false}
-    //   title="Remove from Cart!"
-    //   message="Are you sure you want to remove this item from your cart."
-    //   contentContainerStyle={{width:wp('80%')}}
-    //   closeOnTouchOutside={true}
-    //   closeOnHardwareBackPress={false}
-    //   showCancelButton={true}
-    //   showConfirmButton={true}
-    //   confirmText="No"
-    //   cancelText="Yes"
-    //   confirmButtonColor="green"
-    //   cancelButtonColor="#DD6B55"
-    //   onConfirmPressed={() => {
-    //     delet(id)
-    //   }}
-    //   onCancelPressed={()=>{
-    //     setShowAlert(false)
-    //   }}
-    // />
-    // )
-    // Alert.alert(
-    //   'Remove from Cart ',
-    //   'Are you sure you want to remove this item from your cart !',
-    //   [
-    //     {text: 'Yes', onPress: () => delet(id), style: 'destructive'},
-    //     {text: 'No', style: 'cancel'},
-    //   ],
-    //   {cancelable: true},
-    // );
-  };
+
   const deleteCartItem = id => {
     setLoading(true);
     console.log(140, id);
@@ -460,29 +427,22 @@ export default function Cart({navigation}) {
     /> */}
         </ScrollView>
       </View>
-      {/* <AwesomeAlert
-      show={showAlert}
-      showProgress={false}
-      title="Remove from Cart!"
-      message="Are you sure you want to remove this item from your cart."
-      contentContainerStyle={{width:wp('80%')}}
-      closeOnTouchOutside={true}
-      closeOnHardwareBackPress={false}
-      showCancelButton={true}
-      showConfirmButton={true}
-      confirmText="No"
-      cancelText="Yes"
-      confirmButtonColor="green"
-      cancelButtonColor="#DD6B55"
-      onConfirmPressed={() => {
-        deleteCartItem(itemId)
-        // delet(id)
-
-      }}
-      onCancelPressed={()=>{
-        setShowAlert(false)
-      }}
-    /> */}
+      <AwesomeAlert
+          show={nshowAlert}
+          showProgress={false}
+          title="Warning!"
+          message="You are not connect to the internet."
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="Close"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => {
+            setNshowAlert(false);
+          }}
+        />
     </View>
   );
 }

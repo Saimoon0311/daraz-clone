@@ -24,7 +24,7 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 export default function Arrivals(prop, {navigation}) {
   return (
     <View>
-      {prop.isLoading ? (
+      {prop.aisLoading ? (
         // <ActivityIndicator
         //   size={60}
         //   color="#512500"
