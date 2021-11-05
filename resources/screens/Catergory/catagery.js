@@ -51,14 +51,12 @@ export default function cate({navigation}) {
   const getData = async (id,index) => {
     // setStyless(true)
     setClick(index)
-    setSubloading(true);
-    console.log(39999999999,index)
-    // console.log('before ------->>>>>', catdata);
+    setSubloading(true)
     const api = SUBCAT + id;
     console.log(api);
     fetch(api)
       .then(async response => await response.json())
-      .then(json => setSubcatdata(json),setSubloading(false))
+      .then(json => {setSubcatdata(json),setSubloading(false)})
       .catch(error => setNshowAlert(true))
   };
   // console.log('=============.............', subcatdata);
