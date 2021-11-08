@@ -36,7 +36,7 @@ export default function Navigation() {
            :
            <>      
         <Stack.Screen options={{
-            title: 'Login/Sign Up',
+            title: 'Sign In',
             headerShown:true,
             headerStyle: {
                 backgroundColor: '#FFDDC9',

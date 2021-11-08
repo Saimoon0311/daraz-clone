@@ -8,10 +8,12 @@ import {color} from "../../config/color"
 export const styles = StyleSheet.create({
   te: {
     backgroundColor: 'white',
+    marginLeft:wp('4%')
   },
   but: {
     flexDirection: 'row',
     marginLeft: 10,
+    justifyContent:"center",
     width: wp('80%'),
     backgroundColor: '#FF7E33',
     height: hp('6%'),

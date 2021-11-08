@@ -19,9 +19,9 @@ import {SIGNUP} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import { styles } from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { color } from '../../config/color';
 
-
-export default function Signup() {
+export default function Signup({navigation}) {
   const[loadingButton,setLoadingButton] =useState(false)
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
@@ -151,58 +151,68 @@ export default function Signup() {
         style={{
           backgroundColor: 'white',
           paddingLeft: 28.5,
-          paddingRight: 27.5,
+          paddingRight: 25.5,
           paddingBottom: 100,
         }}>
         <View style={{backgroundColor: 'white'}}>
-          <Text style={{marginBottom: 20.4}}></Text>
+          <Text style={{marginBottom: 5}}></Text>
           <TextInput
-            label="Enter You Name Name*"
+            label="Enter Your Name *"
+            underlineColor="gray"
+            theme={{colors:{primary:color.themColorPrimary}}}
             style={styles.te}
             value={username}
             selectionColor="#FF7E33"
             onChangeText={text => setUsername(text)}
           />
-          <Text style={{marginBottom: 20.4}}></Text>
+          <Text style={{marginBottom: 5}}></Text>
           <TextInput
-            label="Email*"
+            label="Email *"
             style={styles.te}
+            underlineColor="gray"
+            theme={{colors:{primary:color.themColorPrimary}}}
             selectionColor="#FF7E33"
             value={email}
             onChangeText={text => setEmail(text)}
           />
-          <Text style={{marginBottom: 20.4}}></Text>
+          <Text style={{marginBottom: 5}}></Text>
           <TextInput
-            label="Number*"
+            label="Number *"
+            underlineColor="gray"
+            theme={{colors:{primary:color.themColorPrimary}}}
             style={styles.te}
             keyboardType="number-pad"
             value={phone_number}
             selectionColor="#FF7E33"
             onChangeText={text => setPhone_number(text)}
           />
-          <Text style={{marginBottom: 20.4}}></Text>
+          <Text style={{marginBottom: 5}}></Text>
           <View style={{flexDirection:"row"}}>
           <TextInput
-            label="Password*"
-            style={[styles.te,{width:wp('75%')}]}
+            label="Password *"
+            underlineColor="gray"
+            theme={{colors:{primary:color.themColorPrimary}}}
+            style={[styles.te,{width:wp('78%')}]}
             secureTextEntry={show ? false : true}
             value={password}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword(text)}
           />
-           <Ionicons onPress={handleClick} color="gray" style={{top:30}} size={25} name={show ? "eye-outline" : "eye-off-outline" } />
+           <Ionicons onPress={handleClick} color={color.themColorPrimary} style={{top:30}} size={25} name={show ? "eye-outline" : "eye-off-outline" } />
            </View>
-          <Text style={{marginBottom: 20.4}}></Text>
+          <Text style={{marginBottom: 5}}></Text>
           <View style={{flexDirection:"row"}}>
           <TextInput
-            label="Confirm Password*"
-            style={[styles.te,{width:wp('75%')}]}
+            label="Confirm Password *"
+            underlineColor="gray"
+            theme={{colors:{primary:color.themColorPrimary}}}
+            style={[styles.te,{width:wp('78%')}]}
             secureTextEntry={cshow ? false : true}
             value={confirm}
             selectionColor="#FF7E33"
             onChangeText={text => setConfirm(text)}
           />
-          <Ionicons onPress={handleClicks} color="gray" style={{top:30}} size={25} name={cshow ? "eye-outline" : "eye-off-outline" } />
+          <Ionicons onPress={handleClicks} color={color.themColorPrimary} style={{top:30}} size={25} name={cshow ? "eye-outline" : "eye-off-outline" } />
           </View>
           <Text style={{marginBottom: 20.4}}></Text>
         </View>
@@ -214,22 +224,54 @@ export default function Signup() {
           messageFontSize={24}
           message="Loading..."
           />:
-          <TouchableOpacity style={styles.but} onPress={savedata}>
-            <View style={{marginLeft: 20, justifyContent: 'center'}}>
-              <Ionicons name="mail" size={18} color={'white'} />
-            </View>
-            <View style={{justifyContent: 'center', marginLeft: 60}}>
+          <TouchableOpacity
+          onPress={savedata}
+            style={{
+              width: wp('80%'),
+              height: hp('7%'),
+              backgroundColor: '#FF7E33',
+              alignSelf: 'center',
+              marginTop: 30,
+              borderRadius: 7,
+              flexDirection: 'row',
+              // alignItems:'center',
+              // justifyContent:'center'
+            }}>
+            <View
+              style={{
+                width: wp('15%'),
+                height: hp('7%'),
+                alignItems:'center',
+                justifyContent:'center'
+              }}>
+                <Ionicons style={{marginLeft:wp('3%')}} name="mail" size={20} color={'white'} />
+
+              </View>
+            <View
+              style={{
+                width: wp('60%'),
+                height: hp('7%'),
+                  alignItems:'center',
+              justifyContent:'center',
+              // backgroundColor:'red'
+              }}>
               <Text
                 style={{
-                  fontSize: hp("2%"),
-                  textAlign: 'center',
+                  fontSize: hp('2.5%'),
                   color: 'white',
                   fontWeight: 'bold',
+                  alignSelf: 'center',
                 }}>
                 Create Account
               </Text>
             </View>
-          </TouchableOpacity>}
+            <View
+              style={{
+                width: wp('10%'),
+                height: hp('7%'),
+              }}></View>
+          </TouchableOpacity>
+          }
           {/* <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />
@@ -253,7 +295,7 @@ export default function Signup() {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.ty}>
+        <TouchableOpacity style={styles.ty} onPress={()=>navigation.navigate("Login")} >
           <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
             Login
           </Text>

@@ -134,12 +134,12 @@ export default function Home({navigation}) {
                 style={{width: 81, height: 36.5}}
               />
               <TouchableOpacity
-                onPress={() => setToggleSearchBar(!toggleSearchBar)}>
+                onPress={() => setToggleSearchBar(!toggleSearchBar)}  style={{marginLeft:wp('15%')}}>
                 <Ionicons name="search" size={27} color={color.defaultcolor} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Cart')}
-                style={{marginRight: 33}}>
+                style={{marginRight: wp('5%')}}>
                 <Ionicons name="cart" size={27} color={color.defaultcolor} />
               </TouchableOpacity>
             </View>
