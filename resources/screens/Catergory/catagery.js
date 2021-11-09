@@ -106,7 +106,6 @@ export default function cate({navigation}) {
                    <Text style={styles.cattext}>{item.name}</Text>
                    </View>
                  </TouchableOpacity>
-
                   </View>
                 );
               }}
