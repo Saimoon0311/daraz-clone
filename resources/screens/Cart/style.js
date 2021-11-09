@@ -82,5 +82,16 @@ flex:1
     width:wp("20%"),
     alignItems:"center",
     justifyContent:"center"
+  },
+  bottomimages:{
+    borderColor:"black",
+    borderRadius:10,
+    borderWidth:1,
+    marginRight:10
+  },
+  imagss:{
+    width:wp('27%'),
+    height:hp('15%'),
+    borderRadius:10
   }
 });

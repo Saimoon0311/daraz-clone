@@ -332,7 +332,7 @@ export default function Cart({navigation}) {
                             <Ionicons
                               name="remove-circle-sharp"
                               size={20}
-                              color="#512500"
+                              color={color.themColorPrimary}
                               style={{paddingTop: 13, marginRight: 10}}
                             />
                           </TouchableOpacity>
@@ -352,7 +352,7 @@ export default function Cart({navigation}) {
                             <Ionicons
                               name="add-circle-sharp"
                               size={20}
-                              color="#512500"
+                              color={color.themColorPrimary}
                               style={{paddingTop: 13, marginRight: 10}}
                             />
                           </TouchableOpacity>
@@ -425,6 +425,26 @@ export default function Cart({navigation}) {
         console.log('focusField', focusedField);
       }}
     /> */}
+
+    <ScrollView horizontal={true} >
+    <View style={{flexDirection:"row",justifyContent:"space-between",marginLeft:20}} >
+          <View style={styles.bottomimages} >
+            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
+          </View>
+          <View style={styles.bottomimages}>
+            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
+          </View>
+          <View style={styles.bottomimages}>
+            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
+          </View>
+          <View style={styles.bottomimages}>
+            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
+          </View>
+          <View style={styles.bottomimages}>
+            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
+          </View>
+        </View>
+        </ScrollView>
         </ScrollView>
       </View>
       <AwesomeAlert

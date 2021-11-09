@@ -17,8 +17,8 @@ export default function MyTabs() {
                 tabBarActiveTintColor: "#E9691D",
                 tabBarActiveBackgroundColor: "#E9691D",
                 tabBarInactiveTintColor: "black",
-                indicatorStyle: {
-                    color: "red"
+                tabBarIndicatorStyle:{
+                 backgroundColor:"#E9691D"
                 },
             })}
 
@@ -26,7 +26,11 @@ export default function MyTabs() {
             <Tab.Screen name="Login"
             
                 options={{
-                    title: "Login",
+                    // title: "Login",
+                    // headerShown:true,
+                    headerStyle: {
+                        backgroundColor: '#FFDDC9',
+                    },
                     tabBarLabelStyle: {
                         fontWeight: "bold",
                         // : {
@@ -39,7 +43,7 @@ export default function MyTabs() {
 
     
             <Tab.Screen name="Signup" options={{
-                    title: "Sign Up",
+                    title: "Create Account",
                     tabBarLabelStyle: {
                         fontWeight: "bold",
                         // : {
