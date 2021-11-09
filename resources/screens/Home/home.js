@@ -157,7 +157,7 @@ export default function Home({navigation}) {
             <Alldata detailss={detailss} data={data} isLoading={isLoading} />
           </NativeBaseProvider>
           <View style={styles.see}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('subcatdetails')} >
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
