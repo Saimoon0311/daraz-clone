@@ -1,15 +1,15 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {color} from "../../config/color"
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor,
-// backgroundColor:"red",
-flex:1
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
+    // backgroundColor:"red",
+    flex: 1,
   },
   icon: {
     margin: 20,
@@ -38,8 +38,8 @@ flex:1
   },
   ty: {
     marginLeft: 'auto',
-    color:"gray",
-    fontSize:hp('2%')
+    color: 'gray',
+    fontSize: hp('2%'),
   },
   maior: {
     width: wp('70%'),
@@ -76,22 +76,41 @@ flex:1
     color: '#B64400',
     fontSize: 16,
     fontWeight: 'bold',
-    top:13
+    top: 13,
   },
-  buttonstyle:{
-    width:wp("20%"),
-    alignItems:"center",
-    justifyContent:"center"
+  buttonstyle: {
+    width: wp('20%'),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  bottomimages:{
-    borderColor:"black",
-    borderRadius:10,
-    borderWidth:1,
-    marginRight:10
+  bottomimages: {
+    borderColor: 'black',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginRight: 10,
   },
-  imagss:{
-    width:wp('27%'),
-    height:hp('15%'),
-    borderRadius:10
-  }
+  imagss: {
+    width: wp('27%'),
+    height: hp('15%'),
+    borderRadius: 10,
+  },
+  recentTextContainer: {
+    width: wp('90%'),
+    height: hp('5%'),
+    alignSelf: 'center',
+    // backgroundColor: 'green',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  bottomImageScroller: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 20,
+    marginTop: hp('3%'),
+  },
+  sliderText: {
+    fontSize: hp('2%'),
+    color: color.themColorPrimary,
+  },
 });
