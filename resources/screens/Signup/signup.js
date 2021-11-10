@@ -160,7 +160,7 @@ export default function Signup({navigation}) {
             label="Enter Your Name *"
             underlineColor="gray"
             theme={{colors:{primary:color.themColorPrimary}}}
-            style={styles.te}
+            style={[styles.te, {width: wp('75%')}]}
             value={username}
             selectionColor="#FF7E33"
             onChangeText={text => setUsername(text)}
@@ -168,7 +168,7 @@ export default function Signup({navigation}) {
           <Text style={{marginBottom: 5}}></Text>
           <TextInput
             label="Email *"
-            style={styles.te}
+            style={[styles.te, {width: wp('75%')}]}
             underlineColor="gray"
             theme={{colors:{primary:color.themColorPrimary}}}
             selectionColor="#FF7E33"
@@ -180,7 +180,7 @@ export default function Signup({navigation}) {
             label="Number *"
             underlineColor="gray"
             theme={{colors:{primary:color.themColorPrimary}}}
-            style={styles.te}
+            style={[styles.te, {width: wp('75%')}]}
             keyboardType="number-pad"
             value={phone_number}
             selectionColor="#FF7E33"

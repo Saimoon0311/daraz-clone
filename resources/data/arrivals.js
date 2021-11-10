@@ -43,7 +43,8 @@ export default function Arrivals(prop, {navigation}) {
       ) : (
         <FlatList
           data={prop.arrivals}
-          keyExtractor={item => item.key}
+          // keyExtractor={item => item.key}
+          keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => {

@@ -131,7 +131,8 @@ export default function cate({navigation}) {
            : (
             <FlatList
               data={subcatdata}
-              keyExtractor={item => item.key}
+              // keyExtractor={item => item.key}
+              keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item}) => {
@@ -150,7 +151,8 @@ export default function cate({navigation}) {
                         {
                           <FlatList
                             data={item.child_category}
-                            keyExtractor={item => item.key}
+                            // keyExtractor={item => item.key}
+                            keyExtractor={(item, index) => index.toString()}
                             numColumns={2}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>  (

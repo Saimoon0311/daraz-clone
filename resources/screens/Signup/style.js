@@ -5,6 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 export const styles = StyleSheet.create({
   te: {
     backgroundColor: 'white',
+    marginLeft:wp('4%')
   },
   but: {
     flexDirection: 'row',

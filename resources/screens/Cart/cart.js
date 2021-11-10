@@ -249,7 +249,8 @@ export default function Cart({navigation}) {
               {/* {console.log(211)} */}
               <FlatList
                 data={cartdata}
-                keyExtractor={item => item.key}
+                // keyExtractor={item => item.key}
+                keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)

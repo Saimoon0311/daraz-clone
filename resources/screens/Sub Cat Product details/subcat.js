@@ -142,7 +142,8 @@ const getDatass =()=>{
         ) : (
           <FlatList
             data={subcatdata}
-            keyExtractor={item => item.key}
+            // keyExtractor={item => item.key}
+            keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             contentContainerStyle={{paddingBottom: 300}}

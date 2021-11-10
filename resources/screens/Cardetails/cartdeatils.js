@@ -30,7 +30,8 @@ const imm = item.get_products.images
 
    <FlatList
       data={imm}
-      keyExtractor={(item) => item.key}
+      // keyExtractor={(item) => item.key}
+      keyExtractor={(item, index) => index.toString()}
       horizontal
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => {

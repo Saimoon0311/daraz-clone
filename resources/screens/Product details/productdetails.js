@@ -81,7 +81,8 @@ export default function Details ({ route, navigation }){
 
    <FlatList
       data={imm}
-      keyExtractor={(item) => item.key}
+      // keyExtractor={(item) => item.key}
+      keyExtractor={(item, index) => index.toString()}
       horizontal
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => {
