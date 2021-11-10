@@ -32,7 +32,7 @@ function MybottomTabs() {
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: '#512500',
+        tabBarActiveTintColor: '#E9691D',
         tabBarInactiveTintColor: '#512500',
         swipeEnabled: true,
         animationEnabled: true,
@@ -46,8 +46,8 @@ function MybottomTabs() {
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="home" color={color.bottomNavColor} size={20} />
+          tabBarIcon: ({ focused,color, size }) => (
+            <Ionicons name="home" color={color} size={20} />
           ),
           title: 'Home',
           tabBarLabelStyle: {
@@ -62,9 +62,17 @@ function MybottomTabs() {
       <Tab.Screen
         name="cate"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="list" color={color.bottomNavColor} size={30} />
+          tabBarIcon: ({ focused,color, size }) => (
+            <Ionicons name="list" color={color} size={30} />
+
           ),
+          // tabBarActiveTintColor:"yellow",
+          // tabBarInactiveTintColor:"green",
+          // tabBarActiveIconColor:"blue",
+          tabBarIconStyle:{
+          color:"red",
+          
+          },
           title: 'Category',
           tabBarLabelStyle: {
             fontSize: 15,
@@ -93,10 +101,10 @@ function MybottomTabs() {
       <Tab.Screen
         name="setting"
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({ focused,color, size }) => (
             <Ionicons
               name="settings-sharp"
-              color={color.bottomNavColor}
+              color={color}
               size={25}
             />
           ),

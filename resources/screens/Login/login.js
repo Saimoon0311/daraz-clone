@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Alert,
   Button,
+  StatusBar,
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -85,11 +86,11 @@ export default function Login({navigation}) {
               setLoadingButton(false);
               // console.log('res=== 86 ', res);
             } else {
-              showMessage({
-                type: 'success',
-                icon: 'success',
-                message: 'User Login Success',
-              });
+              // showMessage({
+              //   type: 'success',
+              //   icon: 'success',
+              //   message: 'User Login Success',
+              // });
               setLoadingButton(false);
             }
           } catch (error) {
@@ -107,6 +108,7 @@ export default function Login({navigation}) {
   };
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View
         style={{
           backgroundColor: 'white',

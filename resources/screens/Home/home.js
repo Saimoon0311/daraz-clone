@@ -173,11 +173,12 @@ export default function Home({navigation}) {
           </View>
           <Text style={styles.te}>New Arrivals</Text>
           <NativeBaseProvider>
-            <Arrivals
+            {/* <Arrivals
               detailss={detailss}
               arrivals={arrivals}
               aisLoading={aisLoading}
-            />
+            /> */}
+                        <Alldata detailss={detailss} data={data} isLoading={isLoading} />
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity
