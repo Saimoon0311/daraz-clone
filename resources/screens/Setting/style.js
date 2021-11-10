@@ -11,10 +11,11 @@ backgroundColor:color.defaultBackgroundColor
     },
     well:{
         padding:5,
-        backgroundColor:"black"
+        backgroundColor:"#CFA891"
     },
     we:{
-        color:"#E9691D",
+        // color:"#E9691D",
+        color:"#512500",
         fontSize:18,
         fontWeight:"bold",
         textAlign:"center"

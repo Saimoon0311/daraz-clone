@@ -125,7 +125,7 @@ export default function Signup({navigation}) {
                   setPhone_number('');
                   setPassword('');
                   setConfirm('');
-                  console.log('jijijijjijjiji', responseData);
+                  // console.log('jijijijjijjiji', responseData);
                 })
                 .done();
             }

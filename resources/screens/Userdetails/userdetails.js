@@ -28,20 +28,22 @@ const [userdata,setUserdata] = useState();
   const getData = async ()=>{
     const userId = await getUserData();
     const users = userId.id;
-    console.log(286,users)
+    // console.log(286,users)
  fetch(`${USERDATA}/${users}`)
     .then((response) => response.json())
-    .then( (json) =>  setUserdata(json), console.log(17,userdata))
+    .then( (json) =>  setUserdata(json),
+    //  console.log(17,userdata)
+     )
     .catch((error) => console.error(33,error))
       .finally(() => setLoading(false));
-      console.log(17,userdata)
+      // console.log(17,userdata)
   }
     useEffect( () => {
     (async()=>{
       getData()
     })
   },[])
-  console.log(454545,userdata)
+  // console.log(454545,userdata)
 return(
 <View style={styles.main} >
 {isLoading?<ActivityIndicator size={100} color="#512500" style={styles.loader} />:

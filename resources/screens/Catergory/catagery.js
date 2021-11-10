@@ -16,10 +16,16 @@ import {
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CATEGORY, SUBCAT} from '../../config/url';
-import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
-import {color} from "../../config/color"
-import { styles } from './style';
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import {
+  CirclesLoader,
+  PulseLoader,
+  TextLoader,
+  DotsLoader,
+  BubblesLoader,
+} from 'react-native-indicator';
+import {color} from '../../config/color';
+import {styles} from './style';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default function cate({navigation}) {
@@ -29,45 +35,51 @@ export default function cate({navigation}) {
   const [subcatdata, setSubcatdata] = useState();
   const [click, setClick] = useState(null);
   const [nshowAlert, setNshowAlert] = useState(false);
-  const apicall =()=>{
+  const apicall = () => {
     fetch(CATEGORY)
       .then(async response => await response.json())
-      .then(json =>{ setCatdata(json), console.log(28, catdata),setLoading(false)})
-      .catch(error => setNshowAlert(true))
+      .then(json => {
+        setCatdata(json), console.log(28, catdata), setLoading(false);
+      })
+      .catch(error => setNshowAlert(true));
 
-      const api = SUBCAT + 3;
-      console.log(api);
-      fetch(api)
-        .then(async response => await response.json())
-        .then(json => {setSubcatdata(json),setClick(0),setSubloading(false)})
-        // .catch(error => setNshowAlert(true))
-        // .finally(() => setSubloading(false),setClick(0));
-  }
+    const api = SUBCAT + 3;
+    // console.log(api);
+    fetch(api)
+      .then(async response => await response.json())
+      .then(json => {
+        setSubcatdata(json), setClick(0), setSubloading(false);
+      });
+    // .catch(error => setNshowAlert(true))
+    // .finally(() => setSubloading(false),setClick(0));
+  };
   useEffect(() => {
     (async () => {
       apicall();
     })();
   }, []);
-  const getData = async (id,index) => {
+  const getData = async (id, index) => {
     // setStyless(true)
-    setClick(index)
-    setSubloading(true)
+    setClick(index);
+    setSubloading(true);
     const api = SUBCAT + id;
-    console.log(api);
+    // console.log(api);
     fetch(api)
       .then(async response => await response.json())
-      .then(json => {setSubcatdata(json),setSubloading(false)})
-      .catch(error => setNshowAlert(true))
+      .then(json => {
+        setSubcatdata(json), setSubloading(false);
+      })
+      .catch(error => setNshowAlert(true));
   };
   // console.log('=============.............', subcatdata);
   return (
-    <View style={styles.mains} >
+    <View style={styles.mains}>
       <View style={styles.appbarStyle}>
         <Text style={styles.head}>Category</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Ionicons size={37.5} color="#512500" name="chevron-back-outline" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View style={styles.search}>
             <TextInput
               placeholder="Search"
@@ -76,7 +88,7 @@ export default function cate({navigation}) {
             />
             <Ionicons name="search" color="#512500" size={20} />
           </View>
-          <TouchableOpacity  onPress={() => navigation.navigate('Cart')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Ionicons size={37.5} color="#512500" name="cart" />
           </TouchableOpacity>
         </View>
@@ -84,11 +96,19 @@ export default function cate({navigation}) {
       <View style={styles.body}>
         {isLoading ? (
           <SkeletonPlaceholder>
-            <View style={{...styles.sidebox,height:hp('9%')}} />
-            <View style={{...styles.sidebox,height:hp('9%')}} />
-            <View style={{...styles.sidebox,height:hp('9%')}} />
-            <View style={{...styles.sidebox,height:hp('9%')}} />
-        </SkeletonPlaceholder>
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+            <View style={{...styles.sidebox, height: hp('9%')}} />
+          </SkeletonPlaceholder>
         ) : (
           <View>
             <FlatList
@@ -96,23 +116,25 @@ export default function cate({navigation}) {
               keyExtractor={item => item.key}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: 160}}
-              renderItem={({item,index}) => {
+              renderItem={({item, index}) => {
                 return (
                   <View>
-                   <TouchableOpacity
-                  style={index === click? styles.sidebox:styles.sideboxactive}
-                   onPress={() => getData(item.id,index)}>
-                   <View  >
-                   <Text style={styles.cattext}>{item.name}</Text>
-                   </View>
-                 </TouchableOpacity>
+                    <TouchableOpacity
+                      style={
+                        index === click ? styles.sidebox : styles.sideboxactive
+                      }
+                      onPress={() => getData(item.id, index)}>
+                      <View>
+                        <Text style={styles.cattext}>{item.name}</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 );
               }}
             />
           </View>
         )}
-        <View>
+        <View style={{width: wp('65%')}}>
           <TouchableOpacity style={styles.but}>
             <Text style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
               See All Product
@@ -124,11 +146,16 @@ export default function cate({navigation}) {
               style={{marginLeft: 'auto'}}
             />
           </TouchableOpacity>
-          {subloading ? 
-            <View style={{marginTop:hp('15%')}} >
-            <BubblesLoader size={50} dotRadius={10}  color="#512500" />
-          </View>
-           : (
+          {subloading ? (
+            <View
+              style={{
+                marginTop: hp('15%'),
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <BubblesLoader size={50} dotRadius={10} color="#512500" />
+            </View>
+          ) : (
             <FlatList
               data={subcatdata}
               // keyExtractor={item => item.key}
@@ -155,14 +182,20 @@ export default function cate({navigation}) {
                             keyExtractor={(item, index) => index.toString()}
                             numColumns={2}
                             showsVerticalScrollIndicator={false}
-                            renderItem={({item}) =>  (
+                            renderItem={({item}) => (
                               <View
                                 style={{
                                   flex: 1,
                                   flexDirection: 'column',
                                   margin: 3,
                                 }}>
-                                <TouchableOpacity onPress={()=>navigation.navigate("subcatdetails",item)} >
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    navigation.navigate('subcatdetails', {
+                                      item: item,
+                                      screenData: 'subCat',
+                                    })
+                                  }>
                                   <View style={styles.itss}>
                                     {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
                                     <Text style={styles.insidetext}>
@@ -184,21 +217,21 @@ export default function cate({navigation}) {
         </View>
       </View>
       <AwesomeAlert
-          show={nshowAlert}
-          showProgress={false}
-          title="Warning!"
-          message="You are not connect to the internet."
-          contentContainerStyle={{width: wp('80%')}}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          confirmText="Close"
-          confirmButtonColor="#DD6B55"
-          onConfirmPressed={() => {
-            setNshowAlert(false);
-          }}
-        />
+        show={nshowAlert}
+        showProgress={false}
+        title="Warning!"
+        message="You are not connect to the internet."
+        contentContainerStyle={{width: wp('80%')}}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Close"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => {
+          setNshowAlert(false);
+        }}
+      />
     </View>
   );
 }

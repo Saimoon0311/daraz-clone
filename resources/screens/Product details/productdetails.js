@@ -1,43 +1,57 @@
-
-import React,{useState,useEffect} from "react"
-import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView,ActivityIndicator} from "react-native"
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
-import { ADDTOCART, Images_API } from "../../config/url";
-import { showMessage } from "react-native-flash-message";
-import { getUserData } from "../../utils/utils";
-import AnimatedLoader from "react-native-animated-loader";
-import {color} from "../../config/color"
-import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
-import { styles } from "./style";
+import {ADDTOCART, Images_API} from '../../config/url';
+import {showMessage} from 'react-native-flash-message';
+import {getUserData} from '../../utils/utils';
+import AnimatedLoader from 'react-native-animated-loader';
+import {color} from '../../config/color';
+import {
+  CirclesLoader,
+  PulseLoader,
+  TextLoader,
+  DotsLoader,
+  BubblesLoader,
+} from 'react-native-indicator';
+import {styles} from './style';
 
-export default function Details ({ route, navigation }){
-  const [user_id,setUser_id] =useState()
-  const [loading,setLoading]=useState(false)
+export default function Details({route, navigation}) {
+  const [user_id, setUser_id] = useState();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(()=>{
-    setUserId()
-  })
-  const setUserId = async ()=>{
-  
+  useEffect(() => {
+    setUserId();
+  });
+  const setUserId = async () => {
     const userId = await getUserData();
     const users = userId.id;
-    setUser_id(users)
-    console.log("18",user_id)
-  }
+    setUser_id(users);
+  };
 
   const item = route.params;
-    const imm = item.images
-    const attribute = item.get_attribute_values
-    const product_id =item.id
+  const imm = item.images;
+  const attribute = item.get_attribute_values;
+  const product_id = item.id;
 
-    const cartadd =  ()=>{
-      setLoading(true)
-      //  await ff()
-     console.log(user_id)
-       fetch(ADDTOCART, {
+  const cartadd = () => {
+    setLoading(true);
+    //  await ff()
+    fetch(ADDTOCART, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -45,167 +59,191 @@ export default function Details ({ route, navigation }){
       },
       body: JSON.stringify({
         product_id,
-        user_id
-      }) 
+        user_id,
+      }),
     })
-    .then((response) => response.json())
-    .then((json) => {
-       console.log(json)
-       ,showMessage({
-           type:"success",
-           icon:"auto",
-           message:"Your Product Has Been Add To Cart",
-           backgroundColor:"#E9691D"
-         }),
-         setLoading(false)
+      .then(response => response.json())
+      .then(json => {
+          showMessage({
+            type: 'success',
+            icon: 'auto',
+            message: 'Your Product Has Been Add To Cart',
+            backgroundColor: '#E9691D',
+          }),
+          setLoading(false);
+      })
+      .done();
+  };
 
-       })
-       .done();
-  }  
-     
+  return (
+    <View style={styles.main}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="arrow-back-sharp"
+            size={30}
+            color="#512500"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.te}>Details</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+          <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+      <ScrollView>
+        <View style={{margin: 20}}>
+          <FlatList
+            data={imm}
+            // keyExtractor={(item) => item.key}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => {
+              return (
+                <Image
+                  source={{uri: `${Images_API}/${item.name}`}}
+                  style={styles.imm}
+                />
+              );
+            }}
+          />
+          <View style={styles.box}>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item.name}</Text>
+            <Text style={styles.tep}>
+              Category : {item.getchildcategory.name}
+            </Text>
+            {item.is_discounted == 2 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginTop:hp('0.5%')
+                  }}>
+                  Price :
+                </Text>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    textDecorationLine: 'line-through',
+                    marginTop:hp('0.5%')
+                  }}>
+                  $ {item.price}
+                </Text>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginTop:hp('0.5%')
+                  }}>
+                  {' '}
+                  $ {item.discounted_price}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                  }}>
+                  Prices :
+                </Text>
 
-    console.log("tyuu======>>>>>>>>>>",item)
-    return(
-        <View style={styles.main} >
-             <View  style={styles.header} >
-                <TouchableOpacity onPress={()=>navigation.goBack()} >
-                    <Ionicons name="arrow-back-sharp"  size={30} color="#512500" style={styles.icon} />
-                </TouchableOpacity>
-                <Text style={styles.te} >Details</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate("Cart")} >
-                    <Ionicons name="cart" size={30} color="#512500" style={styles.icon}  />
-                </TouchableOpacity>
-            </View>
-            <ScrollView > 
- <View style={{margin:20}}>
-
-   <FlatList
-      data={imm}
-      // keyExtractor={(item) => item.key}
-      keyExtractor={(item, index) => index.toString()}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => {
-          return(
-
-              <Image source={{uri:`${Images_API}/${item.name}`}} style={styles.imm} />
-          )
-      }}
-   />
-<View style={styles.box}>
-    <Text style={[styles.tep,{fontWeight:"bold"}]} >{item.name}</Text>
-    <Text style={styles.tep}>Category : {item.getchildcategory.name}</Text>
-    {item.is_discounted == 2 ? (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                          <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: 18,
-                            fontWeight: 'bold'}}
-                            >
-                            Price :    
-                          </Text>
-                        <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            textDecorationLine: 'line-through',
-                          }}>
-                            $ {item.price}
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'red',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                          }}>
-                          {' '}
-                          $ {item.discounted_price}
-                        </Text>
-                      </View>
-                    ) : (
-                      <View
-                      style={{
-                        flexDirection: 'row',
-                      }}>
-                        <Text
-                         style={{
-                          color: '#512500',
-                          fontSize: 18,
-                          fontWeight: 'bold'}}
-                        > 
-                          Prices : 
-                           </Text>
-
-                      <Text
-                        style={{
-                          color: '#512500',
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                        }}>
-                        $ {item.price}
-                      </Text>
-                      </View>
-                    )}
-    {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
-    <Text style={styles.tep}>SKU : {item.sku}</Text>
-    <Text style={[styles.tep,{fontWeight:"bold"}]}>Description :</Text>
-    <Text style={{marginLeft:"auto",textAlign:"justify",color:"gray"}} > {item.description} </Text> 
-    
-
-
-</View>
-<Text style={styles.delvery}> Delivery & Returns</Text>
-        <View style={[styles.box,{marginBottom:hp("25%")}]} >
-        <Text style={[styles.tep,{fontWeight:"bold"}]} >Choose Your Location</Text>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                  }}>
+                  $ {item.price}
+                </Text>
+              </View>
+            )}
+            {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
+            <Text style={styles.tep}>SKU : {item.sku}</Text>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>
+              Description :
+            </Text>
+            <Text style={{color: 'gray', textAlign: 'justify', marginTop:hp('0.5%')}}>
+              {/* {item.description}  */}
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </Text>
+          </View>
+          <Text style={styles.delvery}> Delivery & Returns</Text>
+          <View style={[styles.box, {marginBottom: hp('25%')}]}>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>
+              Choose Your Location
+            </Text>
+          </View>
         </View>
-        
-        </View>
-        </ScrollView>
-        <View style={{ position: "absolute", bottom: 80, alignSelf: "center"}} >
-          {item.stock < 1 ? <Text style={styles.stock}>Out Of Stock</Text>:
-          
-        <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
-              {loading? 
-              <DotsLoader color="#E9691D" size={20}/>
-              :
-          <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      </ScrollView>
+      <View style={{position: 'absolute', bottom: 80, alignSelf: 'center'}}>
+        {item.stock < 1 ? (
+          <View style={styles.carttouch}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               {/* // <ActivityIndicator size="large" color="white" /> */}
-              <Text style={{ color: "white", fontSize: 20,  fontWeight: "bold" }} >Add To Cart</Text>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+                Out of stock
+              </Text>
             </View>
-          </TouchableOpacity>
-              }
-        </View>
-          }
-
-      </View> 
- </View>
-    )
+          </View>
+        ) : (
+          <View style={{flexDirection: 'row', bottom: 0, alignSelf: 'center'}}>
+            {loading ? (
+              <DotsLoader color="#E9691D" size={20} />
+            ) : (
+              <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  {/* // <ActivityIndicator size="large" color="white" /> */}
+                  <Text
+                    style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+                    Add To Cart
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </View>
+    </View>
+  );
 }
-
-
-
-
-
-
 
 // {"child_category_id": 50, "created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "description": "Test Description", "discounted_percentage": 10, "discounted_price": 585, "featured": 1, "get_attribute_values": [{"attribute": [Object], "attribute_id": 1, "created_at": "2021-08-20T10:03:01.000000Z", "id": 73, "product_id": 105, "updated_at": "2021-08-23T13:08:28.000000Z", "value": [Array]}, {"attribute": [Object], "attribute_id": 7, "created_at": "2021-08-20T13:07:00.000000Z", "id": 88, "product_id": 105, "updated_at": "2021-08-23T10:02:06.000000Z", "value": [Array]}], "get_shop": {"created_at": "2021-08-18T22:39:02.000000Z", "deleted_at": null, "description": "test", "get_vendor": {"address_one": "Nesciunt rerum temp", "address_two": "Nesciunt rerum temp", "city": "Incididunt eos accus", "country": "US", "created_at": "2021-08-18T22:39:02.000000Z", "email": "testvendor@gmail.com", "id": 40, "image": "1629326342-254890.jfif", "password": "$2y$10$fiGodS6VNYikSsLDGOush.4wgAixx51byY6u6ygkA2J81JhtWGxU2", "phone_number": "+1 24265 8979", "status": 1, "updated_at": "2021-08-30T12:45:08.000000Z", "user_role": 2, "username": "test vendor", "zipcode": 123456}, "id": 16, "image": "162984592417.jpg", "name": "TestShop", "status": 1, "updated_at": "2021-08-30T13:20:27.000000Z", "vendor_id": 40}, "getchildcategory": {"created_at": "2021-08-17T15:34:44.000000Z", "id": 50, "name": "Mirrors", "status": 1, "sub_category": {"category": [Object], "category_id": 8, "created_at": "2021-08-17T15:20:48.000000Z", "id": 14, "name": "Home Accessories", "status": 1, "updated_at": "2021-08-17T15:20:48.000000Z"}, "sub_category_id": 14, "updated_at": "2021-08-17T15:34:44.000000Z"}, "has_variations": 1, "id": 105, "images": [{"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 134, "name": "162947930220.jpg", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 135, "name": "16294793028.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 136, "name": "162947930221.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}], "is_discounted": 2, "name": "Orla Gay", "price": 650, "shop_id": 16, "sku": "1688775486", "slug": "orla-gay-16-1629497220-50-209", "status": 1, "stock": 46, "updated_at": "2021-08-27T15:01:06.000000Z"}
 
-
-
 // const [itemcolor,setItemcolor] = useState()
-
 
 // for (let x = 0; x < atttri.length; x++) {
 //     // const element = array[x];
-//     setAttr[x](atttri[x].value[0])        
+//     setAttr[x](atttri[x].value[0])
 // }
-
 
 // const [attr, setAttr] = useState([item.get_attribute_values[0].value[0]]);
 
@@ -216,7 +254,8 @@ export default function Details ({ route, navigation }){
 
 // all:['a','b','c']
 // attribute:{'b':1,'c':2},
-{/* <FlatList
+{
+  /* <FlatList
         data={atttri}
         keyExtractor={(item) => item.key}
         vertical
@@ -252,14 +291,8 @@ export default function Details ({ route, navigation }){
 
 );
       }}
-    /> */}
-
-
-
-
-
-
-
+    /> */
+}
 
 // <TouchableOpacity onPress={() => {
 //           FlatListPicker.showPickerList()
@@ -276,7 +309,7 @@ export default function Details ({ route, navigation }){
 //           pickedTextStyle={{ color: 'black', fontWeight: 'bold' }}
 //           animated="slide"
 //           defaultValue={item.get_attribute_values[0].attribute.name}
-          
+
 //         //   renderDropdownIcon={() =>
 //         // <Picker.Item value={} />
 //         // }

@@ -39,14 +39,16 @@ flex:1
     marginTop: 100,
   },
   body: {
-    margin: 20,
+    marginTop: 20,
+    marginLeft:15,
+    alignItems:"center"
   },
   box: {
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 18,
     backgroundColor: '#F3F5F7',
-    marginRight: 10,
+    marginRight: 15,
     shadowColor: '#000',
     // width:354,
     // shadowOffset: { width: 1, height: 1 },
@@ -56,8 +58,8 @@ flex:1
     marginBottom: 10,
   },
   im: {
-    width: wp('43'),
-    height: hp('20'),
+    width: wp('37'),
+    height: hp('15'),
     borderRadius: 30,
     // shadowColor: '#000',
     // width:354,
@@ -73,9 +75,9 @@ flex:1
   },
   text: {
     color: '#512500',
-    marginLeft: 5,
     fontSize: 16,
-    marginTop: 5,
+    paddingTop:hp('2%'),
+    paddingLeft:wp('2%')
   },
   cart: {
     backgroundColor: '#EEB08B',
@@ -101,5 +103,16 @@ flex:1
     textAlign: 'center',
     fontSize: 14,
     bottom: 10,
+    marginTop:hp('5%')
+  },
+  fea: {
+    marginLeft: 10,
+    marginTop: 10,
+    backgroundColor: '#b64400',
+    color: 'white',
+    width: wp('15%'),
+    borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 10,
   },
 });

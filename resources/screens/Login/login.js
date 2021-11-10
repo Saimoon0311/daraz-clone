@@ -67,7 +67,7 @@ export default function Login({navigation}) {
               email,
               password,
             });
-            console.log('res=== 83', res);
+            // console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
               showMessage({
                 type: 'danger',
@@ -75,7 +75,7 @@ export default function Login({navigation}) {
                 message: res[0].message,
               });
               setLoadingButton(false);
-              console.log('res=== 86 ', res);
+              // console.log('res=== 86 ', res);
             } else if (res[0].message == 'Password is incorrect') {
               showMessage({
                 type: 'danger',
@@ -83,7 +83,7 @@ export default function Login({navigation}) {
                 message: res[0].message,
               });
               setLoadingButton(false);
-              console.log('res=== 86 ', res);
+              // console.log('res=== 86 ', res);
             } else {
               showMessage({
                 type: 'success',
@@ -93,7 +93,7 @@ export default function Login({navigation}) {
               setLoadingButton(false);
             }
           } catch (error) {
-            console.log('errot', error);
+            // console.log('errot', error);
             showMessage(error.message);
           }
         }

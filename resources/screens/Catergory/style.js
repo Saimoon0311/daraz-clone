@@ -22,19 +22,19 @@ flex:1,
     elevation: 5,
   },
   searchbar: {
-    width: wp('55%'),
-
+    width: wp('70%'),
     height: hp('6%'),
     backgroundColor: 'white',
     borderRadius: 17,
     paddingLeft: 15,
   },
   search: {
-    width: wp('65%'),
+    width: wp('80%'),
     backgroundColor: 'white',
     alignItems: 'center',
     flexDirection: 'row',
     borderRadius: 17,
+    marginLeft:wp('2%')
   },
   head: {
     textAlign: 'center',

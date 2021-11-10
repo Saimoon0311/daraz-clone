@@ -1,6 +1,10 @@
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home/home';
 import Deal from '../screens/Deal/deal';
@@ -34,6 +38,10 @@ function MybottomTabs() {
         animationEnabled: true,
         tabBarActiveBackgroundColor: '#FFDDC9',
         tabBarInactiveBackgroundColor: '#FFDDC9',
+        tabBarStyle:{
+          height:hp('8%')
+        },
+        
       })}>
       <Tab.Screen
         name="Home"
@@ -45,6 +53,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom:hp('1%')
           },
         }}
         component={Home}
@@ -60,6 +69,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom:hp('1%')
           },
         }}
         component={cate}
@@ -94,6 +104,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom:hp('1%')
           },
         }}
         component={setting}

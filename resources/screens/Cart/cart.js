@@ -77,10 +77,10 @@ export default function Cart({navigation}) {
       .then(async response => await response.json())
       .then(async json => {
         setSliderData(json);
-        console.log(78, json);
+        // console.log(78, json);
       })
       .catch(e => {
-        console.log(81, e);
+        // console.log(81, e);
       });
   };
 
@@ -124,7 +124,7 @@ export default function Cart({navigation}) {
 
   const deleteCartItem = id => {
     setLoading(true);
-    console.log(140, id);
+    // console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
     const api = CARTDELEtE + '/' + id;
     // console.log(api);

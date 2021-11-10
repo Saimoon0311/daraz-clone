@@ -56,6 +56,7 @@ backgroundColor:color.defaultBackgroundColor
       tep:{
         color:"#512500",
         fontSize:14,
+        marginTop:hp('0.5%')
       },
       carttouch:{
         backgroundColor: "#E9691D", 

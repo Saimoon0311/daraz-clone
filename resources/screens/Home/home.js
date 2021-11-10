@@ -19,7 +19,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {ARRIVALS, FEATURED, GETPRODUCT} from '../../config/url';
+import {ARRIVALS, BRANDDATA, FEATURED, GETPRODUCT} from '../../config/url';
 import {NativeBaseProvider, Box, Center} from 'native-base';
 import Alldata from '../../data/alldata';
 import NetInfo from '@react-native-community/netinfo';
@@ -41,7 +41,9 @@ export default function Home({navigation}) {
   const [arrivals, setArrvals] = useState();
   const [isLoading, setLoading] = useState(true);
   const [aisLoading, setAloading] = useState(true);
+  const [bisLoading, setBloading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const [brand,setBrand] =useState()
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -52,7 +54,7 @@ export default function Home({navigation}) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setLoading(true);
-    setAloading(true)
+    setAloading(true);
     wait(2000).then(() => {
       datacallss(), setRefreshing(false);
     });
@@ -66,19 +68,21 @@ export default function Home({navigation}) {
         fetch(FEATURED)
           .then(response => response.json())
           .then(json => {
-            setData(json[0]),
-          setLoading(false);
+            setData(json[0]), setLoading(false);
           })
           .catch(e => {
-            setShowAlert(true)
+            setShowAlert(true);
           });
         fetch(ARRIVALS)
           .then(response => response.json())
           .then(json => {
-            setArrvals(json[0]),
-            setAloading(false);
-          }
-          )
+            setArrvals(json[0]), setAloading(false);
+          });
+          fetch(BRANDDATA)
+          .then(response => response.json())
+          .then(json => {
+            setBrand(json[0]), setBloading(false);
+          });
       } else {
         setShowAlert(true);
       }
@@ -134,7 +138,8 @@ export default function Home({navigation}) {
                 style={{width: 81, height: 36.5}}
               />
               <TouchableOpacity
-                onPress={() => setToggleSearchBar(!toggleSearchBar)}  style={{marginLeft:wp('15%')}}>
+                onPress={() => setToggleSearchBar(!toggleSearchBar)}
+                style={{marginLeft: wp('15%')}}>
                 <Ionicons name="search" size={27} color={color.defaultcolor} />
               </TouchableOpacity>
               <TouchableOpacity
@@ -157,7 +162,12 @@ export default function Home({navigation}) {
             <Alldata detailss={detailss} data={data} isLoading={isLoading} />
           </NativeBaseProvider>
           <View style={styles.see}>
-            <TouchableOpacity onPress={()=>navigation.navigate('subcatdetails')} >
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('subcatdetails', {
+                  screenData: 'products-featured/',
+                })
+              }>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
@@ -170,7 +180,11 @@ export default function Home({navigation}) {
             />
           </NativeBaseProvider>
           <View style={styles.see}>
-            <TouchableOpacity>
+            <TouchableOpacity
+             onPress={() =>
+              navigation.navigate('subcatdetails', {
+                screenData: 'all-new-arrivals',
+              })}>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
@@ -185,6 +199,7 @@ export default function Home({navigation}) {
           </View>
           <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
+            {/* <Alldata detailss={detailss} data={brand} isLoading={bisLoading} /> */}
             <Alldata detailss={detailss} data={data} isLoading={isLoading} />
           </NativeBaseProvider>
           <View style={styles.see}>
