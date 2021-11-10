@@ -18,7 +18,7 @@ import {
 import cate from '../screens/Catergory/catagery';
 import Order from '../screens/Order/order';
 import setting from '../screens/Setting/setting';
-import {color} from "../config/color"
+import {color} from '../config/color';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,12 +34,13 @@ function MybottomTabs() {
         animationEnabled: true,
         tabBarActiveBackgroundColor: '#FFDDC9',
         tabBarInactiveBackgroundColor: '#FFDDC9',
-      })}
-      >
+      })}>
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: () => <Ionicons name="home"  color={color.bottomNavColor} size={20} />,
+          tabBarIcon: () => (
+            <Ionicons name="home" color={color.bottomNavColor} size={20} />
+          ),
           title: 'Home',
           tabBarLabelStyle: {
             fontSize: 15,
@@ -52,7 +53,9 @@ function MybottomTabs() {
       <Tab.Screen
         name="cate"
         options={{
-          tabBarIcon: () => <Ionicons name="list" color={color.bottomNavColor} size={30} />,
+          tabBarIcon: () => (
+            <Ionicons name="list" color={color.bottomNavColor} size={30} />
+          ),
           title: 'Category',
           tabBarLabelStyle: {
             fontSize: 15,
@@ -81,7 +84,11 @@ function MybottomTabs() {
         name="setting"
         options={{
           tabBarIcon: () => (
-            <Ionicons name="settings-sharp" color={color.bottomNavColor} size={25} />
+            <Ionicons
+              name="settings-sharp"
+              color={color.bottomNavColor}
+              size={25}
+            />
           ),
           title: 'Setting',
           tabBarLabelStyle: {

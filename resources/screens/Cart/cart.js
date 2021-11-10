@@ -38,14 +38,14 @@ export default function Cart({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
-  // const add = () => {
-  //   console.log(cartdata[0].quantity + 1);
-  // };
+
   const [isLoading, setLoading] = useState(true);
+  const [silderData, setSliderData] = useState(null);
 
   const getCartCall = async () => {
     const userId = await getUserData();
     const users = userId.id;
+    console.log(48, userId?.id);
     setUser_id(users);
     fetch(`${testCART}/${users}`, {
       method: 'GET',
@@ -54,6 +54,7 @@ export default function Cart({navigation}) {
       .then(async json => {
         if (json.message == 'Cart is empty') {
           setCartdata([]);
+          setSliderData([]);
           setLoading(false);
         } else {
           setCartdata(json);
@@ -63,24 +64,41 @@ export default function Cart({navigation}) {
         }
       })
       .catch(e => {
-        setNshowAlert(true)
+        setNshowAlert(true);
+      });
+  };
+  const getRecentData = async () => {
+    const userId = await getUserData();
+    const users = userId.id;
+    setUser_id(users);
+    fetch(`${testCART}/${users}`, {
+      method: 'GET',
+    })
+      .then(async response => await response.json())
+      .then(async json => {
+        setSliderData(json);
+        console.log(78, json);
       })
+      .catch(e => {
+        console.log(81, e);
+      });
   };
 
   useEffect(() => {
     (async () => {
       getCartCall();
+      getRecentData();
     })();
   }, []);
 
   const showDeleteAlert = id => {
     return (
-        <AwesomeAlert
+      <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Remove from Cart!"
         message="Are you sure you want to remove this item from your cart."
-        contentContainerStyle={{width:wp('80%')}}
+        contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         showCancelButton={true}
@@ -89,21 +107,20 @@ export default function Cart({navigation}) {
         cancelText="No"
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
-        cancelButtonTextStyle={{fontSize:hp('2.2%')}}
-        confirmButtonTextStyle={{fontSize:hp('2.2%')}}
+        cancelButtonTextStyle={{fontSize: hp('2.2%')}}
+        confirmButtonTextStyle={{fontSize: hp('2.2%')}}
         confirmButtonColor={color.textColorRedCart}
         cancelButtonColor={color.textColorRedCart}
         onConfirmPressed={() => {
-          deleteCartItem(itemId)
-          setShowAlert(false)
+          deleteCartItem(itemId);
+          setShowAlert(false);
         }}
-        onCancelPressed={()=>{
-          setShowAlert(false)
+        onCancelPressed={() => {
+          setShowAlert(false);
         }}
       />
     );
   };
-
 
   const deleteCartItem = id => {
     setLoading(true);
@@ -123,10 +140,10 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: 'Your Cart Has been deleted',
-          })
-          // console.log(68, cartdata);
+          });
+        // console.log(68, cartdata);
       })
-      .catch((e)=>{
+      .catch(e => {
         // console.log(170,e)
       })
       .finally(() => setLoading(false));
@@ -144,13 +161,13 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: json[0].message,
-          })
+          });
         } else {
           showMessage({
             type: 'warning',
             icon: 'warning',
             message: json[0].message,
-          })
+          });
         }
       });
   };
@@ -309,11 +326,10 @@ export default function Cart({navigation}) {
                         <TouchableOpacity
                           style={{flexDirection: 'row'}}
                           onPress={() => {
-                            setItemId(item.id)
-                            showDeleteAlert(item.id)
-                            setShowAlert(true)
+                            setItemId(item.id);
+                            showDeleteAlert(item.id);
+                            setShowAlert(true);
                             // console.log(356,item.id)
-
                           }}>
                           <Ionicons
                             style={{paddingTop: 13, marginRight: 10}}
@@ -349,7 +365,7 @@ export default function Cart({navigation}) {
                             {' '}
                             {item.quantity}{' '}
                           </Text>
-                          <TouchableOpacity >
+                          <TouchableOpacity>
                             <Ionicons
                               name="add-circle-sharp"
                               size={20}
@@ -426,44 +442,89 @@ export default function Cart({navigation}) {
         console.log('focusField', focusedField);
       }}
     /> */}
+          <View style={styles.recentTextContainer}>
+            <TouchableOpacity>
+              <Text style={{...styles.sliderText, color: 'grey'}}>
+                Recent Views
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.sliderText}>See All</Text>
+            </TouchableOpacity>
+          </View>
 
-    <ScrollView horizontal={true} >
-    <View style={{flexDirection:"row",justifyContent:"space-between",marginLeft:20}} >
-          <View style={styles.bottomimages} >
-            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
-          </View>
-          <View style={styles.bottomimages}>
-            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
-          </View>
-          <View style={styles.bottomimages}>
-            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
-          </View>
-          <View style={styles.bottomimages}>
-            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
-          </View>
-          <View style={styles.bottomimages}>
-            <Image style={styles.imagss} source={{ uri: "https://reqres.in/img/faces/7-image.jpg" }} />
-          </View>
-        </View>
-        </ScrollView>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            nestedScrollEnabled
+            horizontal={true}>
+            <View style={styles.bottomImageScroller}>
+              {silderData?.length > 0 &&
+                silderData?.map(res => {
+                  return (
+                    <View style={styles.bottomimages}>
+                      <Image
+                        style={styles.imagss}
+                        source={{
+                          uri: `${Images_API}/${res.get_products.images[0].name}`,
+                        }}
+                        // source={{
+                        //   uri: 'https://reqres.in/img/faces/7-image.jpg',
+                        // }}
+                      />
+                    </View>
+                  );
+                })}
+
+              {/* <View style={styles.bottomimages}>
+                <Image
+                  style={styles.imagss}
+                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
+                />
+              </View>
+              <View style={styles.bottomimages}>
+                <Image
+                  style={styles.imagss}
+                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
+                />
+              </View>
+              <View style={styles.bottomimages}>
+                <Image
+                  style={styles.imagss}
+                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
+                />
+              </View>
+              <View style={styles.bottomimages}>
+                <Image
+                  style={styles.imagss}
+                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
+                />
+              </View>
+              <View style={styles.bottomimages}>
+                <Image
+                  style={styles.imagss}
+                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
+                />
+              </View> */}
+            </View>
+          </ScrollView>
         </ScrollView>
       </View>
       <AwesomeAlert
-          show={nshowAlert}
-          showProgress={false}
-          title="Warning!"
-          message="You are not connect to the internet."
-          contentContainerStyle={{width: wp('80%')}}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          confirmText="Close"
-          confirmButtonColor="#DD6B55"
-          onConfirmPressed={() => {
-            setNshowAlert(false);
-          }}
-        />
+        show={nshowAlert}
+        showProgress={false}
+        title="Warning!"
+        message="You are not connect to the internet."
+        contentContainerStyle={{width: wp('80%')}}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Close"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => {
+          setNshowAlert(false);
+        }}
+      />
     </View>
   );
 }
