@@ -43,7 +43,7 @@ export default function Home({navigation}) {
   const [aisLoading, setAloading] = useState(true);
   const [bisLoading, setBloading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
-  const [brand,setBrand] =useState()
+  const [brand, setBrand] = useState();
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -73,12 +73,12 @@ export default function Home({navigation}) {
           .catch(e => {
             setShowAlert(true);
           });
-         fetch(ARRIVALS)
+        fetch(ARRIVALS)
           .then(response => response.json())
           .then(json => {
             setArrvals(json[0]), setAloading(false);
           });
-          fetch(BRANDDATA)
+        fetch(BRANDDATA)
           .then(response => response.json())
           .then(json => {
             setBrand(json[0]), setBloading(false);
@@ -182,10 +182,11 @@ export default function Home({navigation}) {
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity
-             onPress={() =>
-              navigation.navigate('subcatdetails', {
-                screenData: 'all-new-arrivals',
-              })}>
+              onPress={() =>
+                navigation.navigate('subcatdetails', {
+                  screenData: 'all-new-arrivals',
+                })
+              }>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
@@ -200,8 +201,13 @@ export default function Home({navigation}) {
           </View>
           <Text style={styles.te}>Brands</Text>
           <NativeBaseProvider>
-            {/* <Alldata detailss={detailss} data={brand} isLoading={bisLoading} /> */}
-            <Alldata detailss={detailss} data={data} isLoading={isLoading} />
+            <Alldata
+              detailss={detailss}
+              data={brand}
+              isLoading={bisLoading}
+              isBrand={true}
+            />
+            {/* <Alldata detailss={detailss} data={data} isLoading={isLoading} /> */}
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity>
