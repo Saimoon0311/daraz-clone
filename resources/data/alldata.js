@@ -23,6 +23,9 @@ import Svg, {Circle, Rect} from 'react-native-svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 export default function Alldata(prop, {navigation}) {
+  const allData =()=>{
+    
+  }
   return (
     <View>
       {prop.isLoading ? (

@@ -178,7 +178,7 @@ export default function Home({navigation}) {
               arrivals={arrivals}
               aisLoading={aisLoading}
             /> */}
-                        <Alldata detailss={detailss} data={data} isLoading={isLoading} />
+                        <Alldata detailss={detailss} data={arrivals} isLoading={aisLoading} />
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity
@@ -198,7 +198,7 @@ export default function Home({navigation}) {
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.te}>Top sellers</Text>
+          <Text style={styles.te}>Brands</Text>
           <NativeBaseProvider>
             {/* <Alldata detailss={detailss} data={brand} isLoading={bisLoading} /> */}
             <Alldata detailss={detailss} data={data} isLoading={isLoading} />
