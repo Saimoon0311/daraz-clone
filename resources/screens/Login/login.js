@@ -30,7 +30,6 @@ export default function Login({navigation}) {
   const [loadingButton, setLoadingButton] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);
@@ -107,7 +106,9 @@ export default function Login({navigation}) {
     // }
   };
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1}}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{flex: 1}}>
       <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View
         style={{
@@ -115,14 +116,14 @@ export default function Login({navigation}) {
           paddingLeft: 28.5,
           paddingRight: 27.5,
           paddingBottom: 150,
-          flex:1
+          flex: 1,
         }}>
         <View style={{backgroundColor: 'white'}}>
           <Text style={{marginBottom: 15}}></Text>
           <TextInput
             label="Email *"
             underlineColor="gray"
-            theme={{colors:{primary:color.themColorPrimary}}}
+            theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
             onChangeText={email => updateState({email})}
           />
@@ -131,7 +132,7 @@ export default function Login({navigation}) {
             <TextInput
               label="Password *"
               underlineColor="gray"
-              theme={{colors:{primary:color.themColorPrimary}}}
+              theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
               selectionColor="#FF7E33"
               secureTextEntry={show ? false : true}
@@ -168,40 +169,44 @@ export default function Login({navigation}) {
               message="Loading..."
             />
           ) : ( */}
-            <TouchableOpacity
+          <TouchableOpacity
             onPress={loginss}
+            style={{
+              width: wp('80%'),
+              height: hp('6%'),
+              backgroundColor: '#FF7E33',
+              alignSelf: 'center',
+              marginTop: 30,
+              borderRadius: 10,
+              flexDirection: 'row',
+              // alignItems:'center',
+              // justifyContent:'center'
+            }}>
+            <View
               style={{
-                width: wp('80%'),
-                height: hp('7%'),
-                backgroundColor: '#FF7E33',
-                alignSelf: 'center',
-                marginTop: 30,
-                borderRadius: 10,
-                flexDirection: 'row',
-                // alignItems:'center',
-                // justifyContent:'center'
+                width: wp('15%'),
+                height: hp('6%'),
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              <View
-                style={{
-                  width: wp('15%'),
-                  height: hp('7%'),
-                  alignItems:'center',
-                  justifyContent:'center'
-                }}>
-                  <Ionicons style={{marginLeft:wp('3%')}} name="mail" size={22} color={'white'} />
-  
-                </View>
-              <View
-                style={{
-                  width: wp('50%'),
-                  height: hp('7%'),
-                    alignItems:'center',
-                justifyContent:'center',
+              <Ionicons
+                style={{marginLeft: wp('3%')}}
+                name="mail"
+                size={22}
+                color={'white'}
+              />
+            </View>
+            <View
+              style={{
+                width: wp('50%'),
+                height: hp('6%'),
+                alignItems: 'center',
+                justifyContent: 'center',
                 // backgroundColor:'red'
-                }}>
-                  {loadingButton ?(
-                    <ActivityIndicator color="white" size="small" />
-                  ):(
+              }}>
+              {loadingButton ? (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
                 <Text
                   style={{
                     fontSize: hp('2.8%'),
@@ -211,14 +216,14 @@ export default function Login({navigation}) {
                   }}>
                   Login
                 </Text>
-                  )}
-              </View>
-              <View
-                style={{
-                  width: wp('15%'),
-                  height: hp('7%'),
-                }}></View>
-            </TouchableOpacity>
+              )}
+            </View>
+            <View
+              style={{
+                width: wp('15%'),
+                height: hp('7%'),
+              }}></View>
+          </TouchableOpacity>
           {/* )} */}
 
           {/* <TouchableOpacity style={styles.buts}>
