@@ -58,7 +58,7 @@ flex:1
     marginBottom: 10,
   },
   im: {
-    width: wp('37'),
+    width: wp('40'),
     height: hp('15'),
     borderRadius: 30,
     // shadowColor: '#000',

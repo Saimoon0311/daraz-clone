@@ -107,7 +107,7 @@ export default function Login({navigation}) {
     // }
   };
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1}}>
       <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View
         style={{
@@ -115,6 +115,7 @@ export default function Login({navigation}) {
           paddingLeft: 28.5,
           paddingRight: 27.5,
           paddingBottom: 150,
+          flex:1
         }}>
         <View style={{backgroundColor: 'white'}}>
           <Text style={{marginBottom: 15}}></Text>

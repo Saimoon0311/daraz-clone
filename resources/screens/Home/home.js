@@ -73,7 +73,7 @@ export default function Home({navigation}) {
           .catch(e => {
             setShowAlert(true);
           });
-        fetch(ARRIVALS)
+         fetch(ARRIVALS)
           .then(response => response.json())
           .then(json => {
             setArrvals(json[0]), setAloading(false);

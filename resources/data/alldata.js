@@ -45,7 +45,6 @@ export default function Alldata(prop, {navigation}) {
       ) : (
         <FlatList
           data={prop.data}
-          // keyExtractor={item => item.key}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
