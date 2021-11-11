@@ -52,9 +52,8 @@ export default function setting({navigation}) {
     }, 10);
   };
   var stringName = names;
-  stringName = stringName?.replace(/^"|"$/g, '')
+  stringName = stringName?.replace(/^"|"$/g, '');
   return (
-    
     <View style={styles.main}>
       <StatusBar backgroundColor="#94725f" />
       <View
@@ -85,15 +84,7 @@ export default function setting({navigation}) {
       </View>
       <View style={styles.well}>
         <Text style={styles.we}>Welcome</Text>
-        <Text
-          style={[
-            styles.we,
-            {color: 'white'},
-          ]}>
-      
-          {stringName}
-
-        </Text>
+        <Text style={[styles.we, {color: 'white'}]}>{stringName}</Text>
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: hp('20%')}}>
         <View style={styles.vacc}>
@@ -121,7 +112,14 @@ export default function setting({navigation}) {
             </TouchableOpacity>
           </View>
           <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('subcatdetails', {
+                  screenData: 'wishlist',
+                  isWishlist: true,
+                })
+              }
+              style={styles.shadow}>
               <Ionicons
                 name="heart-outline"
                 size={20}
@@ -153,7 +151,7 @@ export default function setting({navigation}) {
               <Text style={styles.orte}>Logout</Text>
             </TouchableOpacity>
           </View>
-          <Text style={{...styles.acc,marginTop:hp('2%')}}>My Settings</Text>
+          <Text style={{...styles.acc, marginTop: hp('2%')}}>My Settings</Text>
           <View style={styles.box}>
             <TouchableOpacity
               style={styles.shadow}
@@ -171,8 +169,6 @@ export default function setting({navigation}) {
               <Text style={styles.orte}>Change Password</Text>
             </TouchableOpacity>
           </View>
-
-       
         </View>
       </ScrollView>
       <AwesomeAlert

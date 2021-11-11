@@ -38,52 +38,71 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default function subcatdetails({route, navigation}) {
   const paramData = route?.params;
-  const productData = route?.params?.item
+  const productData = route?.params?.item;
   const [user_id, setUser_id] = useState();
   const [subcatdata, setSubcatdata] = useState();
-  const [allData,setAllData] = useState();
+  const [allData, setAllData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [cartloading, setCartloading] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
 
-  const getSubCatData = () => {
-    console.log(50,productData?.id)
+  const getSubCatData = async () => {
+    // console.log(50, productData?.id);
     fetch(`${SUBCATPRODUCTDATA}/20`)
       .then(response => response.json())
-      .then(json => { console.log(51,json)
+      .then(json => {
+        // console.log(51, json);
         setAllData(json[0]), setLoading(false);
       })
-      .catch(error => setNshowAlert(true));
+      .catch(error => {
+        console.log(58, error);
+      });
+  };
+  const getSavedItemsData = async () => {
+    const userId = await getUserData()?.then(res => res?.id);
+
+    fetch(`${API_BASED_URL}${paramData?.screenData}/${userId}`)
+      // fetch(
+      //   'https://test-urls.com/elitedesignhub/moyen-express/public/api/wishlist/13',
+      // )
+      .then(response => response.json())
+      .then(json => {
+        console.log(69, json);
+        setAllData(json), setLoading(false);
+      })
+      .catch(error => {
+        console.log(70, error);
+      });
   };
 
-  const getAllData = () =>{
+  const getAllData = async () => {
     fetch(`${API_BASED_URL}${paramData?.screenData}`)
-    .then(response => response.json())
-    .then(json => {
-      setAllData(json[0]), setLoading(false);
-    })
-    .catch(error => 
-      showMessage({
-        type:"danger",
-        icon:"danger",
-        message:"Something want wrong."
+      .then(response => response.json())
+      .then(json => {
+        setAllData(json[0]), setLoading(false);
       })
-    
-    );
-  }
- const parentFunction =()=>{
-   if(paramData?.screenData=="subCat"){
-    getSubCatData()
-   }else{
-     getAllData()
-   }
- }
+      .catch(error =>
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrong.',
+        }),
+      );
+  };
+  const parentFunction = async () => {
+    if (paramData?.screenData == 'subCat') {
+      await getSubCatData();
+    } else if (paramData?.screenData == 'wishlist') {
+      await getSavedItemsData();
+    } else {
+      await getAllData();
+    }
+  };
   useEffect(() => {
     (async () => {
-      parentFunction()
-      const userId = await getUserData();
-      const users = userId.id;
-      setUser_id(users);
+      const userId = await getUserData()?.then(res => res?.id);
+      await setUser_id(userId);
+      await parentFunction();
     })();
   }, []);
 
@@ -106,7 +125,7 @@ export default function subcatdetails({route, navigation}) {
           });
         }
       })
-     .catch(error => console.error(109, error))
+      .catch(error => console.error(109, error));
   };
 
   const addtocart = id => {
@@ -147,13 +166,220 @@ export default function subcatdetails({route, navigation}) {
     // console.log(id);
   };
 
-  const renderHeaderText =  () => {
-    if (paramData?.screenData=="products-featured/") {
-      return <Text>Featured</Text>
-    } else if(paramData?.screenData=="all-new-arrivals"){
-      return <Text>New Arrivals</Text>
-    }else if(paramData?.screenData=="subCat"){
-      return <Text>{productData?.name}</Text>
+  const renderHeaderText = () => {
+    if (paramData?.screenData == 'products-featured/') {
+      return <Text>Featured</Text>;
+    } else if (paramData?.screenData == 'all-new-arrivals') {
+      return <Text>New Arrivals</Text>;
+    } else if (paramData?.screenData == 'subCat') {
+      return <Text>{productData?.name}</Text>;
+    } else if (paramData?.screenData == 'wishlist') {
+      return <Text>Wishlist</Text>;
+    }
+  };
+
+  const renderCards = item => {
+    return (
+      <View style={styles.box}>
+        <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
+          <ImageBackground
+            style={styles.im}
+            imageStyle={{borderRadius: 20}}
+            source={{uri: `${Images_API}/${item?.images[0].name}`}}
+            // source={{
+            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            // }}
+          >
+            {item.featured == 1 ? (
+              <Text style={styles.fea}>Featured</Text>
+            ) : null}
+            {item.is_discounted == 2 ? (
+              <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
+                {item.discounted_percentage}%OFF
+              </Text>
+            ) : null}
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => addtowishlist(item?.id)}>
+              <Ionicons name="heart-outline" color="#FF0000" size={30} />
+            </TouchableOpacity>
+          </ImageBackground>
+          <View style={{width: wp('35%')}}>
+            <Text style={styles.text} numberOfLines={1}>
+              {item?.name}
+            </Text>
+          </View>
+          {item.is_discounted == 2 ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingTop: hp('2%'),
+                marginLeft: wp('2%'),
+                width: wp('35%'),
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  // width:wp('10%'),
+                  maxWidth: wp('17.5%'),
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                    textDecorationLine: 'line-through',
+                  }}
+                  numberOfLines={1}>
+                  $ {item.price}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: wp('17.5%'),
+                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                  }}
+                  numberOfLines={1}>
+                  {' '}
+                  $ {item.discounted_price}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <Text
+              style={{
+                color: '#512500',
+                fontSize: hp('2%'),
+                fontWeight: 'bold',
+                paddingTop: hp('2%'),
+                paddingLeft: wp('1%'),
+              }}>
+              $ {item.price}
+            </Text>
+          )}
+        </TouchableOpacity>
+        {item?.stock < 1 ? (
+          <Text style={styles.stock}>Out Of Stock</Text>
+        ) : (
+          <TouchableOpacity
+            style={styles.cart}
+            onPress={() => addtocart(item?.id)}>
+            <Text style={styles.carttext}>Add to Cart</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
+
+  const renderWishlistData = item => {
+    return (
+      <View style={styles.box}>
+        <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
+          <ImageBackground
+            style={styles.im}
+            imageStyle={{borderRadius: 20}}
+            // source={{uri: `${Images_API}/${item?.images[0].name}`}}
+            source={{
+              uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            }}>
+            {item.featured == 1 ? (
+              <Text style={styles.fea}>Featured</Text>
+            ) : null}
+            {item.is_discounted == 2 ? (
+              <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
+                {item.discounted_percentage}%OFF
+              </Text>
+            ) : null}
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => addtowishlist(item?.id)}>
+              <Ionicons name="heart-outline" color="#FF0000" size={30} />
+            </TouchableOpacity>
+          </ImageBackground>
+          <View style={{width: wp('35%')}}>
+            <Text style={styles.text} numberOfLines={1}>
+              {item?.name}
+            </Text>
+          </View>
+          {item.is_discounted == 2 ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingTop: hp('2%'),
+                marginLeft: wp('2%'),
+                width: wp('35%'),
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  // width:wp('10%'),
+                  maxWidth: wp('17.5%'),
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                    textDecorationLine: 'line-through',
+                  }}
+                  numberOfLines={1}>
+                  $ {item.price}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: wp('17.5%'),
+                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                  }}
+                  numberOfLines={1}>
+                  {' '}
+                  $ {item.discounted_price}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <Text
+              style={{
+                color: '#512500',
+                fontSize: hp('2%'),
+                fontWeight: 'bold',
+                paddingTop: hp('2%'),
+                paddingLeft: wp('1%'),
+              }}>
+              $ {item.price}
+            </Text>
+          )}
+        </TouchableOpacity>
+        {item?.stock < 1 ? (
+          <Text style={styles.stock}>Out Of Stock</Text>
+        ) : (
+          <TouchableOpacity
+            style={styles.cart}
+            onPress={() => addtocart(item?.id)}>
+            <Text style={styles.carttext}>Add to Cart</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
+
+  const checkRender = item => {
+    if (paramData?.isWishlist) {
+      return renderWishlistData(item);
+    } else {
+      return renderCards(item);
     }
   };
 
@@ -168,9 +394,7 @@ export default function subcatdetails({route, navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>
-          {renderHeaderText()}
-        </Text>
+        <Text style={styles.te}>{renderHeaderText()}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
         </TouchableOpacity>
@@ -190,104 +414,8 @@ export default function subcatdetails({route, navigation}) {
             numColumns={2}
             contentContainerStyle={{paddingBottom: 300}}
             renderItem={({item, index}) => {
-              return (
-                <View style={styles.box}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Details', item)}>
-                    <ImageBackground
-                      style={styles.im}
-                      imageStyle={{borderRadius: 20}}
-                      source={{uri: `${Images_API}/${item?.images[0].name}`}}>
-                         {item.featured == 1 ? (
-                        <Text style={styles.fea}>Featured</Text>
-                      ) : null}
-                      {item.is_discounted == 2 ? (
-                        <Text
-                          style={[styles.fea, {backgroundColor: '#512500'}]}>
-                          {item.discounted_percentage}%OFF
-                        </Text>
-                      ) : null}
-                      <TouchableOpacity
-                        style={styles.icons}
-                        onPress={() => addtowishlist(item?.id)}>
-                        <Ionicons
-                          name="heart-outline"
-                          color="#FF0000"
-                          size={30}
-                        />
-                      </TouchableOpacity>
-                    </ImageBackground>
-                    <View 
-                    style={{width:wp('35%')}}
-                    >
-                    <Text style={styles.text} numberOfLines={1}>
-                      {item?.name}
-                    </Text>
-                    </View>
-                    {item.is_discounted == 2 ? (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          paddingTop:hp('2%'),
-                          marginLeft:wp('2%'),
-                          width:wp('35%'),
-                        }}>
-                          <View
-                             style={{
-                              flexDirection: 'row',
-                              // width:wp('10%'),
-                              maxWidth:wp('17.5%')
-                            }}>
-                        <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: hp('2%'),
-                            fontWeight: 'bold',
-                            textDecorationLine: 'line-through',
-                          }} numberOfLines={1} >
-                          $ {item.price}
-                        </Text>
-                        </View>
-                        <View
-                             style={{
-                              flexDirection: 'row',
-                              width:wp('17.5%'),
-                            }}>
-                        <Text
-                          style={{
-                            color: 'red',
-                            fontSize: hp('2%'),
-                            fontWeight: 'bold',
-                          }} numberOfLines={1} >
-                            {' '}
-                          $ {item.discounted_price}
-                        </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <Text
-                        style={{
-                          color: '#512500',
-                          fontSize: hp('2%'),
-                          fontWeight: 'bold',
-                          paddingTop:hp('2%'),
-                          paddingLeft:wp('1%')
-                        }}>
-                        $ {item.price}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                  {item?.stock < 1 ? (
-                    <Text style={styles.stock}>Out Of Stock</Text>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.cart}
-                      onPress={() => addtocart(item?.id)}>
-                      <Text style={styles.carttext}>Add to Cart</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              );
+              // return renderCards(item);
+              return checkRender(item);
             }}
           />
         )}
