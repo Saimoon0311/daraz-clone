@@ -33,10 +33,12 @@ import {styles} from './style';
 export default function Details({route, navigation}) {
   const [user_id, setUser_id] = useState();
   const [loading, setLoading] = useState(false);
+  const [itemColor, setItemColor] = useState(null);
 
   useEffect(() => {
+    console.log(39, item);
     setUserId();
-  });
+  }, []);
   const setUserId = async () => {
     const userId = await getUserData();
     const users = userId.id;
@@ -64,12 +66,12 @@ export default function Details({route, navigation}) {
     })
       .then(response => response.json())
       .then(json => {
-          showMessage({
-            type: 'success',
-            icon: 'auto',
-            message: 'Your Product Has Been Add To Cart',
-            backgroundColor: '#E9691D',
-          }),
+        showMessage({
+          type: 'success',
+          icon: 'auto',
+          message: 'Your Product Has Been Add To Cart',
+          backgroundColor: '#E9691D',
+        }),
           setLoading(false);
       })
       .done();
@@ -123,7 +125,7 @@ export default function Details({route, navigation}) {
                     color: '#512500',
                     fontSize: 18,
                     fontWeight: 'bold',
-                    marginTop:hp('0.5%')
+                    marginTop: hp('0.5%'),
                   }}>
                   Price :
                 </Text>
@@ -133,7 +135,7 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                     textDecorationLine: 'line-through',
-                    marginTop:hp('0.5%')
+                    marginTop: hp('0.5%'),
                   }}>
                   $ {item.price}
                 </Text>
@@ -142,7 +144,7 @@ export default function Details({route, navigation}) {
                     color: 'red',
                     fontSize: 18,
                     fontWeight: 'bold',
-                    marginTop:hp('0.5%')
+                    marginTop: hp('0.5%'),
                   }}>
                   {' '}
                   $ {item.discounted_price}
@@ -177,7 +179,12 @@ export default function Details({route, navigation}) {
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               Description :
             </Text>
-            <Text style={{color: 'gray', textAlign: 'justify', marginTop:hp('0.5%')}}>
+            <Text
+              style={{
+                color: 'gray',
+                textAlign: 'justify',
+                marginTop: hp('0.5%'),
+              }}>
               {/* {item.description}  */}
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
@@ -192,10 +199,40 @@ export default function Details({route, navigation}) {
             </Text>
           </View>
           <Text style={styles.delvery}> Delivery & Returns</Text>
-          <View style={[styles.box, {marginBottom: hp('25%')}]}>
-            <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-              Choose Your Location
-            </Text>
+          <View style={styles.optionsContainer}>
+            {item?.get_attribute_values &&
+              item?.get_attribute_values?.map((res, i) => {
+                return (
+                  <View>
+                    <Text style={styles.attributeText}>
+                      {res?.attribute?.name}
+                    </Text>
+                    <View style={styles.pickerParentStyle}>
+                      <Picker
+                        selectedValue={itemColor}
+                        onValueChange={e => {
+                          setItemColor(e);
+                        }}
+                        style={styles.pickerStyle}>
+                        <Picker.Item
+                          key={i}
+                          value={null}
+                          label={'Select Attribute'}
+                        />
+                        {res?.value?.map(res => {
+                          return (
+                            <Picker.Item
+                              key={res?.attribute_id}
+                              value={'Red'}
+                              label={res}
+                            />
+                          );
+                        })}
+                      </Picker>
+                    </View>
+                  </View>
+                );
+              })}
           </View>
         </View>
       </ScrollView>
