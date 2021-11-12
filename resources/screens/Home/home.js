@@ -117,7 +117,7 @@ export default function Home({navigation}) {
         screenData: 'search-products',
       })
       setToggleSearchBar(false)
-      setSearchData(null)
+      setSearchData("")
     }
   }
 
