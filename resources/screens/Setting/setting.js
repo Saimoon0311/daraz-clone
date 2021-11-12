@@ -165,7 +165,7 @@ export default function setting({navigation}) {
             </TouchableOpacity>
           </View>
           <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
+            <TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate('changepassword')}>
               <Text style={styles.orte}>Change Password</Text>
             </TouchableOpacity>
           </View>

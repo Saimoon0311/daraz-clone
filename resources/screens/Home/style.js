@@ -68,7 +68,7 @@ backgroundColor:color.defaultBackgroundColor
     width: wp('63%'),
     borderColor: color.defaultcolor,
     borderWidth: 1,
-    height: hp('6%'),
+    height: hp('5.7%'),
     paddingLeft: 10,
   },
 });

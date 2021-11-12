@@ -3,12 +3,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { alignItems } from "styled-system";
 import {color} from "../../config/color"
 
 export const styles = StyleSheet.create({
   main:{
 backgroundColor:color.defaultBackgroundColor,
-flex:1
+flex:1,
   },
   header: {
     flexDirection: 'row',

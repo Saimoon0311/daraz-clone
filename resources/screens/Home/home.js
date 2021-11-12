@@ -28,6 +28,7 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { showMessage } from 'react-native-flash-message';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -44,6 +45,7 @@ export default function Home({navigation}) {
   const [bisLoading, setBloading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [brand, setBrand] = useState();
+  const [seacrhData, setSearchData] = useState("");
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -102,6 +104,23 @@ export default function Home({navigation}) {
     }
   };
 
+  const onSubmitSeacrhItem =() =>{
+    if (seacrhData=="") {
+      showMessage({
+        type:"warning",
+        icon:"warning",
+        message:"Please type something to search..."
+      })
+    } else {
+      navigation.navigate('subcatdetails', {
+        seacrhDatas: seacrhData,
+        screenData: 'search-products',
+      })
+      setToggleSearchBar(false)
+      setSearchData(null)
+    }
+  }
+
   useEffect(() => {
     (async () => {
       datacallss();
@@ -115,10 +134,13 @@ export default function Home({navigation}) {
           {toggleSearchBar ? (
             <View style={styles.searchBarWrap}>
               <TextInput
-                onChangeText={text => onChangeText(text)}
-                value={titleSearchValue}
+                onChangeText={text => setSearchData(text)}
+                value={seacrhData}
                 placeholder={'Search...'}
                 placeholderTextColor={color.defaultcolor}
+                onSubmitEditing={ ()=>
+                  onSubmitSeacrhItem ()
+                }
                 style={styles.search}
               />
               <TouchableOpacity
@@ -178,7 +200,11 @@ export default function Home({navigation}) {
               arrivals={arrivals}
               aisLoading={aisLoading}
             /> */}
-                        <Alldata detailss={detailss} data={arrivals} isLoading={aisLoading} />
+            <Alldata
+              detailss={detailss}
+              data={arrivals}
+              isLoading={aisLoading}
+            />
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity
