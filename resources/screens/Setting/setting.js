@@ -90,6 +90,19 @@ export default function setting({navigation}) {
         <View style={styles.vacc}>
           <Text style={styles.acc}>My Moyen Account</Text>
           <View style={styles.box}>
+            <TouchableOpacity style={styles.shadow}
+             onPress={() => navigation.navigate('Userdeatils')}
+            >
+              <Ionicons
+                name="person-circle-outline"
+                size={20}
+                style={{marginRight: 20}}
+                color="gray"
+              />
+              <Text style={styles.orte}>My Profile</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.box}>
             <TouchableOpacity style={styles.shadow}>
               <Ionicons
                 name="albums-outline"
@@ -140,6 +153,37 @@ export default function setting({navigation}) {
               <Text style={styles.orte}>Recently Viewed</Text>
             </TouchableOpacity>
           </View>
+         
+          <Text style={{...styles.acc, marginTop: hp('2%')}}>My Settings</Text>
+          {/* <View style={styles.box}>
+            <TouchableOpacity
+              style={styles.shadow}
+              onPress={() => navigation.navigate('Userdeatils')}>
+              <Text style={styles.orte}>Details</Text>
+            </TouchableOpacity>
+          </View> */}
+          <View style={styles.box}>
+            <TouchableOpacity style={styles.shadow}>
+            <Ionicons
+                name="book-outline"
+                size={20}
+                style={{marginRight: 20}}
+                color="gray"
+              />
+              <Text style={styles.orte}>Address Book</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.box}>
+            <TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate('changepassword')}>
+            <Ionicons
+                name="keypad-outline"
+                size={20}
+                style={{marginRight: 20}}
+                color="gray"
+              />
+              <Text style={styles.orte}>Change Password</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.box}>
             <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
               <Ionicons
@@ -149,24 +193,6 @@ export default function setting({navigation}) {
                 color="gray"
               />
               <Text style={styles.orte}>Logout</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={{...styles.acc, marginTop: hp('2%')}}>My Settings</Text>
-          <View style={styles.box}>
-            <TouchableOpacity
-              style={styles.shadow}
-              onPress={() => navigation.navigate('Userdeatils')}>
-              <Text style={styles.orte}>Details</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
-              <Text style={styles.orte}>Address Book</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate('changepassword')}>
-              <Text style={styles.orte}>Change Password</Text>
             </TouchableOpacity>
           </View>
         </View>

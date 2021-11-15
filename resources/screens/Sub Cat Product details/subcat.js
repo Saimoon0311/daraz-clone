@@ -70,7 +70,7 @@ export default function subcatdetails({route, navigation}) {
       .then(response => response.json())
       .then(json => {
         console.log(69, json);
-        setAllData(json), setLoading(false);
+        setAllData(json[0]), setLoading(false);
       })
       .catch(error => {
         console.log(70, error);
@@ -152,43 +152,43 @@ export default function subcatdetails({route, navigation}) {
       .catch(error => console.error(109, error));
   };
 
-  const addtocart = id => {
-    var product_id = id;
-    //  setCartloading(true)
-    //  await ff()
-    // console.log('userid', user_id);
-    fetch(ADDTOCART, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id,
-        product_id,
-      }),
-    })
-      .then(response => response.json())
-      .then(json => {
-        // console.log(json);
-        if (json[0].message == 'Successfully added to cart') {
-          showMessage({
-            type: 'success',
-            icon: 'auto',
-            message: 'Your Product Has Been Add To Cart',
-            backgroundColor: '#E9691D',
-          });
-        } else {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: json.message,
-          });
-        }
-      })
-      .done();
-    // console.log(id);
-  };
+  // const addtocart = id => {
+  //   var product_id = id;
+  //   //  setCartloading(true)
+  //   //  await ff()
+  //   // console.log('userid', user_id);
+  //   fetch(ADDTOCART, {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       user_id,
+  //       product_id,
+  //     }),
+  //   })
+  //     .then(response => response.json())
+  //     .then(json => {
+  //       // console.log(json);
+  //       if (json[0].message == 'Successfully added to cart') {
+  //         showMessage({
+  //           type: 'success',
+  //           icon: 'auto',
+  //           message: 'Your Product Has Been Add To Cart',
+  //           backgroundColor: '#E9691D',
+  //         });
+  //       } else {
+  //         showMessage({
+  //           type: 'warning',
+  //           icon: 'warning',
+  //           message: json.message,
+  //         });
+  //       }
+  //     })
+  //     .done();
+  //   // console.log(id);
+  // };
 
   const renderHeaderText = () => {
     if (paramData?.screenData == 'products-featured/') {
@@ -207,7 +207,7 @@ export default function subcatdetails({route, navigation}) {
   const renderCards = item => {
     console.log(207,item)
     return (
-      <View style={styles.box}>
+      <View style={{...styles.box,marginLeft:wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
           <ImageBackground
             style={styles.im}
@@ -285,13 +285,14 @@ export default function subcatdetails({route, navigation}) {
                 fontSize: hp('2%'),
                 fontWeight: 'bold',
                 paddingTop: hp('2%'),
-                paddingLeft: wp('1%'),
+                paddingLeft: wp('2%'),
               }}>
               $ {item.price}
             </Text>
           )}
         </TouchableOpacity>
-        {item?.stock < 1 ? (
+        <Text></Text>
+        {/* {item?.stock < 1 ? (
           <Text style={styles.stock}>Out Of Stock</Text>
         ) : (
           <TouchableOpacity
@@ -299,43 +300,43 @@ export default function subcatdetails({route, navigation}) {
             onPress={() => addtocart(item?.id)}>
             <Text style={styles.carttext}>Add to Cart</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     );
   };
 
   const renderWishlistData = item => {
     return (
-      <View style={styles.box}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
+      <View style={{...styles.box,marginLeft:wp('6%')}}>
+        <TouchableOpacity onPress={() => navigation.navigate('Details', item?.get_products)}>
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.images[0].name}`}}
+            source={{uri: `${Images_API}/${item?.get_products?.images[0]?.name}`}}
             // source={{
             //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
             // }}
             >
-            {item.featured == 1 ? (
+            {item?.get_products?.featured == 1 ? (
               <Text style={styles.fea}>Featured</Text>
             ) : null}
-            {item.is_discounted == 2 ? (
+            {item?.get_products?.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
-                {item.discounted_percentage}%OFF
+                {item?.get_products?.discounted_percentage}%OFF
               </Text>
             ) : null}
             <TouchableOpacity
               style={styles.icons}
-              onPress={() => addtowishlist(item?.id)}>
+              onPress={() => addtowishlist(item?.get_products?.id)}>
               <Ionicons name="heart-outline" color="#FF0000" size={30} />
             </TouchableOpacity>
           </ImageBackground>
           <View style={{width: wp('35%')}}>
             <Text style={styles.text} numberOfLines={1}>
-              {item?.name}
+              {item?.get_products?.name}
             </Text>
           </View>
-          {item.is_discounted == 2 ? (
+          {item?.get_products?.is_discounted == 2 ? (
             <View
               style={{
                 flexDirection: 'row',
@@ -357,7 +358,7 @@ export default function subcatdetails({route, navigation}) {
                     textDecorationLine: 'line-through',
                   }}
                   numberOfLines={1}>
-                  $ {item.price}
+                  $ {item?.get_products?.price}
                 </Text>
               </View>
               <View
@@ -373,7 +374,7 @@ export default function subcatdetails({route, navigation}) {
                   }}
                   numberOfLines={1}>
                   {' '}
-                  $ {item.discounted_price}
+                  $ {item?.get_products?.discounted_price}
                 </Text>
               </View>
             </View>
@@ -386,19 +387,20 @@ export default function subcatdetails({route, navigation}) {
                 paddingTop: hp('2%'),
                 paddingLeft: wp('1%'),
               }}>
-              $ {item.price}
+              $ {item?.get_products?.price}
             </Text>
           )}
         </TouchableOpacity>
-        {item?.stock < 1 ? (
+        <Text></Text>
+        {/* {item?.get_products?.stock < 1 ? (
           <Text style={styles.stock}>Out Of Stock</Text>
         ) : (
           <TouchableOpacity
             style={styles.cart}
-            onPress={() => addtocart(item?.id)}>
+            onPress={() => addtocart(item?.product_id)}>
             <Text style={styles.carttext}>Add to Cart</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     );
   };
@@ -427,9 +429,9 @@ export default function subcatdetails({route, navigation}) {
           <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
         </TouchableOpacity>
       </View>
-      <View style={styles.body}>
+      <View style={{...styles.body}}>
         {isLoading ? (
-          <View style={{margin: hp('20%')}}>
+          <View style={{margin: hp('22%')}}>
             <BubblesLoader size={50} dotRadius={10} color="#512500" />
           </View>
         ) : (
@@ -440,7 +442,7 @@ export default function subcatdetails({route, navigation}) {
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             numColumns={2}
-            contentContainerStyle={{paddingBottom: 300,width:wp('85%')}}
+            contentContainerStyle={{paddingBottom: hp('20%'),width:wp('100%'),alignSelf:"flex-start"}}
             renderItem={({item, index}) => {
               // return renderCards(item);
               return checkRender(item);

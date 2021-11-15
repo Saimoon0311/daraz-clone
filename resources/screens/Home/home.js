@@ -138,6 +138,7 @@ export default function Home({navigation}) {
                 value={seacrhData}
                 placeholder={'Search...'}
                 placeholderTextColor={color.defaultcolor}
+                
                 onSubmitEditing={ ()=>
                   onSubmitSeacrhItem ()
                 }

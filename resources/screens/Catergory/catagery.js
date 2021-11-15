@@ -82,7 +82,7 @@ export default function cate({navigation}) {
           </TouchableOpacity> */}
           <View style={styles.search}>
             <TextInput
-              placeholder="Search"
+              placeholder="Search..."
               placeholderTextColor="#512500"
               style={styles.searchbar}
             />

@@ -20,7 +20,8 @@ margin:wp('5%'),
   noticstext:{
     fontSize:wp('4%'),
     textAlign:"center",
-    marginTop:hp('1%')
+    marginTop:hp('1%'),
+    color:"gray"
   },
    te: {
     backgroundColor: color.defaultBackgroundColor,

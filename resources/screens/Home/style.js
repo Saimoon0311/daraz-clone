@@ -70,5 +70,6 @@ backgroundColor:color.defaultBackgroundColor
     borderWidth: 1,
     height: hp('5.7%'),
     paddingLeft: 10,
+    color:color.defaultcolor
   },
 });

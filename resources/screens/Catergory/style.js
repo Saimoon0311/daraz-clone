@@ -27,6 +27,7 @@ flex:1,
     backgroundColor: 'white',
     borderRadius: 17,
     paddingLeft: 15,
+    color:"#512500"
   },
   search: {
     width: wp('80%'),

@@ -36,7 +36,7 @@ export default function Login({navigation}) {
 
   const [state, setState] = useState({
     email: 'testvendor@gmail.com',
-    password: 'passwords',
+    password: 'password',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
