@@ -33,10 +33,32 @@ import {styles} from './style';
 export default function Details({route, navigation}) {
   const [user_id, setUser_id] = useState();
   const [loading, setLoading] = useState(false);
-  const [itemColor, setItemColor] = useState(null);
+  const [favValue, setFavValue] = useState(false);
+  // const [pickerValue, setPickerValue] = useState({});
+  const [attributeArray, setAttributeArray] = useState([]);
+  const [silderData, setSliderData] = useState([
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+    },
+    {
+      id: 4,
+    },
+    {
+      id: 5,
+    },
+    {
+      id: 6,
+    },
+  ]);
 
   useEffect(() => {
-    console.log(39, item);
+    // console.log(39, item);
     setUserId();
   }, []);
   const setUserId = async () => {
@@ -52,7 +74,6 @@ export default function Details({route, navigation}) {
 
   const cartadd = () => {
     setLoading(true);
-    //  await ff()
     fetch(ADDTOCART, {
       method: 'POST',
       headers: {
@@ -62,10 +83,12 @@ export default function Details({route, navigation}) {
       body: JSON.stringify({
         product_id,
         user_id,
+        attribute: attributeArray,
       }),
     })
       .then(response => response.json())
       .then(json => {
+        console.log(69, json);
         showMessage({
           type: 'success',
           icon: 'auto',
@@ -75,6 +98,60 @@ export default function Details({route, navigation}) {
           setLoading(false);
       })
       .done();
+  };
+
+  const addToAttributeArray = (e, i) => {
+    attributeArray[i] = e;
+  };
+  function useForceUpdate() {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+  }
+  const forceUpdate = useForceUpdate();
+
+  const renderSlider = () => {
+    return (
+      <View
+        style={{
+          // backgroundColor: 'green',
+          marginBottom: hp('20'),
+          marginTop: hp('2'),
+        }}>
+        <View style={{...styles.recentTextContainer}}>
+          <TouchableOpacity>
+            <Text style={{...styles.sliderText, color: 'grey'}}>
+              Related Products
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.sliderText}>See All</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled
+          horizontal={true}>
+          <View style={styles.bottomImageScroller}>
+            {silderData?.length > 0 &&
+              silderData?.map(res => {
+                return (
+                  <View style={styles.bottomimages}>
+                    <Image
+                      style={styles.imagss}
+                      // source={{
+                      //   uri: `${Images_API}/${res.get_products.images[0].name}`,
+                      // }}
+                      source={{
+                        uri: 'https://picsum.photos/200',
+                      }}
+                    />
+                  </View>
+                );
+              })}
+          </View>
+        </ScrollView>
+      </View>
+    );
   };
 
   return (
@@ -111,9 +188,9 @@ export default function Details({route, navigation}) {
             }}
           />
           <View style={styles.box}>
-            <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item.name}</Text>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
             <Text style={styles.tep}>
-              Category : {item.getchildcategory.name}
+              Category : {item?.getchildcategory?.name}
             </Text>
             {item.is_discounted == 2 ? (
               <View
@@ -202,16 +279,24 @@ export default function Details({route, navigation}) {
           <View style={styles.optionsContainer}>
             {item?.get_attribute_values &&
               item?.get_attribute_values?.map((res, i) => {
+                const itemName = res?.attribute?.name;
                 return (
                   <View>
                     <Text style={styles.attributeText}>
-                      {res?.attribute?.name}
+                      {/* {res?.attribute?.name} */}
+                      {itemName}
                     </Text>
                     <View style={styles.pickerParentStyle}>
                       <Picker
-                        selectedValue={itemColor}
+                        selectedValue={attributeArray[i]}
+                        // selectedValue={{...pickerValue}}
                         onValueChange={e => {
-                          setItemColor(e);
+                          // setPickerValue({
+                          //   ...pickerValue,
+                          //   itemName: e,
+                          // });
+                          addToAttributeArray(e, i);
+                          forceUpdate();
                         }}
                         style={styles.pickerStyle}>
                         <Picker.Item
@@ -223,7 +308,7 @@ export default function Details({route, navigation}) {
                           return (
                             <Picker.Item
                               key={res?.attribute_id}
-                              value={'Red'}
+                              value={res}
                               label={res}
                             />
                           );
@@ -234,6 +319,7 @@ export default function Details({route, navigation}) {
                 );
               })}
           </View>
+          {renderSlider()}
         </View>
       </ScrollView>
       <View style={{position: 'absolute', bottom: 80, alignSelf: 'center'}}>
@@ -252,103 +338,53 @@ export default function Details({route, navigation}) {
             {loading ? (
               <DotsLoader color="#E9691D" size={20} />
             ) : (
-              <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  {/* // <ActivityIndicator size="large" color="white" /> */}
-                  <Text
-                    style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
-                    Add To Cart
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View style={styles.buttonParent}>
+                {favValue ? (
+                  <TouchableOpacity
+                    onPress={() => setFavValue(!favValue)}
+                    style={styles.favButton}>
+                    <Ionicons
+                      style={{color: 'white'}}
+                      name="heart"
+                      color="#B64400"
+                      size={35}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => setFavValue(!favValue)}
+                    style={styles.favButton}>
+                    <Ionicons
+                      style={{color: 'white'}}
+                      name="heart-outline"
+                      color="#B64400"
+                      size={35}
+                    />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    {/* // <ActivityIndicator size="large" color="white" /> */}
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                      }}>
+                      Add To Cart
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             )}
           </View>
         )}
       </View>
+      {/* {renderSlider()} */}
     </View>
   );
 }
-
-// {"child_category_id": 50, "created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "description": "Test Description", "discounted_percentage": 10, "discounted_price": 585, "featured": 1, "get_attribute_values": [{"attribute": [Object], "attribute_id": 1, "created_at": "2021-08-20T10:03:01.000000Z", "id": 73, "product_id": 105, "updated_at": "2021-08-23T13:08:28.000000Z", "value": [Array]}, {"attribute": [Object], "attribute_id": 7, "created_at": "2021-08-20T13:07:00.000000Z", "id": 88, "product_id": 105, "updated_at": "2021-08-23T10:02:06.000000Z", "value": [Array]}], "get_shop": {"created_at": "2021-08-18T22:39:02.000000Z", "deleted_at": null, "description": "test", "get_vendor": {"address_one": "Nesciunt rerum temp", "address_two": "Nesciunt rerum temp", "city": "Incididunt eos accus", "country": "US", "created_at": "2021-08-18T22:39:02.000000Z", "email": "testvendor@gmail.com", "id": 40, "image": "1629326342-254890.jfif", "password": "$2y$10$fiGodS6VNYikSsLDGOush.4wgAixx51byY6u6ygkA2J81JhtWGxU2", "phone_number": "+1 24265 8979", "status": 1, "updated_at": "2021-08-30T12:45:08.000000Z", "user_role": 2, "username": "test vendor", "zipcode": 123456}, "id": 16, "image": "162984592417.jpg", "name": "TestShop", "status": 1, "updated_at": "2021-08-30T13:20:27.000000Z", "vendor_id": 40}, "getchildcategory": {"created_at": "2021-08-17T15:34:44.000000Z", "id": 50, "name": "Mirrors", "status": 1, "sub_category": {"category": [Object], "category_id": 8, "created_at": "2021-08-17T15:20:48.000000Z", "id": 14, "name": "Home Accessories", "status": 1, "updated_at": "2021-08-17T15:20:48.000000Z"}, "sub_category_id": 14, "updated_at": "2021-08-17T15:34:44.000000Z"}, "has_variations": 1, "id": 105, "images": [{"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 134, "name": "162947930220.jpg", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 135, "name": "16294793028.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 136, "name": "162947930221.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}], "is_discounted": 2, "name": "Orla Gay", "price": 650, "shop_id": 16, "sku": "1688775486", "slug": "orla-gay-16-1629497220-50-209", "status": 1, "stock": 46, "updated_at": "2021-08-27T15:01:06.000000Z"}
-
-// const [itemcolor,setItemcolor] = useState()
-
-// for (let x = 0; x < atttri.length; x++) {
-//     // const element = array[x];
-//     setAttr[x](atttri[x].value[0])
-// }
-
-// const [attr, setAttr] = useState([item.get_attribute_values[0].value[0]]);
-
-// const [itemcolor,setItemcolor]=useState([].length)
-// const [itematt,setItematt] = useState([
-//     "k","u","t"
-// ])
-
-// all:['a','b','c']
-// attribute:{'b':1,'c':2},
-{
-  /* <FlatList
-        data={atttri}
-        keyExtractor={(item) => item.key}
-        vertical
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-            setAttr[0]("kjs")
-                  return(
-                      <View     style={styles.container}>
-    <Picker
-    // selectedValue={itemcolor}                            color
-    selectedValue={attr}
-    
-    onValueChange={(itemValue, itemIndex) =>{
-        // setItemcolor[itemIndex](itemValue)
-        for(let i =0; i<all.lenght;i++)
-        {
-          if(data-att== all[i])
-          {
-          attribute[''+all[i]+''] = itemValue;
-          }
-        }
-        
-        setItemcolor(attribute:{'b':1,'c':2})
-    }}
-    
-    >
-        <Picker.Item label={item.attribute.name} value={null} />
-        {item.value.map(items => (
-          <Picker.Item key={items}  label={items} value={items} />
-        ))}
-    </Picker>
-    </View>
-
-);
-      }}
-    /> */
-}
-
-// <TouchableOpacity onPress={() => {
-//           FlatListPicker.showPickerList()
-//           // this.FlatListPicker.hidePickerList()
-//         }}
-//         >
-//         </TouchableOpacity>
-//         <FlatListPicker
-//         //   ref={ref => { FlatListPicker = ref }}
-//           data={ele}
-//           containerStyle={styles.container}
-//           dropdownStyle={{ width: 180 }}
-//           dropdownTextStyle={{ fontSize: 15}}
-//           pickedTextStyle={{ color: 'black', fontWeight: 'bold' }}
-//           animated="slide"
-//           defaultValue={item.get_attribute_values[0].attribute.name}
-
-//         //   renderDropdownIcon={() =>
-//         // <Picker.Item value={} />
-//         // }
-//           onValueChange={(value, index) => alert(`Selected ${value}`)}
-//         />
