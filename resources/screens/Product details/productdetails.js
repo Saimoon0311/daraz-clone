@@ -69,8 +69,42 @@ export default function Details({route, navigation}) {
 
   const item = route.params;
   const imm = item.images;
-  const attribute = item.get_attribute_values;
+
   const product_id = item.id;
+
+  const returnTopAlert = (type, message) => {
+    return showMessage({
+      type: type,
+      icon: 'auto',
+      message: message,
+      backgroundColor: '#E9691D',
+    });
+  };
+
+  const validateCartAdd = () => {
+    var gotUndefined = false;
+    const apiDataArrayLength = item?.get_attribute_values?.length;
+    if (attributeArray?.length == apiDataArrayLength) {
+      for (let index = 0; index < apiDataArrayLength; index++) {
+        if (attributeArray[index] == undefined) {
+          gotUndefined = true;
+        }
+      }
+      if (gotUndefined) {
+        returnTopAlert(
+          'danger',
+          'Kindly select the product attributes before adding to cart.',
+        );
+      } else if (!gotUndefined) {
+        cartadd();
+      }
+    } else {
+      returnTopAlert(
+        'danger',
+        'Kindly select the product attributes before adding to cart.',
+      );
+    }
+  };
 
   const cartadd = () => {
     setLoading(true);
@@ -88,14 +122,24 @@ export default function Details({route, navigation}) {
     })
       .then(response => response.json())
       .then(json => {
-        console.log(69, json);
-        showMessage({
-          type: 'success',
-          icon: 'auto',
-          message: 'Your Product Has Been Add To Cart',
-          backgroundColor: '#E9691D',
-        }),
+        console.log(106, json);
+        if (json[0]?.message == 'Successfully added to cart') {
+          showMessage({
+            type: 'success',
+            icon: 'auto',
+            message: 'Your Product Has Been Add To Cart',
+            backgroundColor: '#E9691D',
+          });
           setLoading(false);
+        } else {
+          showMessage({
+            type: 'danger',
+            icon: 'auto',
+            message: 'Something went wrong.',
+            backgroundColor: '#E9691D',
+          });
+          setLoading(false);
+        }
       })
       .done();
   };
@@ -362,7 +406,10 @@ export default function Details({route, navigation}) {
                     />
                   </TouchableOpacity>
                 )}
-                <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
+                <TouchableOpacity
+                  style={styles.carttouch}
+                  //  onPress={cartadd}
+                  onPress={validateCartAdd}>
                   <View
                     style={{
                       flexDirection: 'row',
