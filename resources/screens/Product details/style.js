@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
   pickerStyle: {
     width: wp('80'),
     height: hp('5'),
-    // borderRadius: 10,
+    color: '#512500',
     backgroundColor: '#FFDDC9',
   },
   attributeText: {

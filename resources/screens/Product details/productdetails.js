@@ -63,14 +63,14 @@ export default function Details({route, navigation}) {
   }, []);
   const setUserId = async () => {
     const userId = await getUserData();
-    const users = userId.id;
+    const users = userId?.id;
     setUser_id(users);
   };
 
-  const item = route.params;
-  const imm = item.images;
+  const item = route?.params;
+  const imm = item?.images;
 
-  const product_id = item.id;
+  const product_id = item?.id;
 
   const returnTopAlert = (type, message) => {
     return showMessage({
@@ -114,7 +114,7 @@ export default function Details({route, navigation}) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: JSON?.stringify({
         product_id,
         user_id,
         attribute: attributeArray,
@@ -218,14 +218,13 @@ export default function Details({route, navigation}) {
         <View style={{margin: 20}}>
           <FlatList
             data={imm}
-            // keyExtractor={(item) => item.key}
             keyExtractor={(item, index) => index.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) => {
               return (
                 <Image
-                  source={{uri: `${Images_API}/${item.name}`}}
+                  source={{uri: `${Images_API}/${item?.name}`}}
                   style={styles.imm}
                 />
               );
@@ -236,7 +235,7 @@ export default function Details({route, navigation}) {
             <Text style={styles.tep}>
               Category : {item?.getchildcategory?.name}
             </Text>
-            {item.is_discounted == 2 ? (
+            {item?.is_discounted == 2 ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -258,7 +257,7 @@ export default function Details({route, navigation}) {
                     textDecorationLine: 'line-through',
                     marginTop: hp('0.5%'),
                   }}>
-                  $ {item.price}
+                  $ {item?.price}
                 </Text>
                 <Text
                   style={{
@@ -268,7 +267,7 @@ export default function Details({route, navigation}) {
                     marginTop: hp('0.5%'),
                   }}>
                   {' '}
-                  $ {item.discounted_price}
+                  $ {item?.discounted_price}
                 </Text>
               </View>
             ) : (
@@ -291,12 +290,11 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  $ {item.price}
+                  $ {item?.price}
                 </Text>
               </View>
             )}
-            {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
-            <Text style={styles.tep}>SKU : {item.sku}</Text>
+            <Text style={styles.tep}>SKU : {item?.sku}</Text>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               Description :
             </Text>
@@ -333,12 +331,7 @@ export default function Details({route, navigation}) {
                     <View style={styles.pickerParentStyle}>
                       <Picker
                         selectedValue={attributeArray[i]}
-                        // selectedValue={{...pickerValue}}
                         onValueChange={e => {
-                          // setPickerValue({
-                          //   ...pickerValue,
-                          //   itemName: e,
-                          // });
                           addToAttributeArray(e, i);
                           forceUpdate();
                         }}
@@ -367,7 +360,7 @@ export default function Details({route, navigation}) {
         </View>
       </ScrollView>
       <View style={{position: 'absolute', bottom: 80, alignSelf: 'center'}}>
-        {item.stock < 1 ? (
+        {item?.stock < 1 ? (
           <View style={styles.carttouch}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>

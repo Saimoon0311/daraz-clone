@@ -39,7 +39,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 export default function subcatdetails({route, navigation}) {
   const paramData = route?.params;
   const productData = route?.params?.item;
-  const getSearchData = route?.params?.seacrhDatas
+  const getSearchData = route?.params?.seacrhDatas;
   const [user_id, setUser_id] = useState();
   const [subcatdata, setSubcatdata] = useState();
   const [allData, setAllData] = useState([]);
@@ -49,7 +49,7 @@ export default function subcatdetails({route, navigation}) {
 
   const getSubCatData = async () => {
     // console.log(50, productData?.id);
-    // fetch(`${SUBCATPRODUCTDATA}/${productData?.id}`) for subcat data render we just uncomment it  
+    // fetch(`${SUBCATPRODUCTDATA}/${productData?.id}`) for subcat data render we just uncomment it
     fetch(`${SUBCATPRODUCTDATA}/20`)
       .then(response => response.json())
       .then(json => {
@@ -77,25 +77,25 @@ export default function subcatdetails({route, navigation}) {
       });
   };
 
-  const searchAllData = async ()=>{
+  const searchAllData = async () => {
     fetch(`${API_BASED_URL}${paramData?.screenData}?name=${getSearchData}`)
-    // fetch(`${API_BASED_URL}${paramData?.screenData}?name=n`)
-    // fetch(
-    //   'https://test-urls.com/elitedesignhub/moyen-express/public/api/search-products',{
-    //     body:{
-    //        name:"n"
-    //     }
-    //   }
-    // )
-    .then(response => response.json())
-    .then(json => {
-      console.log(86, json);
-      setAllData(json[0]), setLoading(false);
-    })
-    .catch(error => {
-      console.log(90, error);
-    });
-  }
+      // fetch(`${API_BASED_URL}${paramData?.screenData}?name=n`)
+      // fetch(
+      //   'https://test-urls.com/elitedesignhub/moyen-express/public/api/search-products',{
+      //     body:{
+      //        name:"n"
+      //     }
+      //   }
+      // )
+      .then(response => response.json())
+      .then(json => {
+        console.log(86, json);
+        setAllData(json[0]), setLoading(false);
+      })
+      .catch(error => {
+        console.log(90, error);
+      });
+  };
 
   const getAllData = async () => {
     fetch(`${API_BASED_URL}${paramData?.screenData}`)
@@ -116,8 +116,8 @@ export default function subcatdetails({route, navigation}) {
       await getSubCatData();
     } else if (paramData?.screenData == 'wishlist') {
       await getSavedItemsData();
-    } else if (paramData?.screenData=='search-products'){
-      await searchAllData()
+    } else if (paramData?.screenData == 'search-products') {
+      await searchAllData();
     } else {
       await getAllData();
     }
@@ -199,20 +199,20 @@ export default function subcatdetails({route, navigation}) {
       return <Text>{productData?.name}</Text>;
     } else if (paramData?.screenData == 'wishlist') {
       return <Text>Wishlist</Text>;
-    }else if (paramData?.screenData == "search-products"){
-      return <Text>Search Items</Text>   
+    } else if (paramData?.screenData == 'search-products') {
+      return <Text>Search Items</Text>;
     }
   };
 
   const renderCards = item => {
-    console.log(207,item)
+    console.log(207, item);
     return (
-      <View style={{...styles.box,marginLeft:wp('6%')}}>
+      <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri:`${Images_API}/${item?.images[0].name}`}}
+            source={{uri: `${Images_API}/${item?.images[0].name}`}}
             // source={{
             //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
             // }}
@@ -307,16 +307,19 @@ export default function subcatdetails({route, navigation}) {
 
   const renderWishlistData = item => {
     return (
-      <View style={{...styles.box,marginLeft:wp('6%')}}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details', item?.get_products)}>
+      <View style={{...styles.box, marginLeft: wp('6%')}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Details', item?.get_products)}>
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.get_products?.images[0]?.name}`}}
+            source={{
+              uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
+            }}
             // source={{
             //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
             // }}
-            >
+          >
             {item?.get_products?.featured == 1 ? (
               <Text style={styles.fea}>Featured</Text>
             ) : null}
@@ -442,7 +445,11 @@ export default function subcatdetails({route, navigation}) {
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             numColumns={2}
-            contentContainerStyle={{paddingBottom: hp('20%'),width:wp('100%'),alignSelf:"flex-start"}}
+            contentContainerStyle={{
+              paddingBottom: hp('20%'),
+              width: wp('100%'),
+              alignSelf: 'flex-start',
+            }}
             renderItem={({item, index}) => {
               // return renderCards(item);
               return checkRender(item);
