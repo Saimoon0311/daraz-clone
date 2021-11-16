@@ -285,6 +285,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
+            
               label="Zip Code *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -293,7 +294,7 @@ export default function Userdeatils({navigation}) {
               value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(JSON.parse(text), 'zipcode');
+                updatValue(Number(text), 'zipcode');
               }}
             />
             <TextInput
@@ -378,7 +379,7 @@ export default function Userdeatils({navigation}) {
         show={showAlert}
         showProgress={false}
         title="Warning!"
-        message="You are not connected to the internet."
+        message="Some thing want wrong."
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
