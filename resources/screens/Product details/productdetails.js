@@ -197,7 +197,8 @@ export default function Details({route, navigation}) {
       </View>
     );
   };
-
+  
+console.log(item.id)
   return (
     <View style={styles.main}>
       <View style={styles.header}>

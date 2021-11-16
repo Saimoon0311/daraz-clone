@@ -24,20 +24,15 @@ import {
   USERDATA,
   USERPROFILEUPDATE,
 } from '../../config/url';
-import {getUserData, setItem,setUserData} from '../../utils/utils';
+import {getUserData, setItem, setUserData} from '../../utils/utils';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput} from 'react-native-paper';
 import {FormControl} from 'native-base';
-import {KeyboardAwareScrollView} from 
-'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import Setting from '../Setting/setting';
-
-
-
 
 export default function Userdeatils({navigation}) {
   const [userdataemail, setUserdataemail] = useState();
@@ -46,7 +41,7 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
-  
+
   const getUserAllData = async () => {
     const userDatas = await getUserData();
     const users = userId.id;
@@ -59,10 +54,10 @@ export default function Userdeatils({navigation}) {
     //     .catch((error) => console.error(33,error))
     //       .finally(() => setLoading(false));
   };
-  const ff=async()=>{
+  const ff = async () => {
     const userDatas = await getUserData();
-    console.log(99,userDatas)
-  }
+    console.log(99, userDatas);
+  };
   const updatValue = (value, attribute) => {
     setDummyState(value);
     var data = userDataLocal;
@@ -74,10 +69,7 @@ export default function Userdeatils({navigation}) {
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
 
-    var data = JSON.stringify(
-      userDataLocal
-    )
-
+    var data = JSON.stringify(userDataLocal);
 
     var requestOptions = {
       method: 'PUT',
@@ -86,34 +78,28 @@ export default function Userdeatils({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      `${USERPROFILEUPDATE}/${userDataLocal?.id}`,
-      requestOptions,
-    )
+    fetch(`${USERPROFILEUPDATE}/${userDataLocal?.id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        if (result?.message=="Profile Updated Successfully"){
+        if (result?.message == 'Profile Updated Successfully') {
           showMessage({
-            type:"success",
-            icon:"success",
-            message:"Profile Updated Successfully"
-          })
-          console.log(106,result?.data)
-          setLoadingButton(false)
-          setUserData(result?.data)
-
+            type: 'success',
+            icon: 'success',
+            message: 'Profile Updated Successfully',
+          });
+          console.log(106, result?.data);
+          setLoadingButton(false);
+          setUserData(result?.data);
 
           //  ff()
-          
-        }else{
-          setShowAlert(true)
-          setLoadingButton(false)
+        } else {
+          setShowAlert(true);
+          setLoadingButton(false);
+          console.log(result);
         }
-        
       })
       .catch(error => {
-        console.log('111', error),
-        setShowAlert(false)
+        console.log('111', error), setShowAlert(false);
       });
 
     // fetch(USERPROFILEUPDATE,{
@@ -132,16 +118,19 @@ export default function Userdeatils({navigation}) {
     //  })
   };
   const ValidateProfileUpdate = () => {
-    setLoadingButton(true)
+    setLoadingButton(true);
     if (
-      userDataLocal?.username !== '' &&
-      userDataLocal?.phone_number !== '' &&
-      userDataLocal?.city !== '' &&
-      userDataLocal?.address_one !== '' &&
-      userDataLocal?.address_two !== '' &&
-      userDataLocal?.email !== '' &&
-      userDataLocal?.zipcode !== '' &&
-      userDataLocal?.country !== ''
+      (userDataLocal?.username !== '' && userDataLocal?.username !== null) &&
+      (userDataLocal?.phone_number !== '' &&
+        userDataLocal?.phone_number !== null) &&
+      (userDataLocal?.city !== '' && userDataLocal?.city !== null) &&
+      (userDataLocal?.address_one !== '' &&
+        userDataLocal?.address_one !== null) &&
+      (userDataLocal?.address_two !== '' &&
+        userDataLocal?.address_two !== null) &&
+      (userDataLocal?.email !== '' && userDataLocal?.email !== null) &&
+      (userDataLocal?.zipcode !== '' && userDataLocal?.zipcode !== null) &&
+      (userDataLocal?.country !== '' && userDataLocal?.country !== null)
     ) {
       profileUpdate();
     } else {
@@ -150,7 +139,7 @@ export default function Userdeatils({navigation}) {
         icon: 'warning',
         message: 'This field can not be empty',
       }),
-      setLoadingButton(false)
+        setLoadingButton(false);
     }
   };
   useEffect(() => {
@@ -159,10 +148,11 @@ export default function Userdeatils({navigation}) {
       // setUserdataemail(userDatas.email)
       // getUserAllData()
       setUserDataLocal(userDatas);
-      // console.log(44, userDatas);
+      console.log(149, userDatas);
       // console.log(52, userData);
     })();
   }, []);
+
   return (
     <View style={styles.main}>
       <View
@@ -285,13 +275,17 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-            
               label="Zip Code *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="numeric"
-              value={JSON?.stringify(userDataLocal?.zipcode)}
+              value={
+                userDataLocal?.zipcode == null
+                  ? null
+                  : JSON?.stringify(userDataLocal?.zipcode)
+              }
+              // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(Number(text), 'zipcode');

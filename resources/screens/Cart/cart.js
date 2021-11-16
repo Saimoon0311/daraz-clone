@@ -64,7 +64,11 @@ export default function Cart({navigation}) {
         }
       })
       .catch(e => {
-        setNshowAlert(true);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrong',
+        });
       });
   };
   const getRecentData = async () => {
@@ -77,10 +81,17 @@ export default function Cart({navigation}) {
       .then(async response => await response.json())
       .then(async json => {
         setSliderData(json[0]);
+        // console.log(800, json[0]);
+        // console.log(80, JSON?.parse(silderData[0]?.attributes));
         // console.log(78, json);
       })
       .catch(e => {
-        // console.log(81, e);
+        // showMessage({
+        //   type: 'danger',
+        //   icon: 'danger',
+        //   message: 'Something want wrong',
+        // });
+        console.log(94,e)
       });
   };
 
@@ -271,6 +282,7 @@ export default function Cart({navigation}) {
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
+                  const att = JSON?.parse(item?.attributes);
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
@@ -280,39 +292,85 @@ export default function Cart({navigation}) {
                             source={{
                               uri: `${Images_API}/${item?.get_products?.images[0].name}`,
                             }}
-                            style={{width: wp('30%'), height: hp('15%')}}
+                            style={{
+                              width: wp('30%'),
+                              height: hp('15%'),
+                              borderRadius: 10,
+                            }}
                           />
                           <View style={{marginTop: 20}}>
                             <Text
-                              numberOfLines={2}
+                              numberOfLines={1}
                               style={{
                                 width: wp('40%'),
-                                fontSize: 14,
+                                fontSize: hp('1.8'),
                                 color: color.textColorRedCart,
                                 marginLeft: 10,
+                                marginBottom:hp('1')
                               }}>
-                              {item?.get_products?.description}
+                              {item?.get_products?.name}
                             </Text>
-                            <Text></Text>
                             <Text
+                              numberOfLines={1}
                               style={{
+                                width: wp('95%'),
+                                fontSize: hp('2'),
+                                color: color.textColorRedCart,
+                                fontWeight: 'bold',
+                                marginLeft: 10,
+                                marginBottom:hp('1')
+                              }}>
+                              Price : ${item?.get_products?.price}
+                            </Text>
+                            <View
+                              style={{flexDirection: 'row', width: wp('40%')}}>
+                              <Text
+                               style={{
+                                fontSize: hp('2'),
+                                color: color.textColorRedCart,
+                                fontWeight: 'bold',
+                                marginLeft: 10,
+                              }}
+                              >Attribute :</Text>
+                              
+                              {att &&
+                                att?.map(res => {
+                                  return (
+                                    <Text
+                                    // numberOfLines={1}
+                                      style={{
+                                        fontSize: hp('1.9'),
+                                        color: color.textColorRedCart,
+                                        fontWeight: 'bold',
+                                        marginLeft: 10,
+                                        alignItems:"center"
+                                      }}>
+                                    {res}
+                                    </Text>
+                                  );
+                                })}
+                                {/* </View> */}
+                            </View>
+                            {/* <Text
+                                style={{
                                 width: wp('95%'),
                                 fontSize: 18,
                                 color: color.textColorRedCart,
                                 fontWeight: 'bold',
                                 marginLeft: 10,
-                              }}>
-                              Price : ${item?.get_products?.price}
-                            </Text>
+                              }}> 
+                             
+                              {JSON?.parse(item?.attributes)}
+                               </Text> */}
                           </View>
                         </View>
                       </TouchableOpacity>
                       <View
-                        style={{flex: 1, height: 1, backgroundColor: 'black'}}
+                        style={{flex: 1, height: 1, backgroundColor: 'black',marginTop:hp('1')}}
                       />
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity
-                          onPress={() => addtowishlist(item?.id)}>
+                          onPress={() => addtowishlist(item?.product_id)}>
                           <Ionicons
                             style={{paddingTop: 13}}
                             name="heart-outline"
@@ -348,14 +406,14 @@ export default function Cart({navigation}) {
                               name="remove-circle-sharp"
                               size={20}
                               color={color.themColorPrimary}
-                              style={{paddingTop: 13, marginRight: 10}}
+                              style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
                           <Text
                             style={{
                               paddingTop: 13,
                               marginRight: 10,
-                              fontSize: 14,
+                              fontSize: hp('2.5'),
                               color: '#EEB08B',
                               textDecorationLine: 'underline',
                               fontWeight: 'bold',
@@ -368,7 +426,7 @@ export default function Cart({navigation}) {
                               name="add-circle-sharp"
                               size={20}
                               color={color.themColorPrimary}
-                              style={{paddingTop: 13, marginRight: 10}}
+                              style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
                         </View>
