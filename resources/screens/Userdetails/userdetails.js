@@ -24,7 +24,7 @@ import {
   USERDATA,
   USERPROFILEUPDATE,
 } from '../../config/url';
-import {getUserData} from '../../utils/utils';
+import {getUserData, setItem,setUserData} from '../../utils/utils';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -34,13 +34,19 @@ import {KeyboardAwareScrollView} from
 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import Setting from '../Setting/setting';
+
+
+
+
 export default function Userdeatils({navigation}) {
   const [userdataemail, setUserdataemail] = useState();
   // const [isLoading,setLoading] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [userData, setUserData] = useState();
+  const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
+  
   const getUserAllData = async () => {
     const userDatas = await getUserData();
     const users = userId.id;
@@ -59,23 +65,19 @@ export default function Userdeatils({navigation}) {
   }
   const updatValue = (value, attribute) => {
     setDummyState(value);
-    var data = userData;
+    var data = userDataLocal;
     data[attribute] = value;
-    console.log(68, data);
-    setUserData(data);
+    setUserDataLocal(data);
   };
   const profileUpdate = () => {
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
 
-    // var raw = JSON.stringify({
-    //   username: 'abcd',
-    //   phone_number: '686866',
-    // });
     var data = JSON.stringify(
-      userData
+      userDataLocal
     )
+
 
     var requestOptions = {
       method: 'PUT',
@@ -85,22 +87,23 @@ export default function Userdeatils({navigation}) {
     };
 
     fetch(
-      `${USERPROFILEUPDATE}/${userData?.id}`,
+      `${USERPROFILEUPDATE}/${userDataLocal?.id}`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result?.message)
         if (result?.message=="Profile Updated Successfully"){
           showMessage({
             type:"success",
             icon:"success",
             message:"Profile Updated Successfully"
           })
+          console.log(106,result?.data)
           setLoadingButton(false)
-          var allData = JSON.stringify(result.data);
-           AsyncStorage.setItem('userData',allData)
-           ff()
+          setUserData(result?.data)
+
+
+          //  ff()
           
         }else{
           setShowAlert(true)
@@ -109,7 +112,7 @@ export default function Userdeatils({navigation}) {
         
       })
       .catch(error => {
-        console.log('error', error),
+        console.log('111', error),
         setShowAlert(false)
       });
 
@@ -131,14 +134,14 @@ export default function Userdeatils({navigation}) {
   const ValidateProfileUpdate = () => {
     setLoadingButton(true)
     if (
-      userData?.username !== '' &&
-      userData?.phone_number !== '' &&
-      userData?.city !== '' &&
-      userData?.address_one !== '' &&
-      userData?.address_two !== '' &&
-      userData?.email !== '' &&
-      userData?.zipcode !== '' &&
-      userData?.country !== ''
+      userDataLocal?.username !== '' &&
+      userDataLocal?.phone_number !== '' &&
+      userDataLocal?.city !== '' &&
+      userDataLocal?.address_one !== '' &&
+      userDataLocal?.address_two !== '' &&
+      userDataLocal?.email !== '' &&
+      userDataLocal?.zipcode !== '' &&
+      userDataLocal?.country !== ''
     ) {
       profileUpdate();
     } else {
@@ -155,7 +158,7 @@ export default function Userdeatils({navigation}) {
       const userDatas = await getUserData();
       // setUserdataemail(userDatas.email)
       // getUserAllData()
-      setUserData(userDatas);
+      setUserDataLocal(userDatas);
       // console.log(44, userDatas);
       // console.log(52, userData);
     })();
@@ -214,7 +217,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="default"
-              value={userData?.username}
+              value={userDataLocal?.username}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'username');
@@ -226,7 +229,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="number-pad"
-              value={userData?.phone_number}
+              value={userDataLocal?.phone_number}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'phone_number');
@@ -238,7 +241,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="default"
-              value={userData?.city}
+              value={userDataLocal?.city}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'city');
@@ -250,7 +253,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="default"
-              value={userData?.address_one}
+              value={userDataLocal?.address_one}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'address_one');
@@ -262,7 +265,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="default"
-              value={userData?.address_two}
+              value={userDataLocal?.address_two}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'address_two');
@@ -275,7 +278,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="email-address"
-              value={userData?.email}
+              value={userDataLocal?.email}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'email');
@@ -287,7 +290,7 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="numeric"
-              value={JSON?.stringify(userData?.zipcode)}
+              value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(JSON.parse(text), 'zipcode');
@@ -298,7 +301,7 @@ export default function Userdeatils({navigation}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
-              value={userData?.country}
+              value={userDataLocal?.country}
               selectionColor="#FF7E33"
               onChangeText={text => {
                 updatValue(text, 'country');

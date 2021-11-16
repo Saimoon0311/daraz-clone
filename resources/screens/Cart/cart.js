@@ -45,7 +45,7 @@ export default function Cart({navigation}) {
   const getCartCall = async () => {
     const userId = await getUserData();
     const users = userId.id;
-    console.log(48, userId?.id);
+    // console.log(48, userId?.id);
     setUser_id(users);
     fetch(`${testCART}/${users}`, {
       method: 'GET',
@@ -57,8 +57,8 @@ export default function Cart({navigation}) {
           setSliderData([]);
           setLoading(false);
         } else {
-          setCartdata(json);
-          totalprice(json);
+          setCartdata(json[0]);
+          totalprice(json[0]);
           setLoading(false);
           // console.log(54);
         }
@@ -76,7 +76,7 @@ export default function Cart({navigation}) {
     })
       .then(async response => await response.json())
       .then(async json => {
-        setSliderData(json);
+        setSliderData(json[0]);
         // console.log(78, json);
       })
       .catch(e => {
@@ -274,13 +274,11 @@ export default function Cart({navigation}) {
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('Cartdetails', item)
-                        }>
+                        onPress={() => navigation.navigate('Details', item)}>
                         <View style={{flexDirection: 'row'}}>
                           <Image
                             source={{
-                              uri: `${Images_API}/${item.get_products.images[0].name}`,
+                              uri: `${Images_API}/${item?.get_products?.images[0].name}`,
                             }}
                             style={{width: wp('30%'), height: hp('15%')}}
                           />
@@ -293,7 +291,7 @@ export default function Cart({navigation}) {
                                 color: color.textColorRedCart,
                                 marginLeft: 10,
                               }}>
-                              {item.get_products.description}
+                              {item?.get_products?.description}
                             </Text>
                             <Text></Text>
                             <Text
@@ -304,7 +302,7 @@ export default function Cart({navigation}) {
                                 fontWeight: 'bold',
                                 marginLeft: 10,
                               }}>
-                              Price : ${item.get_products.price}
+                              Price : ${item?.get_products?.price}
                             </Text>
                           </View>
                         </View>
@@ -314,7 +312,7 @@ export default function Cart({navigation}) {
                       />
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity
-                          onPress={() => addtowishlist(item.id)}>
+                          onPress={() => addtowishlist(item?.id)}>
                           <Ionicons
                             style={{paddingTop: 13}}
                             name="heart-outline"
@@ -326,8 +324,8 @@ export default function Cart({navigation}) {
                         <TouchableOpacity
                           style={{flexDirection: 'row'}}
                           onPress={() => {
-                            setItemId(item.id);
-                            showDeleteAlert(item.id);
+                            setItemId(item?.id);
+                            showDeleteAlert(item?.id);
                             setShowAlert(true);
                             // console.log(356,item.id)
                           }}>
@@ -363,7 +361,7 @@ export default function Cart({navigation}) {
                               fontWeight: 'bold',
                             }}>
                             {' '}
-                            {item.quantity}{' '}
+                            {item?.quantity}{' '}
                           </Text>
                           <TouchableOpacity>
                             <Ionicons
@@ -465,7 +463,7 @@ export default function Cart({navigation}) {
                       <Image
                         style={styles.imagss}
                         source={{
-                          uri: `${Images_API}/${res.get_products.images[0].name}`,
+                          uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
                         }}
                         // source={{
                         //   uri: 'https://reqres.in/img/faces/7-image.jpg',
@@ -474,37 +472,6 @@ export default function Cart({navigation}) {
                     </View>
                   );
                 })}
-
-              {/* <View style={styles.bottomimages}>
-                <Image
-                  style={styles.imagss}
-                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
-                />
-              </View>
-              <View style={styles.bottomimages}>
-                <Image
-                  style={styles.imagss}
-                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
-                />
-              </View>
-              <View style={styles.bottomimages}>
-                <Image
-                  style={styles.imagss}
-                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
-                />
-              </View>
-              <View style={styles.bottomimages}>
-                <Image
-                  style={styles.imagss}
-                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
-                />
-              </View>
-              <View style={styles.bottomimages}>
-                <Image
-                  style={styles.imagss}
-                  source={{uri: 'https://reqres.in/img/faces/7-image.jpg'}}
-                />
-              </View> */}
             </View>
           </ScrollView>
         </ScrollView>

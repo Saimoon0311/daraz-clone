@@ -21,22 +21,38 @@ import {showMessage} from 'react-native-flash-message';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {useIsFocused} from "@react-navigation/native"
+
 
 export default function setting({navigation}) {
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
+  const [dummy,setDummy] = useState("")
+  
+  const isFocused = useIsFocused()
+  // if(route?.params==screenUpdatess){
+  //  setDummy("a")
+  //  console.log(47,"update")
+  // } else{
+  //   console.log("no update")
+  // }
   const user = async () => {
     const userId = await getUserData();
     const name = JSON.stringify(userId.username);
+   
     setNames(name);
     setUsers(userId);
   };
 
   useEffect(() => {
     user();
-  }, []);
-  // console.log(20, users);
+    if (isFocused) {
+      user()
+    }else{
+      console.log(58,"screen is not Focused")
+    }
+  }, [isFocused]);
   const onLogoutAlert = () => {
     setShowAlert(true);
   };

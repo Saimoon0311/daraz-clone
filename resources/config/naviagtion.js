@@ -1,15 +1,15 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from "../screens/Login/login"
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Login from '../screens/Login/login';
 import Signup from '../screens/Signup/signup';
 import MyTabs from './topbarnaviagtion';
 import mainstack from '../navigation/mainstack';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import MybottomTabs from './bottomtabnavigaton';
 import Details from '../screens/Product details/productdetails';
 import Cart from '../screens/Cart/cart';
-import Cartdetails from "../screens/Cardetails/cartdeatils"
+import Cartdetails from '../screens/Cardetails/cartdeatils';
 import Arrivals from '../data/arrivals';
 import Userdeatils from '../screens/Userdetails/userdetails';
 import subcatdetails from '../screens/Sub Cat Product details/subcat';
@@ -17,7 +17,6 @@ import changepassword from '../screens/Change password/changepassword';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
-
 
 export default function Navigation() {
     const userData = useSelector((state)=>state.auth.userData)
@@ -41,16 +40,16 @@ export default function Navigation() {
             headerShown:true,
             headerStyle: {
                 backgroundColor: '#FFDDC9',
+              },
+              headerTintColor: '#512500',
 
-            },
-            headerTintColor: '#512500',
-
-            headerTitleStyle: {
-                fontSize: 18
-
-
-            },
-        }} name="MyTabs" component={MyTabs} />
+              headerTitleStyle: {
+                fontSize: 18,
+              },
+            }}
+            name="MyTabs"
+            component={MyTabs}
+          />
         </>
         } 
         <Stack.Screen name="Details" component={Details}  />
