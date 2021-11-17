@@ -1,15 +1,17 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { alignItems } from "styled-system";
-import {color} from "../../config/color"
+import {alignItems} from 'styled-system';
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor,
-flex:1,
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
+    // backgroundColor:"white",
+
+    flex: 1,
   },
 
   header: {
@@ -34,42 +36,76 @@ flex:1,
   },
   box: {
     padding: 13,
-    margin: 20,
-    backgroundColor: '#F3F5F7',
+    margin: wp('7'),
+    backgroundColor: 'white',
+    //     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
   },
-  topMain:{
-flexDirection:"row",
-backgroundColor:"yellow",
-justifyContent:"space-around",
-margin:wp('3')
+  topMain: {
+    flexDirection: 'row',
+//     backgroundColor:"yellow",
+    justifyContent: 'space-around',
+    marginTop: wp('5'),
+    width:wp('95'),
+    alignSelf:"center"
   },
-  topButtonInactive:{
-  width:wp('25'),
-  backgroundColor:"red",
-  textAlign:"center",
-  alignItems:"center",
-  height:hp('5'),
-  justifyContent:"center",
-  borderRadius:5                                                                                  
+  topButtonInactive: {
+    width: wp('22'),
+    backgroundColor: 'white',
+    textAlign: 'center',
+    alignItems: 'center',
+    height: hp('5'),
+    justifyContent: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
-  topButtonInactiveText:{
-   
+  topButtonInactiveText: {
+    color: 'gray',
+    fontSize: hp('1.7'),
   },
-    topButtonActive:{
-  width:wp('25'),
-  backgroundColor:"#FF7E33",
-  textAlign:"center",
-  alignItems:"center",
-  height:hp('5'),
-  justifyContent:"center",
-  borderRadius:5                                                                                  
+  topButtonActive: {
+    width: wp('22'),
+    backgroundColor: '#FF7E33',
+    textAlign: 'center',
+    alignItems: 'center',
+    height: hp('5'),
+    justifyContent: 'center',
+    borderRadius: 7,
   },
-  topButtonActiveText:{
-color:"white"
+  topButtonActiveText: {
+    color: 'white',
+    fontSize: hp('1.7'),
+  },
+  centerText: {
+    marginLeft: wp('7'),
+    color: color.defaultcolor,
+    marginTop: wp('4'),
+  },
+  text: {
+    //     backgroundColor: '#F3F5F7',
+    backgroundColor: 'white',
+    height: hp('7'),
+    width: wp('80'),
+    //     marginLeft:wp('4%')
+  },
+  radioText: {
+    marginTop: hp('0.9'),
+    color: color.defaultcolor,
+  },
+  subtotalText:{
+   color:color.defaultcolor,
+   fontWeight:"bold",
+   fontSize:hp(1.8)
+  },
+  subtotalPrice:{
+marginLeft:'auto',
+color:color.defaultcolor,
+fontWeight:"bold",
+fontSize:hp(1.8)
   }
-})
+});

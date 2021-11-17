@@ -119,7 +119,9 @@ export default function setting({navigation}) {
             </TouchableOpacity>
           </View>
           <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
+            <TouchableOpacity style={styles.shadow}
+            onPress={()=>navigation.navigate('checkOut')}
+            >
               <Ionicons
                 name="albums-outline"
                 size={20}
