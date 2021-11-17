@@ -29,6 +29,7 @@ import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { showMessage } from 'react-native-flash-message';
+import {getUserData} from '../../utils/utils';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -46,6 +47,7 @@ export default function Home({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [brand, setBrand] = useState();
   const [seacrhData, setSearchData] = useState("");
+  const [id,setId] = useState()
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -123,6 +125,8 @@ export default function Home({navigation}) {
 
   useEffect(() => {
     (async () => {
+      // const user = await getUserData()
+      //  setId(user?.id)
       datacallss();
     })();
   }, []);
@@ -211,7 +215,7 @@ export default function Home({navigation}) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('subcatdetails', {
-                  screenData: 'all-new-arrivals',
+                  screenData: 'all-new-arrivals/',
                 })
               }>
               <Text style={{color: '#E9691D'}}>See All</Text>

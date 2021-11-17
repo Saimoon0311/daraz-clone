@@ -38,7 +38,6 @@ export default function Cart({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
-
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
 
@@ -160,6 +159,7 @@ export default function Cart({navigation}) {
       .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
+    setLoading(true);
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
@@ -172,13 +172,17 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: json[0].message,
-          });
+          })
+          getCartCall()
+          setLoading(false);
         } else {
           showMessage({
             type: 'warning',
             icon: 'warning',
             message: json[0].message,
-          });
+          })
+          getCartCall()
+          setLoading(false)
         }
       });
   };
@@ -282,7 +286,7 @@ export default function Cart({navigation}) {
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
-                  const att = JSON?.parse(item?.attributes);
+                  // const att = JSON?.parse(item?.attributes);
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
@@ -333,7 +337,7 @@ export default function Cart({navigation}) {
                               }}
                               >Attribute :</Text>
                               
-                              {att &&
+                              {/* {att &&
                                 att?.map(res => {
                                   return (
                                     <Text
@@ -348,8 +352,7 @@ export default function Cart({navigation}) {
                                     {res}
                                     </Text>
                                   );
-                                })}
-                                {/* </View> */}
+                                })} */}
                             </View>
                             {/* <Text
                                 style={{
@@ -369,7 +372,27 @@ export default function Cart({navigation}) {
                         style={{flex: 1, height: 1, backgroundColor: 'black',marginTop:hp('1')}}
                       />
                       <View style={{flexDirection: 'row'}}>
+                        {item?.is_wishlisted== true?
                         <TouchableOpacity
+                        onPress={() => addtowishlist(item?.product_id)}>
+                        <Ionicons
+                          style={{paddingTop: 13}}
+                          name="heart"
+                          color="#B64400"
+                          size={20}
+                        />
+                      </TouchableOpacity>:
+                      <TouchableOpacity
+                      onPress={() => addtowishlist(item?.product_id)}>
+                      <Ionicons
+                        style={{paddingTop: 13}}
+                        name="heart-outline"
+                        color="#B64400"
+                        size={20}
+                      />
+                    </TouchableOpacity>
+                        }
+                        {/* <TouchableOpacity
                           onPress={() => addtowishlist(item?.product_id)}>
                           <Ionicons
                             style={{paddingTop: 13}}
@@ -377,7 +400,7 @@ export default function Cart({navigation}) {
                             color="#B64400"
                             size={20}
                           />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <View style={styles.verticleLine}></View>
                         <TouchableOpacity
                           style={{flexDirection: 'row'}}
@@ -436,6 +459,7 @@ export default function Cart({navigation}) {
                 }}
               />
               {cartdata?.length > 0 && (
+                <View>
                 <View style={styles.box}>
                   {/* {console.log(323,cartdata
                     )} */}
@@ -467,38 +491,11 @@ export default function Cart({navigation}) {
                       {totalPriceShow}
                     </Text>
                   </View>
-                  <TouchableOpacity style={styles.maior}>
+                  <TouchableOpacity style={styles.maior} onPress={()=>navigation.navigate('checkOut')}>
                     <Text style={styles.or}>Complete your order</Text>
                   </TouchableOpacity>
                 </View>
-              )}
-            </>
-          )}
-
-          {showDeleteAlert()}
-
-          {/* <CardField
-      postalCodeEnabled={true}
-      placeholder={{
-        number: '4242 4242 4242 4242',
-      }}
-      cardStyle={{
-        backgroundColor: '#FFFFFF',
-        textColor: '#000000',
-      }}
-      style={{
-        width: '100%',
-        height: 50,
-        marginVertical: 30,
-      }}
-      onCardChange={(cardDetails) => {
-        console.log('cardDetails', cardDetails);
-      }}
-      onFocus={(focusedField) => {
-        console.log('focusField', focusedField);
-      }}
-    /> */}
-          <View style={styles.recentTextContainer}>
+                <View style={styles.recentTextContainer}>
             <TouchableOpacity>
               <Text style={{...styles.sliderText, color: 'grey'}}>
                 Recent Views
@@ -532,6 +529,68 @@ export default function Cart({navigation}) {
                 })}
             </View>
           </ScrollView>
+                </View>
+              )}
+            </>
+          )}
+
+          {showDeleteAlert()}
+
+          {/* <CardField
+      postalCodeEnabled={true}
+      placeholder={{
+        number: '4242 4242 4242 4242',
+      }}
+      cardStyle={{
+        backgroundColor: '#FFFFFF',
+        textColor: '#000000',
+      }}
+      style={{
+        width: '100%',
+        height: 50,
+        marginVertical: 30,
+      }}
+      onCardChange={(cardDetails) => {
+        console.log('cardDetails', cardDetails);
+      }}
+      onFocus={(focusedField) => {
+        console.log('focusField', focusedField);
+      }}
+    /> */}
+          {/* <View style={styles.recentTextContainer}>
+            <TouchableOpacity>
+              <Text style={{...styles.sliderText, color: 'grey'}}>
+                Recent Views
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.sliderText}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            nestedScrollEnabled
+            horizontal={true}>
+            <View style={styles.bottomImageScroller}>
+              {silderData?.length > 0 &&
+                silderData?.map(res => {
+                  return (
+                    <View style={styles.bottomimages}>
+                      <Image
+                        style={styles.imagss}
+                        source={{
+                          uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
+                        }}
+                        // source={{
+                        //   uri: 'https://reqres.in/img/faces/7-image.jpg',
+                        // }}
+                      />
+                    </View>
+                  );
+                })}
+            </View>
+          </ScrollView> */}
         </ScrollView>
       </View>
       <AwesomeAlert

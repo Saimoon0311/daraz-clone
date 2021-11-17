@@ -48,9 +48,11 @@ export default function subcatdetails({route, navigation}) {
   const [nshowAlert, setNshowAlert] = useState(false);
 
   const getSubCatData = async () => {
+    const user = await getUserData()
+    const id = user?.id
     // console.log(50, productData?.id);
     // fetch(`${SUBCATPRODUCTDATA}/${productData?.id}`) for subcat data render we just uncomment it  
-    fetch(`${SUBCATPRODUCTDATA}/20`)
+    fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
       .then(response => response.json())
       .then(json => {
         // console.log(51, json);
@@ -98,7 +100,10 @@ export default function subcatdetails({route, navigation}) {
   }
 
   const getAllData = async () => {
-    fetch(`${API_BASED_URL}${paramData?.screenData}`)
+    const user = await getUserData()
+    const id = user?.id
+    console.log(102,id)
+    fetch(`${API_BASED_URL}${paramData?.screenData}${id}`)
       .then(response => response.json())
       .then(json => {
         setAllData(json[0]), setLoading(false);
@@ -133,6 +138,7 @@ export default function subcatdetails({route, navigation}) {
   const addtowishlist = id => {
     var product_id = id;
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
+    // fetch(`https://test-urls.com/elitedesignhub/moyen-express/public/api/shop/add-to-wishlist/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
         if (json[0].message == 'Added to wishlist') {
@@ -143,8 +149,8 @@ export default function subcatdetails({route, navigation}) {
           });
         } else {
           showMessage({
-            type: 'warning',
-            icon: 'warning',
+            type: "success",
+            icon: "auto",
             message: json[0].message,
           });
         }
@@ -193,7 +199,7 @@ export default function subcatdetails({route, navigation}) {
   const renderHeaderText = () => {
     if (paramData?.screenData == 'products-featured/') {
       return <Text>Featured</Text>;
-    } else if (paramData?.screenData == 'all-new-arrivals') {
+    } else if (paramData?.screenData == 'all-new-arrivals/') {
       return <Text>New Arrivals</Text>;
     } else if (paramData?.screenData == 'subCat') {
       return <Text>{productData?.name}</Text>;
@@ -225,11 +231,23 @@ export default function subcatdetails({route, navigation}) {
                 {item.discounted_percentage}%OFF
               </Text>
             ) : null}
-            <TouchableOpacity
+             {item?.is_wishlisted== true?
+                        <TouchableOpacity
+                        style={styles.icons}
+                        onPress={() => addtowishlist(item?.id)}>
+                        <Ionicons name="heart" color={color.themColorPrimary} size={30} />
+                      </TouchableOpacity>:
+                      <TouchableOpacity
+                      style={styles.icons}
+                      onPress={() => addtowishlist(item?.id)}>
+                      <Ionicons name="heart-outline" color={color.themColorPrimary} size={30} />
+                    </TouchableOpacity>
+                        }
+            {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.id)}>
-              <Ionicons name="heart-outline" color="#FF0000" size={30} />
-            </TouchableOpacity>
+              <Ionicons name="heart" color={color.themColorPrimary} size={30} />
+            </TouchableOpacity> */}
           </ImageBackground>
           <View style={{width: wp('35%')}}>
             <Text style={styles.text} numberOfLines={1}>
@@ -325,11 +343,31 @@ export default function subcatdetails({route, navigation}) {
                 {item?.get_products?.discounted_percentage}%OFF
               </Text>
             ) : null}
-            <TouchableOpacity
+            {item?.is_wishlisted== true?
+                        <TouchableOpacity
+                        onPress={() => addtowishlist(item?.get_products?.id)}>
+                        <Ionicons
+                          style={{paddingTop: 13}}
+                          name="heart"
+                          color="#B64400"
+                          size={20}
+                        />
+                      </TouchableOpacity>:
+                      <TouchableOpacity
+                      onPress={() => addtowishlist(item?.get_products?.id)}>
+                      <Ionicons
+                        style={{paddingTop: 13}}
+                        name="heart-outline"
+                        color="#B64400"
+                        size={20}
+                      />
+                    </TouchableOpacity>
+                        }
+            {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.get_products?.id)}>
-              <Ionicons name="heart-outline" color="#FF0000" size={30} />
-            </TouchableOpacity>
+              <Ionicons name="heart" color={color.themColorPrimary} size={30} />
+            </TouchableOpacity> */}
           </ImageBackground>
           <View style={{width: wp('35%')}}>
             <Text style={styles.text} numberOfLines={1}>

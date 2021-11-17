@@ -14,6 +14,7 @@ import Arrivals from '../data/arrivals';
 import Userdeatils from '../screens/Userdetails/userdetails';
 import subcatdetails from '../screens/Sub Cat Product details/subcat';
 import changepassword from '../screens/Change password/changepassword';
+import checkOut from '../screens/CheckOut/checkout';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -57,7 +58,8 @@ export default function Navigation() {
         <Stack.Screen name="Cartdetails" component={Cartdetails}  />
         <Stack.Screen name="Userdeatils" component={Userdeatils}  />
         <Stack.Screen name="subcatdetails" component={subcatdetails}  />
-           <Stack.Screen name="changepassword" component={changepassword} />
+        <Stack.Screen name="changepassword" component={changepassword} />
+        <Stack.Screen name="checkOut" component={checkOut} />
         </Stack.Navigator>
     );
 }
