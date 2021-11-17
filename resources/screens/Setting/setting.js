@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import actions from '../../redux/action';
@@ -21,16 +22,15 @@ import {showMessage} from 'react-native-flash-message';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import {useIsFocused} from "@react-navigation/native"
-
+import {useIsFocused} from '@react-navigation/native';
 
 export default function setting({navigation}) {
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
-  const [dummy,setDummy] = useState("")
-  
-  const isFocused = useIsFocused()
+  const [dummy, setDummy] = useState('');
+
+  const isFocused = useIsFocused();
   // if(route?.params==screenUpdatess){
   //  setDummy("a")
   //  console.log(47,"update")
@@ -40,7 +40,7 @@ export default function setting({navigation}) {
   const user = async () => {
     const userId = await getUserData();
     const name = JSON.stringify(userId.username);
-   
+
     setNames(name);
     setUsers(userId);
   };
@@ -48,9 +48,9 @@ export default function setting({navigation}) {
   useEffect(() => {
     user();
     if (isFocused) {
-      user()
-    }else{
-      console.log(58,"screen is not Focused")
+      user();
+    } else {
+      console.log(58, 'screen is not Focused');
     }
   }, [isFocused]);
   const onLogoutAlert = () => {
@@ -77,6 +77,8 @@ export default function setting({navigation}) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           backgroundColor: '#FFDDC9',
+          // backgroundColor: 'red',
+          height: hp('10%'),
         }}>
         <Ionicons
           name="arrow-back-sharp"
@@ -90,7 +92,7 @@ export default function setting({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: 25,
+            marginTop: hp(Platform?.OS == 'ios' ? '5%' : '3%'),
           }}>
           My Account
         </Text>
@@ -99,16 +101,24 @@ export default function setting({navigation}) {
         </TouchableOpacity>
       </View>
       <View style={styles.well}>
-        <Text style={styles.we}>Welcome</Text>
-        <Text style={[styles.we, {color: 'white'}]}>{stringName}</Text>
+        <Text style={{...styles.we, marginLeft: wp('4%')}}>Welcome</Text>
+        <Text
+          style={{
+            ...styles.we,
+            color: 'white',
+            marginLeft: wp('4%'),
+            marginTop: hp('1%'),
+          }}>
+          {stringName}
+        </Text>
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: hp('20%')}}>
         <View style={styles.vacc}>
           <Text style={styles.acc}>My Moyen Account</Text>
           <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}
-             onPress={() => navigation.navigate('Userdeatils')}
-            >
+            <TouchableOpacity
+              style={styles.shadow}
+              onPress={() => navigation.navigate('Userdeatils')}>
               <Ionicons
                 name="person-circle-outline"
                 size={20}
@@ -169,7 +179,7 @@ export default function setting({navigation}) {
               <Text style={styles.orte}>Recently Viewed</Text>
             </TouchableOpacity>
           </View>
-         
+
           <Text style={{...styles.acc, marginTop: hp('2%')}}>My Settings</Text>
           {/* <View style={styles.box}>
             <TouchableOpacity
@@ -180,7 +190,7 @@ export default function setting({navigation}) {
           </View> */}
           <View style={styles.box}>
             <TouchableOpacity style={styles.shadow}>
-            <Ionicons
+              <Ionicons
                 name="book-outline"
                 size={20}
                 style={{marginRight: 20}}
@@ -190,8 +200,10 @@ export default function setting({navigation}) {
             </TouchableOpacity>
           </View>
           <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate('changepassword')}>
-            <Ionicons
+            <TouchableOpacity
+              style={styles.shadow}
+              onPress={() => navigation.navigate('changepassword')}>
+              <Ionicons
                 name="keypad-outline"
                 size={20}
                 style={{marginRight: 20}}
