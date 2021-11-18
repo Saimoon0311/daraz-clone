@@ -86,6 +86,7 @@ export default function Userdeatils({navigation}) {
             type: 'success',
             icon: 'success',
             message: 'Profile Updated Successfully',
+            backgroundColor: '#E9691D',
           });
           console.log(106, result?.data);
           setLoadingButton(false);
@@ -138,6 +139,7 @@ export default function Userdeatils({navigation}) {
         type: 'warning',
         icon: 'warning',
         message: 'This field can not be empty',
+        backgroundColor: '#E9691D',
       }),
         setLoadingButton(false);
     }

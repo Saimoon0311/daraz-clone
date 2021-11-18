@@ -52,6 +52,7 @@ export default function changepassword({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Your Currrent Password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password == '') {
@@ -59,6 +60,7 @@ export default function changepassword({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Your New Password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password_confirmation == '') {
@@ -66,6 +68,7 @@ export default function changepassword({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Correct Password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         }
@@ -74,6 +77,7 @@ export default function changepassword({navigation}) {
                     type: 'warning',
                     icon: 'warning',
                     message: 'Please Enter New Password',
+                    backgroundColor: '#E9691D',
                   }),
                     setLoadingButton(false);
         }
@@ -82,6 +86,7 @@ export default function changepassword({navigation}) {
                     type: 'warning',
                     icon: 'warning',
                     message: 'Please Enter Correct Password',
+                    backgroundColor: '#E9691D',
                   }),
                     setLoadingButton(false);
         }
@@ -131,7 +136,8 @@ formdata.append('password_confirmation', password_confirmation);
             showMessage({
 type:"success",
 icon:"success",
-message:"Password Change Successfully"
+message:"Password Change Successfully",
+backgroundColor: '#E9691D',
             })
         } else {
         setPassword('')
@@ -139,7 +145,8 @@ message:"Password Change Successfully"
         setPassword_confirmation(''),                              showMessage({
 type:"danger",
 icon:"danger",
-message:"Some Thing Want Wrong"
+message:"Some Thing Want Wrong",
+backgroundColor: '#E9691D',
         })                                                  
         }
 

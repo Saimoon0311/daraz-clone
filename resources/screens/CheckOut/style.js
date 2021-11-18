@@ -37,6 +37,7 @@ export const styles = StyleSheet.create({
   box: {
     padding: 13,
     margin: wp('7'),
+    marginBottom:hp('1'),
     backgroundColor: 'white',
     //     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
@@ -51,7 +52,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: wp('5'),
     width:wp('95'),
-    alignSelf:"center"
+    alignSelf:"center",
+    marginBottom: wp('3'),
   },
   topButtonInactive: {
     width: wp('22'),
@@ -82,7 +84,7 @@ export const styles = StyleSheet.create({
     fontSize: hp('1.7'),
   },
   centerText: {
-    marginLeft: wp('7'),
+    marginLeft: wp('8'),
     color: color.defaultcolor,
     marginTop: wp('4'),
   },
@@ -90,7 +92,8 @@ export const styles = StyleSheet.create({
     //     backgroundColor: '#F3F5F7',
     backgroundColor: 'white',
     height: hp('7'),
-    width: wp('80'),
+    width: wp('75'),
+    alignSelf:"center"
     //     marginLeft:wp('4%')
   },
   radioText: {
@@ -107,5 +110,33 @@ marginLeft:'auto',
 color:color.defaultcolor,
 fontWeight:"bold",
 fontSize:hp(1.8)
+  } ,
+   maior: {
+    width: wp('70%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignItems: 'center',
+    marginBottom: hp('5'),
+    marginTop: hp('5'),
+    borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  or: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  devider:{
+    flex: 1,
+    height: 1,
+    backgroundColor: 'black',
+    marginTop: hp('1'),
+    marginBottom: hp('1'),
   }
 });

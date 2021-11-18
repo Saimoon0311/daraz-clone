@@ -51,7 +51,7 @@ export default function subcatdetails({route, navigation}) {
     const user = await getUserData()
     const id = user?.id
     // console.log(50, productData?.id);
-    // fetch(`${SUBCATPRODUCTDATA}/${productData?.id}`) for subcat data render we just uncomment it  
+    // ${productData?.id}
     fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
       .then(response => response.json())
       .then(json => {
@@ -66,9 +66,6 @@ export default function subcatdetails({route, navigation}) {
     const userId = await getUserData()?.then(res => res?.id);
 
     fetch(`${API_BASED_URL}${paramData?.screenData}/${userId}`)
-      // fetch(
-      //   'https://test-urls.com/elitedesignhub/moyen-express/public/api/wishlist/13',
-      // )
       .then(response => response.json())
       .then(json => {
         console.log(69, json);
@@ -80,15 +77,9 @@ export default function subcatdetails({route, navigation}) {
   };
 
   const searchAllData = async () => {
-    fetch(`${API_BASED_URL}${paramData?.screenData}?name=${getSearchData}`)
-      // fetch(`${API_BASED_URL}${paramData?.screenData}?name=n`)
-      // fetch(
-      //   'https://test-urls.com/elitedesignhub/moyen-express/public/api/search-products',{
-      //     body:{
-      //        name:"n"
-      //     }
-      //   }
-      // )
+    const user = await getUserData()
+    const id = user?.id
+    fetch(`${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`)
       .then(response => response.json())
       .then(json => {
         console.log(86, json);
@@ -102,7 +93,6 @@ export default function subcatdetails({route, navigation}) {
   const getAllData = async () => {
     const user = await getUserData()
     const id = user?.id
-    console.log(102,id)
     fetch(`${API_BASED_URL}${paramData?.screenData}${id}`)
       .then(response => response.json())
       .then(json => {
@@ -113,6 +103,7 @@ export default function subcatdetails({route, navigation}) {
           type: 'danger',
           icon: 'danger',
           message: 'Something want wrong.',
+          backgroundColor: '#E9691D',
         }),
       );
   };
@@ -136,65 +127,39 @@ export default function subcatdetails({route, navigation}) {
   }, []);
 
   const addtowishlist = id => {
-    var product_id = id;
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
-    // fetch(`https://test-urls.com/elitedesignhub/moyen-express/public/api/shop/add-to-wishlist/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
-        if (json[0].message == 'Added to wishlist') {
+        if (json[0]?.message == 'Added to wishlist') {
+          parentFunction()
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json[0].message,
+            message: json[0]?.message,
+            backgroundColor: '#E9691D',
           });
-        } else {
+        } else if(json[0]?.message=="This item has been removed from your wishlist"){
+          parentFunction()
           showMessage({
             type: "success",
             icon: "auto",
-            message: json[0].message,
+            message: json[0]?.message,
+            backgroundColor: '#E9691D',
           });
         }
       })
-      .catch(error => console.error(109, error));
+      .catch(error => {
+        console.error(109, error)
+        showMessage({
+          type: "danger",
+          icon: "danger",
+          message: "Something went wrong.",
+          backgroundColor: '#E9691D',
+        })
+      });
   };
 
-  // const addtocart = id => {
-  //   var product_id = id;
-  //   //  setCartloading(true)
-  //   //  await ff()
-  //   // console.log('userid', user_id);
-  //   fetch(ADDTOCART, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       user_id,
-  //       product_id,
-  //     }),
-  //   })
-  //     .then(response => response.json())
-  //     .then(json => {
-  //       // console.log(json);
-  //       if (json[0].message == 'Successfully added to cart') {
-  //         showMessage({
-  //           type: 'success',
-  //           icon: 'auto',
-  //           message: 'Your Product Has Been Add To Cart',
-  //           backgroundColor: '#E9691D',
-  //         });
-  //       } else {
-  //         showMessage({
-  //           type: 'warning',
-  //           icon: 'warning',
-  //           message: json.message,
-  //         });
-  //       }
-  //     })
-  //     .done();
-  //   // console.log(id);
-  // };
+  
 
   const renderHeaderText = () => {
     if (paramData?.screenData == 'products-featured/') {

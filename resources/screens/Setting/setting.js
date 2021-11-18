@@ -59,12 +59,12 @@ export default function setting({navigation}) {
   const logout = () => {
     setTimeout(() => {
       actions.logout();
-      showMessage({
-        type: 'success',
-        icon: 'auto',
-        message: 'Your are successfully logout!',
-        backgroundColor: '#E9691D',
-      });
+      // showMessage({
+      //   type: 'success',
+      //   icon: 'auto',
+      //   message: 'Your are successfully logout!',
+      //   backgroundColor: '#E9691D',
+      // });
     }, 10);
   };
   var stringName = names;

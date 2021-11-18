@@ -48,6 +48,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Your Name',
+            backgroundColor: '#E9691D',
           });
           setLoadingButton(false);
         } else if (!email || reg.test(email) === false) {
@@ -55,6 +56,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter The correct Email',
+            backgroundColor: '#E9691D',
           });
           setLoadingButton(false);
         } else if (email === null) {
@@ -62,6 +64,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Email',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password === null) {
@@ -69,6 +72,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (phone_number === null) {
@@ -76,6 +80,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter Youe Number',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password != confirm) {
@@ -83,6 +88,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'Please Enter The Correct Password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password.length <= 5) {
@@ -90,6 +96,7 @@ export default function Signup({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: 'The password must be at least 6 characters',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else {
@@ -114,13 +121,15 @@ export default function Signup({navigation}) {
                 ? (showMessage({
                     type: 'success',
                     icon: 'auto',
-                    message: responseData[0].message,
+                    message: responseData[0]?.message,
+                    backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false))
                 : (showMessage({
                     type: 'warning',
                     icon: 'auto',
-                    message: responseData.email,
+                    message: responseData?.email,
+                    backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false));
               setEmail('');

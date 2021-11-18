@@ -67,6 +67,7 @@ export default function Cart({navigation}) {
           type: 'danger',
           icon: 'danger',
           message: 'Something want wrong',
+          backgroundColor: '#E9691D',
         });
       });
   };
@@ -150,6 +151,7 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: 'Your Cart Has been deleted',
+            backgroundColor: '#E9691D',
           });
         // console.log(68, cartdata);
       })
@@ -172,6 +174,7 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: json[0].message,
+            backgroundColor: '#E9691D',
           })
           getCartCall()
           setLoading(false);
@@ -180,6 +183,7 @@ export default function Cart({navigation}) {
             type: 'warning',
             icon: 'warning',
             message: json[0].message,
+            backgroundColor: '#E9691D',
           })
           getCartCall()
           setLoading(false)

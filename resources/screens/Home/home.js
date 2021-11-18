@@ -111,7 +111,8 @@ export default function Home({navigation}) {
       showMessage({
         type:"warning",
         icon:"warning",
-        message:"Please type something to search..."
+        message:"Please type something to search...",
+        backgroundColor: '#E9691D',
       })
     } else {
       navigation.navigate('subcatdetails', {

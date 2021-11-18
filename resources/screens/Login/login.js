@@ -35,8 +35,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: 'testvendor@gmail.com',
-    password: 'password',
+    email: 'saimoon0311@gmail.com',
+    password: '03455070125',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -52,6 +52,7 @@ export default function Login({navigation}) {
             type: 'danger',
             icon: 'danger',
             message: 'Please enter yor email',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else if (password == '') {
@@ -59,6 +60,7 @@ export default function Login({navigation}) {
             type: 'danger',
             icon: 'danger',
             message: 'Please enter you password',
+            backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
         } else {
@@ -73,6 +75,7 @@ export default function Login({navigation}) {
                 type: 'danger',
                 icon: 'danger',
                 message: res[0].message,
+                backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
               // console.log('res=== 86 ', res);
@@ -81,6 +84,7 @@ export default function Login({navigation}) {
                 type: 'danger',
                 icon: 'danger',
                 message: res[0].message,
+                backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
               // console.log('res=== 86 ', res);
@@ -94,7 +98,12 @@ export default function Login({navigation}) {
             }
           } catch (error) {
             // console.log('errot', error);
-            showMessage(error.message);
+            showMessage({
+              type:"danger",
+              icon:"danger",
+             message: error?.message,
+             backgroundColor: '#E9691D',}
+             );
           }
         }
       } else {
