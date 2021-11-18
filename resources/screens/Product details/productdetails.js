@@ -8,13 +8,14 @@ import {
   FlatList,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Picker} from '@react-native-picker/picker';
+import {Picker, PickerIOS} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
 import {ADDTOCART, Images_API} from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
@@ -28,6 +29,8 @@ import {
   DotsLoader,
   BubblesLoader,
 } from 'react-native-indicator';
+import RNPickerSelect from 'react-native-picker-select';
+
 import {styles} from './style';
 
 export default function Details({route, navigation}) {
@@ -198,29 +201,48 @@ export default function Details({route, navigation}) {
     );
   };
 
+  console.log(item.id);
   return (
     <View style={styles.main}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={35}
             color="#512500"
             style={styles.icon}
           />
         </TouchableOpacity>
         <Text style={styles.te}>Details</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
+          <Ionicons
+            name="cart"
+            size={30}
+            color="#512500"
+            style={{
+              ...styles.icon,
+
+              marginRight: wp('3'),
+            }}
+          />
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={
+          {
+            // alignSelf: 'center',
+          }
+        }>
         <View style={{margin: 20}}>
           <FlatList
             data={imm}
             keyExtractor={(item, index) => index.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignSelf: 'center',
+              // backgroundColor: 'red',
+            }}
             renderItem={({item}) => {
               return (
                 <Image
@@ -329,12 +351,38 @@ export default function Details({route, navigation}) {
                       {itemName}
                     </Text>
                     <View style={styles.pickerParentStyle}>
+                      {/* {Platform?.OS == 'ios' && (
+                        <PickerIOS style={styles.pickerStyle}></PickerIOS>
+                      )} */}
+                      {/* {res?.value?.map(res => {
+                        return (
+                          <RNPickerSelect
+                            onValueChange={value => console.log(value)}
+                            items={
+                              res?.value?.map(res=>{
+                                return res
+                              })
+                            }
+                          />
+                        );
+                      })} */}
+                      {/* <RNPickerSelect
+                        onValueChange={value => console.log(value)}
+                        
+                        items={[
+                          {label: 'Football', value: 'football'},
+                          {label: 'Baseball', value: 'baseball'},
+                          {label: 'Hockey', value: 'hockey',},
+                        ]}
+                      /> */}
                       <Picker
+                        mode="dialog"
                         selectedValue={attributeArray[i]}
                         onValueChange={e => {
                           addToAttributeArray(e, i);
                           forceUpdate();
                         }}
+                        collapsable={false}
                         style={styles.pickerStyle}>
                         <Picker.Item
                           key={i}

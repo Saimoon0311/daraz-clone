@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "android-build": "cd android && gradlew assembleRelease",
     "branch": "devOnePro",
-    "both":"react-native run-ios && react-native run-android"
+    "both": "react-native run-ios && react-native run-android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",
@@ -45,6 +45,7 @@
     "react-native-orientation-loading-overlay": "^0.1.6",
     "react-native-pager-view": "^5.4.6",
     "react-native-paper": "^4.9.2",
+    "react-native-picker-select": "^8.0.4",
     "react-native-redux-persist": "^1.0.3",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",

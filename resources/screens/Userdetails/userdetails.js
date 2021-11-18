@@ -19,7 +19,7 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {
   CART,
-  CARTDELEtE,
+  CARTDELETE,
   Images_API,
   testCART,
   USERDATA,
@@ -33,7 +33,6 @@ import {HelperText, TextInput} from 'react-native-paper';
 import {FormControl} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import Setting from '../Setting/setting';
 
 export default function Userdeatils({navigation}) {
@@ -88,6 +87,7 @@ export default function Userdeatils({navigation}) {
             type: 'success',
             icon: 'success',
             message: 'Profile Updated Successfully',
+            backgroundColor: '#E9691D',
           });
           console.log(106, result?.data);
           setLoadingButton(false);
@@ -97,6 +97,7 @@ export default function Userdeatils({navigation}) {
         } else {
           setShowAlert(true);
           setLoadingButton(false);
+          // console.log(result);
         }
       })
       .catch(error => {
@@ -122,13 +123,21 @@ export default function Userdeatils({navigation}) {
     setLoadingButton(true);
     if (
       userDataLocal?.username !== '' &&
+      userDataLocal?.username !== null &&
       userDataLocal?.phone_number !== '' &&
+      userDataLocal?.phone_number !== null &&
       userDataLocal?.city !== '' &&
+      userDataLocal?.city !== null &&
       userDataLocal?.address_one !== '' &&
+      userDataLocal?.address_one !== null &&
       userDataLocal?.address_two !== '' &&
+      userDataLocal?.address_two !== null &&
       userDataLocal?.email !== '' &&
+      userDataLocal?.email !== null &&
       userDataLocal?.zipcode !== '' &&
-      userDataLocal?.country !== ''
+      userDataLocal?.zipcode !== null &&
+      userDataLocal?.country !== '' &&
+      userDataLocal?.country !== null
     ) {
       profileUpdate();
     } else {
@@ -136,6 +145,7 @@ export default function Userdeatils({navigation}) {
         type: 'warning',
         icon: 'warning',
         message: 'This field can not be empty',
+        backgroundColor: '#E9691D',
       }),
         setLoadingButton(false);
     }
@@ -146,6 +156,7 @@ export default function Userdeatils({navigation}) {
       setUserDataLocal(userDatas);
     })();
   }, []);
+
   return (
     <View style={styles.main}>
       <View
@@ -274,10 +285,15 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="numeric"
-              value={JSON?.stringify(userDataLocal?.zipcode)}
+              value={
+                userDataLocal?.zipcode == null
+                  ? null
+                  : JSON?.stringify(userDataLocal?.zipcode)
+              }
+              // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(JSON.parse(text), 'zipcode');
+                updatValue(Number(text), 'zipcode');
               }}
             />
             <TextInput
@@ -362,7 +378,7 @@ export default function Userdeatils({navigation}) {
         show={showAlert}
         showProgress={false}
         title="Warning!"
-        message="You are not connected to the internet."
+        message="Some thing want wrong."
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}

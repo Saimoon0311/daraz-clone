@@ -19,7 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import {
   ADDTOWISHLIST,
   CART,
-  CARTDELEtE,
+  CARTDELETE,
   Images_API,
   testCART,
 } from '../../config/url';
@@ -38,7 +38,6 @@ export default function Cart({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
-
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
 
@@ -60,11 +59,17 @@ export default function Cart({navigation}) {
           setCartdata(json[0]);
           totalprice(json[0]);
           setLoading(false);
-          // console.log(54);
+          // console.log(54, json[0]);
+          // console.log(63, JSON?.parse(json[0][2]?.attributes));
         }
       })
       .catch(e => {
-        setNshowAlert(true);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrong',
+          backgroundColor: '#E9691D',
+        });
       });
   };
   const getRecentData = async () => {
@@ -77,10 +82,17 @@ export default function Cart({navigation}) {
       .then(async response => await response.json())
       .then(async json => {
         setSliderData(json[0]);
+        // console.log(800, json[0]);
+        // console.log(80, JSON?.parse(silderData[0]?.attributes));
         // console.log(78, json);
       })
       .catch(e => {
-        // console.log(81, e);
+        // showMessage({
+        //   type: 'danger',
+        //   icon: 'danger',
+        //   message: 'Something want wrong',
+        // });
+        // console.log(94, e);
       });
   };
 
@@ -126,7 +138,7 @@ export default function Cart({navigation}) {
     setLoading(true);
     // console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
-    const api = CARTDELEtE + '/' + id;
+    const api = CARTDELETE + '/' + id;
     // console.log(api);
     fetch(api, {
       method: 'GET',
@@ -140,6 +152,7 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: 'Your Cart Has been deleted',
+            backgroundColor: '#E9691D',
           });
         // console.log(68, cartdata);
       })
@@ -149,6 +162,7 @@ export default function Cart({navigation}) {
       .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
+    setLoading(true);
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
@@ -161,13 +175,19 @@ export default function Cart({navigation}) {
             type: 'success',
             icon: 'success',
             message: json[0].message,
+            backgroundColor: '#E9691D',
           });
+          getCartCall();
+          setLoading(false);
         } else {
           showMessage({
             type: 'warning',
             icon: 'warning',
             message: json[0].message,
+            backgroundColor: '#E9691D',
           });
+          getCartCall();
+          setLoading(false);
         }
       });
   };
@@ -211,17 +231,7 @@ export default function Cart({navigation}) {
 
   return (
     <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: '#FFDDC9',
-          shadowColor: '#000',
-          shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 10,
-          shadowRadius: 6,
-          elevation: 5,
-        }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
@@ -230,20 +240,21 @@ export default function Cart({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text
+        <Text style={styles.te}>Carts</Text>
+        <Ionicons
+          name="cart"
+          size={30}
+          color="#512500"
           style={{
-            textAlign: 'center',
-            fontSize: 18,
-            color: '#512500',
-            fontWeight: 'bold',
-            marginTop: 25,
-          }}>
-          Carts
-        </Text>
-        <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
+            ...styles.icon,
+
+            marginRight: wp('3'),
+          }}
+        />
       </View>
       <View>
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 150}}
           nestedScrollEnabled={true}>
           {isLoading ? (
@@ -271,6 +282,7 @@ export default function Cart({navigation}) {
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
+                  // const att = JSON?.parse(item?.attributes);
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
@@ -280,46 +292,118 @@ export default function Cart({navigation}) {
                             source={{
                               uri: `${Images_API}/${item?.get_products?.images[0].name}`,
                             }}
-                            style={{width: wp('30%'), height: hp('15%')}}
+                            style={{
+                              width: wp('30%'),
+                              height: hp('15%'),
+                              borderRadius: 10,
+                            }}
                           />
                           <View style={{marginTop: 20}}>
                             <Text
-                              numberOfLines={2}
+                              numberOfLines={1}
                               style={{
                                 width: wp('40%'),
-                                fontSize: 14,
+                                fontSize: hp('1.8'),
                                 color: color.textColorRedCart,
                                 marginLeft: 10,
+                                marginBottom: hp('1'),
                               }}>
-                              {item?.get_products?.description}
+                              {item?.get_products?.name}
                             </Text>
-                            <Text></Text>
                             <Text
+                              numberOfLines={1}
                               style={{
+                                width: wp('95%'),
+                                fontSize: hp('2'),
+                                color: color.textColorRedCart,
+                                fontWeight: 'bold',
+                                marginLeft: 10,
+                                marginBottom: hp('1'),
+                              }}>
+                              Price : ${item?.get_products?.price}
+                            </Text>
+                            <View
+                              style={{flexDirection: 'row', width: wp('40%')}}>
+                              <Text
+                                style={{
+                                  fontSize: hp('2'),
+                                  color: color.textColorRedCart,
+                                  fontWeight: 'bold',
+                                  marginLeft: 10,
+                                }}>
+                                Attribute :
+                              </Text>
+
+                              {/* {att &&
+                                att?.map(res => {
+                                  return (
+                                    <Text
+                                    // numberOfLines={1}
+                                      style={{
+                                        fontSize: hp('1.9'),
+                                        color: color.textColorRedCart,
+                                        fontWeight: 'bold',
+                                        marginLeft: 10,
+                                        alignItems:"center"
+                                      }}>
+                                    {res}
+                                    </Text>
+                                  );
+                                })} */}
+                            </View>
+                            {/* <Text
+                                style={{
                                 width: wp('95%'),
                                 fontSize: 18,
                                 color: color.textColorRedCart,
                                 fontWeight: 'bold',
                                 marginLeft: 10,
-                              }}>
-                              Price : ${item?.get_products?.price}
-                            </Text>
+                              }}> 
+                             
+                              {JSON?.parse(item?.attributes)}
+                               </Text> */}
                           </View>
                         </View>
                       </TouchableOpacity>
                       <View
-                        style={{flex: 1, height: 1, backgroundColor: 'black'}}
+                        style={{
+                          flex: 1,
+                          height: 2,
+                          backgroundColor: '#C8C8C8',
+                          marginTop: hp('1'),
+                        }}
                       />
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                          onPress={() => addtowishlist(item?.id)}>
+                        {item?.is_wishlisted == true ? (
+                          <TouchableOpacity
+                            onPress={() => addtowishlist(item?.product_id)}>
+                            <Ionicons
+                              style={{paddingTop: 13}}
+                              name="heart"
+                              color="#B64400"
+                              size={20}
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => addtowishlist(item?.product_id)}>
+                            <Ionicons
+                              style={{paddingTop: 13}}
+                              name="heart-outline"
+                              color="#B64400"
+                              size={20}
+                            />
+                          </TouchableOpacity>
+                        )}
+                        {/* <TouchableOpacity
+                          onPress={() => addtowishlist(item?.product_id)}>
                           <Ionicons
                             style={{paddingTop: 13}}
                             name="heart-outline"
                             color="#B64400"
                             size={20}
                           />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <View style={styles.verticleLine}></View>
                         <TouchableOpacity
                           style={{flexDirection: 'row'}}
@@ -348,14 +432,14 @@ export default function Cart({navigation}) {
                               name="remove-circle-sharp"
                               size={20}
                               color={color.themColorPrimary}
-                              style={{paddingTop: 13, marginRight: 10}}
+                              style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
                           <Text
                             style={{
                               paddingTop: 13,
                               marginRight: 10,
-                              fontSize: 14,
+                              fontSize: hp('2.5'),
                               color: '#EEB08B',
                               textDecorationLine: 'underline',
                               fontWeight: 'bold',
@@ -368,7 +452,7 @@ export default function Cart({navigation}) {
                               name="add-circle-sharp"
                               size={20}
                               color={color.themColorPrimary}
-                              style={{paddingTop: 13, marginRight: 10}}
+                              style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
                         </View>
@@ -378,40 +462,78 @@ export default function Cart({navigation}) {
                 }}
               />
               {cartdata?.length > 0 && (
-                <View style={styles.box}>
-                  {/* {console.log(323,cartdata
+                <View>
+                  <View style={styles.box}>
+                    {/* {console.log(323,cartdata
                     )} */}
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{color: 'gray', fontSize: hp('2%')}}>
-                      Subtotal
-                    </Text>
-                    <Text style={styles.ty}>{totalPriceShow}</Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={{color: 'gray', fontSize: hp('2%')}}>
+                        Subtotal
+                      </Text>
+                      <Text style={styles.ty}>{totalPriceShow}</Text>
+                    </View>
+                    <Text></Text>
+                    <View
+                      style={{flex: 1, height: 1, backgroundColor: 'black'}}
+                    />
+                    <Text></Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          color: color.textColorRedCart,
+                          fontWeight: 'bold',
+                          fontSize: hp('2%'),
+                        }}>
+                        Total
+                      </Text>
+                      <Text
+                        style={[
+                          styles.ty,
+                          {color: color.textColorRedCart, fontWeight: 'bold'},
+                        ]}>
+                        {totalPriceShow}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.maior}
+                      onPress={() => navigation.navigate('checkOut')}>
+                      <Text style={styles.or}>Complete your order</Text>
+                    </TouchableOpacity>
                   </View>
-                  <Text></Text>
-                  <View
-                    style={{flex: 1, height: 1, backgroundColor: 'black'}}
-                  />
-                  <Text></Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        color: color.textColorRedCart,
-                        fontWeight: 'bold',
-                        fontSize: hp('2%'),
-                      }}>
-                      Total
-                    </Text>
-                    <Text
-                      style={[
-                        styles.ty,
-                        {color: color.textColorRedCart, fontWeight: 'bold'},
-                      ]}>
-                      {totalPriceShow}
-                    </Text>
+                  <View style={styles.recentTextContainer}>
+                    <TouchableOpacity>
+                      <Text style={{...styles.sliderText, color: 'grey'}}>
+                        Recent Views
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text style={styles.sliderText}>See All</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.maior}>
-                    <Text style={styles.or}>Complete your order</Text>
-                  </TouchableOpacity>
+
+                  <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    nestedScrollEnabled
+                    horizontal={true}>
+                    <View style={styles.bottomImageScroller}>
+                      {silderData?.length > 0 &&
+                        silderData?.map(res => {
+                          return (
+                            <View style={styles.bottomimages}>
+                              <Image
+                                style={styles.imagss}
+                                source={{
+                                  uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
+                                }}
+                                // source={{
+                                //   uri: 'https://reqres.in/img/faces/7-image.jpg',
+                                // }}
+                              />
+                            </View>
+                          );
+                        })}
+                    </View>
+                  </ScrollView>
                 </View>
               )}
             </>
@@ -440,7 +562,7 @@ export default function Cart({navigation}) {
         console.log('focusField', focusedField);
       }}
     /> */}
-          <View style={styles.recentTextContainer}>
+          {/* <View style={styles.recentTextContainer}>
             <TouchableOpacity>
               <Text style={{...styles.sliderText, color: 'grey'}}>
                 Recent Views
@@ -473,7 +595,7 @@ export default function Cart({navigation}) {
                   );
                 })}
             </View>
-          </ScrollView>
+          </ScrollView> */}
         </ScrollView>
       </View>
       <AwesomeAlert
