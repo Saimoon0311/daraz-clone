@@ -109,12 +109,12 @@ export default function setting({navigation}) {
         </TouchableOpacity>
       </View>
       <View style={styles.well}>
-        <Text style={{...styles.we, marginLeft: wp('4%')}}>Welcome</Text>
+        <Text style={{...styles.we}}>Welcome</Text>
         <Text
           style={{
             ...styles.we,
             color: 'white',
-            marginLeft: wp('4%'),
+            // marginLeft: wp('4%'),
             marginTop: hp('1%'),
           }}>
           {stringName}

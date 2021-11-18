@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   well: {
     padding: 15,
     backgroundColor: '#CFA891',
-    alignItems: 'flex-start',
+    // alignItems: 'flex-start',
   },
   we: {
     // color:"#E9691D",

@@ -313,21 +313,23 @@ export default function subcatdetails({route, navigation}) {
             ) : null}
             {item?.is_wishlisted== true?
                         <TouchableOpacity
+                        style={styles.icons}
                         onPress={() => addtowishlist(item?.get_products?.id)}>
                         <Ionicons
                           style={{paddingTop: 13}}
                           name="heart"
                           color="#B64400"
-                          size={20}
+                          size={30}
                         />
                       </TouchableOpacity>:
                       <TouchableOpacity
+                      style={styles.icons}
                       onPress={() => addtowishlist(item?.get_products?.id)}>
                       <Ionicons
                         style={{paddingTop: 13}}
                         name="heart-outline"
                         color="#B64400"
-                        size={20}
+                        size={30}
                       />
                     </TouchableOpacity>
                         }

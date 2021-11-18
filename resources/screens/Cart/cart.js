@@ -135,7 +135,7 @@ export default function Cart({navigation}) {
 
   const deleteCartItem = id => {
     setLoading(true);
-    // console.log(140, id);
+    console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
     const api = CARTDELEtE + '/' + id;
     // console.log(api);
@@ -153,19 +153,21 @@ export default function Cart({navigation}) {
             message: 'Your Cart Has been deleted',
             backgroundColor: '#E9691D',
           });
+          setLoading(false)
         // console.log(68, cartdata);
       })
       .catch(e => {
-        // console.log(170,e)
+        console.log(170,e)
+        setLoading(false)
       })
-      .finally(() => setLoading(false));
+      // .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
-    setLoading(true);
+    // setLoading(true);
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
-    // console.log('userid', user_id);
+    console.log('id', id,"userid",user_id);
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
@@ -177,7 +179,7 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           })
           getCartCall()
-          setLoading(false);
+          // setLoading(false);
         } else {
           showMessage({
             type: 'warning',
@@ -186,7 +188,7 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           })
           getCartCall()
-          setLoading(false)
+          // setLoading(false)
         }
       });
   };
@@ -290,7 +292,8 @@ export default function Cart({navigation}) {
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
-                  // const att = JSON?.parse(item?.attributes);
+                  const att = item?.attributes;
+                  // {console.log(294,att)}
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
@@ -341,7 +344,7 @@ export default function Cart({navigation}) {
                               }}
                               >Attribute :</Text>
                               
-                              {/* {att &&
+                              {att &&
                                 att?.map(res => {
                                   return (
                                     <Text
@@ -356,7 +359,7 @@ export default function Cart({navigation}) {
                                     {res}
                                     </Text>
                                   );
-                                })} */}
+                                })}
                             </View>
                             {/* <Text
                                 style={{

@@ -68,6 +68,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    
   },
   buttonParent: {
     width: wp('75%'),
