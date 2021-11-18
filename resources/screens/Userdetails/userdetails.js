@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -24,20 +25,16 @@ import {
   USERDATA,
   USERPROFILEUPDATE,
 } from '../../config/url';
-import {getUserData, setItem,setUserData} from '../../utils/utils';
+import {getUserData, setItem, setUserData} from '../../utils/utils';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput} from 'react-native-paper';
 import {FormControl} from 'native-base';
-import {KeyboardAwareScrollView} from 
-'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Setting from '../Setting/setting';
-
-
-
 
 export default function Userdeatils({navigation}) {
   const [userdataemail, setUserdataemail] = useState();
@@ -46,7 +43,7 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
-  
+
   const getUserAllData = async () => {
     const userDatas = await getUserData();
     const users = userId.id;
@@ -59,10 +56,10 @@ export default function Userdeatils({navigation}) {
     //     .catch((error) => console.error(33,error))
     //       .finally(() => setLoading(false));
   };
-  const ff=async()=>{
+  const ff = async () => {
     const userDatas = await getUserData();
-    console.log(99,userDatas)
-  }
+    console.log(99, userDatas);
+  };
   const updatValue = (value, attribute) => {
     setDummyState(value);
     var data = userDataLocal;
@@ -74,10 +71,7 @@ export default function Userdeatils({navigation}) {
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
 
-    var data = JSON.stringify(
-      userDataLocal
-    )
-
+    var data = JSON.stringify(userDataLocal);
 
     var requestOptions = {
       method: 'PUT',
@@ -86,34 +80,27 @@ export default function Userdeatils({navigation}) {
       redirect: 'follow',
     };
 
-    fetch(
-      `${USERPROFILEUPDATE}/${userDataLocal?.id}`,
-      requestOptions,
-    )
+    fetch(`${USERPROFILEUPDATE}/${userDataLocal?.id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        if (result?.message=="Profile Updated Successfully"){
+        if (result?.message == 'Profile Updated Successfully') {
           showMessage({
-            type:"success",
-            icon:"success",
-            message:"Profile Updated Successfully"
-          })
-          console.log(106,result?.data)
-          setLoadingButton(false)
-          setUserData(result?.data)
-
+            type: 'success',
+            icon: 'success',
+            message: 'Profile Updated Successfully',
+          });
+          console.log(106, result?.data);
+          setLoadingButton(false);
+          setUserData(result?.data);
 
           //  ff()
-          
-        }else{
-          setShowAlert(true)
-          setLoadingButton(false)
+        } else {
+          setShowAlert(true);
+          setLoadingButton(false);
         }
-        
       })
       .catch(error => {
-        console.log('111', error),
-        setShowAlert(false)
+        console.log('111', error), setShowAlert(false);
       });
 
     // fetch(USERPROFILEUPDATE,{
@@ -132,7 +119,7 @@ export default function Userdeatils({navigation}) {
     //  })
   };
   const ValidateProfileUpdate = () => {
-    setLoadingButton(true)
+    setLoadingButton(true);
     if (
       userDataLocal?.username !== '' &&
       userDataLocal?.phone_number !== '' &&
@@ -150,17 +137,13 @@ export default function Userdeatils({navigation}) {
         icon: 'warning',
         message: 'This field can not be empty',
       }),
-      setLoadingButton(false)
+        setLoadingButton(false);
     }
   };
   useEffect(() => {
     (async () => {
       const userDatas = await getUserData();
-      // setUserdataemail(userDatas.email)
-      // getUserAllData()
       setUserDataLocal(userDatas);
-      // console.log(44, userDatas);
-      // console.log(52, userData);
     })();
   }, []);
   return (
@@ -172,14 +155,15 @@ export default function Userdeatils({navigation}) {
           backgroundColor: '#FFDDC9',
           shadowColor: '#000',
           shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 10,
+          shadowOpacity: 0.4,
           shadowRadius: 6,
           elevation: 5,
+          height: hp(Platform?.OS == 'ios' ? '10' : '9'),
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={35}
             color="#512500"
             style={styles.icon}
           />
@@ -190,7 +174,7 @@ export default function Userdeatils({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: 25,
+            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
           }}>
           User Profile
         </Text>
@@ -350,7 +334,7 @@ export default function Userdeatils({navigation}) {
                 ) : (
                   <Text
                     style={{
-                      fontSize: hp('2%'),
+                      fontSize: hp('1.7%'),
                       color: 'white',
                       fontWeight: 'bold',
                       alignSelf: 'center',

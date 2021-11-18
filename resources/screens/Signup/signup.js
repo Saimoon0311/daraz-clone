@@ -234,8 +234,8 @@ export default function Signup({navigation}) {
             <TouchableOpacity
               onPress={savedata}
               style={{
-                width: wp('80%'),
-                height: hp('7%'),
+                width: wp('60%'),
+                height: hp('6%'),
                 backgroundColor: '#FF7E33',
                 alignSelf: 'center',
                 marginTop: 30,
@@ -247,28 +247,28 @@ export default function Signup({navigation}) {
               <View
                 style={{
                   width: wp('15%'),
-                  height: hp('7%'),
+                  height: hp('6%'),
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
                 <Ionicons
                   style={{marginLeft: wp('3%')}}
-                  name="mail"
-                  size={20}
+                  name="create"
+                  size={25}
                   color={'white'}
                 />
               </View>
               <View
                 style={{
-                  width: wp('60%'),
-                  height: hp('7%'),
+                  width: wp('35%'),
+                  height: hp('6%'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   // backgroundColor:'red'
                 }}>
                 <Text
                   style={{
-                    fontSize: hp('2.5%'),
+                    fontSize: hp('2%'),
                     color: 'white',
                     fontWeight: 'bold',
                     alignSelf: 'center',

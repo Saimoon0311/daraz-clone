@@ -25,7 +25,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 export default function Alldata(prop, {navigation}) {
   const flatListRender = item => {
     return (
-      <ScrollView showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
           <TouchableOpacity onPress={() => prop.detailss(item)}>
             <ImageBackground
@@ -33,12 +33,17 @@ export default function Alldata(prop, {navigation}) {
               imageStyle={{borderRadius: 20}}
               source={{uri: `${Images_API}/${item.images[0].name}`}}>
               {item.featured == 1 ? (
-                <Text style={styles.fea}>Featured</Text>
+                <View style={styles.fea}>
+                  <Text style={styles.textStyle}>Featured</Text>
+                </View>
               ) : null}
               {item.is_discounted == 2 ? (
-                <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
-                  {item.discounted_percentage}%OFF
-                </Text>
+                <View style={styles.fea}>
+                  <Text
+                    style={[styles.textStyle, {backgroundColor: '#512500'}]}>
+                    {item.discounted_percentage}%OFF
+                  </Text>
+                </View>
               ) : null}
             </ImageBackground>
             <Text></Text>
@@ -193,6 +198,13 @@ const styles = StyleSheet.create({
     color: 'white',
     width: wp('15%'),
     borderRadius: 10,
+
+    textAlign: 'center',
+    fontSize: 10,
+    overflow: 'hidden',
+  },
+  textStyle: {
+    color: 'white',
     textAlign: 'center',
     fontSize: 10,
   },

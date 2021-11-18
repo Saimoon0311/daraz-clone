@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     backgroundColor: color.defaultBackgroundColor,
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+    marginRight: wp('5'),
   },
   well: {
     padding: 15,
@@ -35,8 +36,8 @@ export const styles = StyleSheet.create({
   box: {
     padding: 13,
     marginTop: 15,
-    backgroundColor: 'red',
-    // backgroundColor: '#F3F5F7',
+    // backgroundColor: 'red',
+    backgroundColor: '#F3F5F7',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.8,
@@ -56,6 +57,16 @@ export const styles = StyleSheet.create({
   shadow: {
     flexDirection: 'row',
     width: wp('80%'),
+    padding: 13,
+    marginTop: 15,
+    // backgroundColor: 'red',
+    backgroundColor: '#F3F5F7',
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    elevation: 5,
+    borderRadius: 10,
   },
   shadows: {
     flexDirection: 'row',
