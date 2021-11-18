@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import actions from '../../redux/action';
@@ -21,16 +22,15 @@ import {showMessage} from 'react-native-flash-message';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import {useIsFocused} from "@react-navigation/native"
-
+import {useIsFocused} from '@react-navigation/native';
 
 export default function setting({navigation}) {
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
-  const [dummy,setDummy] = useState("")
-  
-  const isFocused = useIsFocused()
+  const [dummy, setDummy] = useState('');
+
+  const isFocused = useIsFocused();
   // if(route?.params==screenUpdatess){
   //  setDummy("a")
   //  console.log(47,"update")
@@ -40,7 +40,7 @@ export default function setting({navigation}) {
   const user = async () => {
     const userId = await getUserData();
     const name = JSON.stringify(userId.username);
-   
+
     setNames(name);
     setUsers(userId);
   };
@@ -48,9 +48,9 @@ export default function setting({navigation}) {
   useEffect(() => {
     user();
     if (isFocused) {
-      user()
-    }else{
-      console.log(58,"screen is not Focused")
+      user();
+    } else {
+      console.log(58, 'screen is not Focused');
     }
   }, [isFocused]);
   const onLogoutAlert = () => {
@@ -77,6 +77,8 @@ export default function setting({navigation}) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           backgroundColor: '#FFDDC9',
+          // backgroundColor: 'red',
+          height: hp('10%'),
         }}>
         <Ionicons
           name="arrow-back-sharp"
@@ -90,130 +92,145 @@ export default function setting({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: 25,
+            marginTop: hp(Platform?.OS == 'ios' ? '5.5%' : '3.5%'),
           }}>
           My Account
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
+          <Ionicons
+            name="cart"
+            size={35}
+            color="#512500"
+            style={{
+              ...styles.icon,
+              marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
+            }}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.well}>
-        <Text style={styles.we}>Welcome</Text>
-        <Text style={[styles.we, {color: 'white'}]}>{stringName}</Text>
+        <Text style={{...styles.we, marginLeft: wp('4%')}}>Welcome</Text>
+        <Text
+          style={{
+            ...styles.we,
+            color: 'white',
+            marginLeft: wp('4%'),
+            marginTop: hp('1%'),
+          }}>
+          {stringName}
+        </Text>
       </View>
-      <ScrollView contentContainerStyle={{paddingBottom: hp('20%')}}>
-        <View style={styles.vacc}>
-          <Text style={styles.acc}>My Moyen Account</Text>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}
-             onPress={() => navigation.navigate('Userdeatils')}
-            >
-              <Ionicons
-                name="person-circle-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>My Profile</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}
-            onPress={()=>navigation.navigate('checkOut')}
-            >
-              <Ionicons
-                name="albums-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Orders</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Ratings & Reviews</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('subcatdetails', {
-                  screenData: 'wishlist',
-                  isWishlist: true,
-                })
-              }
-              style={styles.shadow}>
-              <Ionicons
-                name="heart-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Saved Items</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
-              <Ionicons
-                name="eye-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Recently Viewed</Text>
-            </TouchableOpacity>
-          </View>
-         
-          <Text style={{...styles.acc, marginTop: hp('2%')}}>My Settings</Text>
-          {/* <View style={styles.box}>
-            <TouchableOpacity
-              style={styles.shadow}
-              onPress={() => navigation.navigate('Userdeatils')}>
-              <Text style={styles.orte}>Details</Text>
-            </TouchableOpacity>
-          </View> */}
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow}>
-            <Ionicons
-                name="book-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Address Book</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow} onPress={()=>navigation.navigate('changepassword')}>
-            <Ionicons
-                name="keypad-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Change Password</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
-              <Ionicons
-                name="log-out-outline"
-                size={20}
-                style={{marginRight: 20}}
-                color="gray"
-              />
-              <Text style={styles.orte}>Logout</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          alignItems: 'center',
+          paddingBottom: hp('30%'),
+        }}>
+        {/* <View style={styles.vacc}> */}
+        <Text
+          style={{
+            ...styles.acc,
+            marginTop: hp('3'),
+            marginRight: wp(Platform?.OS == 'ios' ? '47' : '53'),
+          }}>
+          My Moyen Account
+        </Text>
+        <TouchableOpacity
+          style={styles.shadow}
+          onPress={() => navigation.navigate('Userdeatils')}>
+          <Ionicons
+            name="person-circle-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>My Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.shadow}>
+          <Ionicons
+            name="albums-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Orders</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.shadow}>
+          <Ionicons
+            name="document-text-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Ratings & Reviews</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('subcatdetails', {
+              screenData: 'wishlist',
+              isWishlist: true,
+            })
+          }
+          style={styles.shadow}>
+          <Ionicons
+            name="heart-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Saved Items</Text>
+        </TouchableOpacity>
+        {/* </View> */}
+        <TouchableOpacity style={styles.shadow}>
+          <Ionicons
+            name="eye-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Recently Viewed</Text>
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            ...styles.acc,
+            marginTop: hp('3'),
+            marginBottom: hp('1'),
+            marginRight: wp('60'),
+            marginRight: wp(Platform?.OS == 'ios' ? '60' : '65'),
+          }}>
+          My Settings
+        </Text>
+
+        <TouchableOpacity style={styles.shadow}>
+          <Ionicons
+            name="book-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Address Book</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.shadow}
+          onPress={() => navigation.navigate('changepassword')}>
+          <Ionicons
+            name="keypad-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Change Password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
+          <Ionicons
+            name="log-out-outline"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>Logout</Text>
+        </TouchableOpacity>
       </ScrollView>
       <AwesomeAlert
         show={showAlert}

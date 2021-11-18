@@ -1,35 +1,40 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { alignItems } from "styled-system";
-import {color} from "../../config/color"
+import {alignItems} from 'styled-system';
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor,
-flex:1,
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFDDC9',
+    // backgroundColor: 'red',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 10,
+    shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
+    height: hp(Platform?.OS == 'ios' ? '11' : '9'),
+    // height: hp('9'),
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2.7'),
   },
   te: {
     textAlign: 'center',
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: 25,
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.7'),
   },
   loader: {
     justifyContent: 'center',
@@ -41,7 +46,7 @@ flex:1,
   },
   body: {
     marginTop: hp('3%'),
-    marginLeft:wp('1%')
+    marginLeft: wp('1%'),
   },
   box: {
     justifyContent: 'center',
@@ -76,8 +81,8 @@ flex:1,
   text: {
     color: '#512500',
     fontSize: 16,
-    paddingTop:hp('2%'),
-    paddingLeft:wp('2%')
+    paddingTop: hp('2%'),
+    paddingLeft: wp('2%'),
   },
   cart: {
     backgroundColor: '#EEB08B',
@@ -103,7 +108,7 @@ flex:1,
     textAlign: 'center',
     fontSize: 14,
     bottom: 10,
-    marginTop:hp('5%')
+    marginTop: hp('5%'),
   },
   fea: {
     marginLeft: 10,

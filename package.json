@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "android-build": "cd android && gradlew assembleRelease",
-    "branch": "devOnePro"
+    "branch": "devOnePro",
+    "both":"react-native run-ios && react-native run-android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",

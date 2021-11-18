@@ -9,6 +9,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -39,12 +40,11 @@ export default function cate({navigation}) {
     fetch(CATEGORY)
       .then(async response => await response.json())
       .then(json => {
-        setCatdata(json), console.log(28, catdata), setLoading(false);
+        setCatdata(json), setLoading(false);
       })
       .catch(error => setNshowAlert(true));
 
     const api = SUBCAT + 3;
-    // console.log(api);
     fetch(api)
       .then(async response => await response.json())
       .then(json => {
@@ -63,7 +63,6 @@ export default function cate({navigation}) {
     setClick(index);
     setSubloading(true);
     const api = SUBCAT + id;
-    // console.log(api);
     fetch(api)
       .then(async response => await response.json())
       .then(json => {
@@ -71,7 +70,6 @@ export default function cate({navigation}) {
       })
       .catch(error => setNshowAlert(true));
   };
-  // console.log('=============.............', subcatdata);
   return (
     <View style={styles.mains}>
       <View style={styles.appbarStyle}>
@@ -89,7 +87,14 @@ export default function cate({navigation}) {
             <Ionicons name="search" color="#512500" size={20} />
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-            <Ionicons size={37.5} color="#512500" name="cart" />
+            <Ionicons
+              size={37.5}
+              color="#512500"
+              name="cart"
+              style={{
+                marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.5'),
+              }}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -125,7 +130,9 @@ export default function cate({navigation}) {
                       }
                       onPress={() => getData(item.id, index)}>
                       <View>
-                        <Text style={styles.cattext}>{item.name}</Text>
+                        <Text style={{...styles.cattext, fontSize: hp('1.5')}}>
+                          {item.name}
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -168,11 +175,11 @@ export default function cate({navigation}) {
                     <View style={styles.inside}>
                       <Text
                         style={{
-                          fontSize: 14,
+                          fontSize: hp('2'),
                           color: '#512500',
                           fontWeight: 'bold',
                         }}>
-                        {item.name}
+                        {item?.name}
                       </Text>
                       <View style={styles.multibox}>
                         {
@@ -188,6 +195,7 @@ export default function cate({navigation}) {
                                   flex: 1,
                                   flexDirection: 'column',
                                   margin: 3,
+                                  // backgroundColor: 'red',
                                 }}>
                                 <TouchableOpacity
                                   onPress={() =>
@@ -199,7 +207,7 @@ export default function cate({navigation}) {
                                   <View style={styles.itss}>
                                     {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
                                     <Text style={styles.insidetext}>
-                                      {item.name}
+                                      {item?.name}
                                     </Text>
                                   </View>
                                 </TouchableOpacity>

@@ -18,6 +18,7 @@ import {
   SafeAreaView,
   Image,
   Linking,
+  Platform,
 } from 'react-native';
 import cate from '../screens/Catergory/catagery';
 import Order from '../screens/Order/order';
@@ -38,22 +39,22 @@ function MybottomTabs() {
         animationEnabled: true,
         tabBarActiveBackgroundColor: '#FFDDC9',
         tabBarInactiveBackgroundColor: '#FFDDC9',
-        tabBarStyle:{
-          height:hp('8%')
+        tabBarStyle: {
+          height: hp(Platform?.OS == 'ios' ? '10%' : '8%'),
+          backgroundColor: '#FFDDC9',
         },
-        
       })}>
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: ({ focused,color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="home" color={color} size={20} />
           ),
           title: 'Home',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom:hp('1%')
+            marginBottom: hp('1%'),
           },
         }}
         component={Home}
@@ -62,22 +63,20 @@ function MybottomTabs() {
       <Tab.Screen
         name="cate"
         options={{
-          tabBarIcon: ({ focused,color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="list" color={color} size={30} />
-
           ),
           // tabBarActiveTintColor:"yellow",
           // tabBarInactiveTintColor:"green",
           // tabBarActiveIconColor:"blue",
-          tabBarIconStyle:{
-          color:"red",
-          
+          tabBarIconStyle: {
+            color: 'red',
           },
           title: 'Category',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom:hp('1%')
+            marginBottom: hp('1%'),
           },
         }}
         component={cate}
@@ -101,18 +100,14 @@ function MybottomTabs() {
       <Tab.Screen
         name="setting"
         options={{
-          tabBarIcon: ({ focused,color, size }) => (
-            <Ionicons
-              name="settings-sharp"
-              color={color}
-              size={25}
-            />
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="settings-sharp" color={color} size={25} />
           ),
           title: 'Setting',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom:hp('1%')
+            marginBottom: hp('1%'),
           },
         }}
         component={setting}

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,11 +18,14 @@ export const styles = StyleSheet.create({
     marginTop: 100,
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+    marginLeft: wp('3'),
+    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   page: {
     marginTop: hp('5%'),
-    marginBottom:hp('2%')
+    marginBottom: hp('2%'),
   },
   te: {
     backgroundColor: color.defaultBackgroundColor,
@@ -30,12 +33,12 @@ export const styles = StyleSheet.create({
     marginTop: hp('1%'),
   },
   mainpage: {
-//     flex: 1,
-    width:wp("80%"),
-    alignSelf:"center"
-//     height:hp('200%')
+    //     flex: 1,
+    width: wp('80%'),
+    alignSelf: 'center',
+    //     height:hp('200%')
   },
   inputContainers: {
-//     backgroundColor:"green"
+    //     backgroundColor:"green"
   },
 });

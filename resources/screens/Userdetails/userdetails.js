@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -147,8 +148,6 @@ export default function Userdeatils({navigation}) {
   useEffect(() => {
     (async () => {
       const userDatas = await getUserData();
-      // setUserdataemail(userDatas.email)
-      // getUserAllData()
       setUserDataLocal(userDatas);
       console.log(149, userDatas);
       // console.log(52, userData);
@@ -164,14 +163,15 @@ export default function Userdeatils({navigation}) {
           backgroundColor: '#FFDDC9',
           shadowColor: '#000',
           shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 10,
+          shadowOpacity: 0.4,
           shadowRadius: 6,
           elevation: 5,
+          height: hp(Platform?.OS == 'ios' ? '10' : '9'),
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={35}
             color="#512500"
             style={styles.icon}
           />
@@ -182,7 +182,7 @@ export default function Userdeatils({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: 25,
+            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
           }}>
           User Profile
         </Text>
@@ -347,7 +347,7 @@ export default function Userdeatils({navigation}) {
                 ) : (
                   <Text
                     style={{
-                      fontSize: hp('2%'),
+                      fontSize: hp('1.7%'),
                       color: 'white',
                       fontWeight: 'bold',
                       alignSelf: 'center',

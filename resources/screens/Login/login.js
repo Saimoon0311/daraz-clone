@@ -132,6 +132,7 @@ export default function Login({navigation}) {
           <TextInput
             label="Email *"
             underlineColor="gray"
+            value={email}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
             onChangeText={email => updateState({email})}
@@ -141,6 +142,7 @@ export default function Login({navigation}) {
             <TextInput
               label="Password *"
               underlineColor="gray"
+              value={password}
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
               selectionColor="#FF7E33"
@@ -181,15 +183,13 @@ export default function Login({navigation}) {
           <TouchableOpacity
             onPress={loginss}
             style={{
-              width: wp('80%'),
+              width: wp('65%'),
               height: hp('6%'),
               backgroundColor: '#FF7E33',
               alignSelf: 'center',
               marginTop: 30,
               borderRadius: 10,
               flexDirection: 'row',
-              // alignItems:'center',
-              // justifyContent:'center'
             }}>
             <View
               style={{
@@ -200,18 +200,18 @@ export default function Login({navigation}) {
               }}>
               <Ionicons
                 style={{marginLeft: wp('3%')}}
-                name="mail"
-                size={22}
+                name="log-in"
+                size={25}
                 color={'white'}
               />
             </View>
             <View
               style={{
-                width: wp('50%'),
+                width: wp('35%'),
                 height: hp('6%'),
                 alignItems: 'center',
                 justifyContent: 'center',
-                // backgroundColor:'red'
+                // backgroundColor: 'red',
               }}>
               {loadingButton ? (
                 <ActivityIndicator color="white" size="small" />

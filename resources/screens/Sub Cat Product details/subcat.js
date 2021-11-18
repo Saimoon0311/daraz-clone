@@ -425,19 +425,24 @@ export default function subcatdetails({route, navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={35}
             color="#512500"
-            style={styles.icon}
+            style={{...styles.icon, marginLeft: wp('3')}}
           />
         </TouchableOpacity>
         <Text style={styles.te}>{renderHeaderText()}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons name="cart" size={30} color="#512500" style={styles.icon} />
+          <Ionicons
+            name="cart"
+            size={35}
+            color="#512500"
+            style={{...styles.icon, marginRight: wp('3')}}
+          />
         </TouchableOpacity>
       </View>
       <View style={{...styles.body}}>
         {isLoading ? (
-          <View style={{margin: hp('22%')}}>
+          <View style={{margin: hp('22%'), alignSelf: 'center'}}>
             <BubblesLoader size={50} dotRadius={10} color="#512500" />
           </View>
         ) : (
