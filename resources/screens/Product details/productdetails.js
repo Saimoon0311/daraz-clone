@@ -338,7 +338,7 @@ export default function Details({route, navigation}) {
               Lorem Ipsum.
             </Text>
           </View>
-          <Text style={styles.delvery}> Delivery & Returns</Text>
+          {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
           <View style={styles.optionsContainer}>
             {item?.get_attribute_values &&
               item?.get_attribute_values?.map((res, i) => {

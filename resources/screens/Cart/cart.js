@@ -267,10 +267,9 @@ export default function Cart({navigation}) {
         <Ionicons
           name="cart"
           size={30}
-          color="#512500"
+          color="#FFDDC9"
           style={{
             ...styles.icon,
-
             marginRight: wp('3'),
           }}
         />
@@ -311,7 +310,9 @@ export default function Cart({navigation}) {
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('Details', item)}>
+                        onPress={() =>
+                          navigation.navigate('Cartdetails', item)
+                        }>
                         <View style={{flexDirection: 'row'}}>
                           <Image
                             source={{
@@ -335,18 +336,61 @@ export default function Cart({navigation}) {
                               }}>
                               {item?.get_products?.name}
                             </Text>
+                            <View
+                            style={{
+                              width: wp('50%'),
+                              flexDirection:"row"
+                            }}
+                            >
                             <Text
                               numberOfLines={1}
                               style={{
-                                width: wp('95%'),
                                 fontSize: hp('2'),
                                 color: color.textColorRedCart,
                                 fontWeight: 'bold',
                                 marginLeft: 10,
                                 marginBottom: hp('1'),
                               }}>
-                              Price : ${item?.get_products?.price}
+                              Price : $ 
+                              {/* Price : ${item?.get_products?.price} */}
                             </Text>
+                            {item?.get_products?.is_discounted == 2 ? (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontSize: hp('2'),
+                                      color: color.textColorRedCart,
+                                      fontWeight: 'bold',
+                                      textDecorationLine: 'line-through',
+                                    }}>
+                                    {item?.get_products?.price}
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: hp('2'),
+                                      color: 'red',
+                                      fontWeight: 'bold',
+                                      marginLeft: wp('2'),
+                                    }}>
+                                    {item?.get_products?.discounted_price}
+                                  </Text>
+                                </View>
+                              ) : (
+                                <Text
+                                style={{
+                                  fontSize: hp('2'),
+                                  color: color.textColorRedCart,
+                                  fontWeight: 'bold',
+                                  marginBottom: hp('1'),
+                                }}
+                                >
+                                  {item?.get_products?.price}
+                                </Text>
+                              )}
+                            </View>
                             <View
                               style={{
                                 flexDirection: 'row',
