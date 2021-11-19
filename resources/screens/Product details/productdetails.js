@@ -30,8 +30,9 @@ import {
   BubblesLoader,
 } from 'react-native-indicator';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import {styles} from './style';
+import StarRating from 'react-native-star-rating';
 
 export default function Details({route, navigation}) {
   const [user_id, setUser_id] = useState();
@@ -39,6 +40,11 @@ export default function Details({route, navigation}) {
   const [favValue, setFavValue] = useState(false);
   // const [pickerValue, setPickerValue] = useState({});
   const [attributeArray, setAttributeArray] = useState([]);
+  const [starCount, setstarCount] = useState(4);
+
+  const onStarRatingPress = rating => {
+    setstarCount(rating);
+  };
   const [silderData, setSliderData] = useState([
     {
       id: 1,
@@ -316,6 +322,16 @@ export default function Details({route, navigation}) {
               </View>
             )}
             <Text style={styles.tep}>SKU : {item?.sku}</Text>
+            <StarRating
+              containerStyle={{width: wp('10')}}
+              starSize={20}
+              fullStarColor="#E9691D"
+              starStyle={{marginBottom: hp('0.5'), marginTop: hp('0.5')}}
+              disabled={true}
+              maxStars={5}
+              rating={starCount}
+              selectedStar={rating => onStarRatingPress(rating)}
+            />
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               Description :
             </Text>
