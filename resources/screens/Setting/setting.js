@@ -146,7 +146,9 @@ export default function setting({navigation}) {
           />
           <Text style={styles.orte}>My Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.shadow}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('OrderDetails')}
+          style={styles.shadow}>
           <Ionicons
             name="albums-outline"
             size={20}

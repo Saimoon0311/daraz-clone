@@ -26,4 +26,4 @@ export const SEARCH = getApi('search-products');
 export const PASSWORDCHNAGE = getApi('changeUserPassword');
 export const USERPROFILEUPDATE = getApi('user-detail-update');
 export const ALLNEWARRIVALS = getApi('all-new-arrivals');
-export const USERORDERDEATILS = getApi('/shop/user-order-details');
+export const USERORDERDEATILS = getApi('shop/user-order-details/');

@@ -21,7 +21,7 @@ import {
   Platform,
 } from 'react-native';
 import cate from '../screens/Catergory/catagery';
-import Order from '../screens/Order/order';
+import Order from '../screens/OrderDetails/OrderDetails';
 import setting from '../screens/Setting/setting';
 import {color} from '../config/color';
 
