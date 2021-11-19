@@ -174,21 +174,21 @@ export default function Cart({navigation}) {
             message: 'Your Cart Has been deleted',
             backgroundColor: '#E9691D',
           });
-          setLoading(false)
+        setLoading(false);
         // console.log(68, cartdata);
       })
       .catch(e => {
-        console.log(170,e)
-        setLoading(false)
-      })
-      // .finally(() => setLoading(false));
+        console.log(170, e);
+        setLoading(false);
+      });
+    // .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
     // setLoading(true);
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
-    console.log('id', id,"userid",user_id);
+    console.log('id', id, 'userid', user_id);
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
@@ -198,8 +198,8 @@ export default function Cart({navigation}) {
             icon: 'success',
             message: json[0].message,
             backgroundColor: '#E9691D',
-          })
-          getCartCall()
+          });
+          getCartCall();
           // setLoading(false);
         } else {
           showMessage({
@@ -207,8 +207,8 @@ export default function Cart({navigation}) {
             icon: 'warning',
             message: json[0].message,
             backgroundColor: '#E9691D',
-          })
-          getCartCall()
+          });
+          getCartCall();
           // setLoading(false)
         }
       });
@@ -266,10 +266,9 @@ export default function Cart({navigation}) {
         <Ionicons
           name="cart"
           size={30}
-          color="#512500"
+          color="#FFDDC9"
           style={{
             ...styles.icon,
-
             marginRight: wp('3'),
           }}
         />
@@ -309,7 +308,9 @@ export default function Cart({navigation}) {
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('Details', item)}>
+                        onPress={() =>
+                          navigation.navigate('Cartdetails', item)
+                        }>
                         <View style={{flexDirection: 'row'}}>
                           <Image
                             source={{
@@ -333,42 +334,86 @@ export default function Cart({navigation}) {
                               }}>
                               {item?.get_products?.name}
                             </Text>
+                            <View
+                            style={{
+                              width: wp('50%'),
+                              flexDirection:"row"
+                            }}
+                            >
                             <Text
                               numberOfLines={1}
                               style={{
-                                width: wp('95%'),
                                 fontSize: hp('2'),
                                 color: color.textColorRedCart,
                                 fontWeight: 'bold',
                                 marginLeft: 10,
                                 marginBottom: hp('1'),
                               }}>
-                              Price : ${item?.get_products?.price}
+                              Price : $ 
+                              {/* Price : ${item?.get_products?.price} */}
                             </Text>
+                            {item?.get_products?.is_discounted == 2 ? (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontSize: hp('2'),
+                                      color: color.textColorRedCart,
+                                      fontWeight: 'bold',
+                                      textDecorationLine: 'line-through',
+                                    }}>
+                                    {item?.get_products?.price}
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: hp('2'),
+                                      color: 'red',
+                                      fontWeight: 'bold',
+                                      marginLeft: wp('2'),
+                                    }}>
+                                    {item?.get_products?.discounted_price}
+                                  </Text>
+                                </View>
+                              ) : (
+                                <Text
+                                style={{
+                                  fontSize: hp('2'),
+                                  color: color.textColorRedCart,
+                                  fontWeight: 'bold',
+                                  marginBottom: hp('1'),
+                                }}
+                                >
+                                  {item?.get_products?.price}
+                                </Text>
+                              )}
+                            </View>
                             <View
                               style={{flexDirection: 'row', width: wp('40%')}}>
                               <Text
-                               style={{
-                                fontSize: hp('2'),
-                                color: color.textColorRedCart,
-                                fontWeight: 'bold',
-                                marginLeft: 10,
-                              }}
-                              >Attribute :</Text>
-                              
+                                style={{
+                                  fontSize: hp('2'),
+                                  color: color.textColorRedCart,
+                                  fontWeight: 'bold',
+                                  marginLeft: 10,
+                                }}>
+                                Attribute :
+                              </Text>
+
                               {att &&
                                 att?.map(res => {
                                   return (
                                     <Text
-                                    // numberOfLines={1}
+                                      // numberOfLines={1}
                                       style={{
                                         fontSize: hp('1.9'),
                                         color: color.textColorRedCart,
                                         fontWeight: 'bold',
                                         marginLeft: 10,
-                                        alignItems:"center"
+                                        alignItems: 'center',
                                       }}>
-                                    {res}
+                                      {res}
                                     </Text>
                                   );
                                 })}
