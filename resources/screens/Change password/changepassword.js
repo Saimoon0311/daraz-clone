@@ -20,7 +20,7 @@ import {
   ADDTOWISHLIST,
   API_BASED_URL,
   CART,
-  CARTDELEtE,
+  CARTDELETE,
   Images_API,
   PASSWORDCHNAGE,
   testCART,
@@ -71,26 +71,23 @@ export default function changepassword({navigation}) {
             backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
-        }
-                else if(current_password==(password||password_confirmation)){
-                           showMessage({
-                    type: 'warning',
-                    icon: 'warning',
-                    message: 'Please Enter New Password',
-                    backgroundColor: '#E9691D',
-                  }),
-                    setLoadingButton(false);
-        }
-        else if(password!=password_confirmation){
-                           showMessage({
-                    type: 'warning',
-                    icon: 'warning',
-                    message: 'Please Enter Correct Password',
-                    backgroundColor: '#E9691D',
-                  }),
-                    setLoadingButton(false);
-        }
-        else {
+        } else if (current_password == (password || password_confirmation)) {
+          showMessage({
+            type: 'warning',
+            icon: 'warning',
+            message: 'Please Enter New Password',
+            backgroundColor: '#E9691D',
+          }),
+            setLoadingButton(false);
+        } else if (password != password_confirmation) {
+          showMessage({
+            type: 'warning',
+            icon: 'warning',
+            message: 'Please Enter Correct Password',
+            backgroundColor: '#E9691D',
+          }),
+            setLoadingButton(false);
+        } else {
           passwordChangeRequest();
           // console.log(userId)
         }
@@ -105,12 +102,12 @@ export default function changepassword({navigation}) {
     myHeaders.append('Accept', 'application/json');
 
     var formdata = new FormData();
-//     formdata.append('current_password', current_password);
-//     formdata.append('password', password);
-//     formdata.append('password_confirmation', password_confirmation);
-formdata.append('current_password', current_password);
-formdata.append('password', password);
-formdata.append('password_confirmation', password_confirmation);
+    //     formdata.append('current_password', current_password);
+    //     formdata.append('password', password);
+    //     formdata.append('password_confirmation', password_confirmation);
+    formdata.append('current_password', current_password);
+    formdata.append('password', password);
+    formdata.append('password_confirmation', password_confirmation);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -118,38 +115,36 @@ formdata.append('password_confirmation', password_confirmation);
       redirect: 'follow',
     };
 
-    console.log('108',API_BASED_URL+PASSWORDCHNAGE+"/"+userId)
-    console.log('108',API_BASED_URL)
-    console.log('110',PASSWORDCHNAGE)
+    console.log('108', API_BASED_URL + PASSWORDCHNAGE + '/' + userId);
+    console.log('108', API_BASED_URL);
+    console.log('110', PASSWORDCHNAGE);
 
-
-    fetch(`${PASSWORDCHNAGE}/${userId}`, 
-    requestOptions)
+    fetch(`${PASSWORDCHNAGE}/${userId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(109,result)
-        setLoadingButton(false)
-        setPassword('')
-        setCurrent_password('')
-        setPassword_confirmation('')
-        if (result=="User Password Change Successful") {
-            showMessage({
-type:"success",
-icon:"success",
-message:"Password Change Successfully",
-backgroundColor: '#E9691D',
-            })
+        console.log(109, result);
+        setLoadingButton(false);
+        setPassword('');
+        setCurrent_password('');
+        setPassword_confirmation('');
+        if (result == 'User Password Change Successful') {
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: 'Password Change Successfully',
+            backgroundColor: '#E9691D',
+          });
         } else {
-        setPassword('')
-        setCurrent_password('')
-        setPassword_confirmation(''),                              showMessage({
-type:"danger",
-icon:"danger",
-message:"Some Thing Want Wrong",
-backgroundColor: '#E9691D',
-        })                                                  
+          setPassword('');
+          setCurrent_password('');
+          setPassword_confirmation(''),
+            showMessage({
+              type: 'danger',
+              icon: 'danger',
+              message: 'Some Thing Want Wrong',
+              backgroundColor: '#E9691D',
+            });
         }
-
       })
       .catch(error => console.log('error', error));
     //     fetch(`${API_BASED_URL}${PASSWORDCHNAGE}/${userId}`, {

@@ -19,7 +19,7 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {
   CART,
-  CARTDELEtE,
+  CARTDELETE,
   Images_API,
   testCART,
   USERDATA,
@@ -97,7 +97,7 @@ export default function Userdeatils({navigation}) {
         } else {
           setShowAlert(true);
           setLoadingButton(false);
-          console.log(result);
+          // console.log(result);
         }
       })
       .catch(error => {
@@ -122,17 +122,22 @@ export default function Userdeatils({navigation}) {
   const ValidateProfileUpdate = () => {
     setLoadingButton(true);
     if (
-      (userDataLocal?.username !== '' && userDataLocal?.username !== null) &&
-      (userDataLocal?.phone_number !== '' &&
-        userDataLocal?.phone_number !== null) &&
-      (userDataLocal?.city !== '' && userDataLocal?.city !== null) &&
-      (userDataLocal?.address_one !== '' &&
-        userDataLocal?.address_one !== null) &&
-      (userDataLocal?.address_two !== '' &&
-        userDataLocal?.address_two !== null) &&
-      (userDataLocal?.email !== '' && userDataLocal?.email !== null) &&
-      (userDataLocal?.zipcode !== '' && userDataLocal?.zipcode !== null) &&
-      (userDataLocal?.country !== '' && userDataLocal?.country !== null)
+      userDataLocal?.username !== '' &&
+      userDataLocal?.username !== null &&
+      userDataLocal?.phone_number !== '' &&
+      userDataLocal?.phone_number !== null &&
+      userDataLocal?.city !== '' &&
+      userDataLocal?.city !== null &&
+      userDataLocal?.address_one !== '' &&
+      userDataLocal?.address_one !== null &&
+      userDataLocal?.address_two !== '' &&
+      userDataLocal?.address_two !== null &&
+      userDataLocal?.email !== '' &&
+      userDataLocal?.email !== null &&
+      userDataLocal?.zipcode !== '' &&
+      userDataLocal?.zipcode !== null &&
+      userDataLocal?.country !== '' &&
+      userDataLocal?.country !== null
     ) {
       profileUpdate();
     } else {
@@ -149,8 +154,6 @@ export default function Userdeatils({navigation}) {
     (async () => {
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
-      console.log(149, userDatas);
-      // console.log(52, userData);
     })();
   }, []);
 

@@ -198,13 +198,14 @@ export default function cate({navigation}) {
                                   // backgroundColor: 'red',
                                 }}>
                                 <TouchableOpacity
+                                style={styles.itss}
                                   onPress={() =>
                                     navigation.navigate('subcatdetails', {
                                       item: item,
                                       screenData: 'subCat',
                                     })
                                   }>
-                                  <View style={styles.itss}>
+                                  <View >
                                     {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
                                     <Text style={styles.insidetext}>
                                       {item?.name}

@@ -19,7 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import {
   ADDTOWISHLIST,
   CART,
-  CARTDELEtE,
+  CARTDELETE,
   Images_API,
   testCART,
 } from '../../config/url';
@@ -59,7 +59,8 @@ export default function Cart({navigation}) {
           setCartdata(json[0]);
           totalprice(json[0]);
           setLoading(false);
-          // console.log(54);
+          // console.log(54, json[0]);
+          // console.log(63, JSON?.parse(json[0][2]?.attributes));
         }
       })
       .catch(e => {
@@ -91,7 +92,7 @@ export default function Cart({navigation}) {
         //   icon: 'danger',
         //   message: 'Something want wrong',
         // });
-        console.log(94,e)
+        // console.log(94, e);
       });
   };
 
@@ -137,7 +138,7 @@ export default function Cart({navigation}) {
     setLoading(true);
     console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
-    const api = CARTDELEtE + '/' + id;
+    const api = CARTDELETE + '/' + id;
     // console.log(api);
     fetch(api, {
       method: 'GET',
@@ -232,17 +233,7 @@ export default function Cart({navigation}) {
 
   return (
     <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: '#FFDDC9',
-          shadowColor: '#000',
-          shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 10,
-          shadowRadius: 6,
-          elevation: 5,
-        }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
@@ -251,20 +242,21 @@ export default function Cart({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text
+        <Text style={styles.te}>Carts</Text>
+        <Ionicons
+          name="cart"
+          size={30}
+          color="#512500"
           style={{
-            textAlign: 'center',
-            fontSize: 18,
-            color: '#512500',
-            fontWeight: 'bold',
-            marginTop: 25,
-          }}>
-          Carts
-        </Text>
-        <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
+            ...styles.icon,
+
+            marginRight: wp('3'),
+          }}
+        />
       </View>
       <View>
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 150}}
           nestedScrollEnabled={true}>
           {isLoading ? (
@@ -317,7 +309,7 @@ export default function Cart({navigation}) {
                                 fontSize: hp('1.8'),
                                 color: color.textColorRedCart,
                                 marginLeft: 10,
-                                marginBottom:hp('1')
+                                marginBottom: hp('1'),
                               }}>
                               {item?.get_products?.name}
                             </Text>
@@ -329,7 +321,7 @@ export default function Cart({navigation}) {
                                 color: color.textColorRedCart,
                                 fontWeight: 'bold',
                                 marginLeft: 10,
-                                marginBottom:hp('1')
+                                marginBottom: hp('1'),
                               }}>
                               Price : ${item?.get_products?.price}
                             </Text>
@@ -376,29 +368,35 @@ export default function Cart({navigation}) {
                         </View>
                       </TouchableOpacity>
                       <View
-                        style={{flex: 1, height: 1, backgroundColor: 'black',marginTop:hp('1')}}
+                        style={{
+                          flex: 1,
+                          height: 2,
+                          backgroundColor: '#C8C8C8',
+                          marginTop: hp('1'),
+                        }}
                       />
                       <View style={{flexDirection: 'row'}}>
-                        {item?.is_wishlisted== true?
-                        <TouchableOpacity
-                        onPress={() => addtowishlist(item?.product_id)}>
-                        <Ionicons
-                          style={{paddingTop: 13}}
-                          name="heart"
-                          color="#B64400"
-                          size={20}
-                        />
-                      </TouchableOpacity>:
-                      <TouchableOpacity
-                      onPress={() => addtowishlist(item?.product_id)}>
-                      <Ionicons
-                        style={{paddingTop: 13}}
-                        name="heart-outline"
-                        color="#B64400"
-                        size={20}
-                      />
-                    </TouchableOpacity>
-                        }
+                        {item?.is_wishlisted == true ? (
+                          <TouchableOpacity
+                            onPress={() => addtowishlist(item?.product_id)}>
+                            <Ionicons
+                              style={{paddingTop: 13}}
+                              name="heart"
+                              color="#B64400"
+                              size={20}
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => addtowishlist(item?.product_id)}>
+                            <Ionicons
+                              style={{paddingTop: 13}}
+                              name="heart-outline"
+                              color="#B64400"
+                              size={20}
+                            />
+                          </TouchableOpacity>
+                        )}
                         {/* <TouchableOpacity
                           onPress={() => addtowishlist(item?.product_id)}>
                           <Ionicons
@@ -467,75 +465,77 @@ export default function Cart({navigation}) {
               />
               {cartdata?.length > 0 && (
                 <View>
-                <View style={styles.box}>
-                  {/* {console.log(323,cartdata
+                  <View style={styles.box}>
+                    {/* {console.log(323,cartdata
                     )} */}
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{color: 'gray', fontSize: hp('2%')}}>
-                      Subtotal
-                    </Text>
-                    <Text style={styles.ty}>{totalPriceShow}</Text>
-                  </View>
-                  <Text></Text>
-                  <View
-                    style={{flex: 1, height: 1, backgroundColor: 'black'}}
-                  />
-                  <Text></Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        color: color.textColorRedCart,
-                        fontWeight: 'bold',
-                        fontSize: hp('2%'),
-                      }}>
-                      Total
-                    </Text>
-                    <Text
-                      style={[
-                        styles.ty,
-                        {color: color.textColorRedCart, fontWeight: 'bold'},
-                      ]}>
-                      {totalPriceShow}
-                    </Text>
-                  </View>
-                  <TouchableOpacity style={styles.maior} onPress={()=>navigation.navigate('checkOut')}>
-                    <Text style={styles.or}>Complete your order</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.recentTextContainer}>
-            <TouchableOpacity>
-              <Text style={{...styles.sliderText, color: 'grey'}}>
-                Recent Views
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.sliderText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            nestedScrollEnabled
-            horizontal={true}>
-            <View style={styles.bottomImageScroller}>
-              {silderData?.length > 0 &&
-                silderData?.map(res => {
-                  return (
-                    <View style={styles.bottomimages}>
-                      <Image
-                        style={styles.imagss}
-                        source={{
-                          uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
-                        }}
-                        // source={{
-                        //   uri: 'https://reqres.in/img/faces/7-image.jpg',
-                        // }}
-                      />
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={{color: 'gray', fontSize: hp('2%')}}>
+                        Subtotal
+                      </Text>
+                      <Text style={styles.ty}>{totalPriceShow}</Text>
                     </View>
-                  );
-                })}
-            </View>
-          </ScrollView>
+                    <Text></Text>
+                    <View
+                      style={{flex: 1, height: 1, backgroundColor: 'black'}}
+                    />
+                    <Text></Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          color: color.textColorRedCart,
+                          fontWeight: 'bold',
+                          fontSize: hp('2%'),
+                        }}>
+                        Total
+                      </Text>
+                      <Text
+                        style={[
+                          styles.ty,
+                          {color: color.textColorRedCart, fontWeight: 'bold'},
+                        ]}>
+                        {totalPriceShow}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.maior}
+                      onPress={() => navigation.navigate('checkOut')}>
+                      <Text style={styles.or}>Complete your order</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.recentTextContainer}>
+                    <TouchableOpacity>
+                      <Text style={{...styles.sliderText, color: 'grey'}}>
+                        Recent Views
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text style={styles.sliderText}>See All</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    nestedScrollEnabled
+                    horizontal={true}>
+                    <View style={styles.bottomImageScroller}>
+                      {silderData?.length > 0 &&
+                        silderData?.map(res => {
+                          return (
+                            <View style={styles.bottomimages}>
+                              <Image
+                                style={styles.imagss}
+                                source={{
+                                  uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
+                                }}
+                                // source={{
+                                //   uri: 'https://reqres.in/img/faces/7-image.jpg',
+                                // }}
+                              />
+                            </View>
+                          );
+                        })}
+                    </View>
+                  </ScrollView>
                 </View>
               )}
             </>

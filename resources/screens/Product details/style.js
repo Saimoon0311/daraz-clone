@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {color} from '../../config/color';
 import {
   widthPercentageToDP as wp,
@@ -16,12 +16,16 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFDDC9',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 10,
+    shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
+    height: hp(Platform?.OS == 'ios' ? '10' : '8'),
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2'),
+    marginLeft: wp('3'),
+    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   box: {
     padding: 13,
@@ -29,7 +33,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.4,
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
@@ -41,6 +45,7 @@ export const styles = StyleSheet.create({
     width: wp('88%'),
     height: hp('40%'),
     marginRight: 20,
+    marginLeft: 3,
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 1},
@@ -54,7 +59,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: 25,
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
   },
   tep: {
     color: '#512500',
@@ -79,6 +84,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 10,
     overflow: 'hidden',
+    marginBottom: hp(Platform?.OS == 'ios' ? '3' : '0'),
   },
   delvery: {
     fontSize: 14,
@@ -103,24 +109,41 @@ export const styles = StyleSheet.create({
     // marginBottom: hp('20'),
     marginTop: hp('2'),
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
     elevation: 5,
   },
   pickerStyle: {
     width: wp('80'),
-    height: hp('5'),
+    height: hp(Platform?.OS == 'ios' ? '20' : '7'),
+    // height: hp('2'),
     color: '#512500',
-    backgroundColor: '#FFDDC9',
+    backgroundColor: Platform?.OS == 'ios' ? 'transparent' : '#FFDDC9',
+    // alignItems: 'center',
+    // padding: 0,
+    alignSelf: 'center',
+    // opacity: 0.5,
+    overflow: 'hidden',
+  },
+  pickerParentStyle: {
+    width: wp('80'),
+    height: hp(Platform?.OS == 'ios' ? '20' : '7'),
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: hp(Platform?.OS == 'ios' ? '-5' : '2'),
+    // backgroundColor: '#FFDDC9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#512500',
   },
   attributeText: {
     color: '#512500',
     fontSize: hp('2'),
     marginTop: hp('2'),
   },
-  pickerParentStyle: {
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginTop: hp('2'),
-  },
+
   favButton: {
     width: wp('15'),
     height: hp('7'),
