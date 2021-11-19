@@ -40,6 +40,26 @@ export default function Cart({navigation}) {
   const [itemId, setItemId] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
+  const recentArray = [
+    {
+      id: 0,
+    },
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+    },
+    {
+      id: 4,
+    },
+    {
+      id: 5,
+    },
+  ];
 
   const getCartCall = async () => {
     const userId = await getUserData();
@@ -72,29 +92,29 @@ export default function Cart({navigation}) {
         });
       });
   };
-  const getRecentData = async () => {
-    const userId = await getUserData();
-    const users = userId.id;
-    setUser_id(users);
-    fetch(`${testCART}/${users}`, {
-      method: 'GET',
-    })
-      .then(async response => await response.json())
-      .then(async json => {
-        setSliderData(json[0]);
-        // console.log(800, json[0]);
-        // console.log(80, JSON?.parse(silderData[0]?.attributes));
-        // console.log(78, json);
-      })
-      .catch(e => {
-        // showMessage({
-        //   type: 'danger',
-        //   icon: 'danger',
-        //   message: 'Something want wrong',
-        // });
-        // console.log(94, e);
-      });
-  };
+  // const getRecentData = async () => {
+  //   const userId = await getUserData();
+  //   const users = userId.id;
+  //   setUser_id(users);
+  //   fetch(`${testCART}/${users}`, {
+  //     method: 'GET',
+  //   })
+  //     .then(async response => await response.json())
+  //     .then(async json => {
+  //       setSliderData(json[0]);
+  //       // console.log(800, json[0]);
+  //       // console.log(80, JSON?.parse(silderData[0]?.attributes));
+  //       // console.log(78, json);
+  //     })
+  //     .catch(e => {
+  //       // showMessage({
+  //       //   type: 'danger',
+  //       //   icon: 'danger',
+  //       //   message: 'Something want wrong',
+  //       // });
+  //       // console.log(94, e);
+  //     });
+  // };
 
   useEffect(() => {
     (async () => {
@@ -518,14 +538,14 @@ export default function Cart({navigation}) {
                     nestedScrollEnabled
                     horizontal={true}>
                     <View style={styles.bottomImageScroller}>
-                      {silderData?.length > 0 &&
-                        silderData?.map(res => {
+                      {cartdata?.length > 0 &&
+                        recentArray?.map(res => {
                           return (
                             <View style={styles.bottomimages}>
                               <Image
                                 style={styles.imagss}
                                 source={{
-                                  uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
+                                  uri: 'https://picsum.photos/200',
                                 }}
                                 // source={{
                                 //   uri: 'https://reqres.in/img/faces/7-image.jpg',

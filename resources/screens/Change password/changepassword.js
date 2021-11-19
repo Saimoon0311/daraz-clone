@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -165,25 +166,17 @@ export default function changepassword({navigation}) {
     //       });
   };
 
-  useEffect(async () => {
-    const userId = await getUserData();
-    const users = userId.id;
-    setUser_ID(users);
+  useEffect(() => {
+    (async () => {
+      const userId = await getUserData();
+      const users = userId.id;
+      setUser_ID(users);
+    })();
   }, []);
 
   return (
     <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: '#FFDDC9',
-          shadowColor: '#000',
-          shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 10,
-          shadowRadius: 6,
-          elevation: 5,
-        }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
@@ -198,11 +191,21 @@ export default function changepassword({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: 25,
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+            marginLeft: wp('3'),
           }}>
-          Change Password
+          Carts
         </Text>
-        <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
+        <Ionicons
+          name="cart"
+          size={30}
+          color="#512500"
+          style={{
+            ...styles.icon,
+
+            marginRight: wp('3'),
+          }}
+        />
       </View>
       <ScrollView>
         <View style={styles.page}>
@@ -226,7 +229,7 @@ export default function changepassword({navigation}) {
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            keyboardType="visible-password"
+            // keyboardType="visible-password"
             value={current_password}
             selectionColor="#FF7E33"
             onChangeText={text => setCurrent_password(text)}
@@ -236,7 +239,7 @@ export default function changepassword({navigation}) {
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            keyboardType="visible-password"
+            // keyboardType="visible-password"
             value={password}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword(text)}
@@ -246,7 +249,7 @@ export default function changepassword({navigation}) {
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            keyboardType="visible-password"
+            // keyboardType="visible-password"
             value={password_confirmation}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword_confirmation(text)}
@@ -255,7 +258,7 @@ export default function changepassword({navigation}) {
         <TouchableOpacity
           onPress={() => passwordchange()}
           style={{
-            width: wp('75%'),
+            width: wp('60%'),
             height: hp('6%'),
             backgroundColor: '#FF7E33',
             alignSelf: 'center',
@@ -275,24 +278,24 @@ export default function changepassword({navigation}) {
             <Ionicons
               style={{marginLeft: wp('3%')}}
               name="lock-closed"
-              size={20}
+              size={25}
               color={'white'}
             />
           </View>
           <View
             style={{
-              width: wp('60%'),
+              width: wp('45%'),
               height: hp('6%'),
               alignItems: 'center',
               justifyContent: 'center',
-              // backgroundColor:'red'
+              // backgroundColor: 'red',
             }}>
             {loadingButton ? (
               <ActivityIndicator color="white" size="small" />
             ) : (
               <Text
                 style={{
-                  fontSize: hp('2.7%'),
+                  fontSize: hp('1.6%'),
                   color: 'white',
                   fontWeight: 'bold',
                   alignSelf: 'center',
@@ -301,11 +304,12 @@ export default function changepassword({navigation}) {
               </Text>
             )}
           </View>
-          <View
+          {/* <View
             style={{
               width: wp('10%'),
               height: hp('6%'),
-            }}></View>
+              backgroundColor: 'red',
+            }}></View> */}
         </TouchableOpacity>
       </ScrollView>
 

@@ -55,8 +55,17 @@ export default function checkOut({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>Check out</Text>
-        <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
+        <Text style={styles.te}>Check Out</Text>
+        <Ionicons
+          name="cart"
+          size={30}
+          color="#512500"
+          style={{
+            ...styles.icon,
+
+            marginRight: wp('3'),
+          }}
+        />
       </View>
     );
   };
@@ -273,19 +282,17 @@ export default function checkOut({navigation}) {
       <>
         <Text style={styles.centerText}>Select Payment Method</Text>
         <View style={styles.box}>
-          <TouchableOpacity
-              onPress={() => setChecked('Direct Bank Transfer')}
-          >
-          <View style={{flexDirection: 'row'}}>
-            <RadioButton
-              value="Direct Bank Transfer"
-              color={color.themColorPrimary}
-              status={
-                checked === 'Direct Bank Transfer' ? 'checked' : 'unchecked'
-              }
-            />
-            <Text style={styles.radioText}>Direct Bank Transfer</Text>
-          </View>
+          <TouchableOpacity onPress={() => setChecked('Direct Bank Transfer')}>
+            <View style={{flexDirection: 'row'}}>
+              <RadioButton
+                value="Direct Bank Transfer"
+                color={color.themColorPrimary}
+                status={
+                  checked === 'Direct Bank Transfer' ? 'checked' : 'unchecked'
+                }
+              />
+              <Text style={styles.radioText}>Direct Bank Transfer</Text>
+            </View>
           </TouchableOpacity>
           <View
             style={{
@@ -295,17 +302,15 @@ export default function checkOut({navigation}) {
               backgroundColor: '#C8C8C8',
             }}
           />
-           <TouchableOpacity
-              onPress={() => setChecked('Cash on Delivery')}
-          >
-          <View style={{flexDirection: 'row'}}>
-            <RadioButton
-              color={color.themColorPrimary}
-              value="Cash on Delivery"
-              status={checked == 'Cash on Delivery' ? 'checked' : 'unchecked'}
-            />
-            <Text style={styles.radioText}>Cash on Delivery</Text>
-          </View>
+          <TouchableOpacity onPress={() => setChecked('Cash on Delivery')}>
+            <View style={{flexDirection: 'row'}}>
+              <RadioButton
+                color={color.themColorPrimary}
+                value="Cash on Delivery"
+                status={checked == 'Cash on Delivery' ? 'checked' : 'unchecked'}
+              />
+              <Text style={styles.radioText}>Cash on Delivery</Text>
+            </View>
           </TouchableOpacity>
           <View
             style={{
@@ -315,17 +320,15 @@ export default function checkOut({navigation}) {
               backgroundColor: '#C8C8C8',
             }}
           />
-           <TouchableOpacity
-              onPress={() => setChecked('PayPal')}
-          >
-          <View style={{flexDirection: 'row'}}>
-            <RadioButton
-              color={color.themColorPrimary}
-              value="PayPal"
-              status={checked == 'PayPal' ? 'checked' : 'unchecked'}
-            />
-            <Text style={styles.radioText}>PayPal</Text>
-          </View>
+          <TouchableOpacity onPress={() => setChecked('PayPal')}>
+            <View style={{flexDirection: 'row'}}>
+              <RadioButton
+                color={color.themColorPrimary}
+                value="PayPal"
+                status={checked == 'PayPal' ? 'checked' : 'unchecked'}
+              />
+              <Text style={styles.radioText}>PayPal</Text>
+            </View>
           </TouchableOpacity>
           <View
             style={{
@@ -335,18 +338,16 @@ export default function checkOut({navigation}) {
               backgroundColor: '#C8C8C8',
             }}
           />
-           <TouchableOpacity
-              onPress={() => setChecked('Check Payment')}
-          >
-          <View style={{flexDirection: 'row'}}>
-            <RadioButton
-              color={color.themColorPrimary}
-              value="Check Payment"
-              status={checked == 'Check Payment' ? 'checked' : 'unchecked'}
-            />
-            <Text style={styles.radioText}>Check Payment</Text>
-          </View>
-</TouchableOpacity>
+          <TouchableOpacity onPress={() => setChecked('Check Payment')}>
+            <View style={{flexDirection: 'row'}}>
+              <RadioButton
+                color={color.themColorPrimary}
+                value="Check Payment"
+                status={checked == 'Check Payment' ? 'checked' : 'unchecked'}
+              />
+              <Text style={styles.radioText}>Check Payment</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </>
     );
