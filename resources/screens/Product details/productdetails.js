@@ -125,7 +125,7 @@ export default function Details({route, navigation}) {
     })
       .then(response => response.json())
       .then(json => {
-        console.log(106, json);
+        // console.log(106, json);
         if (json[0]?.message == 'Successfully added to cart') {
           showMessage({
             type: 'success',
@@ -201,7 +201,6 @@ export default function Details({route, navigation}) {
     );
   };
 
-  console.log(item.id);
   return (
     <View style={styles.main}>
       <View style={styles.header}>

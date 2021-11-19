@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -19,40 +19,46 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#FFDDC9',
     shadowColor: '#000',
-    shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 10,
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-  },
-  icon: {
-    margin: 20,
+    height: hp(Platform?.OS == 'ios' ? '10' : '8'),
   },
   te: {
     textAlign: 'center',
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: 25,
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+    marginLeft: wp('3'),
+  },
+  icon: {
+    // margin: 20,
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2'),
+    marginLeft: wp('3'),
+    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   box: {
     padding: 13,
     margin: wp('7'),
-    marginBottom:hp('1'),
+    marginBottom: hp('1'),
     backgroundColor: 'white',
     //     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.4,
+    shadowOffset: {width: 1, height: 3},
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
   },
   topMain: {
     flexDirection: 'row',
-//     backgroundColor:"yellow",
+    //     backgroundColor:"yellow",
     justifyContent: 'space-around',
     marginTop: wp('5'),
-    width:wp('95'),
-    alignSelf:"center",
+    width: wp('95'),
+    alignSelf: 'center',
     marginBottom: wp('3'),
   },
   topButtonInactive: {
@@ -93,25 +99,25 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: hp('7'),
     width: wp('75'),
-    alignSelf:"center"
+    alignSelf: 'center',
     //     marginLeft:wp('4%')
   },
   radioText: {
     marginTop: hp('0.9'),
     color: color.defaultcolor,
   },
-  subtotalText:{
-   color:color.defaultcolor,
-   fontWeight:"bold",
-   fontSize:hp(1.8)
+  subtotalText: {
+    color: color.defaultcolor,
+    fontWeight: 'bold',
+    fontSize: hp(1.8),
   },
-  subtotalPrice:{
-marginLeft:'auto',
-color:color.defaultcolor,
-fontWeight:"bold",
-fontSize:hp(1.8)
-  } ,
-   maior: {
+  subtotalPrice: {
+    marginLeft: 'auto',
+    color: color.defaultcolor,
+    fontWeight: 'bold',
+    fontSize: hp(1.8),
+  },
+  maior: {
     width: wp('70%'),
     height: hp('6%'),
     backgroundColor: '#FF7E33',
@@ -132,11 +138,11 @@ fontSize:hp(1.8)
     alignContent: 'center',
     alignItems: 'center',
   },
-  devider:{
+  devider: {
     flex: 1,
     height: 1,
     backgroundColor: 'black',
     marginTop: hp('1'),
     marginBottom: hp('1'),
-  }
+  },
 });
