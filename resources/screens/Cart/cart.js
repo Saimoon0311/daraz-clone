@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -156,7 +157,7 @@ export default function Cart({navigation}) {
 
   const deleteCartItem = id => {
     setLoading(true);
-    // console.log(140, id);
+    console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
     const api = CARTDELETE + '/' + id;
     // console.log(api);
@@ -174,19 +175,21 @@ export default function Cart({navigation}) {
             message: 'Your Cart Has been deleted',
             backgroundColor: '#E9691D',
           });
+        setLoading(false);
         // console.log(68, cartdata);
       })
       .catch(e => {
-        // console.log(170,e)
-      })
-      .finally(() => setLoading(false));
+        console.log(170, e);
+        setLoading(false);
+      });
+    // .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
-    setLoading(true);
+    // setLoading(true);
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
-    // console.log('userid', user_id);
+    console.log('id', id, 'userid', user_id);
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
@@ -198,7 +201,7 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
           getCartCall();
-          setLoading(false);
+          // setLoading(false);
         } else {
           showMessage({
             type: 'warning',
@@ -207,7 +210,7 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
           getCartCall();
-          setLoading(false);
+          // setLoading(false)
         }
       });
   };
@@ -293,16 +296,18 @@ export default function Cart({navigation}) {
               </TouchableOpacity>
             </View>
           ) : (
-            <>
-              {/* {console.log(211)} */}
+            // <SafeAreaView style={{flex: 1}}>
+            <View>
               <FlatList
                 data={cartdata}
+                nestedScrollEnabled
                 // keyExtractor={item => item.key}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
-                  // const att = JSON?.parse(item?.attributes);
+                  const att = item?.attributes;
+                  // {console.log(294,att)}
                   return (
                     <View style={styles.box}>
                       <TouchableOpacity
@@ -343,7 +348,10 @@ export default function Cart({navigation}) {
                               Price : ${item?.get_products?.price}
                             </Text>
                             <View
-                              style={{flexDirection: 'row', width: wp('40%')}}>
+                              style={{
+                                flexDirection: 'row',
+                                width: wp('40%'),
+                              }}>
                               <Text
                                 style={{
                                   fontSize: hp('2'),
@@ -354,34 +362,23 @@ export default function Cart({navigation}) {
                                 Attribute :
                               </Text>
 
-                              {/* {att &&
+                              {att &&
                                 att?.map(res => {
                                   return (
                                     <Text
-                                    // numberOfLines={1}
+                                      // numberOfLines={1}
                                       style={{
                                         fontSize: hp('1.9'),
                                         color: color.textColorRedCart,
                                         fontWeight: 'bold',
                                         marginLeft: 10,
-                                        alignItems:"center"
+                                        alignItems: 'center',
                                       }}>
-                                    {res}
+                                      {res}
                                     </Text>
                                   );
-                                })} */}
+                                })}
                             </View>
-                            {/* <Text
-                                style={{
-                                width: wp('95%'),
-                                fontSize: 18,
-                                color: color.textColorRedCart,
-                                fontWeight: 'bold',
-                                marginLeft: 10,
-                              }}> 
-                             
-                              {JSON?.parse(item?.attributes)}
-                               </Text> */}
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -481,11 +478,10 @@ export default function Cart({navigation}) {
                   );
                 }}
               />
+
               {cartdata?.length > 0 && (
                 <View>
                   <View style={styles.box}>
-                    {/* {console.log(323,cartdata
-                    )} */}
                     <View style={{flexDirection: 'row'}}>
                       <Text style={{color: 'gray', fontSize: hp('2%')}}>
                         Subtotal
@@ -556,66 +552,10 @@ export default function Cart({navigation}) {
                   </ScrollView>
                 </View>
               )}
-            </>
+            </View>
           )}
 
           {showDeleteAlert()}
-
-          {/* <CardField
-      postalCodeEnabled={true}
-      placeholder={{
-        number: '4242 4242 4242 4242',
-      }}
-      cardStyle={{
-        backgroundColor: '#FFFFFF',
-        textColor: '#000000',
-      }}
-      style={{
-        width: '100%',
-        height: 50,
-        marginVertical: 30,
-      }}
-      onCardChange={(cardDetails) => {
-        console.log('cardDetails', cardDetails);
-      }}
-      onFocus={(focusedField) => {
-        console.log('focusField', focusedField);
-      }}
-    /> */}
-          {/* <View style={styles.recentTextContainer}>
-            <TouchableOpacity>
-              <Text style={{...styles.sliderText, color: 'grey'}}>
-                Recent Views
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.sliderText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            nestedScrollEnabled
-            horizontal={true}>
-            <View style={styles.bottomImageScroller}>
-              {silderData?.length > 0 &&
-                silderData?.map(res => {
-                  return (
-                    <View style={styles.bottomimages}>
-                      <Image
-                        style={styles.imagss}
-                        source={{
-                          uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
-                        }}
-                        // source={{
-                        //   uri: 'https://reqres.in/img/faces/7-image.jpg',
-                        // }}
-                      />
-                    </View>
-                  );
-                })}
-            </View>
-          </ScrollView> */}
         </ScrollView>
       </View>
       <AwesomeAlert
@@ -637,13 +577,3 @@ export default function Cart({navigation}) {
     </View>
   );
 }
-
-// var example = [{a:1, b:2, c:3}, {a:4, b:5, c:6}, {a:7, b:8, c:9}];
-
-// let sum = 0;
-// example.forEach(obj => {
-//     for (let property in obj) {
-//         if(property !== "c")
-//         sum += obj[property];
-//     }
-// })

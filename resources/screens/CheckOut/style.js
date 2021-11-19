@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 3},
     shadowRadius: 2,
     elevation: 5,
+    // height: hp('30'),
     borderRadius: 10,
   },
   topMain: {
@@ -103,8 +104,9 @@ export const styles = StyleSheet.create({
     //     marginLeft:wp('4%')
   },
   radioText: {
-    marginTop: hp('0.9'),
+    // marginTop: hp('0.9'),
     color: color.defaultcolor,
+    marginLeft: wp('3'),
   },
   subtotalText: {
     color: color.defaultcolor,

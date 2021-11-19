@@ -56,11 +56,12 @@ export const styles = StyleSheet.create({
     // marginRight: wp('3%'),
     shadowColor: '#000',
     // width:354,
-    // shadowOffset: { width: 1, height: 1 },
+    shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 5,
     elevation: 5,
     marginBottom: 10,
+    marginTop: hp('2'),
   },
   im: {
     width: wp('41'),
@@ -119,5 +120,39 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center',
     fontSize: 10,
+  },
+
+  imm: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('20%'),
+  },
+  tee: {
+    color: '#512500',
+    fontSize: 20,
+    marginBottom: 10,
+  },
+
+  maior: {
+    width: wp('70%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignItems: 'center',
+    marginTop: 42,
+    borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+
+  or: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });

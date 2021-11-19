@@ -73,8 +73,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
-
-    // marginBottom: hp('5'),
+    
   },
   buttonParent: {
     width: wp('75%'),

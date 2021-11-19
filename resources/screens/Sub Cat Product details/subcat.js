@@ -52,7 +52,7 @@ export default function subcatdetails({route, navigation}) {
     const id = user?.id
     // console.log(50, productData?.id);
     // ${productData?.id}
-    fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
+    fetch(`${SUBCATPRODUCTDATA}/${productData?.id}/${id}`)
       .then(response => response.json())
       .then(json => {
         // console.log(51, json);
@@ -290,6 +290,7 @@ export default function subcatdetails({route, navigation}) {
 
   const renderWishlistData = item => {
     return (
+
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Details', item?.get_products)}>
@@ -313,21 +314,23 @@ export default function subcatdetails({route, navigation}) {
             ) : null}
             {item?.is_wishlisted== true?
                         <TouchableOpacity
+                        style={styles.icons}
                         onPress={() => addtowishlist(item?.get_products?.id)}>
                         <Ionicons
                           style={{paddingTop: 13}}
                           name="heart"
                           color="#B64400"
-                          size={20}
+                          size={30}
                         />
                       </TouchableOpacity>:
                       <TouchableOpacity
+                      style={styles.icons}
                       onPress={() => addtowishlist(item?.get_products?.id)}>
                       <Ionicons
                         style={{paddingTop: 13}}
                         name="heart-outline"
                         color="#B64400"
-                        size={20}
+                        size={30}
                       />
                     </TouchableOpacity>
                         }
@@ -445,7 +448,18 @@ export default function subcatdetails({route, navigation}) {
           <View style={{margin: hp('22%'), alignSelf: 'center'}}>
             <BubblesLoader size={50} dotRadius={10} color="#512500" />
           </View>
-        ) : (
+        ) : allData?.length == 0 ? (
+          <View style={styles.imm}>
+            <Ionicons name="cart" color="#E9691D" size={80} />
+            <Text style={styles.tee}>You have no items in the list</Text>
+            {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
+            <TouchableOpacity
+              style={styles.maior}
+              onPress={() => navigation.goBack()}>
+              <Text style={styles.or}>Continue Shopping</Text>
+            </TouchableOpacity>
+          </View>
+        ) :(
           <FlatList
             // data={subcatdata}
             data={allData}
