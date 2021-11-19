@@ -113,16 +113,20 @@ const styles = StyleSheet.create({
 function App({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   Hide_Splash_Screen = () => {
-    // setState({
-    //   isVisible : false
-    // });
     setIsVisible(false);
+  };
+  const time = () => {
+    if (Platform?.OS == 'android') {
+      return 5000;
+    } else {
+      return 0;
+    }
   };
 
   useEffect(async () => {
     (async () => {
-      LogBox.ignoreAllLogs();
-
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+      LogBox.ignoreAllLogs(true);
       const userData = await getUserData();
       // console.log('user data App.js', userData);
       if (!!userData) {
@@ -131,7 +135,7 @@ function App({navigation}) {
     })();
     setTimeout(function () {
       Hide_Splash_Screen();
-    }, 5000);
+    }, time());
   }, []);
   {
     let Splash_Screen = (
@@ -144,10 +148,11 @@ function App({navigation}) {
         </View>
       </View>
     );
+
     return (
       <Provider store={store}>
         {isVisible === true ? (
-          Splash_Screen
+          Platform?.OS == 'android' && Splash_Screen
         ) : (
           <NavigationContainer>
             <Navigation />

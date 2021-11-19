@@ -56,11 +56,12 @@ export const styles = StyleSheet.create({
     // marginRight: wp('3%'),
     shadowColor: '#000',
     // width:354,
-    // shadowOffset: { width: 1, height: 1 },
+    shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 5,
     elevation: 5,
     marginBottom: 10,
+    marginTop: hp('2'),
   },
   im: {
     width: wp('41'),
@@ -120,7 +121,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 10,
   },
-  
+
   imm: {
     justifyContent: 'center',
     alignContent: 'center',
@@ -132,7 +133,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 10,
   },
-  
+
   maior: {
     width: wp('70%'),
     height: hp('6%'),
@@ -144,7 +145,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  
+
   or: {
     textAlign: 'center',
     fontSize: 16,

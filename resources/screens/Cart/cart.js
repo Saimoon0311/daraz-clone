@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -294,10 +295,11 @@ export default function Cart({navigation}) {
               </TouchableOpacity>
             </View>
           ) : (
-            <>
-              {/* {console.log(211)} */}
+            // <SafeAreaView style={{flex: 1}}>
+            <View>
               <FlatList
                 data={cartdata}
+                nestedScrollEnabled
                 // keyExtractor={item => item.key}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
@@ -390,7 +392,10 @@ export default function Cart({navigation}) {
                               )}
                             </View>
                             <View
-                              style={{flexDirection: 'row', width: wp('40%')}}>
+                              style={{
+                                flexDirection: 'row',
+                                width: wp('40%'),
+                              }}>
                               <Text
                                 style={{
                                   fontSize: hp('2'),
@@ -418,17 +423,6 @@ export default function Cart({navigation}) {
                                   );
                                 })}
                             </View>
-                            {/* <Text
-                                style={{
-                                width: wp('95%'),
-                                fontSize: 18,
-                                color: color.textColorRedCart,
-                                fontWeight: 'bold',
-                                marginLeft: 10,
-                              }}> 
-                             
-                              {JSON?.parse(item?.attributes)}
-                               </Text> */}
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -528,11 +522,10 @@ export default function Cart({navigation}) {
                   );
                 }}
               />
+
               {cartdata?.length > 0 && (
                 <View>
                   <View style={styles.box}>
-                    {/* {console.log(323,cartdata
-                    )} */}
                     <View style={{flexDirection: 'row'}}>
                       <Text style={{color: 'gray', fontSize: hp('2%')}}>
                         Subtotal
@@ -603,66 +596,10 @@ export default function Cart({navigation}) {
                   </ScrollView>
                 </View>
               )}
-            </>
+            </View>
           )}
 
           {showDeleteAlert()}
-
-          {/* <CardField
-      postalCodeEnabled={true}
-      placeholder={{
-        number: '4242 4242 4242 4242',
-      }}
-      cardStyle={{
-        backgroundColor: '#FFFFFF',
-        textColor: '#000000',
-      }}
-      style={{
-        width: '100%',
-        height: 50,
-        marginVertical: 30,
-      }}
-      onCardChange={(cardDetails) => {
-        console.log('cardDetails', cardDetails);
-      }}
-      onFocus={(focusedField) => {
-        console.log('focusField', focusedField);
-      }}
-    /> */}
-          {/* <View style={styles.recentTextContainer}>
-            <TouchableOpacity>
-              <Text style={{...styles.sliderText, color: 'grey'}}>
-                Recent Views
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.sliderText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            nestedScrollEnabled
-            horizontal={true}>
-            <View style={styles.bottomImageScroller}>
-              {silderData?.length > 0 &&
-                silderData?.map(res => {
-                  return (
-                    <View style={styles.bottomimages}>
-                      <Image
-                        style={styles.imagss}
-                        source={{
-                          uri: `${Images_API}/${res?.get_products?.images[0]?.name}`,
-                        }}
-                        // source={{
-                        //   uri: 'https://reqres.in/img/faces/7-image.jpg',
-                        // }}
-                      />
-                    </View>
-                  );
-                })}
-            </View>
-          </ScrollView> */}
         </ScrollView>
       </View>
       <AwesomeAlert
@@ -684,13 +621,3 @@ export default function Cart({navigation}) {
     </View>
   );
 }
-
-// var example = [{a:1, b:2, c:3}, {a:4, b:5, c:6}, {a:7, b:8, c:9}];
-
-// let sum = 0;
-// example.forEach(obj => {
-//     for (let property in obj) {
-//         if(property !== "c")
-//         sum += obj[property];
-//     }
-// })

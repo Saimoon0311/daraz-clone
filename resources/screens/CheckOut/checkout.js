@@ -35,7 +35,7 @@ import {
 } from 'react-native-indicator';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput, RadioButton} from 'react-native-paper';
-import {Radio} from 'native-base';
+import {Radio, NativeBaseProvider} from 'native-base';
 
 export default function checkOut({navigation}) {
   const [buttonState, setButtonState] = useState(1);
@@ -43,6 +43,8 @@ export default function checkOut({navigation}) {
   const [Deliverychecked, setDeliverychecked] = useState();
   const [value, setValue] = useState();
   const [text, setText] = useState('');
+  const [deliveryMethodValue, setDeliveryMethodValue] = useState(null);
+  const [paymentMethodValue, setPaymentMethodValue] = useState(null);
 
   const header = () => {
     return (
@@ -193,11 +195,36 @@ export default function checkOut({navigation}) {
       <>
         <Text style={styles.centerText}>Select Delivery Method</Text>
         <View style={styles.box}>
-          <TouchableOpacity onPress={() => setDeliverychecked('Door Delivery')}>
+          <NativeBaseProvider>
+            <Radio.Group
+              value={deliveryMethodValue}
+              onChange={nextValue => {
+                setDeliveryMethodValue(nextValue);
+              }}
+              colorScheme={'orange'}>
+              <Radio value="Door Delivery" my={1}>
+                <Text style={styles.radioText}>Door Delivery</Text>
+              </Radio>
+              <View
+                style={{
+                  ...styles.devider,
+                  width: wp('75'),
+                  alignSelf: 'center',
+                  backgroundColor: '#C8C8C8',
+                }}
+              />
+              <Radio value="Self Pickup" my={1}>
+                <Text style={styles.radioText}>Self Pickup</Text>
+              </Radio>
+            </Radio.Group>
+          </NativeBaseProvider>
+          {/* <TouchableOpacity onPress={() => setDeliverychecked('Door Delivery')}>
             <View style={{flexDirection: 'row'}}>
               <RadioButton
                 value="Door Delivery"
+                uncheckedColor={color.themColorPrimary}
                 color={color.themColorPrimary}
+                onPress={() => setDeliverychecked('Door Delivery')}
                 status={
                   Deliverychecked === 'Door Delivery' ? 'checked' : 'unchecked'
                 }
@@ -216,15 +243,17 @@ export default function checkOut({navigation}) {
           <TouchableOpacity onPress={() => setDeliverychecked('Self Pickup')}>
             <View style={{flexDirection: 'row'}}>
               <RadioButton
+                onPress={() => setDeliverychecked('Self Pickup')}
                 color={color.themColorPrimary}
                 value="Self Pickup"
+                uncheckedColor={color.themColorPrimary}
                 status={
                   Deliverychecked == 'Self Pickup' ? 'checked' : 'unchecked'
                 }
               />
               <Text style={styles.radioText}>Self Pickup</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </>
     );
@@ -244,7 +273,14 @@ export default function checkOut({navigation}) {
           <Text style={styles.subtotalText}>Sub Total</Text>
           <Text style={styles.subtotalPrice}>125</Text>
         </View>
-        <View style={styles.devider} />
+        <View
+          style={{
+            ...styles.devider,
+            width: wp('75'),
+            alignSelf: 'center',
+            backgroundColor: '#C8C8C8',
+          }}
+        />
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
             Sub Total
@@ -282,7 +318,64 @@ export default function checkOut({navigation}) {
       <>
         <Text style={styles.centerText}>Select Payment Method</Text>
         <View style={styles.box}>
-          <TouchableOpacity onPress={() => setChecked('Direct Bank Transfer')}>
+          <NativeBaseProvider>
+            <Radio.Group
+              value={paymentMethodValue}
+              onChange={nextValue => {
+                console.log(318, nextValue);
+                setPaymentMethodValue(nextValue);
+              }}
+              colorScheme={'orange'}>
+              <Radio value="Direct Bank Transfer" my={1}>
+                <Text style={styles.radioText}>Direct Bank Transfer</Text>
+              </Radio>
+              <View
+                style={{
+                  ...styles.devider,
+                  width: wp('75'),
+                  alignSelf: 'center',
+                  backgroundColor: '#C8C8C8',
+                }}
+              />
+              <Radio value="Cash on Delivery" my={1}>
+                <Text style={styles.radioText}>Cash on Delivery</Text>
+              </Radio>
+              <View
+                style={{
+                  ...styles.devider,
+                  width: wp('75'),
+                  alignSelf: 'center',
+                  backgroundColor: '#C8C8C8',
+                }}
+              />
+              <Radio value="PayPal" my={1}>
+                <Text style={styles.radioText}>PayPal</Text>
+              </Radio>
+              <View
+                style={{
+                  ...styles.devider,
+                  width: wp('75'),
+                  alignSelf: 'center',
+                  backgroundColor: '#C8C8C8',
+                }}
+              />
+              <Radio value="Check Payment" my={1}>
+                <Text style={styles.radioText}>Check Payment</Text>
+              </Radio>
+            </Radio.Group>
+            {/* <View
+              style={{
+                ...styles.devider,
+                width: wp('75'),
+                alignSelf: 'center',
+                backgroundColor: '#C8C8C8',
+              }}
+            />
+            <Radio value="Check Payment" my={1}>
+              <Text style={styles.radioText}>Check Payment</Text>
+            </Radio> */}
+          </NativeBaseProvider>
+          {/* <TouchableOpacity onPress={() => setChecked('Direct Bank Transfer')}>
             <View style={{flexDirection: 'row'}}>
               <RadioButton
                 value="Direct Bank Transfer"
@@ -347,7 +440,7 @@ export default function checkOut({navigation}) {
               />
               <Text style={styles.radioText}>Check Payment</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </>
     );
