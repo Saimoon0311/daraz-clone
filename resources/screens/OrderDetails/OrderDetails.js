@@ -47,6 +47,8 @@ export default function OrderDetails({navigation}) {
   const [activeSession, setActiveSession] = useState([]);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [attArray, setAttArray] = useState(['Black', '24']);
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -64,6 +66,7 @@ export default function OrderDetails({navigation}) {
         // console.log(54, res);
         if (res) {
           setOrderData(res);
+          setIsLoading(false);
         } else {
           setOrderData([]);
         }
@@ -199,14 +202,12 @@ export default function OrderDetails({navigation}) {
     );
   };
 
-  const returnItemAttributes = item => {
-    var data;
-    if (
-      item?.get_order_items[0]?.attributes !== undefined &&
-      item?.get_order_items[0]?.attributes?.length > 0
-    ) {
-      data = item?.get_order_items[0]?.attributes;
-      return data;
+  const renderAttributeArray = data => {
+    var arr;
+    if (data?.length > 0) {
+      var arr = data;
+      var arrayString = arr.join(', ');
+      return arrayString;
     }
   };
 
@@ -231,39 +232,71 @@ export default function OrderDetails({navigation}) {
         <View style={styles.parentCardTopTag}>
           <Text style={styles.parentCardTopTagText}>Product Details</Text>
         </View>
-        {/* <Text>A</Text> */}
         {renderMultipleItems(item)?.map((res, i) => {
-          // console.log(241, item);
-          // console.log(234, res, i);
           return (
-            <View style={styles.parentCardIconHolder}>
-              <Feather
-                name="shopping-bag"
-                color={color.themColorPrimary}
-                size={hp('3')}
-                style={styles.iconStyle}
-              />
-              <View style={styles.parentCardRow}>
-                <View style={styles.viewForTextWidth}>
-                  <Text style={styles.parentCarddTextStyle}>
-                    {res?.get_products?.name} x {res?.quantity}
-                  </Text>
+            <View>
+              <View style={styles.parentCardIconHolder}>
+                <Feather
+                  name="shopping-bag"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <View style={styles.viewForTextWidth}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      {res?.get_products?.name} x {res?.quantity}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.viewForTextWidth,
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      {res?.get_products?.is_discounted == 2
+                        ? res?.get_products?.discounted_price
+                        : res?.get_products?.price}{' '}
+                      x{res?.quantity}
+                    </Text>
+                  </View>
                 </View>
-                <View
-                  style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
-                  <Text style={styles.parentCarddTextStyle}>
-                    {res?.get_products?.is_discounted == 2
-                      ? res?.get_products?.discounted_price
-                      : res?.get_products?.price}{' '}
-                    x{res?.quantity}
-                  </Text>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="fork"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <View style={styles.viewForTextWidth}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      Product Attributes
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.viewForTextWidth,
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text
+                      style={{
+                        ...styles.parentCarddTextStyle,
+                        // marginRight: wp('10'),
+                      }}>
+                      {/* {res?.attributes} */}
+                      {renderAttributeArray(res?.attributes)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
           );
         })}
 
-        <View style={styles.parentCardIconHolder}>
+        {/* <View style={styles.parentCardIconHolder}>
           <AntDesign
             name="fork"
             color={color.themColorPrimary}
@@ -277,7 +310,6 @@ export default function OrderDetails({navigation}) {
               </Text>
             </View>
             <View style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
-              {returnItemAttributes(item)?.map(res => {
                 return (
                   <Text
                     style={{
@@ -287,9 +319,9 @@ export default function OrderDetails({navigation}) {
                   </Text>
                 );
               })}
-            </View>
-          </View>
-        </View>
+         </View> 
+        </View> 
+        </View>  */}
         <View style={styles.parentCardIconHolder}>
           <AntDesign
             name="calculator"
@@ -528,7 +560,16 @@ export default function OrderDetails({navigation}) {
   return (
     <View style={styles.main}>
       {header()}
-      {accordionRender()}
+
+      {isLoading ? (
+        <View style={{alignSelf: 'center', marginTop: hp('20%')}}>
+          <BubblesLoader size={50} color="#512500" dotRadius={10} />
+        </View>
+      ) : (
+        accordionRender()
+      )}
+
+      {/* {accordionRender()} */}
     </View>
   );
 }
