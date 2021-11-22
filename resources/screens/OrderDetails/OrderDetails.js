@@ -84,7 +84,7 @@ export default function OrderDetails({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
             marginLeft: wp('3'),
           }}>
           Orders Details
@@ -135,6 +135,8 @@ export default function OrderDetails({navigation}) {
     return (
       <View style={styles.childCardStyle}>
         <Text>{item?.id}</Text>
+        {/* <Text>hh</Text> */}
+
       </View>
     );
   };

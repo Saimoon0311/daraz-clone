@@ -39,6 +39,7 @@ export default function Signup({navigation}) {
   const savedata = async () => {
     setLoadingButton(true);
     let netFlag = 0;
+    var res
     await NetInfo.fetch('wifi').then(async state => {
       if (state.isConnected) {
         netFlag = 1;
@@ -116,7 +117,7 @@ export default function Signup({navigation}) {
           })
             // console.log("res=== ",res)
             .then(response => response.json())
-            .then(responseData => {
+            .then(async responseData => {
               responseData[0]
                 ? (showMessage({
                     type: 'success',
@@ -124,7 +125,18 @@ export default function Signup({navigation}) {
                     message: responseData[0]?.message,
                     backgroundColor: '#E9691D',
                   }),
-                  setLoadingButton(false))
+                  setLoadingButton(false),
+                   res = await action.login({
+                    email,
+                    password,
+                  }),
+                  // setEmail(''),
+                  // setUsername(''),
+                  // setPhone_number(''),
+                  // setPassword(''),
+                  // setConfirm(''),
+                  console.log(133,res)
+                  )
                 : (showMessage({
                     type: 'warning',
                     icon: 'auto',
@@ -132,11 +144,7 @@ export default function Signup({navigation}) {
                     backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false));
-              setEmail('');
-              setUsername('');
-              setPhone_number('');
-              setPassword('');
-              setConfirm('');
+             
               // console.log('jijijijjijjiji', responseData);
             })
             .done();
@@ -231,7 +239,7 @@ export default function Signup({navigation}) {
           <Text style={{marginBottom: 20.4}}></Text>
         </View>
         <View>
-          {loadingButton ? (
+          {/* {loadingButton ? (
             <OrientationLoadingOverlay
               visible={true}
               color="white"
@@ -239,9 +247,9 @@ export default function Signup({navigation}) {
               messageFontSize={24}
               message="Loading..."
             />
-          ) : (
+          ) : ( */}
             <TouchableOpacity
-              onPress={savedata}
+              onPress={()=>savedata()}
               style={{
                 width: wp('60%'),
                 height: hp('6%'),
@@ -275,6 +283,9 @@ export default function Signup({navigation}) {
                   justifyContent: 'center',
                   // backgroundColor:'red'
                 }}>
+                   {loadingButton ? (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
                 <Text
                   style={{
                     fontSize: hp('2%'),
@@ -283,7 +294,7 @@ export default function Signup({navigation}) {
                     alignSelf: 'center',
                   }}>
                   Create Account
-                </Text>
+                </Text>)}
               </View>
               <View
                 style={{
@@ -291,7 +302,7 @@ export default function Signup({navigation}) {
                   height: hp('7%'),
                 }}></View>
             </TouchableOpacity>
-          )}
+          
           {/* <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />

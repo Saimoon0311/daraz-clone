@@ -306,6 +306,7 @@ export default function Cart({navigation}) {
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
                   const att = item?.attributes;
+                  const data = item
                   // {console.log(294,att)}
                   return (
                     <View style={styles.box}>
@@ -556,7 +557,7 @@ export default function Cart({navigation}) {
                     </View>
                     <TouchableOpacity
                       style={styles.maior}
-                      onPress={() => navigation.navigate('checkOut')}>
+                      onPress={() => navigation.navigate('checkOut',{screenData:cartdata})}>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>
