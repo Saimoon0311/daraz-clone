@@ -57,7 +57,11 @@ export const styles = StyleSheet.create({
     width: wp('80%'),
     height: hp('30'),
     alignSelf: 'center',
-    backgroundColor: 'red',
+    backgroundColor: '#FFDDC9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: hp('15'),
+    borderRadius: hp('2'),
   },
 
   parentCardStyle: {
@@ -142,5 +146,11 @@ export const styles = StyleSheet.create({
     width: wp('35'),
     // flexDirection: 'row',
     // alignItems: 'flex-end',
+  },
+  noTextstyle: {
+    fontSize: hp('2.5'),
+    color: '#512500',
+    textAlign: 'center',
+    marginTop: hp('3'),
   },
 });

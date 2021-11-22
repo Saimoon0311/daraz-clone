@@ -48,7 +48,7 @@ export default function OrderDetails({navigation}) {
   const [activeSession, setActiveSession] = useState([]);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
-  const [datag,setG]= useState()
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -66,6 +66,7 @@ export default function OrderDetails({navigation}) {
         // console.log(54, res);
         if (res) {
           setOrderData(res);
+          setIsLoading(false);
         } else {
           setOrderData([]);
         }
@@ -128,7 +129,17 @@ export default function OrderDetails({navigation}) {
             onChange={e => updateSections(e)}
           />
         ) : (
-          <View style={styles.noDataContainer}></View>
+          <View style={styles.noDataContainer}>
+            <FontAwesome
+              name="shopping-cart"
+              color={color.themColorPrimary}
+              size={hp('10')}
+              // style={{...styles.iconStyle, marginLeft: wp('1')}}
+            />
+            <Text style={styles.noTextstyle}>
+              You have no orders to display.
+            </Text>
+          </View>
         )}
       </ScrollView>
     );
@@ -201,35 +212,18 @@ export default function OrderDetails({navigation}) {
     );
   };
 
-  const test = (data)=>{
-  //  data.map(res=>{
-     const g=  data?.attributes
-     setG(g)
-  //  })
-  }
-
-  const returnItemAttributes = item => {
-    var data;
-    // var h = item?.get_order_items
-    // test(h)
-    if (
-      item?.attributes !== undefined &&
-      item?.attributes?.length > 0
-    ) {
-      data = item?.attributes;
-      console.log(220,data)
-      return   (
-        <Text>{' '} {data}</Text>
-        // data ;
-
-      )
+  const renderAttributeArray = data => {
+    var arr;
+    if (data?.length > 0) {
+      var arr = data;
+      var arrayString = arr.join(', ');
+      return arrayString;
     }
   };
 
   const renderMultipleItems = item => {
     var data;
     if (item?.get_order_items?.length > 0) {
-      // console.log(215, item?.get_order_items);
       data = item?.get_order_items;
       return data;
     }
@@ -247,82 +241,96 @@ export default function OrderDetails({navigation}) {
         <View style={styles.parentCardTopTag}>
           <Text style={styles.parentCardTopTagText}>Product Details</Text>
         </View>
-        {/* <Text>A</Text> */}
         {renderMultipleItems(item)?.map((res, i) => {
-          // console.log(241, item);
-          // console.log(234, res, i);
           return (
-            <View style={styles.parentCardIconHolder}>
-              <Feather
-                name="shopping-bag"
-                color={color.themColorPrimary}
-                size={hp('3')}
-                style={styles.iconStyle}
-              />
-              <View style={styles.parentCardRow}>
-                <View style={styles.viewForTextWidth}>
-                  <Text style={styles.parentCarddTextStyle}>
-                    {res?.get_products?.name} x {res?.quantity}
-                  </Text>
+            <View>
+              <View style={styles.parentCardIconHolder}>
+                <Feather
+                  name="shopping-bag"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <View style={styles.viewForTextWidth}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      {res?.get_products?.name} x {res?.quantity}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.viewForTextWidth,
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      {res?.get_products?.is_discounted == 2
+                        ? res?.get_products?.discounted_price
+                        : res?.get_products?.price}{' '}
+                      x{res?.quantity}
+                    </Text>
+                  </View>
                 </View>
-                <View
-                  style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
-                  <Text style={styles.parentCarddTextStyle}>
-                    {res?.get_products?.is_discounted == 2
-                      ? res?.get_products?.discounted_price
-                      : res?.get_products?.price}{' '}
-                    x{res?.quantity}
-                  </Text>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="fork"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <View style={styles.viewForTextWidth}>
+                    <Text style={styles.parentCarddTextStyle}>
+                      Product Attributes
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.viewForTextWidth,
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text
+                      style={{
+                        ...styles.parentCarddTextStyle,
+                        // marginRight: wp('10'),
+                      }}>
+                      {/* {res?.attributes} */}
+                      {renderAttributeArray(res?.attributes)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
           );
         })}
 
-
-              {renderMultipleItems(item)?.map((res, i) => {
-                  return (
-                    <View style={styles.parentCardIconHolder}>
-                    <AntDesign
-                      name="fork"
-                      color={color.themColorPrimary}
-                      size={hp('3')}
-                      style={styles.iconStyle}
-                    />
-                    <View style={styles.parentCardRow}>
-                      <View style={styles.viewForTextWidth}>
-                        <Text style={styles.parentCarddTextStyle}>
-                          Product Attributes
-                        </Text>
-                      </View>
-                      <View style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
-                        {/* {res?.attributes?.map(ress => {
-                          return (
-                            <Text
-                              style={{
-                                ...styles.parentCarddTextStyle,
-                              }}>
-                              ({ress})
-                            </Text>
-                          );
-                        })} */}
-
-
-
-                          <Text
-                      style={{
-                        ...styles.parentCarddTextStyle,
-                      }}>
-                        {returnItemAttributes(res)}
-                     {/* {res?.attributes}
-                     {console.log(res?.attributes)} */}
-                    </Text>
-                      </View>
-                    </View>
-                  </View>
-                  )
-                  
-                    })}
+        {/* <View style={styles.parentCardIconHolder}>
+          <AntDesign
+            name="fork"
+            color={color.themColorPrimary}
+            size={hp('3')}
+            style={styles.iconStyle}
+          />
+          <View style={styles.parentCardRow}>
+            <View style={styles.viewForTextWidth}>
+              <Text style={styles.parentCarddTextStyle}>
+                Product Attributes
+              </Text>
+            </View>
+            <View style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
+                return (
+                  <Text
+                    style={{
+                      ...styles.parentCarddTextStyle,
+                    }}>
+                    ({res})
+                  </Text>
+                );
+              })}
+         </View> 
+        </View> 
+        </View>  */}
         <View style={styles.parentCardIconHolder}>
           <AntDesign
             name="calculator"
@@ -561,7 +569,14 @@ export default function OrderDetails({navigation}) {
   return (
     <View style={styles.main}>
       {header()}
-      {accordionRender()}
+
+      {isLoading ? (
+        <View style={{alignSelf: 'center', marginTop: hp('20%')}}>
+          <BubblesLoader size={50} color="#512500" dotRadius={10} />
+        </View>
+      ) : (
+        accordionRender()
+      )}
     </View>
   );
 }
