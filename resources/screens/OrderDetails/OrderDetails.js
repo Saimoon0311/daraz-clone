@@ -48,7 +48,6 @@ export default function OrderDetails({navigation}) {
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [attArray, setAttArray] = useState(['Black', '24']);
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -129,7 +128,17 @@ export default function OrderDetails({navigation}) {
             onChange={e => updateSections(e)}
           />
         ) : (
-          <View style={styles.noDataContainer}></View>
+          <View style={styles.noDataContainer}>
+            <FontAwesome
+              name="shopping-cart"
+              color={color.themColorPrimary}
+              size={hp('10')}
+              // style={{...styles.iconStyle, marginLeft: wp('1')}}
+            />
+            <Text style={styles.noTextstyle}>
+              You have no orders to display.
+            </Text>
+          </View>
         )}
       </ScrollView>
     );
@@ -214,7 +223,6 @@ export default function OrderDetails({navigation}) {
   const renderMultipleItems = item => {
     var data;
     if (item?.get_order_items?.length > 0) {
-      // console.log(215, item?.get_order_items);
       data = item?.get_order_items;
       return data;
     }
@@ -568,8 +576,6 @@ export default function OrderDetails({navigation}) {
       ) : (
         accordionRender()
       )}
-
-      {/* {accordionRender()} */}
     </View>
   );
 }
