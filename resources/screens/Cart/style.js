@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
     height: 30,
     width: 1,
     backgroundColor: '#909090',
-    marginTop: 10,
+    marginTop: hp('2'),
     marginLeft: 10,
     marginRight: 10,
   },
@@ -100,7 +100,7 @@ export const styles = StyleSheet.create({
     color: '#B64400',
     fontSize: 16,
     fontWeight: 'bold',
-    top: 13,
+    top: hp('2.5'),
   },
   buttonstyle: {
     width: wp('20%'),

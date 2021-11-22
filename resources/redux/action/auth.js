@@ -1,21 +1,21 @@
-import { apiPost, setUserData,clearUserData } from "../../utils/utils";
-import {LOGIN,SIGNUP} from "../../config/url"
-import store from "../store";
-import types from "../type"
-import { showMessage } from "react-native-flash-message";
-const {dispatch} = store
+import {apiPost, setUserData, clearUserData} from '../../utils/utils';
+import {LOGIN, SIGNUP} from '../../config/url';
+import store from '../store';
+import types from '../type';
+import {showMessage} from 'react-native-flash-message';
+const {dispatch} = store;
 
-export const saveUserData = (data) => {
-    dispatch({
-        type: types.LOGIN,
-        payload: data
-    })
-}
+export const saveUserData = data => {
+  dispatch({
+    type: types.LOGIN,
+    payload: data,
+  });
+};
 
 // export function login (data){
 //     return new Promise((resolve,reject)=>{
 //         return apiPost(LOGIN,data)
-//      .then((res)=>{ 
+//      .then((res)=>{
 //          setUserData(res[0].message).then(()=>{
 // resolve(res)
 // saveUserData(res)
@@ -28,29 +28,26 @@ export const saveUserData = (data) => {
 //     return apiPost(SIGNUP,data)
 // }
 
-
-
-
 export function login(data) {
-    return new Promise((resolve, reject) => {
-        
-        return apiPost(LOGIN, data).then((res) => {
-            if (res[0].status==1) {
-              data =res[0].user
-setUserData(data).then(() => {
-    resolve(res)
-    saveUserData(data)
-})
-               return
-}
+  return new Promise((resolve, reject) => {
+    return apiPost(LOGIN, data)
+      .then(res => {
+        if (res[0].status == 1) {
+          data = res[0].user;
+          setUserData(data).then(() => {
+            resolve(res);
+            saveUserData(data);
+          });
+          return;
+        }
 
-            resolve(res)
-        }).catch((error) => {
-            reject(error)
-        })
-    })
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
 }
-
 
 // export function login(data) {
 //     return new Promise((resolve, reject) => {
@@ -68,16 +65,13 @@ setUserData(data).then(() => {
 // }
 
 export function signup(data) {
-    return apiPost(SIGNUP, data)
+  return apiPost(SIGNUP, data);
 }
 
-export function logout(){
-    dispatch({type: types.CLEAR_REDUX_STATE})
-    clearUserData()
+export function logout() {
+  dispatch({type: types.CLEAR_REDUX_STATE});
+  clearUserData();
 }
-
-
-
 
 // data =res[0].user
 // setUserData(data).then(() => {

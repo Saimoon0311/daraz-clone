@@ -6,6 +6,10 @@ import Login from "../screens/Login/login";
 import { style } from "styled-system";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from "../config/color"
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+  } from 'react-native-responsive-screen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,7 +20,11 @@ export default function MyTabs() {
             screenOptions={({ route }) => ({
                 tabBarActiveTintColor: "#E9691D",
                 tabBarActiveBackgroundColor: "#E9691D",
-                tabBarInactiveTintColor: "black",
+                tabBarInactiveTintColor: "#512500",
+                upperCaseLabel: false,
+                // tabBarItemStyle:{
+                    
+                // },
                 tabBarIndicatorStyle:{
                  backgroundColor:"#E9691D"
                 },
@@ -33,9 +41,8 @@ export default function MyTabs() {
                     },
                     tabBarLabelStyle: {
                         fontWeight: "bold",
-                        // : {
-
-                        // }
+                        textTransform:"none",
+                        fontSize:hp('2')
                     },
                 }}
                 component={Login} />
@@ -44,11 +51,11 @@ export default function MyTabs() {
     
             <Tab.Screen name="Signup" options={{
                     title: "Create Account",
+                    
                     tabBarLabelStyle: {
                         fontWeight: "bold",
-                        // : {
-
-                        // }
+                        textTransform:"none",
+                        fontSize:hp('2')
                     },
                 }} component={Signup} />
         </Tab.Navigator>

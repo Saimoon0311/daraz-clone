@@ -19,9 +19,11 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {
   ADDTOWISHLIST,
+  API_BASED_URL,
   CART,
   CARTDELETE,
   Images_API,
+  QUANTITYINCREASE,
   testCART,
 } from '../../config/url';
 import {getUserData} from '../../utils/utils';
@@ -154,6 +156,20 @@ export default function Cart({navigation}) {
       />
     );
   };
+const quantityIncrease=async (type,id)=>{
+  const userId = await getUserData();
+    const users = userId.id;
+    const a = `${API_BASED_URL}${type}/${users}/${id}`
+    console.log(163,a)
+    fetch(a, {
+      method: 'POST',
+    })
+    .then(res=>res.json())
+    .then(json=> 
+      setCartdata(json[0])
+      )
+}
+
 
   const deleteCartItem = id => {
     setLoading(true);
@@ -306,6 +322,7 @@ export default function Cart({navigation}) {
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
                   const att = item?.attributes;
+                  const data = item
                   // {console.log(294,att)}
                   return (
                     <View style={styles.box}>
@@ -439,7 +456,7 @@ export default function Cart({navigation}) {
                           <TouchableOpacity
                             onPress={() => addtowishlist(item?.product_id)}>
                             <Ionicons
-                              style={{paddingTop: 13}}
+                              style={{paddingTop: hp('2.5')}}
                               name="heart"
                               color="#B64400"
                               size={20}
@@ -449,7 +466,7 @@ export default function Cart({navigation}) {
                           <TouchableOpacity
                             onPress={() => addtowishlist(item?.product_id)}>
                             <Ionicons
-                              style={{paddingTop: 13}}
+                              style={{paddingTop: hp('2.5')}}
                               name="heart-outline"
                               color="#B64400"
                               size={20}
@@ -459,7 +476,7 @@ export default function Cart({navigation}) {
                         {/* <TouchableOpacity
                           onPress={() => addtowishlist(item?.product_id)}>
                           <Ionicons
-                            style={{paddingTop: 13}}
+                            style={{paddingTop: hp('2.5')}}
                             name="heart-outline"
                             color="#B64400"
                             size={20}
@@ -475,7 +492,7 @@ export default function Cart({navigation}) {
                             // console.log(356,item.id)
                           }}>
                           <Ionicons
-                            style={{paddingTop: 13, marginRight: 10}}
+                            style={{paddingTop: hp('2.5'), marginRight: 10}}
                             name="trash"
                             size={20}
                             color="#B64400"
@@ -488,30 +505,33 @@ export default function Cart({navigation}) {
                             justifyContent: 'space-between',
                             flexDirection: 'row',
                           }}>
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={()=>quantityIncrease("decrement-cart-data",item?.id)}
+                          >
                             <Ionicons
                               name="remove-circle-sharp"
-                              size={20}
+                              size={25}
                               color={color.themColorPrimary}
                               style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
                           <Text
                             style={{
-                              paddingTop: 13,
+                              paddingTop: hp('2'),
                               marginRight: 10,
                               fontSize: hp('2.5'),
                               color: '#EEB08B',
-                              textDecorationLine: 'underline',
                               fontWeight: 'bold',
                             }}>
                             {' '}
                             {item?.quantity}{' '}
                           </Text>
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                          onPress={()=>quantityIncrease("increment-cart-data",item?.id)}
+                          >
                             <Ionicons
                               name="add-circle-sharp"
-                              size={20}
+                              size={25}
                               color={color.themColorPrimary}
                               style={{paddingTop: 18, marginRight: 10}}
                             />
@@ -556,7 +576,7 @@ export default function Cart({navigation}) {
                     </View>
                     <TouchableOpacity
                       style={styles.maior}
-                      onPress={() => navigation.navigate('checkOut')}>
+                      onPress={() => navigation.navigate('checkOut',{screenData:cartdata})}>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>

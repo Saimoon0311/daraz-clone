@@ -42,6 +42,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {G} from 'react-native-svg';
 
 export default function OrderDetails({navigation}) {
   const [activeSession, setActiveSession] = useState([]);
@@ -93,7 +94,7 @@ export default function OrderDetails({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
             marginLeft: wp('3'),
           }}>
           My Orders
