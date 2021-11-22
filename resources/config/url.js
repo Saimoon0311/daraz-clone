@@ -27,3 +27,4 @@ export const PASSWORDCHNAGE = getApi('changeUserPassword');
 export const USERPROFILEUPDATE = getApi('user-detail-update');
 export const ALLNEWARRIVALS = getApi('all-new-arrivals');
 export const USERORDERDEATILS = getApi('shop/user-order-details/');
+export const QUANTITYINCREASE = getApi('cart-data')

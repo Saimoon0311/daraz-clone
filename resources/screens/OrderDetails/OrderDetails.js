@@ -42,11 +42,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
+import { G } from 'react-native-svg';
 
 export default function OrderDetails({navigation}) {
   const [activeSession, setActiveSession] = useState([]);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
+  const [datag,setG]= useState()
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -199,14 +201,28 @@ export default function OrderDetails({navigation}) {
     );
   };
 
+  const test = (data)=>{
+  //  data.map(res=>{
+     const g=  data?.attributes
+     setG(g)
+  //  })
+  }
+
   const returnItemAttributes = item => {
     var data;
+    // var h = item?.get_order_items
+    // test(h)
     if (
-      item?.get_order_items[0]?.attributes !== undefined &&
-      item?.get_order_items[0]?.attributes?.length > 0
+      item?.attributes !== undefined &&
+      item?.attributes?.length > 0
     ) {
-      data = item?.get_order_items[0]?.attributes;
-      return data;
+      data = item?.attributes;
+      console.log(220,data)
+      return   (
+        <Text>{' '} {data}</Text>
+        // data ;
+
+      )
     }
   };
 
@@ -263,33 +279,50 @@ export default function OrderDetails({navigation}) {
           );
         })}
 
-        <View style={styles.parentCardIconHolder}>
-          <AntDesign
-            name="fork"
-            color={color.themColorPrimary}
-            size={hp('3')}
-            style={styles.iconStyle}
-          />
-          <View style={styles.parentCardRow}>
-            <View style={styles.viewForTextWidth}>
-              <Text style={styles.parentCarddTextStyle}>
-                Product Attributes
-              </Text>
-            </View>
-            <View style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
-              {returnItemAttributes(item)?.map(res => {
-                return (
-                  <Text
-                    style={{
-                      ...styles.parentCarddTextStyle,
-                    }}>
-                    ({res})
-                  </Text>
-                );
-              })}
-            </View>
-          </View>
-        </View>
+
+              {renderMultipleItems(item)?.map((res, i) => {
+                  return (
+                    <View style={styles.parentCardIconHolder}>
+                    <AntDesign
+                      name="fork"
+                      color={color.themColorPrimary}
+                      size={hp('3')}
+                      style={styles.iconStyle}
+                    />
+                    <View style={styles.parentCardRow}>
+                      <View style={styles.viewForTextWidth}>
+                        <Text style={styles.parentCarddTextStyle}>
+                          Product Attributes
+                        </Text>
+                      </View>
+                      <View style={{...styles.viewForTextWidth, alignItems: 'flex-end'}}>
+                        {/* {res?.attributes?.map(ress => {
+                          return (
+                            <Text
+                              style={{
+                                ...styles.parentCarddTextStyle,
+                              }}>
+                              ({ress})
+                            </Text>
+                          );
+                        })} */}
+
+
+
+                          <Text
+                      style={{
+                        ...styles.parentCarddTextStyle,
+                      }}>
+                        {returnItemAttributes(res)}
+                     {/* {res?.attributes}
+                     {console.log(res?.attributes)} */}
+                    </Text>
+                      </View>
+                    </View>
+                  </View>
+                  )
+                  
+                    })}
         <View style={styles.parentCardIconHolder}>
           <AntDesign
             name="calculator"
