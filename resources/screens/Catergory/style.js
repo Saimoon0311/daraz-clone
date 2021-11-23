@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '16' : '12'),
+    height: hp(Platform?.OS == 'ios' ? '16' : '14'),
   },
   searchbar: {
     width: wp('70%'),

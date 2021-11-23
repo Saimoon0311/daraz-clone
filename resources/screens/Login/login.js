@@ -35,8 +35,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: 'saimoon0311@gmail.com',
-    password: '03455070125',
+    email: 'Asad123@gmail.com',
+    password: 'aaaaaa',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -99,11 +99,11 @@ export default function Login({navigation}) {
           } catch (error) {
             // console.log('errot', error);
             showMessage({
-              type:"danger",
-              icon:"danger",
-             message: error?.message,
-             backgroundColor: '#E9691D',}
-             );
+              type: 'danger',
+              icon: 'danger',
+              message: error?.message,
+              backgroundColor: '#E9691D',
+            });
           }
         }
       } else {
