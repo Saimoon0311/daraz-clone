@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '16' : '12'),
+    height: hp(Platform?.OS == 'ios' ? '16' : '14'),
   },
   searchbar: {
     width: wp('70%'),
@@ -61,8 +61,8 @@ export const styles = StyleSheet.create({
     marginBottom: hp('2%'),
     borderRadius: 10,
     width: wp('30%'),
-    paddingLeft: wp('5%'),
-    paddingRight: wp('5%'),
+    paddingLeft: wp('3%'),
+    paddingRight: wp('3%'),
     backgroundColor: 'white',
   },
   inside: {
@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
   insidetext: {
     color: '#512500',
     textAlign: 'center',
-    fontSize: hp('1.5'),
+    fontSize: hp('1.8'),
   },
   cattext: {
     color: '#512500',
@@ -120,9 +120,11 @@ export const styles = StyleSheet.create({
     marginBottom: hp('2%'),
     borderRadius: 10,
     width: wp('30%'),
-    paddingLeft: wp('5%'),
-    paddingRight: wp('5%'),
+    paddingLeft: wp('3%'),
+    paddingRight: wp('3%'),
     backgroundColor: '#FFDDC9',
+    // backgroundColor: 'red',
+
   },
   but: {
     flexDirection: 'row',

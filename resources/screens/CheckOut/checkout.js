@@ -40,6 +40,8 @@ import {Radio, NativeBaseProvider} from 'native-base';
 export default function checkOut({navigation, route}) {
   // console.log(41,route?.params?.screenData)
   var itemOrder = route?.params?.screenData;
+  var itemTotalPrice = route?.params?.totalPrice;
+
   const [buttonState, setButtonState] = useState(1);
   const [checked, setChecked] = useState();
   const [Deliverychecked, setDeliverychecked] = useState();
@@ -325,17 +327,17 @@ export default function checkOut({navigation, route}) {
   const totalPriceCard = () => {
     return (
       <View style={{...styles.box, paddingTop: hp('2.5')}}>
-        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
+        {/* <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={styles.subtotalText}>Sub Total</Text>
           <Text style={styles.subtotalPrice}>125</Text>
         </View>
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={styles.subtotalText}>Sub Total</Text>
           <Text style={styles.subtotalPrice}>125</Text>
-        </View>
+        </View> */}
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={styles.subtotalText}>Sub Total</Text>
-          <Text style={styles.subtotalPrice}>125</Text>
+          <Text style={styles.subtotalPrice}>{itemTotalPrice}</Text>
         </View>
         <View
           style={{
@@ -347,11 +349,11 @@ export default function checkOut({navigation, route}) {
         />
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
-            Sub Total
+           Total
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
-            125
+            {itemTotalPrice}
           </Text>
         </View>
       </View>
@@ -609,11 +611,13 @@ export default function checkOut({navigation, route}) {
       var discountedPrice = res?.get_products?.discounted_price;
       return (
         <>
-          <View style={{flexDirection: 'row', marginBottom: hp('0.5')}}>
-            <Text style={{...styles.subtotalText, fontWeight: 'normal'}}>
+          <View style={{flexDirection: 'row', marginBottom: hp('0.5'),width:wp('79.5')}}>
+            <Text numberOfLines={1} style={{...styles.subtotalText, fontWeight: 'normal',width:wp('39'),fontSize:hp('2')}}>
               {res?.get_products?.name} x {res?.quantity}{' '}
             </Text>
-            <Text style={styles.subtotalPrice}>
+            <View style={{width:wp('10')}} ></View>
+            <View style={{...styles.subtotalPrice,width:wp('37')}}>
+            <Text style={{...styles.subtotalPrice}} numberOfLines={1} >
               {res?.get_products?.is_discounted == 2 ? (
                 <>
                   <Text style={{textDecorationLine: 'line-through'}}>
@@ -625,6 +629,7 @@ export default function checkOut({navigation, route}) {
                 quantityCalculate(itemQuantity, itemPrice)
               )}
             </Text>
+            </View>
             {/* {console.log(628,res?.get_products?.id)} */}
             {console.log(629,res?.get_products?.shop_id)}
             {console.log(630,res?.product_id)}

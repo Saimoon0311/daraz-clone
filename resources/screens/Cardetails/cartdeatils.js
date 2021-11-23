@@ -45,8 +45,7 @@ export default function Cartdetails({route, navigation}) {
             color="#512500"
             style={{
               ...styles.icon,
-
-              marginRight: wp('3'),
+              marginRight: wp('4'),
             }}
           />
         </TouchableOpacity>

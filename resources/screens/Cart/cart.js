@@ -237,11 +237,11 @@ const quantityIncrease=async (type,id)=>{
       // console.log(148, data);
       let sum = 0;
       data?.forEach(obj => {
-        for (let property in obj?.get_products) {
+        for (let property in obj) {
           // console.log(152);
-          if (property == 'price') {
+          if (property == 'product_total') {
             // console.log(154);
-            sum += obj?.get_products[property];
+            sum += obj[property];
           }
         }
       });
@@ -517,7 +517,7 @@ const quantityIncrease=async (type,id)=>{
                           </TouchableOpacity>
                           <Text
                             style={{
-                              paddingTop: hp('2'),
+                              paddingTop: hp('2.7'),
                               marginRight: 10,
                               fontSize: hp('2.5'),
                               color: '#EEB08B',
@@ -576,7 +576,7 @@ const quantityIncrease=async (type,id)=>{
                     </View>
                     <TouchableOpacity
                       style={styles.maior}
-                      onPress={() => navigation.navigate('checkOut',{screenData:cartdata})}>
+                      onPress={() => navigation.navigate('checkOut',{screenData:cartdata,totalPrice:totalPriceShow})}>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>

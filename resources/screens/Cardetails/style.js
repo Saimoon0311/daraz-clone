@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '10' : '8'),
+    height: hp(Platform?.OS == 'ios' ? '10' : '10'),
   },
   icon: {
     margin: 20,
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '4'),
   },
   tep: {
     color: '#512500',
