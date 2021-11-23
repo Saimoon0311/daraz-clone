@@ -253,8 +253,10 @@ export default function setting({navigation}) {
         confirmButtonColor={color.textColorRedCart}
         cancelButtonColor={color.textColorRedCart}
         onConfirmPressed={() => {
-          logout();
           setShowAlert(false);
+          setTimeout(() => {
+            logout();
+          }, 1000);
         }}
         onCancelPressed={() => {
           setShowAlert(false);

@@ -156,20 +156,17 @@ export default function Cart({navigation}) {
       />
     );
   };
-const quantityIncrease=async (type,id)=>{
-  const userId = await getUserData();
+  const quantityIncrease = async (type, id) => {
+    const userId = await getUserData();
     const users = userId.id;
-    const a = `${API_BASED_URL}${type}/${users}/${id}`
-    console.log(163,a)
+    const a = `${API_BASED_URL}${type}/${users}/${id}`;
+    console.log(163, a);
     fetch(a, {
       method: 'POST',
     })
-    .then(res=>res.json())
-    .then(json=> 
-      setCartdata(json[0])
-      )
-}
-
+      .then(res => res.json())
+      .then(json => setCartdata(json[0]));
+  };
 
   const deleteCartItem = id => {
     setLoading(true);
@@ -322,7 +319,7 @@ const quantityIncrease=async (type,id)=>{
                 renderItem={({item}) => {
                   // console.log(215,cartdata)
                   const att = item?.attributes;
-                  const data = item
+                  const data = item;
                   // {console.log(294,att)}
                   return (
                     <View style={styles.box}>
@@ -350,28 +347,30 @@ const quantityIncrease=async (type,id)=>{
                                 color: color.textColorRedCart,
                                 marginLeft: 10,
                                 marginBottom: hp('1'),
+                                fontWeight: 'bold',
                               }}>
                               {item?.get_products?.name}
                             </Text>
                             <View
-                            style={{
-                              width: wp('50%'),
-                              flexDirection:"row"
-                            }}
-                            >
-                            <Text
-                              numberOfLines={1}
                               style={{
-                                fontSize: hp('2'),
-                                color: color.textColorRedCart,
-                                fontWeight: 'bold',
-                                marginLeft: 10,
-                                marginBottom: hp('1'),
+                                width: wp('50%'),
+                                flexDirection: 'row',
                               }}>
-                              Price : $ 
-                              {/* Price : ${item?.get_products?.price} */}
-                            </Text>
-                            {item?.get_products?.is_discounted == 2 ? (
+                              <Text
+                                numberOfLines={1}
+                                style={{
+                                  fontSize: hp('2'),
+                                  // color: color.textColorRedCart,
+                                  color: '#512500',
+
+                                  // fontWeight: 'bold',
+                                  marginLeft: 10,
+                                  marginBottom: hp('1'),
+                                }}>
+                                Price : $
+                                {/* Price : ${item?.get_products?.price} */}
+                              </Text>
+                              {item?.get_products?.is_discounted == 2 ? (
                                 <View
                                   style={{
                                     flexDirection: 'row',
@@ -379,8 +378,10 @@ const quantityIncrease=async (type,id)=>{
                                   <Text
                                     style={{
                                       fontSize: hp('2'),
-                                      color: color.textColorRedCart,
-                                      fontWeight: 'bold',
+                                      // color: color.textColorRedCart,
+                                      color: '#512500',
+
+                                      // fontWeight: 'bold',
                                       textDecorationLine: 'line-through',
                                     }}>
                                     {item?.get_products?.price}
@@ -389,7 +390,7 @@ const quantityIncrease=async (type,id)=>{
                                     style={{
                                       fontSize: hp('2'),
                                       color: 'red',
-                                      fontWeight: 'bold',
+                                      // fontWeight: 'bold',
                                       marginLeft: wp('2'),
                                     }}>
                                     {item?.get_products?.discounted_price}
@@ -397,13 +398,14 @@ const quantityIncrease=async (type,id)=>{
                                 </View>
                               ) : (
                                 <Text
-                                style={{
-                                  fontSize: hp('2'),
-                                  color: color.textColorRedCart,
-                                  fontWeight: 'bold',
-                                  marginBottom: hp('1'),
-                                }}
-                                >
+                                  style={{
+                                    fontSize: hp('2'),
+                                    // color: '#512500',
+
+                                    color: color.textColorRedCart,
+                                    // fontWeight: 'bold',
+                                    marginBottom: hp('1'),
+                                  }}>
                                   {item?.get_products?.price}
                                 </Text>
                               )}
@@ -416,8 +418,10 @@ const quantityIncrease=async (type,id)=>{
                               <Text
                                 style={{
                                   fontSize: hp('2'),
-                                  color: color.textColorRedCart,
-                                  fontWeight: 'bold',
+                                  color: '#512500',
+
+                                  // color: color.textColorRedCart,
+                                  // fontWeight: 'bold',
                                   marginLeft: 10,
                                 }}>
                                 Attribute :
@@ -430,9 +434,11 @@ const quantityIncrease=async (type,id)=>{
                                       // numberOfLines={1}
                                       style={{
                                         fontSize: hp('1.9'),
-                                        color: color.textColorRedCart,
-                                        fontWeight: 'bold',
-                                        marginLeft: 10,
+                                        // color: color.textColorRedCart,
+                                        // fontWeight: 'bold',
+                                        color: '#512500',
+
+                                        marginLeft: wp('1'),
                                         alignItems: 'center',
                                       }}>
                                       {res}
@@ -506,8 +512,9 @@ const quantityIncrease=async (type,id)=>{
                             flexDirection: 'row',
                           }}>
                           <TouchableOpacity
-                            onPress={()=>quantityIncrease("decrement-cart-data",item?.id)}
-                          >
+                            onPress={() =>
+                              quantityIncrease('decrement-cart-data', item?.id)
+                            }>
                             <Ionicons
                               name="remove-circle-sharp"
                               size={25}
@@ -527,8 +534,9 @@ const quantityIncrease=async (type,id)=>{
                             {item?.quantity}{' '}
                           </Text>
                           <TouchableOpacity
-                          onPress={()=>quantityIncrease("increment-cart-data",item?.id)}
-                          >
+                            onPress={() =>
+                              quantityIncrease('increment-cart-data', item?.id)
+                            }>
                             <Ionicons
                               name="add-circle-sharp"
                               size={25}

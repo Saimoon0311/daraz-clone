@@ -20,6 +20,7 @@ import {
   ADDTOWISHLIST,
   API_BASED_URL,
   Images_API,
+  ORDERPLACE,
   SUBCATPRODUCTDATA,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
@@ -36,11 +37,12 @@ import {
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput, RadioButton} from 'react-native-paper';
 import {Radio, NativeBaseProvider} from 'native-base';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function checkOut({navigation, route}) {
-  // console.log(41,route?.params?.screenData)
   var itemOrder = route?.params?.screenData;
   var itemTotalPrice = route?.params?.totalPrice;
+  var total = itemTotalPrice;
 
   const [buttonState, setButtonState] = useState(1);
   const [checked, setChecked] = useState();
@@ -52,27 +54,70 @@ export default function checkOut({navigation, route}) {
   const [paymentMethodValue, setPaymentMethodValue] = useState(null);
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
-  // console.log(53,itemOrder?.get_products)
-  console.log(53, itemOrder[0]?.get_products);
+  const [productIdArray, setProductIdArray] = useState([]);
+  const [shopIdArray] = useState([]);
+  const [quantityArray, setQuantityArray] = useState([]);
+  const [attributesArray, setAttributesArray] = useState([]);
+  const [note, setNote] = useState('');
+  const [objectArray, setObjectArray] = useState([]);
 
-  // setOrderdata(itemOrder)
-  // console.log(55,orderdata)
+  const data = route?.params?.screenData;
+
   const updatValue = (value, attribute) => {
     setDummyState(value);
     var data = userDataLocal;
     data[attribute] = value;
     setUserDataLocal(data);
-    console.log(55, userDataLocal);
   };
 
   useEffect(() => {
     (async () => {
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
+      makeArrays();
+      // console.log(64, route?.params?.screenData);
     })();
   }, []);
 
-  const header = () => {
+  const makeArrays = () => {
+    makeProductIdArray();
+    makeShopIdArray();
+    makeQuantityArray();
+    makeAttributesArray();
+    // makeProductObjectArray();
+  };
+  // const makeProductObjectArray = () => {
+  //   for (let index = 0; index < data?.length; index++) {
+  //     objectArray[index] = data[index];
+  //   }
+  //   console.log(91, '===>>>>', objectArray);
+  // };
+
+  const makeProductIdArray = () => {
+    for (let index = 0; index < data?.length; index++) {
+      productIdArray[index] = data[index]?.get_products?.id;
+    }
+  };
+  const makeShopIdArray = () => {
+    for (let index = 0; index < data?.length; index++) {
+      shopIdArray[index] = data[index]?.get_products?.shop_id;
+    }
+  };
+
+  const makeQuantityArray = () => {
+    for (let index = 0; index < data?.length; index++) {
+      quantityArray[index] = data[index]?.quantity;
+    }
+  };
+
+  const makeAttributesArray = () => {
+    for (let index = 0; index < data?.length; index++) {
+      attributesArray[index] = data[index]?.attributes;
+    }
+  };
+
+  const header = text => {
+    var t = text;
     return (
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -83,7 +128,7 @@ export default function checkOut({navigation, route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>Check Out</Text>
+        <Text style={styles.te}>{t}</Text>
         <Ionicons
           name="cart"
           size={30}
@@ -151,108 +196,107 @@ export default function checkOut({navigation, route}) {
   const accountDetails = () => {
     return (
       <>
-        <Text style={styles.centerText}>Account Details</Text>
-        <View style={{...styles.box, paddingBottom: 30}}>
-          <TextInput
-            label="Full Name *"
-            underlineColor="gray"
-            // value={text}
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            value={userDataLocal?.username}
-            // onChangeText={e => setText(e)}
-            onChangeText={text => {
-              updatValue(text, 'username');
-            }}
-          />
-          {/* <TextInput
-            label="Email *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            //             onChangeText={email => updateState({email})}
-          /> */}
-          <TextInput
-            label="Address One *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            value={userDataLocal?.address_one}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'address_one');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-          <TextInput
-            label="Address Two *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            value={userDataLocal?.address_two}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'address_two');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-          <TextInput
-            label="City *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            keyboardType="default"
-            value={userDataLocal?.city}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'city');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-          <TextInput
-            label="Country *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            value={userDataLocal?.country}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'country');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-          <TextInput
-            label="Number *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            keyboardType="number-pad"
-            value={userDataLocal?.phone_number}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'phone_number');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-          <TextInput
-            label="ZipCode *"
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            keyboardType="numeric"
-            value={
-              userDataLocal?.zipcode == null
-                ? null
-                : JSON?.stringify(userDataLocal?.zipcode)
-            }
-            // value={JSON?.stringify(userDataLocal?.zipcode)}
-            selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(Number(text), 'zipcode');
-            }}
-            //             onChangeText={email => updateState({email})}
-          />
-        </View>
+        <ScrollView>
+          <Text style={styles.centerText}>Account Details</Text>
+          <View style={{...styles.box, paddingBottom: 30}}>
+            <TextInput
+              label="Full Name *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={userDataLocal?.username}
+              onChangeText={text => {
+                updatValue(text, 'username');
+              }}
+            />
+
+            <TextInput
+              label="Address One *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={userDataLocal?.address_one}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'address_one');
+              }}
+            />
+            <TextInput
+              label="Address Two *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={userDataLocal?.address_two}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'address_two');
+              }}
+            />
+            <TextInput
+              label="City *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              keyboardType="default"
+              value={userDataLocal?.city}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'city');
+              }}
+            />
+            <TextInput
+              label="Country *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={userDataLocal?.country}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'country');
+              }}
+            />
+            <TextInput
+              label="Number *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              keyboardType="number-pad"
+              value={userDataLocal?.phone_number}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'phone_number');
+              }}
+            />
+            <TextInput
+              label="ZipCode *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              keyboardType="numeric"
+              value={
+                userDataLocal?.zipcode == null
+                  ? null
+                  : JSON?.stringify(userDataLocal?.zipcode)
+              }
+              // value={JSON?.stringify(userDataLocal?.zipcode)}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(Number(text), 'zipcode');
+              }}
+            />
+            <TextInput
+              label="Note"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={note}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setNote(text);
+              }}
+            />
+          </View>
+        </ScrollView>
       </>
     );
   };
@@ -284,42 +328,6 @@ export default function checkOut({navigation, route}) {
               </Radio>
             </Radio.Group>
           </NativeBaseProvider>
-          {/* <TouchableOpacity onPress={() => setDeliverychecked('Door Delivery')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                value="Door Delivery"
-                uncheckedColor={color.themColorPrimary}
-                color={color.themColorPrimary}
-                onPress={() => setDeliverychecked('Door Delivery')}
-                status={
-                  Deliverychecked === 'Door Delivery' ? 'checked' : 'unchecked'
-                }
-              />
-              <Text style={styles.radioText}>Door Delivery</Text>
-            </View>
-          </TouchableOpacity>
-          <View
-            style={{
-              ...styles.devider,
-              width: wp('75'),
-              alignSelf: 'center',
-              backgroundColor: '#C8C8C8',
-            }}
-          />
-          <TouchableOpacity onPress={() => setDeliverychecked('Self Pickup')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                onPress={() => setDeliverychecked('Self Pickup')}
-                color={color.themColorPrimary}
-                value="Self Pickup"
-                uncheckedColor={color.themColorPrimary}
-                status={
-                  Deliverychecked == 'Self Pickup' ? 'checked' : 'unchecked'
-                }
-              />
-              <Text style={styles.radioText}>Self Pickup</Text>
-            </View>
-          </TouchableOpacity> */}
         </View>
       </>
     );
@@ -349,7 +357,7 @@ export default function checkOut({navigation, route}) {
         />
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
-           Total
+            Total
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
@@ -363,20 +371,36 @@ export default function checkOut({navigation, route}) {
     if (buttonState == 1) {
       return (
         <View>
+          {/* {topButton()} */}
           {accountDetails()}
           {deliveryMethod()}
+          {orderDetailsRenderdata()}
+          {bottomButton()}
         </View>
       );
     } else if (buttonState == 2) {
-      return <View>{paymentMethod()}</View>;
+      return (
+        <View>
+          {/* {topButton()} */}
+          {paymentMethod()}
+          {bottomButton()}
+        </View>
+      );
     } else if (buttonState == 3) {
       return (
         <View>
+          {/* {topButton()} */}
           {accountDetailsSummy()}
           {deliveryMethod()}
           {paymentMethod()}
+          {orderDetailsRenderdata()}
+          {bottomButton()}
         </View>
       );
+    } else if (buttonState == 4) {
+      return <>
+      {orderCompleteScreen()}
+      </>;
     }
   };
   const paymentMethod = () => {
@@ -429,84 +453,7 @@ export default function checkOut({navigation, route}) {
                 <Text style={styles.radioText}>Check Payment</Text>
               </Radio>
             </Radio.Group>
-            {/* <View
-              style={{
-                ...styles.devider,
-                width: wp('75'),
-                alignSelf: 'center',
-                backgroundColor: '#C8C8C8',
-              }}
-            />
-            <Radio value="Check Payment" my={1}>
-              <Text style={styles.radioText}>Check Payment</Text>
-            </Radio> */}
           </NativeBaseProvider>
-          {/* <TouchableOpacity onPress={() => setChecked('Direct Bank Transfer')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                value="Direct Bank Transfer"
-                color={color.themColorPrimary}
-                status={
-                  checked === 'Direct Bank Transfer' ? 'checked' : 'unchecked'
-                }
-              />
-              <Text style={styles.radioText}>Direct Bank Transfer</Text>
-            </View>
-          </TouchableOpacity>
-          <View
-            style={{
-              ...styles.devider,
-              width: wp('75'),
-              alignSelf: 'center',
-              backgroundColor: '#C8C8C8',
-            }}
-          />
-          <TouchableOpacity onPress={() => setChecked('Cash on Delivery')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                color={color.themColorPrimary}
-                value="Cash on Delivery"
-                status={checked == 'Cash on Delivery' ? 'checked' : 'unchecked'}
-              />
-              <Text style={styles.radioText}>Cash on Delivery</Text>
-            </View>
-          </TouchableOpacity>
-          <View
-            style={{
-              ...styles.devider,
-              width: wp('75'),
-              alignSelf: 'center',
-              backgroundColor: '#C8C8C8',
-            }}
-          />
-          <TouchableOpacity onPress={() => setChecked('PayPal')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                color={color.themColorPrimary}
-                value="PayPal"
-                status={checked == 'PayPal' ? 'checked' : 'unchecked'}
-              />
-              <Text style={styles.radioText}>PayPal</Text>
-            </View>
-          </TouchableOpacity>
-          <View
-            style={{
-              ...styles.devider,
-              width: wp('75'),
-              alignSelf: 'center',
-              backgroundColor: '#C8C8C8',
-            }}
-          />
-          <TouchableOpacity onPress={() => setChecked('Check Payment')}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton
-                color={color.themColorPrimary}
-                value="Check Payment"
-                status={checked == 'Check Payment' ? 'checked' : 'unchecked'}
-              />
-              <Text style={styles.radioText}>Check Payment</Text>
-            </View>
-          </TouchableOpacity> */}
         </View>
       </>
     );
@@ -520,33 +467,26 @@ export default function checkOut({navigation, route}) {
             label="Full Name *"
             underlineColor="gray"
             editable={false}
+            value={userDataLocal?.username}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            // onChangeText={e => setText(e)}
           />
-          {/* <TextInput
-            label="Email *"
-            editable={false}
-            underlineColor="gray"
-            theme={{colors: {primary: color.themColorPrimary}}}
-            style={styles.text}
-            //             onChangeText={email => updateState({email})}
-          /> */}
+
           <TextInput
             label="Address One *"
             editable={false}
             underlineColor="gray"
+            value={userDataLocal?.address_one}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            //             onChangeText={email => updateState({email})}
           />
           <TextInput
             label="Address Two *"
             editable={false}
             underlineColor="gray"
+            value={userDataLocal?.address_two}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            //             onChangeText={email => updateState({email})}
           />
           <TextInput
             label="City *"
@@ -556,18 +496,14 @@ export default function checkOut({navigation, route}) {
             style={styles.text}
             value={userDataLocal?.city}
             selectionColor="#FF7E33"
-            onChangeText={text => {
-              updatValue(text, 'city');
-            }}
-            //             onChangeText={email => updateState({email})}
           />
           <TextInput
             label="State *"
             editable={false}
             underlineColor="gray"
+            value={userDataLocal?.country}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            //             onChangeText={email => updateState({email})}
           />
           <TextInput
             label="Number *"
@@ -576,16 +512,29 @@ export default function checkOut({navigation, route}) {
             keyboardType="number-pad"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            //             onChangeText={email => updateState({email})}
+            value={userDataLocal?.phone_number}
           />
           <TextInput
             label="ZipCode *"
             editable={false}
             keyboardType="number-pad"
             underlineColor="gray"
+            value={
+              userDataLocal?.zipcode == null
+                ? null
+                : JSON?.stringify(userDataLocal?.zipcode)
+            }
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-            //             onChangeText={email => updateState({email})}
+          />
+          <TextInput
+            label="Note"
+            underlineColor="gray"
+            editable={false}
+            theme={{colors: {primary: color.themColorPrimary}}}
+            style={styles.text}
+            value={note}
+            selectionColor="#FF7E33"
           />
         </View>
       </>
@@ -601,9 +550,9 @@ export default function checkOut({navigation, route}) {
   };
   const quantityCalculate = (quantity, prices) => {
     var totlaPrice = quantity * prices;
-    // console.log(603,totlaPrice);
     return totlaPrice;
   };
+
   const orderDetailsAlldata = () => {
     return itemOrder?.map(res => {
       var itemQuantity = res?.quantity;
@@ -611,29 +560,37 @@ export default function checkOut({navigation, route}) {
       var discountedPrice = res?.get_products?.discounted_price;
       return (
         <>
-          <View style={{flexDirection: 'row', marginBottom: hp('0.5'),width:wp('79.5')}}>
-            <Text numberOfLines={1} style={{...styles.subtotalText, fontWeight: 'normal',width:wp('39'),fontSize:hp('2')}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginBottom: hp('0.5'),
+              width: wp('79.5'),
+            }}>
+            <Text
+              numberOfLines={1}
+              style={{
+                ...styles.subtotalText,
+                fontWeight: 'normal',
+                width: wp('39'),
+                fontSize: hp('2'),
+              }}>
               {res?.get_products?.name} x {res?.quantity}{' '}
             </Text>
-            <View style={{width:wp('10')}} ></View>
-            <View style={{...styles.subtotalPrice,width:wp('37')}}>
-            <Text style={{...styles.subtotalPrice}} numberOfLines={1} >
-              {res?.get_products?.is_discounted == 2 ? (
-                <>
-                  <Text style={{textDecorationLine: 'line-through'}}>
-                    {itemPrice}{' '}
-                  </Text>
-                  {quantityCalculate(itemQuantity, discountedPrice)}
-                </>
-              ) : (
-                quantityCalculate(itemQuantity, itemPrice)
-              )}
-            </Text>
+            <View style={{width: wp('10')}}></View>
+            <View style={{...styles.subtotalPrice, width: wp('37')}}>
+              <Text style={{...styles.subtotalPrice}} numberOfLines={1}>
+                {res?.get_products?.is_discounted == 2 ? (
+                  <>
+                    <Text style={{textDecorationLine: 'line-through'}}>
+                      {itemPrice}{' '}
+                    </Text>
+                    {quantityCalculate(itemQuantity, discountedPrice)}
+                  </>
+                ) : (
+                  quantityCalculate(itemQuantity, itemPrice)
+                )}
+              </Text>
             </View>
-            {/* {console.log(628,res?.get_products?.id)} */}
-            {console.log(629,res?.get_products?.shop_id)}
-            {console.log(630,res?.product_id)}
-
           </View>
           <View
             style={{
@@ -655,56 +612,219 @@ export default function checkOut({navigation, route}) {
     return (
       <>
         {totalPriceCard()}
-        <TouchableOpacity style={styles.maior}>
-          <Text style={styles.or}>Proceed to payment</Text>
+        <TouchableOpacity
+          style={styles.maior}
+          onPress={() => processTopPayment()}>
+          <Text style={styles.or}>Proceed</Text>
         </TouchableOpacity>
       </>
     );
   };
+  const processTopPayment = () => {
+    if (buttonState == 1) {
+      setButtonState(2);
+    } else if (buttonState == 2) {
+      setButtonState(3);
+    } else if (buttonState == 3) {
+      // setButtonState(4)
+      if (
+        deliveryMethodValue !== null &&
+        paymentMethodValue !== null &&
+        userDataLocal?.username !== '' &&
+        userDataLocal?.username !== null &&
+        userDataLocal?.phone_number !== '' &&
+        userDataLocal?.phone_number !== null &&
+        userDataLocal?.city !== '' &&
+        userDataLocal?.city !== null &&
+        userDataLocal?.address_one !== '' &&
+        userDataLocal?.address_one !== null &&
+        userDataLocal?.address_two !== '' &&
+        userDataLocal?.address_two !== null &&
+        // userDataLocal?.email !== '' &&
+        // userDataLocal?.email !== null &&
+        userDataLocal?.zipcode !== '' &&
+        userDataLocal?.zipcode !== null &&
+        userDataLocal?.country !== '' &&
+        userDataLocal?.country !== null
+      ) {
+        // fetch(`${ORDERPLACE}/${userDataLocal?.id}`,{
+        //   method:"POST"
+        // })
+        var myHeaders = new Headers();
+        myHeaders.append('Accept', 'application/json');
+        myHeaders.append('Content-Type', 'application/json');
 
+        var raw = JSON.stringify({
+          //  total,
+          //  product_id: productIdArray,
+          //  shopIdArray,
+          //  quantityArray,
+
+          total: total,
+          product_id: productIdArray,
+          shop_id: shopIdArray,
+          quantity: quantityArray,
+          // products: objectArray,
+          shipping_fullname: userDataLocal?.username,
+          shipping_address: userDataLocal?.address_one,
+          shipping_city: userDataLocal?.city,
+          shipping_state: userDataLocal?.country,
+          shipping_zipcode: userDataLocal?.zipcode,
+          shipping_phone: userDataLocal?.phone_number,
+          notes: note,
+          attributes: attributesArray,
+        });
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow',
+        };
+
+        fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            if(result?.message=="Checkout Completed"){
+              showMessage({
+                type:"success",
+                icon:"success",
+                message:"Your order has been sucessfully placed.",
+                backgroundColor: '#E9691D',
+              })
+              setButtonState(4)
+            }
+            console.log(645, result)})
+          .catch(error => console.log('error', error));
+
+        // alert("wait")
+      } else
+        showMessage({
+          type: 'warning',
+          icon: 'warning',
+          message: 'Please enter all delivery information',
+          backgroundColor: '#E9691D',
+        });
+    }
+  };
+
+  const orderCompleteScreen = () => {
+    return (
+      <>
+        <ScrollView>
+          <View style={{alignItems: 'center', marginTop: hp('5')}}>
+            {/* <Ionicons
+              name="checkmark-circle-outline"
+              size={hp('30')}
+              color={color.themColorPrimary}
+            /> */}
+            <Image source={require('../../images/9812.png')} style={{width:wp('60'),height:hp('30'),marginBottom:hp('2')}} />
+            <Text style={{color:color.themColorPrimary,fontSize:hp('3')}} >Success</Text>
+            {/* <View style={styles.box}>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>Order ID:</Text>
+                  <Text style={styles.parentCarddTextStyle}>444455545</Text>
+                </View>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>Order ID:</Text>
+                  <Text style={styles.parentCarddTextStyle}>444455545</Text>
+                </View>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>Status:</Text>
+                  <Text style={styles.parentCarddTextStyle}>pending</Text>
+                </View>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>Date:</Text>
+                  <Text style={styles.parentCarddTextStyle}>11-2-2021</Text>
+                </View>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>Total:</Text>
+                  <Text style={styles.parentCarddTextStyle}>$1254</Text>
+                </View>
+              </View>
+              <View style={styles.parentCardIconHolder}>
+                <AntDesign
+                  name="shoppingcart"
+                  color={color.themColorPrimary}
+                  size={hp('3')}
+                  style={styles.iconStyle}
+                />
+                <View style={styles.parentCardRow}>
+                  <Text style={styles.parentCarddTextStyle}>
+                    Payment method:
+                  </Text>
+                  <Text style={styles.parentCarddTextStyle}>
+                    Cash on delivery
+                  </Text>
+                </View>
+              </View>
+            </View> */}
+            <TouchableOpacity
+          style={styles.maior}
+          onPress={()=>navigation.navigate('Home')}
+          >
+          <Text style={styles.or}>Back To Home</Text>
+        </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </>
+    );
+  };
   return (
     <View style={styles.main}>
-      {header()}
-      {topButton()}
+      {header('Check Out')}
+      {buttonState == 4 ? null : topButton()}
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderScreen()}
-
-        {/* <Text style={styles.centerText}>Account Details</Text>
- <View style={{...styles.box, paddingBottom: 30}} >
-   <View>
-     {console.log(617,orderdata?.get_products)}
-   <Text style={{color:"black"}} > {itemOrder?.get_products?.name} </Text>
- </View>
- </View> */}
-        {orderDetailsRenderdata()}
-        {bottomButton()}
+        {/* {bottomButton()} */}
+        {/* {orderCompleteScreen()} */}
       </ScrollView>
     </View>
   );
 }
 
-// [{"attributes": ["Black", "30"], "created_at": "2021-11-19T10:49:12.000000Z", "get_products": {"child_category_id": 20, "created_at": "2021-08-20T13:23:52.000000Z", "deleted_at": null, "description": "testtest123testqwerty123", "discounted_percentage": 25, "discounted_price": 1499, "featured": 1, "has_variations": 1,
-// "id": 111, "images": [Array], "is_discounted": 2, "name": "Casual Wear", "price":
-// 1999, "reviews": [Array], "shop_id": 16,
-// "sku": "1627607833", "slug": "casual-wear-16-1634762451-20-612", "status": 1, "stock": 185, "updated_at": "2021-11-19T10:25:49.000000Z"}, "id": 412, "is_wishlisted": true, "product_id": 111, "quantity": 1, "updated_at": "2021-11-19T10:49:12.000000Z", "user_id": 130, "user_ip": null}]
-
-// 41 [{"attributes": ["Black", "30"], "created_at": "2021-11-19T10:49:12.000000Z", "get_products": {"child_category_id": 20, "created_at": "2021-08-20T13:23:52.000000Z", "deleted_at": null, "description": "testtest123testqwerty123", "discounted_percentage": 25, "discounted_price": 1499, "featured": 1, "has_variations": 1,
-// "id": 111, "images": [Array], "is_discounted": 2, "name": "Casual Wear", "price":
-// 1999, "reviews": [Array], "shop_id": 16,
-// "sku": "1627607833", "slug": "casual-wear-16-1634762451-20-612", "status": 1, "stock": 185, "updated_at": "2021-11-19T10:25:49.000000Z"}, "id": 412, "is_wishlisted": true, "product_id": 111, "quantity": 1, "updated_at": "2021-11-19T10:49:12.000000Z", "user_id": 130, "user_ip": null}, {"attributes": ["Yellow", "Medium"], "created_at": "2021-11-22T11:07:10.000000Z", "get_products": {"child_category_id": 50, "created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "description": "Test Description", "discounted_percentage": 10, "discounted_price": 585, "featured": 1, "has_variations": 1, "id": 105, "images": [Array], "is_discounted": 2, "name": "Orla Gay", "price": 650, "reviews": [Array], "shop_id": 16, "sku": "1688775486", "slug": "orla-gay-16-1629497220-50-209", "status": 1, "stock": 43, "updated_at":
-// "2021-11-18T08:40:36.000000Z"}, "id": 416, "product_id": 105, "quantity": 1, "updated_at": "2021-11-22T11:07:10.000000Z", "user_id": 130, "user_ip": null}]
 
 
 
 
 
 
-
-
-
-
-
-
-
-// 53 {"child_category_id": 70, "created_at": "2021-08-20T13:26:47.000000Z", "deleted_at": null, "description": "Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make 
-// a type specimen book.a", "discounted_percentage": 5, "discounted_price": 664, "featured": 1, "has_variations": 1, "id": 112, "images": [{"created_at": "2021-08-20T13:26:47.000000Z", "deleted_at": null, "id": 147, "name": "162949840720.jpg", "product_id": 112, "updated_at": "2021-08-20T13:26:47.000000Z"}, {"created_at": "2021-08-20T13:26:47.000000Z", "deleted_at": null, "id": 148, "name": "16294984073.jpg", "product_id": 112, "updated_at": "2021-08-20T13:26:47.000000Z"}], "is_discounted": 2, "name": "Blue Tshirt", "price": 699, "reviews": [], "shop_id": 16, "sku": "1623784777", "slug": "blue-tshirt-16-1629758854-70-117", "status": 1, "stock": 195, "updated_at": "2021-11-16T18:24:14.000000Z"}

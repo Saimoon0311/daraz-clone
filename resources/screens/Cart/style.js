@@ -99,7 +99,7 @@ export const styles = StyleSheet.create({
   remov: {
     color: '#B64400',
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     top: hp('2.5'),
   },
   buttonstyle: {

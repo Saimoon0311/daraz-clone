@@ -28,7 +28,7 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { showMessage } from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 
 const wait = timeout => {
@@ -46,8 +46,8 @@ export default function Home({navigation}) {
   const [bisLoading, setBloading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [brand, setBrand] = useState();
-  const [seacrhData, setSearchData] = useState("");
-  const [id,setId] = useState()
+  const [seacrhData, setSearchData] = useState('');
+  const [id, setId] = useState();
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = item => {
     navigation.navigate('Details', item);
@@ -106,23 +106,23 @@ export default function Home({navigation}) {
     }
   };
 
-  const onSubmitSeacrhItem =() =>{
-    if (seacrhData=="") {
+  const onSubmitSeacrhItem = () => {
+    if (seacrhData == '') {
       showMessage({
-        type:"warning",
-        icon:"warning",
-        message:"Please type something to search...",
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please type something to search...',
         backgroundColor: '#E9691D',
-      })
+      });
     } else {
       navigation.navigate('subcatdetails', {
         seacrhDatas: seacrhData,
         screenData: 'search-products',
-      })
-      setToggleSearchBar(false)
-      setSearchData("")
+      });
+      setToggleSearchBar(false);
+      setSearchData('');
     }
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -143,10 +143,7 @@ export default function Home({navigation}) {
                 value={seacrhData}
                 placeholder={'Search...'}
                 placeholderTextColor={color.defaultcolor}
-                
-                onSubmitEditing={ ()=>
-                  onSubmitSeacrhItem ()
-                }
+                onSubmitEditing={() => onSubmitSeacrhItem()}
                 style={styles.search}
               />
               <TouchableOpacity
