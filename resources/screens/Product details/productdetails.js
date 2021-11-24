@@ -439,6 +439,7 @@ export default function Details({route, navigation}) {
               <DotsLoader color="#E9691D" size={20} />
             ) : (
               <View style={styles.buttonParent}>
+                
                 {favValue ? (
                   <TouchableOpacity
                     onPress={() => setFavValue(!favValue)}

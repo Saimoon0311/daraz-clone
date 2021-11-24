@@ -31,6 +31,7 @@ import {NineCubesLoader, BubblesLoader} from 'react-native-indicator';
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function Cart({navigation}) {
   const [cartdata, setCartdata] = useState(null);
@@ -43,6 +44,7 @@ export default function Cart({navigation}) {
   const [itemId, setItemId] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
+  const isFocused = useIsFocused();
   const recentArray = [
     {
       id: 0,
@@ -120,11 +122,18 @@ export default function Cart({navigation}) {
   // };
 
   useEffect(() => {
-    (async () => {
+    ( () => {
       getCartCall();
-      getRecentData();
+      // getRecentData();
+  if(isFocused){
+    // setLoading(true)
+    getCartCall();
+    // getRecentData();
+  } else {
+    console.log(58, 'screen is not Focused');
+  }
     })();
-  }, []);
+  }, [isFocused]);
 
   const showDeleteAlert = id => {
     return (
@@ -165,7 +174,10 @@ export default function Cart({navigation}) {
       method: 'POST',
     })
       .then(res => res.json())
-      .then(json => setCartdata(json[0]));
+      .then(json => {
+        setCartdata(json[0])
+        // totalprice(json[0])
+      });
   };
 
   const deleteCartItem = id => {

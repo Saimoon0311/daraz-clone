@@ -28,6 +28,8 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { showMessage } from 'react-native-flash-message';
+
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ export default function cate({navigation}) {
   const [subcatdata, setSubcatdata] = useState();
   const [click, setClick] = useState(null);
   const [nshowAlert, setNshowAlert] = useState(false);
+  const [seacrhData, setSearchData] = useState('');
   const apicall = () => {
     fetch(CATEGORY)
       .then(async response => await response.json())
@@ -53,6 +56,26 @@ export default function cate({navigation}) {
     // .catch(error => setNshowAlert(true))
     // .finally(() => setSubloading(false),setClick(0));
   };
+
+  const onSubmitSeacrhItem = () => {
+    if (seacrhData == '') {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please type something to search...',
+        backgroundColor: '#E9691D',
+      });
+    } else {
+      navigation.navigate('subcatdetails', {
+        seacrhDatas: seacrhData,
+        screenData: 'search-products',
+      });
+      // setToggleSearchBar(false);
+      setSearchData('');
+    }
+  };
+
+
   useEffect(() => {
     (async () => {
       apicall();
@@ -83,8 +106,15 @@ export default function cate({navigation}) {
               placeholder="Search..."
               placeholderTextColor="#512500"
               style={styles.searchbar}
+              onSubmitEditing={() => onSubmitSeacrhItem()}
+              value={seacrhData}
+              onChangeText={text => setSearchData(text)}
             />
+            <TouchableOpacity  
+            onPress={() => onSubmitSeacrhItem()}
+            >
             <Ionicons name="search" color="#512500" size={20} />
+          </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Ionicons
