@@ -19,7 +19,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {ARRIVALS, BRANDDATA, FEATURED, GETPRODUCT} from '../../config/url';
+import {
+  ADDTOWISHLIST,
+  ARRIVALS,
+  BRANDDATA,
+  FEATURED,
+  GETPRODUCT,
+} from '../../config/url';
 import {NativeBaseProvider, Box, Center} from 'native-base';
 import Alldata from '../../data/alldata';
 import NetInfo from '@react-native-community/netinfo';
@@ -64,12 +70,53 @@ export default function Home({navigation}) {
     });
   }, []);
 
+  const addtowishlist = productid => {
+    fetch(`${ADDTOWISHLIST}/${productid}/${id}`)
+      .then(async response => await response.json())
+      .then(json => {
+        if (json[0]?.message == 'Added to wishlist') {
+          // parentFunction()
+          // prop.detailss
+          datacallss();
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: json[0]?.message,
+            backgroundColor: '#E9691D',
+          });
+        } else if (
+          json[0]?.message == 'This item has been removed from your wishlist'
+        ) {
+          // parentFunction()
+          datacallss();
+          showMessage({
+            type: 'success',
+            icon: 'auto',
+            message: json[0]?.message,
+            backgroundColor: '#E9691D',
+          });
+        }
+      })
+      .catch(error => {
+        console.error(109, error);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something went wrong.',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
+
   const datacallss = async () => {
+    const user = await getUserData();
+    let userId = user?.id;
+    setId(userId);
     let netFlag = 0;
     await NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         netFlag = 1;
-        fetch(FEATURED)
+        fetch(`${FEATURED}/${userId}`)
           .then(response => response.json())
           .then(json => {
             setData(json[0]), setLoading(false);
@@ -77,7 +124,7 @@ export default function Home({navigation}) {
           .catch(e => {
             setShowAlert(true);
           });
-        fetch(ARRIVALS)
+        fetch(`${ARRIVALS}/${userId}`)
           .then(response => response.json())
           .then(json => {
             setArrvals(json[0]), setAloading(false);
@@ -184,7 +231,13 @@ export default function Home({navigation}) {
           contentContainerStyle={{paddingBottom: 100, marginLeft: 30}}>
           <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
-            <Alldata detailss={detailss} data={data} isLoading={isLoading} />
+            <Alldata
+              detailss={detailss}
+              data={data}
+              isLoading={isLoading}
+              userid={id}
+              addtowishlist={addtowishlist}
+            />
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity
@@ -207,6 +260,8 @@ export default function Home({navigation}) {
               detailss={detailss}
               data={arrivals}
               isLoading={aisLoading}
+              userid={id}
+              addtowishlist={addtowishlist}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
@@ -221,7 +276,13 @@ export default function Home({navigation}) {
           </View>
           <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
-            <Alldata detailss={detailss} data={data} isLoading={isLoading} />
+            <Alldata
+              detailss={detailss}
+              data={data}
+              isLoading={isLoading}
+              userid={id}
+              addtowishlist={addtowishlist}
+            />
           </NativeBaseProvider>
           <View style={styles.see}>
             <TouchableOpacity>

@@ -176,7 +176,7 @@ export default function Cart({navigation}) {
       .then(res => res.json())
       .then(json => {
         setCartdata(json[0])
-        // totalprice(json[0])
+        totalprice(json[0])
       });
   };
 

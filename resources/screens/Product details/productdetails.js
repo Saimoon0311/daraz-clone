@@ -444,28 +444,24 @@ export default function Details({route, navigation}) {
               <DotsLoader color="#E9691D" size={20} />
             ) : (
               <View style={styles.buttonParent}>
-                {favValue ? (
-                  <TouchableOpacity
-                    onPress={() => setFavValue(!favValue)}
-                    style={styles.favButton}>
+                {item?.is_wishlisted == true ? (
+                  <View style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
                       name="heart"
                       color="#B64400"
                       size={35}
                     />
-                  </TouchableOpacity>
+                  </View>
                 ) : (
-                  <TouchableOpacity
-                    onPress={() => setFavValue(!favValue)}
-                    style={styles.favButton}>
+                  <View style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
                       name="heart-outline"
                       color="#B64400"
                       size={35}
                     />
-                  </TouchableOpacity>
+                  </View>
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
