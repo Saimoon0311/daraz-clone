@@ -22,6 +22,7 @@ import {
   Images_API,
   ORDERPLACE,
   SUBCATPRODUCTDATA,
+  StripePKey,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
@@ -38,6 +39,36 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput, RadioButton} from 'react-native-paper';
 import {Radio, NativeBaseProvider} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {
+  StripeProvider,
+  CardField,
+  useStripe,
+  useConfirmPayment,
+} from '@stripe/stripe-react-native';
+
+// import stripe from 'tipsi-stripe';
+
+// stripe.setOptions({
+//   publishableKey: StripePKey,
+// });
+
+// const token = await stripe.paymentRequestWithCardForm({
+//   // Only iOS support this options
+//   smsAutofillDisabled: true,
+//   requiredBillingAddressFields: 'full',
+//   prefilledInformation: {
+//     billingAddress: {
+//       name: 'Enappd Store',
+//       line1: 'Canary Place',
+//       line2: '3',
+//       city: 'Macon',
+//       state: '',
+//       country: 'Estonia',
+//       postalCode: '31217',
+//       email: 'admin@enappd.com',
+//     },
+//   },
+// });
 
 export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
@@ -60,6 +91,65 @@ export default function checkOut({navigation, route}) {
   const [attributesArray, setAttributesArray] = useState([]);
   const [note, setNote] = useState('');
   const [objectArray, setObjectArray] = useState([]);
+  const [cardData, setCardData] = useState(null);
+
+  const {confirmPayment, initPaymentSheet} = useStripe();
+
+  const handlePayment = async () => {
+    // const a = useStripe()?.retrievePaymentIntent({
+
+    // });
+    // console.log(101, a);
+
+    // const tt = await useStripe()
+    //   ?.patme()
+    //   .then(res => {
+    //     console.log(100, res);
+    //   })
+    //   .catch(e => {
+    //     console.log(103, e);
+    //   });
+    // console.log(101, tt);
+    //////////////////////////////////////////////
+    const clientKey =
+      'pi_1J0i8QAlwvMZiv3a2lG2c-G3F_secret_LKWRuFmi5tRv-fau6djRczZXmY';
+    const {error, paymentIntent} = await confirmPayment(clientKey, {
+      type: 'Card',
+      billingDetails: {
+        email: 'asad@yopmail.com',
+      },
+    });
+    if (error) {
+      console.log(107, error?.message);
+    } else {
+      console.log(110, paymentIntent);
+    }
+  };
+
+  //   pi_1J0i8QAlwvMZiv3a2lG2c-
+  // G3F_secret_LKWRuFmi5tRv-
+  // fau6djRczZXmY
+
+  // const token = useStripe()
+  //   // ?.confirmPayment({
+  //   //   pa
+  //   // })
+  //   ?.createToken({
+  //     address: '100 fylad ssdsr',
+  //     type: 'Card',
+  //     name: 'Asad Hameed',
+  //   })
+  //   ?.then(res => {
+  //     // return res;
+  //     console.log(100, res);
+  //   })
+  //   .catch(c => {
+  //     console.log(102, c);
+  //   })
+  //   .finally(f => {
+  //     console.log(106, f);
+  //   });
+  // console.log(97, token);
 
   const data = route?.params?.screenData;
 
@@ -84,14 +174,7 @@ export default function checkOut({navigation, route}) {
     makeShopIdArray();
     makeQuantityArray();
     makeAttributesArray();
-    // makeProductObjectArray();
   };
-  // const makeProductObjectArray = () => {
-  //   for (let index = 0; index < data?.length; index++) {
-  //     objectArray[index] = data[index];
-  //   }
-  //   console.log(91, '===>>>>', objectArray);
-  // };
 
   const makeProductIdArray = () => {
     for (let index = 0; index < data?.length; index++) {
@@ -113,6 +196,34 @@ export default function checkOut({navigation, route}) {
   const makeAttributesArray = () => {
     for (let index = 0; index < data?.length; index++) {
       attributesArray[index] = data[index]?.attributes;
+    }
+  };
+
+  const handleCardPayPress = async () => {
+    try {
+      this.setState({loading: true, token: null});
+      const token = await stripe.paymentRequestWithCardForm({
+        // Only iOS support this options
+        smsAutofillDisabled: true,
+        requiredBillingAddressFields: 'full',
+        prefilledInformation: {
+          billingAddress: {
+            name: 'Enappd Store',
+            line1: 'Canary Place',
+            line2: '3',
+            city: 'Macon',
+            state: '',
+            country: 'Estonia',
+            postalCode: '31217',
+            email: 'admin@enappd.com',
+          },
+        },
+      });
+      console.log(token);
+
+      this.setState({loading: false, token});
+    } catch (error) {
+      this.setState({loading: false});
     }
   };
 
@@ -198,6 +309,49 @@ export default function checkOut({navigation, route}) {
       <>
         <ScrollView>
           <Text style={styles.centerText}>Account Details</Text>
+          <CardField
+            postalCodeEnabled={false}
+            placeholder={{
+              number: '4242 4242 4242 4242',
+            }}
+            cardStyle={{
+              backgroundColor: '#FFEEE3',
+              textColor: '#000000',
+            }}
+            style={{
+              width: wp('85'),
+              height: hp('7'),
+              alignSelf: 'center',
+              marginTop: hp('2'),
+              // marginVertical: 30,
+            }}
+            onCardChange={cardDetails => {
+              console.log('cardDetails', cardDetails);
+              setCardData(cardDetails);
+            }}
+            onFocus={focusedField => {
+              console.log('focusField', focusedField);
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              width: 100,
+              height: 40,
+              backgroundColor: color.themColorPrimary,
+              alignSelf: 'center',
+              borderRadius: 10,
+              marginTop: hp('2'),
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => handlePayment()}>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              Pay
+            </Text>
+          </TouchableOpacity>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
               label="Full Name *"
@@ -398,9 +552,7 @@ export default function checkOut({navigation, route}) {
         </View>
       );
     } else if (buttonState == 4) {
-      return <>
-      {orderCompleteScreen()}
-      </>;
+      return <>{orderCompleteScreen()}</>;
     }
   };
   const paymentMethod = () => {
@@ -462,6 +614,7 @@ export default function checkOut({navigation, route}) {
     return (
       <>
         <Text style={styles.centerText}>Account Details</Text>
+
         <View style={{...styles.box, paddingBottom: 30}}>
           <TextInput
             label="Full Name *"
@@ -685,16 +838,17 @@ export default function checkOut({navigation, route}) {
         fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
           .then(response => response.json())
           .then(result => {
-            if(result?.message=="Checkout Completed"){
+            if (result?.message == 'Checkout Completed') {
               showMessage({
-                type:"success",
-                icon:"success",
-                message:"Your order has been sucessfully placed.",
+                type: 'success',
+                icon: 'success',
+                message: 'Your order has been sucessfully placed.',
                 backgroundColor: '#E9691D',
-              })
-              setButtonState(4)
+              });
+              setButtonState(4);
             }
-            console.log(645, result)})
+            console.log(645, result);
+          })
           .catch(error => console.log('error', error));
 
         // alert("wait")
@@ -718,8 +872,13 @@ export default function checkOut({navigation, route}) {
               size={hp('30')}
               color={color.themColorPrimary}
             /> */}
-            <Image source={require('../../images/9812.png')} style={{width:wp('60'),height:hp('30'),marginBottom:hp('2')}} />
-            <Text style={{color:color.themColorPrimary,fontSize:hp('3')}} >Success</Text>
+            <Image
+              source={require('../../images/9812.png')}
+              style={{width: wp('60'), height: hp('30'), marginBottom: hp('2')}}
+            />
+            <Text style={{color: color.themColorPrimary, fontSize: hp('3')}}>
+              Success
+            </Text>
             {/* <View style={styles.box}>
               <View style={styles.parentCardIconHolder}>
                 <AntDesign
@@ -799,32 +958,29 @@ export default function checkOut({navigation, route}) {
               </View>
             </View> */}
             <TouchableOpacity
-          style={styles.maior}
-          onPress={()=>navigation.navigate('Home')}
-          >
-          <Text style={styles.or}>Back To Home</Text>
-        </TouchableOpacity>
+              style={styles.maior}
+              onPress={() => navigation.navigate('Home')}>
+              <Text style={styles.or}>Back To Home</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </>
     );
   };
   return (
-    <View style={styles.main}>
-      {header('Check Out')}
-      {buttonState == 4 ? null : topButton()}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderScreen()}
-        {/* {bottomButton()} */}
-        {/* {orderCompleteScreen()} */}
-      </ScrollView>
-    </View>
+    <StripeProvider
+      publishableKey={StripePKey}
+      // merchantIdentifier="merchant.identifier"
+    >
+      <View style={styles.main}>
+        {header('Check Out')}
+        {buttonState == 4 ? null : topButton()}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderScreen()}
+          {/* {bottomButton()} */}
+          {/* {orderCompleteScreen()} */}
+        </ScrollView>
+      </View>
+    </StripeProvider>
   );
 }
-
-
-
-
-
-
-

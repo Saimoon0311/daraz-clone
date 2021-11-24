@@ -30,7 +30,7 @@ import {
   BubblesLoader,
 } from 'react-native-indicator';
 import RNPickerSelect from 'react-native-picker-select';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import {Rating, AirbnbRating} from 'react-native-ratings';
 import {styles} from './style';
 import StarRating from 'react-native-star-rating';
 
@@ -422,9 +422,14 @@ export default function Details({route, navigation}) {
           {renderSlider()}
         </View>
       </ScrollView>
-      <View style={{position: 'absolute', bottom: 80, alignSelf: 'center'}}>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: Platform?.OS == 'ios' ? 110 : 80,
+          alignSelf: 'center',
+        }}>
         {item?.stock < 1 ? (
-          <View style={styles.carttouch}>
+          <View style={{...styles.carttouch, height: hp('6')}}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               {/* // <ActivityIndicator size="large" color="white" /> */}
@@ -439,7 +444,6 @@ export default function Details({route, navigation}) {
               <DotsLoader color="#E9691D" size={20} />
             ) : (
               <View style={styles.buttonParent}>
-                
                 {favValue ? (
                   <TouchableOpacity
                     onPress={() => setFavValue(!favValue)}

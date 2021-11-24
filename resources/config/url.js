@@ -27,5 +27,7 @@ export const PASSWORDCHNAGE = getApi('changeUserPassword');
 export const USERPROFILEUPDATE = getApi('user-detail-update');
 export const ALLNEWARRIVALS = getApi('all-new-arrivals');
 export const USERORDERDEATILS = getApi('shop/user-order-details/');
-export const QUANTITYINCREASE = getApi('cart-data')
-export const ORDERPLACE = getApi ('place-an-order')
+export const QUANTITYINCREASE = getApi('cart-data');
+export const ORDERPLACE = getApi('place-an-order');
+export const StripePKey =
+  'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
