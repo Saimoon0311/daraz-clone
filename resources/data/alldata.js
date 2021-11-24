@@ -16,13 +16,53 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {GETPRODUCT, Images_API} from '../config/url';
+import {ADDTOWISHLIST, GETPRODUCT, Images_API} from '../config/url';
 import {VStack, Box, Divider} from 'native-base';
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient';
 import Svg, {Circle, Rect} from 'react-native-svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {color} from '../config/color';
+import {showMessage} from 'react-native-flash-message';
+import {addtowishlist} from '../screens/Home/home';
 
 export default function Alldata(prop, {navigation}) {
+  // console.log(29,addtowishlist)
+  const s = id => {
+    prop.addtowishlist(id);
+  };
+  // const addtowishlist = id => {
+  //   fetch(`${ADDTOWISHLIST}/${id}/${prop?.userid}`)
+  //     .then(async response => await response.json())
+  //     .then(json => {
+  //       if (json[0]?.message == 'Added to wishlist') {
+  //         // parentFunction()
+  //         // prop.detailss
+  //         showMessage({
+  //           type: 'success',
+  //           icon: 'success',
+  //           message: json[0]?.message,
+  //           backgroundColor: '#E9691D',
+  //         });
+  //       } else if(json[0]?.message=="This item has been removed from your wishlist"){
+  //         // parentFunction()
+  //         showMessage({
+  //           type: "success",
+  //           icon: "auto",
+  //           message: json[0]?.message,
+  //           backgroundColor: '#E9691D',
+  //         });
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error(109, error)
+  //       showMessage({
+  //         type: "danger",
+  //         icon: "danger",
+  //         message: "Something went wrong.",
+  //         backgroundColor: '#E9691D',
+  //       })
+  //     });
+  // };
   const flatListRender = item => {
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -45,6 +85,27 @@ export default function Alldata(prop, {navigation}) {
                   </Text>
                 </View>
               ) : null}
+              {item?.is_wishlisted == true ? (
+                <TouchableOpacity
+                  style={styles.icons}
+                  onPress={() => s(item?.id)}>
+                  <Ionicons
+                    name="heart"
+                    color={color.themColorPrimary}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.icons}
+                  onPress={() => s(item?.id)}>
+                  <Ionicons
+                    name="heart-outline"
+                    color={color.themColorPrimary}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              )}
             </ImageBackground>
             <Text></Text>
             <Text
@@ -215,5 +276,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: hp('2%'),
     marginBottom: hp('2%'),
+  },
+  icons: {
+    marginTop: 'auto',
+    marginLeft: 5,
+    width: wp('9%'),
   },
 });

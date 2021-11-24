@@ -440,9 +440,8 @@ export default function Details({route, navigation}) {
             ) : (
               <View style={styles.buttonParent}>
                 
-                {favValue ? (
-                  <TouchableOpacity
-                    onPress={() => setFavValue(!favValue)}
+                {item?.is_wishlisted==true ? (
+                  <View
                     style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
@@ -450,10 +449,9 @@ export default function Details({route, navigation}) {
                       color="#B64400"
                       size={35}
                     />
-                  </TouchableOpacity>
+                  </View>
                 ) : (
-                  <TouchableOpacity
-                    onPress={() => setFavValue(!favValue)}
+                  <View
                     style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
@@ -461,7 +459,7 @@ export default function Details({route, navigation}) {
                       color="#B64400"
                       size={35}
                     />
-                  </TouchableOpacity>
+                  </View>
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
