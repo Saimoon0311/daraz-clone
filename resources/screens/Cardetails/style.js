@@ -26,7 +26,6 @@ export const styles = StyleSheet.create({
   },
   box: {
     padding: 13,
-    marginTop: 20,
     backgroundColor: '#F3F5F7',
     // backgroundColor: 'red',
     shadowColor: '#000',
@@ -35,6 +34,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
+    // marginTop:hp('10')
   },
   container: {
     borderWidth: 0,

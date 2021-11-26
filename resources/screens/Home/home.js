@@ -122,7 +122,13 @@ export default function Home({navigation}) {
             setData(json[0]), setLoading(false);
           })
           .catch(e => {
-            setShowAlert(true);
+            // setShowAlert(true);
+            showMessage({
+              type: 'danger',
+              icon: 'danger',
+              message: 'Something want wrong',
+              backgroundColor: '#E9691D',
+            });
           });
         fetch(`${ARRIVALS}/${userId}`)
           .then(response => response.json())
@@ -135,7 +141,13 @@ export default function Home({navigation}) {
             setBrand(json[0]), setBloading(false);
           });
       } else {
-        setShowAlert(true);
+        // setShowAlert(true);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrong',
+          backgroundColor: '#E9691D',
+        });
       }
     });
     if (toggleSearchBar) {
@@ -309,7 +321,7 @@ export default function Home({navigation}) {
           show={showAlert}
           showProgress={false}
           title="Warning!"
-          message="You are not connect to the internet."
+          message="Some thing want wrong."
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}

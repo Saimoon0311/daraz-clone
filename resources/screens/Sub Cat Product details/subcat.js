@@ -53,6 +53,7 @@ export default function subcatdetails({route, navigation}) {
     // console.log(50, productData?.id);
     // ${productData?.id}
     fetch(`${SUBCATPRODUCTDATA}/${productData?.id}/${id}`)
+    // fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
       .then(response => response.json())
       .then(json => {
         // console.log(51, json);
@@ -451,7 +452,7 @@ export default function subcatdetails({route, navigation}) {
         ) : allData?.length == 0 ? (
           <View style={styles.imm}>
             <Ionicons name="cart" color="#E9691D" size={80} />
-            <Text style={styles.tee}>You have no items in the list</Text>
+            <Text style={styles.tee}>You have no items in this list</Text>
             {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
             <TouchableOpacity
               style={styles.maior}

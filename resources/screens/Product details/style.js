@@ -105,6 +105,7 @@ export const styles = StyleSheet.create({
     height: 'auto',
     paddingBottom: hp('5'),
     backgroundColor: '#F3F5F7',
+    // backgroundColor: 'red',
     borderRadius: 10,
     alignSelf: 'center',
     // marginBottom: hp('20'),

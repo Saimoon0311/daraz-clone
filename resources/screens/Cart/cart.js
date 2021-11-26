@@ -423,6 +423,7 @@ export default function Cart({navigation}) {
                                 </Text>
                               )}
                             </View>
+                            {item?.attributes?.length == 0? null:
                             <View
                               style={{
                                 flexDirection: 'row',
@@ -459,6 +460,8 @@ export default function Cart({navigation}) {
                                   );
                                 })}
                             </View>
+                            
+                            }
                           </View>
                         </View>
                       </TouchableOpacity>
