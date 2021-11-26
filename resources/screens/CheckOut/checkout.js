@@ -46,30 +46,6 @@ import {
   useConfirmPayment,
 } from '@stripe/stripe-react-native';
 
-// import stripe from 'tipsi-stripe';
-
-// stripe.setOptions({
-//   publishableKey: StripePKey,
-// });
-
-// const token = await stripe.paymentRequestWithCardForm({
-//   // Only iOS support this options
-//   smsAutofillDisabled: true,
-//   requiredBillingAddressFields: 'full',
-//   prefilledInformation: {
-//     billingAddress: {
-//       name: 'Enappd Store',
-//       line1: 'Canary Place',
-//       line2: '3',
-//       city: 'Macon',
-//       state: '',
-//       country: 'Estonia',
-//       postalCode: '31217',
-//       email: 'admin@enappd.com',
-//     },
-//   },
-// });
-
 export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
   var itemTotalPrice = route?.params?.totalPrice;
@@ -92,15 +68,137 @@ export default function checkOut({navigation, route}) {
   const [note, setNote] = useState('');
   const [objectArray, setObjectArray] = useState([]);
   const [cardData, setCardData] = useState(null);
+  const [clientSecret, setClientSecret] = useState('');
+  //ADD localhost address of your server
+  const API_URL = 'http://localhost:3000';
 
-  const {confirmPayment, initPaymentSheet} = useStripe();
+  const {
+    confirmPayment,
+    initPaymentSheet,
+    presentPaymentSheet,
+    retrievePaymentIntent,
+  } = useStripe();
+
+  useEffect(() => {
+    (async () => {
+      const userDatas = await getUserData();
+      setUserDataLocal(userDatas);
+      makeArrays();
+      // fetchClientSecret();
+      // initPaymentScreenStripe();
+      // console.log(64, route?.params?.screenData);
+    })();
+  }, []);
+
+  const startPaymentProcess = async () => {
+    await fetchClientSecret();
+  };
+
+  const fetchClientSecret = async () => {
+    await fetch(`${API_URL}/create-payment-intent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response?.json())
+      .then(res => {
+        console.log(118, res);
+        setClientSecret(res?.clientSecret);
+        initPaymentScreenStripe(res?.clientSecret);
+      })
+      .catch(err => {
+        console.log(122, err);
+      });
+    // const data = await res?.json();
+    // console.log(114, data);
+  };
+
+  const initPaymentScreenStripe = async data => {
+    const {error} = await initPaymentSheet({
+      paymentIntentClientSecret: data,
+    });
+    if (error) {
+      console.log(119, error);
+    } else {
+      console.log(112);
+      handlePayment();
+    }
+  };
 
   const handlePayment = async () => {
-    // const a = useStripe()?.retrievePaymentIntent({
+    // const {error, paymentIntent} = await confirmPayment(clientSecret, {
+    //   type: 'Card',
+    //   billingDetails: {
+    //     email: 'asad@yopmail.com',
+    //   },
+    // });
+    // if (error) {
+    //   console.log(107, error?.message);
+    // } else {
+    //   console.log(110, paymentIntent);
+    // }
+    ///////////////////////////////////////////////////////////
+    //Payment Sheet okay
+    const {paymentOption, error} = await presentPaymentSheet({
+      clientSecret: clientSecret,
+    });
 
+    if (error) {
+      console.log(156, error);
+    } else {
+      console.log(148, paymentOption);
+    }
+    const {errorr, paymentIntent} = await confirmPayment(clientSecret, {
+      type: 'Card',
+      billingDetails: {
+        email: 'asad@yopmail.com',
+      },
+    });
+    if (errorr) {
+      console.log(107, errorr?.message);
+    } else {
+      console.log(110, paymentIntent);
+    }
+    ///////////////////////////////////////////////////
+    // const fetchPaymentIntentClientSecret = async () => {
+    // const response = await fetch(`${API_URL}/create-payment-intent`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => response?.json())
+    //   .then(res => {
+    //     console.log(138, res);
+    //   });
+    // const {  } = await response.json();
+    // return { clientSecret, error };
+    // };
+
+    //////////////////////////////////////////////////////
+
+    // const token = await stripe.paymentRequestWithCardForm({
+    //   // Only iOS support this options
+    //   smsAutofillDisabled: true,
+    //   requiredBillingAddressFields: 'full',
+    //   prefilledInformation: {
+    //     billingAddress: {
+    //       name: 'Enappd Store',
+    //       line1: 'Canary Place',
+    //       line2: '3',
+    //       city: 'Macon',
+    //       state: '',
+    //       country: 'Estonia',
+    //       postalCode: '31217',
+    //       email: 'admin@enappd.com',
+    //     },
+    //   },
+    // })
+    ////////////////////////////////////////////////////////////////////
+    // const a = useStripe()?.retrievePaymentIntent({
     // });
     // console.log(101, a);
-
     // const tt = await useStripe()
     //   ?.patme()
     //   .then(res => {
@@ -111,20 +209,21 @@ export default function checkOut({navigation, route}) {
     //   });
     // console.log(101, tt);
     //////////////////////////////////////////////
-    const clientKey =
-      'pi_1J0i8QAlwvMZiv3a2lG2c-G3F_secret_LKWRuFmi5tRv-fau6djRczZXmY';
-    const {error, paymentIntent} = await confirmPayment(clientKey, {
-      type: 'Card',
-      billingDetails: {
-        email: 'asad@yopmail.com',
-      },
-    });
-    if (error) {
-      console.log(107, error?.message);
-    } else {
-      console.log(110, paymentIntent);
-    }
+    //   const clientKey =
+    //     'pi_1J0i8QAlwvMZiv3a2lG2c-G3F_secret_LKWRuFmi5tRv-fau6djRczZXmY';
+    //   const {error, paymentIntent} = await confirmPayment(clientKey, {
+    //     type: 'Card',
+    //     billingDetails: {
+    //       email: 'asad@yopmail.com',
+    //     },
+    //   });
+    //   if (error) {
+    //     console.log(107, error?.message);
+    //   } else {
+    //     console.log(110, paymentIntent);
+    //   }
   };
+  /////////////////////////////////////////////////////////////
 
   //   pi_1J0i8QAlwvMZiv3a2lG2c-
   // G3F_secret_LKWRuFmi5tRv-
@@ -159,15 +258,6 @@ export default function checkOut({navigation, route}) {
     data[attribute] = value;
     setUserDataLocal(data);
   };
-
-  useEffect(() => {
-    (async () => {
-      const userDatas = await getUserData();
-      setUserDataLocal(userDatas);
-      makeArrays();
-      // console.log(64, route?.params?.screenData);
-    })();
-  }, []);
 
   const makeArrays = () => {
     makeProductIdArray();
@@ -345,7 +435,11 @@ const cardDetails = ()=>{
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => handlePayment()}>
+            onPress={() => startPaymentProcess()}
+            // onPress={() => handlePayment()}
+            // onPress={() => fetchClientSecret()}
+            // onPress={() => initializePayment()}
+          >
             <Text
               style={{
                 color: 'white',

@@ -122,16 +122,16 @@ export default function Cart({navigation}) {
   // };
 
   useEffect(() => {
-    ( () => {
+    (() => {
       getCartCall();
       // getRecentData();
-  if(isFocused){
-    // setLoading(true)
-    getCartCall();
-    // getRecentData();
-  } else {
-    console.log(58, 'screen is not Focused');
-  }
+      if (isFocused) {
+        // setLoading(true)
+        getCartCall();
+        // getRecentData();
+      } else {
+        console.log(58, 'screen is not Focused');
+      }
     })();
   }, [isFocused]);
 
@@ -175,8 +175,8 @@ export default function Cart({navigation}) {
     })
       .then(res => res.json())
       .then(json => {
-        setCartdata(json[0])
-        totalprice(json[0])
+        setCartdata(json[0]);
+        totalprice(json[0]);
       });
   };
 
@@ -315,7 +315,8 @@ export default function Cart({navigation}) {
               <Text style={{color: 'gray'}}>Add items you want to shop</Text>
               <TouchableOpacity
                 style={styles.maior}
-                onPress={() => navigation.goBack()}>
+                // onPress={() => navigation.goBack()}
+                onPress={() => navigation.navigate('checkOut')}>
                 <Text style={styles.or}>Continue Shopping</Text>
               </TouchableOpacity>
             </View>
@@ -599,7 +600,12 @@ export default function Cart({navigation}) {
                     </View>
                     <TouchableOpacity
                       style={styles.maior}
-                      onPress={() => navigation.navigate('checkOut',{screenData:cartdata,totalPrice:totalPriceShow})}>
+                      onPress={() =>
+                        navigation.navigate('checkOut', {
+                          screenData: cartdata,
+                          totalPrice: totalPriceShow,
+                        })
+                      }>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>

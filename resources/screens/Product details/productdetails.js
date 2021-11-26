@@ -459,8 +459,7 @@ export default function Details({route, navigation}) {
                     />
                   </View>
                 ) : (
-                  <View
-                    style={styles.favButton}>
+                  <View style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
                       name="heart-outline"
