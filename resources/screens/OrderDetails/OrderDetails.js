@@ -99,6 +99,7 @@ export default function OrderDetails({navigation}) {
           }}>
           My Orders
         </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <Ionicons
           name="cart"
           size={30}
@@ -109,6 +110,7 @@ export default function OrderDetails({navigation}) {
             marginRight: wp('3'),
           }}
         />
+        </TouchableOpacity>
       </View>
     );
   };

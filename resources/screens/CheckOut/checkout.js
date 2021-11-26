@@ -304,12 +304,12 @@ export default function checkOut({navigation, route}) {
   const updateButtonState = e => {
     setButtonState(e);
   };
-  const accountDetails = () => {
-    return (
-      <>
-        <ScrollView>
-          <Text style={styles.centerText}>Account Details</Text>
-          <CardField
+
+
+const cardDetails = ()=>{
+  return(
+    <>
+    <CardField
             postalCodeEnabled={false}
             placeholder={{
               number: '4242 4242 4242 4242',
@@ -341,6 +341,7 @@ export default function checkOut({navigation, route}) {
               alignSelf: 'center',
               borderRadius: 10,
               marginTop: hp('2'),
+              marginBottom: hp('2'),
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -352,6 +353,17 @@ export default function checkOut({navigation, route}) {
               Pay
             </Text>
           </TouchableOpacity>
+    </>
+  )
+}
+
+
+  const accountDetails = () => {
+    return (
+      <>
+        <ScrollView>
+          <Text style={styles.centerText}>Account Details</Text>
+          
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
               label="Full Name *"
@@ -579,6 +591,10 @@ export default function checkOut({navigation, route}) {
                   backgroundColor: '#C8C8C8',
                 }}
               />
+              {/* {paymentMethodValue== 'Direct Bank Transfer'?
+            cardDetails():
+            null  
+            } */}
               <Radio value="Cash on Delivery" my={1}>
                 <Text style={styles.radioText}>Cash on Delivery</Text>
               </Radio>
@@ -976,6 +992,7 @@ export default function checkOut({navigation, route}) {
         {header('Check Out')}
         {buttonState == 4 ? null : topButton()}
         <ScrollView showsVerticalScrollIndicator={false}>
+          {cardDetails()}
           {renderScreen()}
           {/* {bottomButton()} */}
           {/* {orderCompleteScreen()} */}

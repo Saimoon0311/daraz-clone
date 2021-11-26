@@ -108,12 +108,16 @@ export default function Alldata(prop, {navigation}) {
               )}
             </ImageBackground>
             <Text></Text>
+            
             <Text
+            numberOfLines={1}
               style={{
                 color: '#512500',
                 fontSize: 14,
+                width:wp('30'),
                 fontWeight: 'bold',
                 textAlign: 'center',
+                alignSelf:"center"
               }}>
               {item.name}
             </Text>
@@ -122,18 +126,23 @@ export default function Alldata(prop, {navigation}) {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
+                  width:wp('33'),
+                  alignSelf:"center",
                 }}>
                 <Text
+                numberOfLines={1}
                   style={{
                     color: '#512500',
                     fontSize: hp('2%'),
                     fontWeight: 'bold',
                     textAlign: 'center',
                     textDecorationLine: 'line-through',
+                    // alignSelf:"center"
                   }}>
                   $ {item.price}
                 </Text>
                 <Text
+                                numberOfLines={1}
                   style={{
                     color: 'red',
                     fontSize: hp('2%'),
@@ -146,11 +155,14 @@ export default function Alldata(prop, {navigation}) {
               </View>
             ) : (
               <Text
+              numberOfLines={1}
                 style={{
                   color: '#512500',
                   fontSize: hp('2%'),
                   fontWeight: 'bold',
                   textAlign: 'center',
+                  width:wp('30'),
+                  alignSelf:"center"
                 }}>
                 $ {item.price}
               </Text>
@@ -168,7 +180,7 @@ export default function Alldata(prop, {navigation}) {
     return (
       <ScrollView showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
-          <TouchableOpacity onPress={() => prop.detailss(item)}>
+          {/* <TouchableOpacity onPress={() => prop.detailss(item)}> */}
             <ImageBackground
               style={styles.im}
               imageStyle={{borderRadius: 20}}
@@ -177,7 +189,7 @@ export default function Alldata(prop, {navigation}) {
                 uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
               }}></ImageBackground>
             <Text style={styles.boxImageStyle}>{item.name}</Text>
-          </TouchableOpacity>
+          {/* </TouchableOpacity> */}
         </View>
       </ScrollView>
     );
@@ -210,7 +222,20 @@ export default function Alldata(prop, {navigation}) {
             />
           </View>
         </SkeletonPlaceholder>
-      ) : (
+      ) :
+      prop?.data?.length == 0 ? (
+        <View style={styles.imm}>
+          {/* <Ionicons name="cart" color="#E9691D" size={30} /> */}
+          <Text style={styles.tee}>You have no items in this list</Text>
+          {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
+          {/* <TouchableOpacity
+            style={styles.maior}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.or}>Continue Shopping</Text>
+          </TouchableOpacity> */}
+        </View>
+      ) :
+      (
         <FlatList
           data={prop.data}
           keyExtractor={(item, index) => index.toString()}
@@ -281,5 +306,16 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginLeft: 5,
     width: wp('9%'),
+  },
+  imm: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('5%'),
+  },
+  tee: {
+    color: '#512500',
+    fontSize: 20,
+    marginBottom: 10,
   },
 });

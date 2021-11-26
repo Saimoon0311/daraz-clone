@@ -15,7 +15,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CATEGORY, SUBCAT} from '../../config/url';
 import {
   CirclesLoader,
@@ -29,7 +29,7 @@ import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { showMessage } from 'react-native-flash-message';
-
+import Ionicons from "react-native-vector-icons/Ionicons"
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -192,7 +192,35 @@ export default function cate({navigation}) {
               }}>
               <BubblesLoader size={50} dotRadius={10} color="#512500" />
             </View>
-          ) : (
+          ) :  subcatdata?.length == 0? 
+          <View
+          style={{
+            alignSelf:"center",
+            // backgroundColor:"green",
+            alignItems:"center",
+            justifyContent:"center",
+            marginTop:hp('15')
+          }}
+          >
+            <MaterialIcon name="database-remove" size={70} color="#512500" />
+          <Text
+          style={{
+            color:"#512500",
+            fontSize:hp('2')
+          }}
+          >
+            No item in the list.
+          </Text>
+
+          </View>
+          // <Text
+          // style={{
+          //   backgroundColor:"green",
+          //   width:wp('100')
+          // }}
+          // >hy</Text>
+          // console.log("hyfdfdfdfdf")
+          : (
             <FlatList
               data={subcatdata}
               // keyExtractor={item => item.key}
@@ -237,7 +265,7 @@ export default function cate({navigation}) {
                                   }>
                                   <View >
                                     {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
-                                    <Text style={styles.insidetext}>
+                                    <Text numberOfLines={2} style={styles.insidetext}>
                                       {item?.name}
                                     </Text>
                                   </View>

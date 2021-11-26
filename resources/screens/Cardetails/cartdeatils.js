@@ -38,19 +38,19 @@ export default function Cartdetails({route, navigation}) {
           />
         </TouchableOpacity>
         <Text style={styles.te}>Details</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}> */}
           <Ionicons
             name="cart"
             size={30}
-            color="#512500"
+            color="#FFDDC9"
             style={{
               ...styles.icon,
               marginRight: wp('4'),
             }}
           />
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{paddingBottom:hp('10')}}>
         <View style={{margin: 20}}>
           <FlatList
             data={imm}
@@ -70,7 +70,8 @@ export default function Cartdetails({route, navigation}) {
               );
             }}
           />
-          <View style={styles.box}>
+          <View style={{...styles.box,
+    marginTop: 20,}}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               {item?.get_products?.name}
             </Text>
@@ -156,8 +157,8 @@ export default function Cartdetails({route, navigation}) {
                 textAlign: 'justify',
                 marginTop: hp('0.5%'),
               }}>
-              {/* {item?.get_products?.description}  */}
-              Lorem Ipsum is simply dummy text of the printing and typesetting
+              {item?.get_products?.description} 
+              {/* Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
               type and scrambled it to make a type specimen book. It has
@@ -166,26 +167,29 @@ export default function Cartdetails({route, navigation}) {
               popularised in the 1960s with the release of Letraset sheets
               containing Lorem Ipsum passages, and more recently with desktop
               publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              Lorem Ipsum. */}
             </Text>
           </View>
-          {item?.attributes ? (
-            <View style={{...styles.box, marginBottom: hp('10')}}>
-              <View>
-                <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-                  Attributes :{' '}
-                </Text>
-                {item?.attributes.map((res, i) => {
-                  return (
-                    <View style={styles.pickerParentStyle}>
-                      <Text style={styles.pickerStyle}> {res} </Text>
-                    </View>
-                  );
-                })}
-                <Text></Text>
-              </View>
-            </View>
-          ) : null}
+          {item?.attributes?.length == 0 ? 
+          null
+          : 
+          <View style={{...styles.box,
+          marginTop: 20,}}>
+          <View>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>
+              Attributes :{' '}
+            </Text>
+            {item?.attributes.map((res, i) => {
+              return (
+                <View style={styles.pickerParentStyle}>
+                  <Text style={styles.pickerStyle}> {res} </Text>
+                </View>
+              );
+            })}
+            <Text></Text>
+          </View>
+        </View>
+          }
           {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
 
           {/* {renderSlider()} */}
