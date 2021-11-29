@@ -71,7 +71,7 @@ export default function Alldata(prop, {navigation}) {
             <ImageBackground
               style={styles.im}
               imageStyle={{borderRadius: 20}}
-              source={{uri: `${Images_API}/${item.images[0].name}`}}>
+              source={{uri: `${Images_API}/${item.images[0]?.name}`}}>
               {item.featured == 1 ? (
                 <View style={styles.fea}>
                   <Text style={styles.textStyle}>Featured</Text>
@@ -108,29 +108,29 @@ export default function Alldata(prop, {navigation}) {
               )}
             </ImageBackground>
             <Text></Text>
-            
+
             <Text
-            numberOfLines={1}
+              numberOfLines={1}
               style={{
                 color: '#512500',
                 fontSize: 14,
-                width:wp('30'),
+                width: wp('30'),
                 fontWeight: 'bold',
                 textAlign: 'center',
-                alignSelf:"center"
+                alignSelf: 'center',
               }}>
-              {item.name}
+              {item?.name}
             </Text>
             {item.is_discounted == 2 ? (
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
-                  width:wp('33'),
-                  alignSelf:"center",
+                  width: wp('33'),
+                  alignSelf: 'center',
                 }}>
                 <Text
-                numberOfLines={1}
+                  numberOfLines={1}
                   style={{
                     color: '#512500',
                     fontSize: hp('2%'),
@@ -142,7 +142,7 @@ export default function Alldata(prop, {navigation}) {
                   $ {item.price}
                 </Text>
                 <Text
-                                numberOfLines={1}
+                  numberOfLines={1}
                   style={{
                     color: 'red',
                     fontSize: hp('2%'),
@@ -155,14 +155,14 @@ export default function Alldata(prop, {navigation}) {
               </View>
             ) : (
               <Text
-              numberOfLines={1}
+                numberOfLines={1}
                 style={{
                   color: '#512500',
                   fontSize: hp('2%'),
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  width:wp('30'),
-                  alignSelf:"center"
+                  width: wp('30'),
+                  alignSelf: 'center',
                 }}>
                 $ {item.price}
               </Text>
@@ -181,14 +181,14 @@ export default function Alldata(prop, {navigation}) {
       <ScrollView showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
           {/* <TouchableOpacity onPress={() => prop.detailss(item)}> */}
-            <ImageBackground
-              style={styles.im}
-              imageStyle={{borderRadius: 20}}
-              // source={{uri: `${Images_API}/${item?.image}`}}
-              source={{
-                uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-              }}></ImageBackground>
-            <Text style={styles.boxImageStyle}>{item.name}</Text>
+          <ImageBackground
+            style={styles.im}
+            imageStyle={{borderRadius: 20}}
+            // source={{uri: `${Images_API}/${item?.image}`}}
+            source={{
+              uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            }}></ImageBackground>
+          <Text style={styles.boxImageStyle}>{item?.name}</Text>
           {/* </TouchableOpacity> */}
         </View>
       </ScrollView>
@@ -222,8 +222,7 @@ export default function Alldata(prop, {navigation}) {
             />
           </View>
         </SkeletonPlaceholder>
-      ) :
-      prop?.data?.length == 0 ? (
+      ) : prop?.data?.length == 0 ? (
         <View style={styles.imm}>
           {/* <Ionicons name="cart" color="#E9691D" size={30} /> */}
           <Text style={styles.tee}>You have no items in this list</Text>
@@ -234,8 +233,7 @@ export default function Alldata(prop, {navigation}) {
             <Text style={styles.or}>Continue Shopping</Text>
           </TouchableOpacity> */}
         </View>
-      ) :
-      (
+      ) : (
         <FlatList
           data={prop.data}
           keyExtractor={(item, index) => index.toString()}

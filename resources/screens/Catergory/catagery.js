@@ -28,8 +28,8 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { showMessage } from 'react-native-flash-message';
-import Ionicons from "react-native-vector-icons/Ionicons"
+import {showMessage} from 'react-native-flash-message';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -75,7 +75,6 @@ export default function cate({navigation}) {
     }
   };
 
-
   useEffect(() => {
     (async () => {
       apicall();
@@ -110,11 +109,9 @@ export default function cate({navigation}) {
               value={seacrhData}
               onChangeText={text => setSearchData(text)}
             />
-            <TouchableOpacity  
-            onPress={() => onSubmitSeacrhItem()}
-            >
-            <Ionicons name="search" color="#512500" size={20} />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => onSubmitSeacrhItem()}>
+              <Ionicons name="search" color="#512500" size={20} />
+            </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Ionicons
@@ -161,7 +158,7 @@ export default function cate({navigation}) {
                       onPress={() => getData(item.id, index)}>
                       <View>
                         <Text style={{...styles.cattext, fontSize: hp('2')}}>
-                          {item.name}
+                          {item?.name}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -192,35 +189,32 @@ export default function cate({navigation}) {
               }}>
               <BubblesLoader size={50} dotRadius={10} color="#512500" />
             </View>
-          ) :  subcatdata?.length == 0? 
-          <View
-          style={{
-            alignSelf:"center",
-            // backgroundColor:"green",
-            alignItems:"center",
-            justifyContent:"center",
-            marginTop:hp('15')
-          }}
-          >
-            <MaterialIcon name="database-remove" size={70} color="#512500" />
-          <Text
-          style={{
-            color:"#512500",
-            fontSize:hp('2')
-          }}
-          >
-            No item in the list.
-          </Text>
-
-          </View>
-          // <Text
-          // style={{
-          //   backgroundColor:"green",
-          //   width:wp('100')
-          // }}
-          // >hy</Text>
-          // console.log("hyfdfdfdfdf")
-          : (
+          ) : subcatdata?.length == 0 ? (
+            <View
+              style={{
+                alignSelf: 'center',
+                // backgroundColor:"green",
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: hp('15'),
+              }}>
+              <MaterialIcon name="database-remove" size={70} color="#512500" />
+              <Text
+                style={{
+                  color: '#512500',
+                  fontSize: hp('2'),
+                }}>
+                No item in the list.
+              </Text>
+            </View>
+          ) : (
+            // <Text
+            // style={{
+            //   backgroundColor:"green",
+            //   width:wp('100')
+            // }}
+            // >hy</Text>
+            // console.log("hyfdfdfdfdf")
             <FlatList
               data={subcatdata}
               // keyExtractor={item => item.key}
@@ -256,16 +250,18 @@ export default function cate({navigation}) {
                                   // backgroundColor: 'red',
                                 }}>
                                 <TouchableOpacity
-                                style={styles.itss}
+                                  style={styles.itss}
                                   onPress={() =>
                                     navigation.navigate('subcatdetails', {
                                       item: item,
                                       screenData: 'subCat',
                                     })
                                   }>
-                                  <View >
+                                  <View>
                                     {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
-                                    <Text numberOfLines={2} style={styles.insidetext}>
+                                    <Text
+                                      numberOfLines={2}
+                                      style={styles.insidetext}>
                                       {item?.name}
                                     </Text>
                                   </View>
