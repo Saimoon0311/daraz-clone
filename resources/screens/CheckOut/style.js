@@ -186,4 +186,19 @@ export const styles = StyleSheet.create({
     // marginLeft: wp('3%'),
     // marginTop: hp('1.8'),
   },
+  payButton: {
+    width: 100,
+    height: 40,
+    backgroundColor: color.themColorPrimary,
+    alignSelf: 'center',
+    borderRadius: 10,
+    marginTop: hp('2'),
+    marginBottom: hp('2'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  payButtonText: {
+    color: 'white',
+    fontSize: hp('1.7'),
+  },
 });

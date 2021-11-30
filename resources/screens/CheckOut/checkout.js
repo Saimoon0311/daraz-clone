@@ -80,6 +80,7 @@ export default function checkOut({navigation, route}) {
     initPaymentSheet,
     presentPaymentSheet,
     retrievePaymentIntent,
+    retrieveSetupIntent,
   } = useStripe();
 
   useEffect(() => {
@@ -98,18 +99,34 @@ export default function checkOut({navigation, route}) {
   };
 
   const fetchClientSecret = async () => {
-    await fetch(`${API_URL}/create-payment-intent`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // https://test-urls.com/elitedesignhub/moyen-express/public/api/stripe-form/submit
+    // await fetch(
+    //   `${API_URL}/create-payment-intent`,
+    await fetch(
+      'https://test-urls.com/elitedesignhub/moyen-express/public/api/stripe-form/submit',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: 5000,
+        }),
       },
-    })
+    )
       .then(response => response?.json())
       .then(res => {
-        console.log(118, res?.clientSecret?.client_secret);
-        setClientSecret(res?.clientSecret?.client_secret);
-        setStripeData(res?.clientSecret);
-        initPaymentScreenStripe(res?.clientSecret?.client_secret);
+        console.log(1118, res);
+        console.log(1119, res?.client_secret);
+        setClientSecret(res?.client_secret);
+        setStripeData(res);
+        initPaymentScreenStripe(res?.client_secret);
+        ////////////////////
+        // console.log(110, res?.clientSecret);
+        // console.log(118, res?.clientSecret?.client_secret);
+        // setClientSecret(res?.clientSecret?.client_secret);
+        // setStripeData(res?.clientSecret);
+        // initPaymentScreenStripe(res?.clientSecret?.client_secret);
       })
       .catch(err => {
         console.log(122, err);
@@ -122,11 +139,17 @@ export default function checkOut({navigation, route}) {
     const {error} = await initPaymentSheet({
       paymentIntentClientSecret: data,
       merchantDisplayName: 'MoyenXpress',
+      // allowsDelayedPaymentMethods: true,
+      primaryButtonColor: color.themColorPrimary,
+      // applePay: true,
+      customerId: userDataLocal?.id,
+      // googlePay: true,
+      // customerEphemeralKeySecret,
     });
     if (error) {
       console.log(119, error);
     } else {
-      console.log(112);
+      // console.log(112);
       handlePayment();
     }
   };
@@ -142,8 +165,22 @@ export default function checkOut({navigation, route}) {
       console.log(156, error);
     } else {
       console.log(148);
+      const {paymentIntent, error} = await retrievePaymentIntent(clientSecret);
+      console.log(1566, paymentIntent);
+      console.log(1577, error);
+      // getPaymentIntentToSend();
+      // await retrievePaymentIntent(clientSecret).then(res => {
+      //   console.log(147, res);
+      // });
+      // console.log(146, ff);
       // confirmPaymentStripe();
     }
+  };
+
+  const getPaymentIntentToSend = async () => {
+    const {paymentIntent, error} = await retrievePaymentIntent(clientSecret);
+    console.log(1566, paymentIntent);
+    console.log(1577, error);
   };
 
   const confirmPaymentStripe = async () => {
@@ -377,24 +414,9 @@ export default function checkOut({navigation, route}) {
         <ScrollView>
           <Text style={styles.centerText}>Account Details</Text>
           <TouchableOpacity
-            style={{
-              width: 100,
-              height: 40,
-              backgroundColor: color.themColorPrimary,
-              alignSelf: 'center',
-              borderRadius: 10,
-              marginTop: hp('2'),
-              marginBottom: hp('2'),
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            style={styles.payButton}
             onPress={() => startPaymentProcess()}>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              Pay
-            </Text>
+            <Text style={styles.payButtonText}>Pay</Text>
           </TouchableOpacity>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
