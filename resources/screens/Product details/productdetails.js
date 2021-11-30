@@ -341,7 +341,7 @@ export default function Details({route, navigation}) {
                 textAlign: 'justify',
                 marginTop: hp('0.5%'),
               }}>
-              {item?.description} 
+              {item?.description}
               {/* Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
@@ -355,22 +355,22 @@ export default function Details({route, navigation}) {
             </Text>
           </View>
           {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
-          {item?.get_attribute_values?.length == 0? null:
-          <View style={styles.optionsContainer}>
-            {item?.get_attribute_values &&
-            item?.get_attribute_values?.map((res, i) => {
-              const itemName = res?.attribute?.name;
-              return (
-                <View>
-                  <Text style={styles.attributeText}>
-                    {/* {res?.attribute?.name} */}
-                    {itemName}
-                  </Text>
-                  <View style={styles.pickerParentStyle}>
-                    {/* {Platform?.OS == 'ios' && (
+          {item?.get_attribute_values?.length == 0 ? null : (
+            <View style={styles.optionsContainer}>
+              {item?.get_attribute_values &&
+                item?.get_attribute_values?.map((res, i) => {
+                  const itemName = res?.attribute?.name;
+                  return (
+                    <View>
+                      <Text style={styles.attributeText}>
+                        {/* {res?.attribute?.name} */}
+                        {itemName}
+                      </Text>
+                      <View style={styles.pickerParentStyle}>
+                        {/* {Platform?.OS == 'ios' && (
                       <PickerIOS style={styles.pickerStyle}></PickerIOS>
                     )} */}
-                    {/* {res?.value?.map(res => {
+                        {/* {res?.value?.map(res => {
                       return (
                         <RNPickerSelect
                           onValueChange={value => console.log(value)}
@@ -382,7 +382,7 @@ export default function Details({route, navigation}) {
                         />
                       );
                     })} */}
-                    {/* <RNPickerSelect
+                        {/* <RNPickerSelect
                       onValueChange={value => console.log(value)}
                       
                       items={[
@@ -391,37 +391,36 @@ export default function Details({route, navigation}) {
                         {label: 'Hockey', value: 'hockey',},
                       ]}
                     /> */}
-                    <Picker
-                      mode="dialog"
-                      selectedValue={attributeArray[i]}
-                      onValueChange={e => {
-                        addToAttributeArray(e, i);
-                        forceUpdate();
-                      }}
-                      collapsable={false}
-                      style={styles.pickerStyle}>
-                      <Picker.Item
-                        key={i}
-                        value={null}
-                        label={'Select Attribute'}
-                      />
-                      {res?.value?.map(res => {
-                        return (
+                        <Picker
+                          mode="dialog"
+                          selectedValue={attributeArray[i]}
+                          onValueChange={e => {
+                            addToAttributeArray(e, i);
+                            forceUpdate();
+                          }}
+                          collapsable={false}
+                          style={styles.pickerStyle}>
                           <Picker.Item
-                            key={res?.attribute_id}
-                            value={res}
-                            label={res}
+                            key={i}
+                            value={null}
+                            label={'Select Attribute'}
                           />
-                        );
-                      })}
-                    </Picker>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-          
-          }
+                          {res?.value?.map(res => {
+                            return (
+                              <Picker.Item
+                                key={res?.attribute_id}
+                                value={res}
+                                label={res}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                    </View>
+                  );
+                })}
+            </View>
+          )}
           {renderSlider()}
         </View>
       </ScrollView>

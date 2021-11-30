@@ -343,7 +343,7 @@ export default function Cart({navigation}) {
                         <View style={{flexDirection: 'row'}}>
                           <Image
                             source={{
-                              uri: `${Images_API}/${item?.get_products?.images[0].name}`,
+                              uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
                             }}
                             style={{
                               width: wp('30%'),
@@ -423,45 +423,44 @@ export default function Cart({navigation}) {
                                 </Text>
                               )}
                             </View>
-                            {item?.attributes?.length == 0? null:
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                width: wp('40%'),
-                              }}>
-                              <Text
+                            {item?.attributes?.length == 0 ? null : (
+                              <View
                                 style={{
-                                  fontSize: hp('2'),
-                                  color: '#512500',
-
-                                  // color: color.textColorRedCart,
-                                  // fontWeight: 'bold',
-                                  marginLeft: 10,
+                                  flexDirection: 'row',
+                                  width: wp('40%'),
                                 }}>
-                                Attribute :
-                              </Text>
+                                <Text
+                                  style={{
+                                    fontSize: hp('2'),
+                                    color: '#512500',
 
-                              {att &&
-                                att?.map(res => {
-                                  return (
-                                    <Text
-                                      // numberOfLines={1}
-                                      style={{
-                                        fontSize: hp('1.9'),
-                                        // color: color.textColorRedCart,
-                                        // fontWeight: 'bold',
-                                        color: '#512500',
+                                    // color: color.textColorRedCart,
+                                    // fontWeight: 'bold',
+                                    marginLeft: 10,
+                                  }}>
+                                  Attribute :
+                                </Text>
 
-                                        marginLeft: wp('1'),
-                                        alignItems: 'center',
-                                      }}>
-                                      {res}
-                                    </Text>
-                                  );
-                                })}
-                            </View>
-                            
-                            }
+                                {att &&
+                                  att?.map(res => {
+                                    return (
+                                      <Text
+                                        // numberOfLines={1}
+                                        style={{
+                                          fontSize: hp('1.9'),
+                                          // color: color.textColorRedCart,
+                                          // fontWeight: 'bold',
+                                          color: '#512500',
+
+                                          marginLeft: wp('1'),
+                                          alignItems: 'center',
+                                        }}>
+                                        {res}
+                                      </Text>
+                                    );
+                                  })}
+                              </View>
+                            )}
                           </View>
                         </View>
                       </TouchableOpacity>

@@ -48,12 +48,12 @@ export default function subcatdetails({route, navigation}) {
   const [nshowAlert, setNshowAlert] = useState(false);
 
   const getSubCatData = async () => {
-    const user = await getUserData()
-    const id = user?.id
+    const user = await getUserData();
+    const id = user?.id;
     // console.log(50, productData?.id);
     // ${productData?.id}
     fetch(`${SUBCATPRODUCTDATA}/${productData?.id}/${id}`)
-    // fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
+      // fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
       .then(response => response.json())
       .then(json => {
         // console.log(51, json);
@@ -78,9 +78,11 @@ export default function subcatdetails({route, navigation}) {
   };
 
   const searchAllData = async () => {
-    const user = await getUserData()
-    const id = user?.id
-    fetch(`${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`)
+    const user = await getUserData();
+    const id = user?.id;
+    fetch(
+      `${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`,
+    )
       .then(response => response.json())
       .then(json => {
         console.log(86, json);
@@ -92,8 +94,8 @@ export default function subcatdetails({route, navigation}) {
   };
 
   const getAllData = async () => {
-    const user = await getUserData()
-    const id = user?.id
+    const user = await getUserData();
+    const id = user?.id;
     fetch(`${API_BASED_URL}${paramData?.screenData}${id}`)
       .then(response => response.json())
       .then(json => {
@@ -132,35 +134,35 @@ export default function subcatdetails({route, navigation}) {
       .then(async response => await response.json())
       .then(json => {
         if (json[0]?.message == 'Added to wishlist') {
-          parentFunction()
+          parentFunction();
           showMessage({
             type: 'success',
             icon: 'success',
             message: json[0]?.message,
             backgroundColor: '#E9691D',
           });
-        } else if(json[0]?.message=="This item has been removed from your wishlist"){
-          parentFunction()
+        } else if (
+          json[0]?.message == 'This item has been removed from your wishlist'
+        ) {
+          parentFunction();
           showMessage({
-            type: "success",
-            icon: "auto",
+            type: 'success',
+            icon: 'auto',
             message: json[0]?.message,
             backgroundColor: '#E9691D',
           });
         }
       })
       .catch(error => {
-        console.error(109, error)
+        console.error(109, error);
         showMessage({
-          type: "danger",
-          icon: "danger",
-          message: "Something went wrong.",
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something went wrong.',
           backgroundColor: '#E9691D',
-        })
+        });
       });
   };
-
-  
 
   const renderHeaderText = () => {
     if (paramData?.screenData == 'products-featured/') {
@@ -184,7 +186,7 @@ export default function subcatdetails({route, navigation}) {
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.images[0].name}`}}
+            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
             // source={{
             //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
             // }}
@@ -197,18 +199,27 @@ export default function subcatdetails({route, navigation}) {
                 {item.discounted_percentage}%OFF
               </Text>
             ) : null}
-             {item?.is_wishlisted== true?
-                        <TouchableOpacity
-                        style={styles.icons}
-                        onPress={() => addtowishlist(item?.id)}>
-                        <Ionicons name="heart" color={color.themColorPrimary} size={30} />
-                      </TouchableOpacity>:
-                      <TouchableOpacity
-                      style={styles.icons}
-                      onPress={() => addtowishlist(item?.id)}>
-                      <Ionicons name="heart-outline" color={color.themColorPrimary} size={30} />
-                    </TouchableOpacity>
-                        }
+            {item?.is_wishlisted == true ? (
+              <TouchableOpacity
+                style={styles.icons}
+                onPress={() => addtowishlist(item?.id)}>
+                <Ionicons
+                  name="heart"
+                  color={color.themColorPrimary}
+                  size={30}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.icons}
+                onPress={() => addtowishlist(item?.id)}>
+                <Ionicons
+                  name="heart-outline"
+                  color={color.themColorPrimary}
+                  size={30}
+                />
+              </TouchableOpacity>
+            )}
             {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.id)}>
@@ -291,7 +302,6 @@ export default function subcatdetails({route, navigation}) {
 
   const renderWishlistData = item => {
     return (
-
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Details', item?.get_products)}>
@@ -313,28 +323,29 @@ export default function subcatdetails({route, navigation}) {
                 {item?.get_products?.discounted_percentage}%OFF
               </Text>
             ) : null}
-            {item?.is_wishlisted== true?
-                        <TouchableOpacity
-                        style={styles.icons}
-                        onPress={() => addtowishlist(item?.get_products?.id)}>
-                        <Ionicons
-                          style={{paddingTop: 13}}
-                          name="heart"
-                          color="#B64400"
-                          size={30}
-                        />
-                      </TouchableOpacity>:
-                      <TouchableOpacity
-                      style={styles.icons}
-                      onPress={() => addtowishlist(item?.get_products?.id)}>
-                      <Ionicons
-                        style={{paddingTop: 13}}
-                        name="heart-outline"
-                        color="#B64400"
-                        size={30}
-                      />
-                    </TouchableOpacity>
-                        }
+            {item?.is_wishlisted == true ? (
+              <TouchableOpacity
+                style={styles.icons}
+                onPress={() => addtowishlist(item?.get_products?.id)}>
+                <Ionicons
+                  style={{paddingTop: 13}}
+                  name="heart"
+                  color="#B64400"
+                  size={30}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.icons}
+                onPress={() => addtowishlist(item?.get_products?.id)}>
+                <Ionicons
+                  style={{paddingTop: 13}}
+                  name="heart-outline"
+                  color="#B64400"
+                  size={30}
+                />
+              </TouchableOpacity>
+            )}
             {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.get_products?.id)}>
@@ -460,7 +471,7 @@ export default function subcatdetails({route, navigation}) {
               <Text style={styles.or}>Continue Shopping</Text>
             </TouchableOpacity>
           </View>
-        ) :(
+        ) : (
           <FlatList
             // data={subcatdata}
             data={allData}
