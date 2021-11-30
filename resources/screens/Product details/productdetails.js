@@ -446,8 +446,10 @@ export default function Details({route, navigation}) {
               <DotsLoader color="#E9691D" size={20} />
             ) : (
               <View style={styles.buttonParent}>
-                {item?.is_wishlisted == true ? (
-                  <View style={styles.favButton}>
+                
+                {item?.is_wishlisted==true ? (
+                  <View
+                    style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
                       name="heart"

@@ -187,8 +187,8 @@ export const styles = StyleSheet.create({
     // marginTop: hp('1.8'),
   },
   payButton: {
-    width: 100,
-    height: 40,
+    width: wp('70%'),
+    height: hp('6%'),
     backgroundColor: color.themColorPrimary,
     alignSelf: 'center',
     borderRadius: 10,

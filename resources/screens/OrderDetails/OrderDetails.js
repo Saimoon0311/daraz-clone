@@ -273,6 +273,7 @@ export default function OrderDetails({navigation}) {
                   </View>
                 </View>
               </View>
+              {res?.attributes?.length > 0 && (
               <View style={styles.parentCardIconHolder}>
                 <AntDesign
                   name="fork"
@@ -303,6 +304,7 @@ export default function OrderDetails({navigation}) {
                   </View>
                 </View>
               </View>
+              )}
             </View>
           );
         })}

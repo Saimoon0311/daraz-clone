@@ -1,7 +1,7 @@
 export const API_BASED_URL =
   'https://test-urls.com/elitedesignhub/moyen-express/public/api/';
 export const Images_API =
-  'https://test-urls.com/elitedesignhub/moyen-express/public/storage/public/products';
+  'https://test-urls.com/elitedesignhub/moyen-express/storage/app/public/products';
 
 export const getApi = endpoint => API_BASED_URL + endpoint;
 
@@ -29,5 +29,8 @@ export const ALLNEWARRIVALS = getApi('all-new-arrivals');
 export const USERORDERDEATILS = getApi('shop/user-order-details/');
 export const QUANTITYINCREASE = getApi('cart-data');
 export const ORDERPLACE = getApi('place-an-order');
+export const GETCLIENTSECRET = getApi('stripe-form/submit');
+export const SENDINTENTANDORDERDATA = getApi('stripe-form/submit');
+
 export const StripePKey =
   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';

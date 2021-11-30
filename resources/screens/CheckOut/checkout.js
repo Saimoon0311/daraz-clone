@@ -24,6 +24,8 @@ import {
   ORDERPLACE,
   SUBCATPRODUCTDATA,
   StripePKey,
+  GETCLIENTSECRET,
+  SENDINTENTANDORDERDATA,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
@@ -51,7 +53,6 @@ export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
   var itemTotalPrice = route?.params?.totalPrice;
   var total = itemTotalPrice;
-
   const [buttonState, setButtonState] = useState(1);
   const [checked, setChecked] = useState();
   const [Deliverychecked, setDeliverychecked] = useState();
@@ -88,9 +89,6 @@ export default function checkOut({navigation, route}) {
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
       makeArrays();
-      // fetchClientSecret();
-      // initPaymentScreenStripe();
-      // console.log(64, route?.params?.screenData);
     })();
   }, []);
 
@@ -99,141 +97,54 @@ export default function checkOut({navigation, route}) {
   };
 
   const fetchClientSecret = async () => {
-    // https://test-urls.com/elitedesignhub/moyen-express/public/api/stripe-form/submit
-    // await fetch(
-    //   `${API_URL}/create-payment-intent`,
-    await fetch(
-      'https://test-urls.com/elitedesignhub/moyen-express/public/api/stripe-form/submit',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: 5000,
-        }),
+    var amountToSend = itemTotalPrice * 100;
+    await fetch(GETCLIENTSECRET, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({
+        amount: amountToSend,
+      }),
+    })
       .then(response => response?.json())
       .then(res => {
-        console.log(1118, res);
-        console.log(1119, res?.client_secret);
         setClientSecret(res?.client_secret);
         setStripeData(res);
         initPaymentScreenStripe(res?.client_secret);
-        ////////////////////
-        // console.log(110, res?.clientSecret);
-        // console.log(118, res?.clientSecret?.client_secret);
-        // setClientSecret(res?.clientSecret?.client_secret);
-        // setStripeData(res?.clientSecret);
-        // initPaymentScreenStripe(res?.clientSecret?.client_secret);
       })
       .catch(err => {
         console.log(122, err);
       });
-    // const data = await res?.json();
-    // console.log(114, data);
   };
 
   const initPaymentScreenStripe = async data => {
     const {error} = await initPaymentSheet({
       paymentIntentClientSecret: data,
       merchantDisplayName: 'MoyenXpress',
-      // allowsDelayedPaymentMethods: true,
       primaryButtonColor: color.themColorPrimary,
-      // applePay: true,
       customerId: userDataLocal?.id,
-      // googlePay: true,
-      // customerEphemeralKeySecret,
     });
     if (error) {
       console.log(119, error);
     } else {
-      // console.log(112);
-      handlePayment();
+      validateHitOrderPlaceApi('stripe', data);
     }
   };
 
-  const handlePayment = async () => {
-    ///////////////////////////////////////////////////////////
-    //Payment Sheet okay
+  const handlePayment = async data => {
     const {error} = await presentPaymentSheet({
-      clientSecret: clientSecret,
+      clientSecret: data,
     });
 
     if (error) {
       console.log(156, error);
     } else {
-      console.log(148);
-      const {paymentIntent, error} = await retrievePaymentIntent(clientSecret);
-      console.log(1566, paymentIntent);
-      console.log(1577, error);
-      // getPaymentIntentToSend();
-      // await retrievePaymentIntent(clientSecret).then(res => {
-      //   console.log(147, res);
-      // });
-      // console.log(146, ff);
-      // confirmPaymentStripe();
+      const {paymentIntent, error} = await retrievePaymentIntent(data);
+      if (paymentIntent) {
+        hitOrderPlaceApi(paymentIntent);
+      }
     }
-  };
-
-  const getPaymentIntentToSend = async () => {
-    const {paymentIntent, error} = await retrievePaymentIntent(clientSecret);
-    console.log(1566, paymentIntent);
-    console.log(1577, error);
-  };
-
-  const confirmPaymentStripe = async () => {
-    const {error, paymentIntent} = await confirmPayment(
-      clientSecret,
-      {
-        type: 'Card',
-        billingDetails: {
-          email: 'a@yopmail.com',
-        },
-      },
-
-      //  {
-      // type: 'Card',
-      // paymentMethodId: '2',
-      // cvc: '222',
-      // token: '3343242342',
-      // billingDetails: {
-      //   email: 'asad@yopmail.com',
-      //   addressCity: 'a',
-      //   addressCountry: 'Canada',
-      //   addressLine1: 'sasdasdsad',
-      //   addressLine2: 'asdas dsad asd',
-      //   addressPostalCode: '33222',
-      //   addressState: 'saddad',
-      //   name: 'asd',
-      //   phone: '3342343424234',
-      // },
-      //}
-    );
-    if (error) {
-      console.log(107, error?.message);
-    } else {
-      console.log(164, {paymentIntent});
-      console.log(165, paymentIntent?.id);
-      console.log(166, paymentIntent?.lastPaymentError);
-      console.log(167, paymentIntent?.livemode);
-      console.log(168, paymentIntent?.paymentMethodId);
-      console.log(169, paymentIntent?.receiptEmail);
-      console.log(170, paymentIntent?.shipping);
-      console.log(171, paymentIntent?.status);
-    }
-    // const {error, paymentIntent} = await confirmPayment(clientSecret, {
-    //   type: 'Card',
-    //   billingDetails: {
-    //     email: 'asad@yopmail.com',
-    //   },
-    // });
-    // if (error) {
-    //   console.log(107, error?.message);
-    // } else {
-    //   console.log(110, paymentIntent);
-    // }
   };
 
   const data = route?.params?.screenData;
@@ -329,7 +240,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Payment
+            Summary
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -343,7 +254,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Summary
+            Payment
           </Text>
         </TouchableOpacity>
       </View>
@@ -353,71 +264,78 @@ export default function checkOut({navigation, route}) {
     setButtonState(e);
   };
 
-  const cardDetails = () => {
+  const deliveryMethod = () => {
     return (
       <>
-        <CardField
-          postalCodeEnabled={false}
-          placeholder={{
-            number: '4242 4242 4242 4242',
-          }}
-          cardStyle={{
-            backgroundColor: '#FFEEE3',
-            textColor: '#000000',
-          }}
-          style={{
-            width: wp('85'),
-            height: hp('7'),
-            alignSelf: 'center',
-            marginTop: hp('2'),
-            // marginVertical: 30,
-          }}
-          onCardChange={cardDetails => {
-            console.log('cardDetails', cardDetails);
-            setCardData(cardDetails);
-          }}
-          onFocus={focusedField => {
-            console.log('focusField', focusedField);
-          }}
-        />
-        <TouchableOpacity
-          style={{
-            width: 100,
-            height: 40,
-            backgroundColor: color.themColorPrimary,
-            alignSelf: 'center',
-            borderRadius: 10,
-            marginTop: hp('2'),
-            marginBottom: hp('2'),
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => startPaymentProcess()}
-          // onPress={() => handlePayment()}
-          // onPress={() => fetchClientSecret()}
-          // onPress={() => initializePayment()}
-        >
-          <Text
-            style={{
-              color: 'white',
-            }}>
-            Pay
-          </Text>
-        </TouchableOpacity>
+        <Text style={styles.centerText}>Select Delivery Method</Text>
+        <View style={styles.box}>
+          <NativeBaseProvider>
+            <Radio.Group
+              value={deliveryMethodValue}
+              onChange={nextValue => {
+                setDeliveryMethodValue(nextValue);
+              }}
+              colorScheme={'orange'}>
+              <Radio value="Door Delivery" my={1}>
+                <Text style={styles.radioText}>Door Delivery</Text>
+              </Radio>
+              <View
+                style={{
+                  ...styles.devider,
+                  width: wp('75'),
+                  alignSelf: 'center',
+                  backgroundColor: '#C8C8C8',
+                }}
+              />
+              <Radio value="Self Pickup" my={1}>
+                <Text style={styles.radioText}>Self Pickup</Text>
+              </Radio>
+            </Radio.Group>
+          </NativeBaseProvider>
+        </View>
       </>
     );
   };
-
+  const totalPriceCard = () => {
+    return (
+      <View style={{...styles.box, paddingTop: hp('2.5')}}>
+        {/* <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
+          <Text style={styles.subtotalText}>Sub Total</Text>
+          <Text style={styles.subtotalPrice}>125</Text>
+        </View>
+        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
+          <Text style={styles.subtotalText}>Sub Total</Text>
+          <Text style={styles.subtotalPrice}>125</Text>
+        </View> */}
+        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
+          <Text style={styles.subtotalText}>Sub Total</Text>
+          <Text style={styles.subtotalPrice}>{itemTotalPrice}</Text>
+        </View>
+        <View
+          style={{
+            ...styles.devider,
+            width: wp('75'),
+            alignSelf: 'center',
+            backgroundColor: '#C8C8C8',
+          }}
+        />
+        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
+          <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
+            Total
+          </Text>
+          <Text
+            style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
+            {itemTotalPrice}
+          </Text>
+        </View>
+      </View>
+    );
+  };
   const accountDetails = () => {
     return (
       <>
         <ScrollView>
           <Text style={styles.centerText}>Account Details</Text>
-          <TouchableOpacity
-            style={styles.payButton}
-            onPress={() => startPaymentProcess()}>
-            <Text style={styles.payButtonText}>Pay</Text>
-          </TouchableOpacity>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
               label="Full Name *"
@@ -429,9 +347,8 @@ export default function checkOut({navigation, route}) {
                 updatValue(text, 'username');
               }}
             />
-
             <TextInput
-              label="Address One *"
+              label="Address *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -441,7 +358,7 @@ export default function checkOut({navigation, route}) {
                 updatValue(text, 'address_one');
               }}
             />
-            <TextInput
+            {/* <TextInput
               label="Address Two *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -451,7 +368,7 @@ export default function checkOut({navigation, route}) {
               onChangeText={text => {
                 updatValue(text, 'address_two');
               }}
-            />
+            /> */}
             <TextInput
               label="City *"
               underlineColor="gray"
@@ -520,73 +437,6 @@ export default function checkOut({navigation, route}) {
       </>
     );
   };
-  const deliveryMethod = () => {
-    return (
-      <>
-        <Text style={styles.centerText}>Select Delivery Method</Text>
-        <View style={styles.box}>
-          <NativeBaseProvider>
-            <Radio.Group
-              value={deliveryMethodValue}
-              onChange={nextValue => {
-                setDeliveryMethodValue(nextValue);
-              }}
-              colorScheme={'orange'}>
-              <Radio value="Door Delivery" my={1}>
-                <Text style={styles.radioText}>Door Delivery</Text>
-              </Radio>
-              <View
-                style={{
-                  ...styles.devider,
-                  width: wp('75'),
-                  alignSelf: 'center',
-                  backgroundColor: '#C8C8C8',
-                }}
-              />
-              <Radio value="Self Pickup" my={1}>
-                <Text style={styles.radioText}>Self Pickup</Text>
-              </Radio>
-            </Radio.Group>
-          </NativeBaseProvider>
-        </View>
-      </>
-    );
-  };
-  const totalPriceCard = () => {
-    return (
-      <View style={{...styles.box, paddingTop: hp('2.5')}}>
-        {/* <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={styles.subtotalText}>Sub Total</Text>
-          <Text style={styles.subtotalPrice}>125</Text>
-        </View>
-        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={styles.subtotalText}>Sub Total</Text>
-          <Text style={styles.subtotalPrice}>125</Text>
-        </View> */}
-        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={styles.subtotalText}>Sub Total</Text>
-          <Text style={styles.subtotalPrice}>{itemTotalPrice}</Text>
-        </View>
-        <View
-          style={{
-            ...styles.devider,
-            width: wp('75'),
-            alignSelf: 'center',
-            backgroundColor: '#C8C8C8',
-          }}
-        />
-        <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
-            Total
-          </Text>
-          <Text
-            style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
-            {itemTotalPrice}
-          </Text>
-        </View>
-      </View>
-    );
-  };
   const renderScreen = () => {
     if (buttonState == 1) {
       return (
@@ -602,7 +452,10 @@ export default function checkOut({navigation, route}) {
       return (
         <View>
           {/* {topButton()} */}
-          {paymentMethod()}
+          {accountDetailsSummy()}
+          {deliveryMethod()}
+          {/* {paymentMethod()} */}
+          {orderDetailsRenderdata()}
           {bottomButton()}
         </View>
       );
@@ -610,10 +463,15 @@ export default function checkOut({navigation, route}) {
       return (
         <View>
           {/* {topButton()} */}
-          {accountDetailsSummy()}
-          {deliveryMethod()}
           {paymentMethod()}
-          {orderDetailsRenderdata()}
+          {/* {paymentMethodValue == 'Stripe Payment' && (
+            <TouchableOpacity
+              style={styles.payButton}
+              onPress={() => startPaymentProcess()}>
+              <Text style={styles.or}>Continue Stripe</Text>
+
+            </TouchableOpacity>
+          )} */}
           {bottomButton()}
         </View>
       );
@@ -630,7 +488,6 @@ export default function checkOut({navigation, route}) {
             <Radio.Group
               value={paymentMethodValue}
               onChange={nextValue => {
-                console.log(318, nextValue);
                 setPaymentMethodValue(nextValue);
               }}
               colorScheme={'orange'}>
@@ -671,8 +528,8 @@ export default function checkOut({navigation, route}) {
                   backgroundColor: '#C8C8C8',
                 }}
               />
-              <Radio value="Check Payment" my={1}>
-                <Text style={styles.radioText}>Check Payment</Text>
+              <Radio value="Stripe Payment" my={1}>
+                <Text style={styles.radioText}>Stripe Payment</Text>
               </Radio>
             </Radio.Group>
           </NativeBaseProvider>
@@ -696,21 +553,21 @@ export default function checkOut({navigation, route}) {
           />
 
           <TextInput
-            label="Address One *"
+            label="Address *"
             editable={false}
             underlineColor="gray"
             value={userDataLocal?.address_one}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
           />
-          <TextInput
+          {/* <TextInput
             label="Address Two *"
             editable={false}
             underlineColor="gray"
             value={userDataLocal?.address_two}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-          />
+          /> */}
           <TextInput
             label="City *"
             editable={false}
@@ -849,89 +706,118 @@ export default function checkOut({navigation, route}) {
     } else if (buttonState == 2) {
       setButtonState(3);
     } else if (buttonState == 3) {
-      // setButtonState(4)
-      if (
-        deliveryMethodValue !== null &&
-        paymentMethodValue !== null &&
-        userDataLocal?.username !== '' &&
-        userDataLocal?.username !== null &&
-        userDataLocal?.phone_number !== '' &&
-        userDataLocal?.phone_number !== null &&
-        userDataLocal?.city !== '' &&
-        userDataLocal?.city !== null &&
-        userDataLocal?.address_one !== '' &&
-        userDataLocal?.address_one !== null &&
-        userDataLocal?.address_two !== '' &&
-        userDataLocal?.address_two !== null &&
-        // userDataLocal?.email !== '' &&
-        // userDataLocal?.email !== null &&
-        userDataLocal?.zipcode !== '' &&
-        userDataLocal?.zipcode !== null &&
-        userDataLocal?.country !== '' &&
-        userDataLocal?.country !== null
-      ) {
-        // fetch(`${ORDERPLACE}/${userDataLocal?.id}`,{
-        //   method:"POST"
-        // })
-        var myHeaders = new Headers();
-        myHeaders.append('Accept', 'application/json');
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
-          //  total,
-          //  product_id: productIdArray,
-          //  shopIdArray,
-          //  quantityArray,
-
-          total: total,
-          product_id: productIdArray,
-          shop_id: shopIdArray,
-          quantity: quantityArray,
-          // products: objectArray,
-          shipping_fullname: userDataLocal?.username,
-          shipping_address: userDataLocal?.address_one,
-          shipping_city: userDataLocal?.city,
-          shipping_state: userDataLocal?.country,
-          shipping_zipcode: userDataLocal?.zipcode,
-          shipping_phone: userDataLocal?.phone_number,
-          notes: note,
-          attributes: attributesArray,
-        });
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
-        };
-
-        fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            if (result?.message == 'Checkout Completed') {
-              showMessage({
-                type: 'success',
-                icon: 'success',
-                message: 'Your order has been sucessfully placed.',
-                backgroundColor: '#E9691D',
-              });
-              setButtonState(4);
-            }
-            console.log(645, result);
-          })
-          .catch(error => console.log('error', error));
-
-        // alert("wait")
-      } else
-        showMessage({
-          type: 'warning',
-          icon: 'warning',
-          message: 'Please enter all delivery information',
-          backgroundColor: '#E9691D',
-        });
+      if (paymentMethodValue == 'Stripe Payment') {
+        startPaymentProcess();
+      } else {
+        validateHitOrderPlaceApi();
+      }
     }
   };
 
+  const validateHitOrderPlaceApi = (stringValue, data) => {
+    if (
+      deliveryMethodValue !== null &&
+      paymentMethodValue !== null &&
+      userDataLocal?.username !== '' &&
+      userDataLocal?.username !== null &&
+      userDataLocal?.phone_number !== '' &&
+      userDataLocal?.phone_number !== null &&
+      userDataLocal?.city !== '' &&
+      userDataLocal?.city !== null &&
+      userDataLocal?.address_one !== '' &&
+      userDataLocal?.address_one !== null &&
+      // userDataLocal?.address_two !== '' &&
+      // userDataLocal?.address_two !== null &&
+      userDataLocal?.zipcode !== '' &&
+      userDataLocal?.zipcode !== null &&
+      userDataLocal?.country !== '' &&
+      userDataLocal?.country !== null
+    ) {
+      if (stringValue == 'stripe') {
+        handlePayment(data);
+      } else {
+        hitOrderPlaceApi();
+      }
+    } else
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please enter all delivery information',
+        backgroundColor: '#E9691D',
+      });
+  };
+
+  const hitOrderPlaceApi = async paymentIntentdata => {
+    var myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({
+      total: total,
+      product_id: productIdArray,
+      shop_id: shopIdArray,
+      quantity: quantityArray,
+      shipping_fullname: userDataLocal?.username,
+      shipping_address: userDataLocal?.address_one,
+      shipping_city: userDataLocal?.city,
+      shipping_state: userDataLocal?.country,
+      shipping_zipcode: userDataLocal?.zipcode,
+      shipping_phone: userDataLocal?.phone_number,
+      notes: note,
+      attributes: attributesArray,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        if (result?.message == 'Checkout Completed') {
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: 'Your order has been sucessfully placed.',
+            backgroundColor: '#E9691D',
+          });
+          setButtonState(4);
+          // sendPaymentIntentData(result, paymentIntentdata);
+        }
+      })
+      .catch(error => console.log('error', error));
+  };
+  const sendPaymentIntentData = async (result, paymentIntentdata) => {
+    var requestOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON?.stringify({
+        orderNumber: result?.id,
+        stripeId: paymentIntentdata?.id,
+      }),
+    };
+
+    await fetch(`${SENDINTENTANDORDERDATA}`, requestOptions)
+      .then(response => response?.json())
+      .then(res => {
+        console.log(810, res);
+        showMessage({
+          type: 'success',
+          icon: 'success',
+          message: 'Your order has been sucessfully placed.',
+          backgroundColor: '#E9691D',
+        });
+        setButtonState(4);
+      })
+      .catch(err => {
+        console.log(800, err);
+      });
+  };
   const orderCompleteScreen = () => {
     return (
       <>
