@@ -65,7 +65,7 @@ export default function Alldata(prop, {navigation}) {
   // };
   const flatListRender = item => {
     return (
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
         <View style={styles.box}>
           <TouchableOpacity onPress={() => prop.detailss(item)}>
             <ImageBackground

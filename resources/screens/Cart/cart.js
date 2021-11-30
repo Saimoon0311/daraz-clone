@@ -42,6 +42,7 @@ export default function Cart({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
+  const [product_id,setProduct_id] = useState()
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
   const isFocused = useIsFocused();
@@ -165,11 +166,17 @@ export default function Cart({navigation}) {
       />
     );
   };
-  const quantityIncrease = async (type, id) => {
+  const quantityIncrease = async (type, id,quantity) => {
     const userId = await getUserData();
     const users = userId.id;
     const a = `${API_BASED_URL}${type}/${users}/${id}`;
     console.log(163, a);
+    // if (quantity >= 0) {
+     
+    // } else{
+      
+    //   console.log(183,quantity)
+    // }
     fetch(a, {
       method: 'POST',
     })
@@ -177,14 +184,14 @@ export default function Cart({navigation}) {
       .then(json => {
         setCartdata(json[0]);
         totalprice(json[0]);
-      });
+      });        
   };
 
   const deleteCartItem = id => {
     setLoading(true);
     console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
-    const api = CARTDELETE + '/' + id;
+    const api = CARTDELETE + '/' + id + '/' + user_id;
     // console.log(api);
     fetch(api, {
       method: 'GET',
@@ -316,7 +323,7 @@ export default function Cart({navigation}) {
               <TouchableOpacity
                 style={styles.maior}
                 // onPress={() => navigation.goBack()}
-                onPress={() => navigation.navigate('checkOut')}>
+                onPress={() => navigation.goBack()}>
                 <Text style={styles.or}>Continue Shopping</Text>
               </TouchableOpacity>
             </View>
@@ -508,6 +515,7 @@ export default function Cart({navigation}) {
                           style={{flexDirection: 'row'}}
                           onPress={() => {
                             setItemId(item?.id);
+                            // setProduct_id(item?.product_id)
                             showDeleteAlert(item?.id);
                             setShowAlert(true);
                             // console.log(356,item.id)
@@ -526,9 +534,10 @@ export default function Cart({navigation}) {
                             justifyContent: 'space-between',
                             flexDirection: 'row',
                           }}>
+                            {item?.quantity>1 &&
                           <TouchableOpacity
                             onPress={() =>
-                              quantityIncrease('decrement-cart-data', item?.id)
+                              quantityIncrease('decrement-cart-data', item?.id,item?.quantity)
                             }>
                             <Ionicons
                               name="remove-circle-sharp"
@@ -537,6 +546,7 @@ export default function Cart({navigation}) {
                               style={{paddingTop: 18, marginRight: 10}}
                             />
                           </TouchableOpacity>
+                            }
                           <Text
                             style={{
                               paddingTop: hp('2.7'),
@@ -550,7 +560,7 @@ export default function Cart({navigation}) {
                           </Text>
                           <TouchableOpacity
                             onPress={() =>
-                              quantityIncrease('increment-cart-data', item?.id)
+                              quantityIncrease('increment-cart-data', item?.id,item?.quantity)
                             }>
                             <Ionicons
                               name="add-circle-sharp"

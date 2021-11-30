@@ -169,6 +169,7 @@ export default function cate({navigation}) {
           </View>
         )}
         <View style={{width: wp('65%')}}>
+          {subcatdata?.length > 0 &&
           <TouchableOpacity style={styles.but}>
             <Text style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
               See All Product
@@ -180,6 +181,8 @@ export default function cate({navigation}) {
               style={{marginLeft: 'auto'}}
             />
           </TouchableOpacity>
+          
+          }
           {subloading ? (
             <View
               style={{
