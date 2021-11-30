@@ -371,7 +371,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Payment
+            Summary
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -385,7 +385,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Summary
+            Payment
           </Text>
         </TouchableOpacity>
       </View>
@@ -405,14 +405,30 @@ const cardDetails = ()=>{
               number: '4242 4242 4242 4242',
             }}
             cardStyle={{
-              backgroundColor: '#FFEEE3',
+              backgroundColor: 'white',
               textColor: '#000000',
+              // borderRadius:10,
+              overflow:"hidden",
+              // shadowColor: '#000',
+              // shadowOpacity: 0.4,
+              // shadowOffset: {width: 1, height: 3},
+              // shadowRadius: 2,
+              // elevation: 5,
+              
             }}
             style={{
               width: wp('85'),
               height: hp('7'),
               alignSelf: 'center',
               marginTop: hp('2'),
+              shadowColor: '#000',
+              shadowOpacity: 0.4,
+              shadowOffset: {width: 1, height: 3},
+              shadowRadius: 2,
+              elevation: 5,
+              backgroundColor:"#00",
+              overflow:"hidden",
+              borderRadius:20,
               // marginVertical: 30,
             }}
             onCardChange={cardDetails => {
@@ -423,7 +439,7 @@ const cardDetails = ()=>{
               console.log('focusField', focusedField);
             }}
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               width: 100,
               height: 40,
@@ -446,7 +462,7 @@ const cardDetails = ()=>{
               }}>
               Pay
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
     </>
   )
 }
@@ -471,7 +487,7 @@ const cardDetails = ()=>{
             />
 
             <TextInput
-              label="Address One *"
+              label="Address *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -481,7 +497,7 @@ const cardDetails = ()=>{
                 updatValue(text, 'address_one');
               }}
             />
-            <TextInput
+            {/* <TextInput
               label="Address Two *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -491,7 +507,7 @@ const cardDetails = ()=>{
               onChangeText={text => {
                 updatValue(text, 'address_two');
               }}
-            />
+            /> */}
             <TextInput
               label="City *"
               underlineColor="gray"
@@ -642,21 +658,23 @@ const cardDetails = ()=>{
       return (
         <View>
           {/* {topButton()} */}
-          {paymentMethod()}
+          {accountDetailsSummy()}
+          {deliveryMethod()}
+          {/* {paymentMethod()} */}
+          {orderDetailsRenderdata()}
           {bottomButton()}
         </View>
+       
       );
     } else if (buttonState == 3) {
       return (
         <View>
-          {/* {topButton()} */}
-          {accountDetailsSummy()}
-          {deliveryMethod()}
-          {paymentMethod()}
-          {orderDetailsRenderdata()}
-          {bottomButton()}
-        </View>
-      );
+        {/* {topButton()} */}
+        {paymentMethod()}
+        {paymentMethodValue== "Stripe Payment" && cardDetails()}
+        {bottomButton()}
+      </View>
+        );
     } else if (buttonState == 4) {
       return <>{orderCompleteScreen()}</>;
     }
@@ -711,8 +729,8 @@ const cardDetails = ()=>{
                   backgroundColor: '#C8C8C8',
                 }}
               />
-              <Radio value="Check Payment" my={1}>
-                <Text style={styles.radioText}>Check Payment</Text>
+              <Radio value="Stripe Payment" my={1}>
+                <Text style={styles.radioText}>Stripe Payment</Text>
               </Radio>
             </Radio.Group>
           </NativeBaseProvider>
@@ -736,21 +754,21 @@ const cardDetails = ()=>{
           />
 
           <TextInput
-            label="Address One *"
+            label="Address *"
             editable={false}
             underlineColor="gray"
             value={userDataLocal?.address_one}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
           />
-          <TextInput
+          {/* <TextInput
             label="Address Two *"
             editable={false}
             underlineColor="gray"
             value={userDataLocal?.address_two}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
-          />
+          /> */}
           <TextInput
             label="City *"
             editable={false}
@@ -1086,7 +1104,7 @@ const cardDetails = ()=>{
         {header('Check Out')}
         {buttonState == 4 ? null : topButton()}
         <ScrollView showsVerticalScrollIndicator={false}>
-          {cardDetails()}
+          {/* {cardDetails()} */}
           {renderScreen()}
           {/* {bottomButton()} */}
           {/* {orderCompleteScreen()} */}

@@ -94,6 +94,7 @@ export default function Login({navigation}) {
               //   icon: 'success',
               //   message: 'User Login Success',
               // });
+              console.log(res)
               setLoadingButton(false);
             }
           } catch (error) {
