@@ -63,7 +63,7 @@ export default function OrderDetails({navigation}) {
     fetch(url)
       .then(data => data?.json())
       .then(res => {
-        // console.log(54, res);
+        console.log(54, res);
         if (res) {
           setOrderData(res);
           setIsLoading(false);
@@ -100,16 +100,16 @@ export default function OrderDetails({navigation}) {
           My Orders
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-        <Ionicons
-          name="cart"
-          size={30}
-          color="#512500"
-          style={{
-            ...styles.icon,
+          <Ionicons
+            name="cart"
+            size={30}
+            color="#512500"
+            style={{
+              ...styles.icon,
 
-            marginRight: wp('3'),
-          }}
-        />
+              marginRight: wp('3'),
+            }}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -274,36 +274,36 @@ export default function OrderDetails({navigation}) {
                 </View>
               </View>
               {res?.attributes?.length > 0 && (
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="fork"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <View style={styles.viewForTextWidth}>
-                    <Text style={styles.parentCarddTextStyle}>
-                      Product Attributes
-                    </Text>
-                  </View>
+                <View style={styles.parentCardIconHolder}>
+                  <AntDesign
+                    name="fork"
+                    color={color.themColorPrimary}
+                    size={hp('3')}
+                    style={styles.iconStyle}
+                  />
+                  <View style={styles.parentCardRow}>
+                    <View style={styles.viewForTextWidth}>
+                      <Text style={styles.parentCarddTextStyle}>
+                        Product Attributes
+                      </Text>
+                    </View>
 
-                  <View
-                    style={{
-                      ...styles.viewForTextWidth,
-                      alignItems: 'flex-end',
-                    }}>
-                    <Text
+                    <View
                       style={{
-                        ...styles.parentCarddTextStyle,
-                        // marginRight: wp('10'),
+                        ...styles.viewForTextWidth,
+                        alignItems: 'flex-end',
                       }}>
-                      {/* {res?.attributes} */}
-                      {renderAttributeArray(res?.attributes)}
-                    </Text>
+                      <Text
+                        style={{
+                          ...styles.parentCarddTextStyle,
+                          // marginRight: wp('10'),
+                        }}>
+                        {/* {res?.attributes} */}
+                        {renderAttributeArray(res?.attributes)}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
               )}
             </View>
           );

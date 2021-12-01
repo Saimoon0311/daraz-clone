@@ -98,6 +98,8 @@ export default function checkOut({navigation, route}) {
 
   const fetchClientSecret = async () => {
     var amountToSend = itemTotalPrice * 100;
+
+    ///////////////
     await fetch(GETCLIENTSECRET, {
       method: 'POST',
       headers: {
@@ -765,7 +767,10 @@ export default function checkOut({navigation, route}) {
       shipping_phone: userDataLocal?.phone_number,
       notes: note,
       attributes: attributesArray,
+      payment_method: paymentMethodValue,
     });
+
+    // console.log(773, raw);
 
     var requestOptions = {
       method: 'POST',
@@ -777,7 +782,39 @@ export default function checkOut({navigation, route}) {
     fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
+        // console.log(785, result);
         if (result?.message == 'Checkout Completed') {
+          sendPaymentIntentData(result, paymentIntentdata);
+        }
+      })
+      .catch(error => console.log('error', error));
+  };
+  const sendPaymentIntentData = async (result, paymentIntentdata) => {
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({
+      orderNumber: result?.order?.order_number,
+      orderId: result?.order?.id,
+      stripeId: paymentIntentdata?.id,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    await fetch(
+      SENDINTENTANDORDERDATA,
+      // 'https://test-urls.com/elitedesignhub/moyen-express/public/api/stripe-form/aftersubmit',
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        if (result?.success == true) {
           showMessage({
             type: 'success',
             icon: 'success',
@@ -785,37 +822,23 @@ export default function checkOut({navigation, route}) {
             backgroundColor: '#E9691D',
           });
           setButtonState(4);
-          // sendPaymentIntentData(result, paymentIntentdata);
+        } else {
+          showMessage({
+            type: 'warning',
+            icon: 'warning',
+            message: 'Something went wrong.',
+            backgroundColor: '#E9691D',
+          });
         }
       })
-      .catch(error => console.log('error', error));
-  };
-  const sendPaymentIntentData = async (result, paymentIntentdata) => {
-    var requestOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON?.stringify({
-        orderNumber: result?.id,
-        stripeId: paymentIntentdata?.id,
-      }),
-    };
-
-    await fetch(`${SENDINTENTANDORDERDATA}`, requestOptions)
-      .then(response => response?.json())
-      .then(res => {
-        console.log(810, res);
+      .catch(error => {
         showMessage({
-          type: 'success',
-          icon: 'success',
-          message: 'Your order has been sucessfully placed.',
+          type: 'warning',
+          icon: 'warning',
+          message: 'Something went wrong.',
           backgroundColor: '#E9691D',
         });
-        setButtonState(4);
-      })
-      .catch(err => {
-        console.log(800, err);
+        console.log('error', error);
       });
   };
   const orderCompleteScreen = () => {

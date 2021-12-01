@@ -322,9 +322,8 @@ export default function Cart({navigation}) {
               <Text style={{color: 'gray'}}>Add items you want to shop</Text>
               <TouchableOpacity
                 style={styles.maior}
-                onPress={() => navigation.navigate('checkOut')}
-                // onPress={() => navigation.goBack()}
-              >
+                // onPress={() => navigation.navigate('checkOut')}
+                onPress={() => navigation.goBack()}>
                 <Text style={styles.or}>Continue Shopping</Text>
               </TouchableOpacity>
             </View>
