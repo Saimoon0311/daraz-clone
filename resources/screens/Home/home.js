@@ -219,11 +219,16 @@ export default function Home({navigation}) {
             <View style={styles.header}>
               <Image
                 source={require('../../images/Group66.png')}
-                style={{width: 81, height: 36.5}}
+                style={{
+                  width: 81,
+                  height: 36.5,
+                  // backgroundColor: 'red',
+                  marginLeft: wp('4'),
+                }}
               />
               <TouchableOpacity
                 onPress={() => setToggleSearchBar(!toggleSearchBar)}
-                style={{marginLeft: wp('15%')}}>
+                style={{marginLeft: wp('10%')}}>
                 <Ionicons name="search" size={27} color={color.defaultcolor} />
               </TouchableOpacity>
               <TouchableOpacity

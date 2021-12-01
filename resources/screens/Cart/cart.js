@@ -15,6 +15,7 @@ import {
   ScrollView,
   Alert,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -553,7 +554,9 @@ export default function Cart({navigation}) {
                           )}
                           <Text
                             style={{
-                              paddingTop: hp('2.7'),
+                              paddingTop: hp(
+                                Platform?.OS == 'ios' ? '2.2' : '2',
+                              ),
                               marginRight: 10,
                               fontSize: hp('2.5'),
                               color: '#EEB08B',

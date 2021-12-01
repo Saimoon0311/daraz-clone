@@ -54,7 +54,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom: hp('1%'),
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={Home}
@@ -76,7 +76,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom: hp('1%'),
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={cate}
@@ -107,7 +107,7 @@ function MybottomTabs() {
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
-            marginBottom: hp('1%'),
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={setting}
