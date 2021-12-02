@@ -35,8 +35,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: 'Asad123@gmail.com',
-    password: 'aaaaaa',
+    email: '',
+    password: '',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -94,7 +94,7 @@ export default function Login({navigation}) {
               //   icon: 'success',
               //   message: 'User Login Success',
               // });
-              console.log(res)
+              console.log(res);
               setLoadingButton(false);
             }
           } catch (error) {
