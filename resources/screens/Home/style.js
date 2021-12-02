@@ -1,21 +1,29 @@
-import {StyleSheet} from "react-native"
-import {color} from "../../config/color"
+import {StyleSheet} from 'react-native';
+import {color} from '../../config/color';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: wp('36%'),
     borderBottomWidth: 0.5,
+    // height:hp(''),
     paddingBottom: 10,
-    
+    paddingTop: 10,
+    // backgroundColor: 'yellow',
+
+    // shadowColor: '#000',
+    // shadowOffset: {width: 1, height: 3},
+    // shadowOpacity: 0.4,
+    // // shadowRadius: 2,
+    // elevation: 5,
   },
   ic: {
     marginLeft: 'auto',
@@ -46,6 +54,8 @@ backgroundColor:color.defaultBackgroundColor
     alignItems: 'center',
     alignSelf: 'center',
     width: wp('80%'),
+    paddingBottom: hp('1'),
+    paddingTop: hp('1'),
   },
   item: {
     backgroundColor: '#716f25',
@@ -68,8 +78,8 @@ backgroundColor:color.defaultBackgroundColor
     width: wp('63%'),
     borderColor: color.defaultcolor,
     borderWidth: 1,
-    height: hp('5.7%'),
+    height: hp('5%'),
     paddingLeft: 10,
-    color:color.defaultcolor
+    color: color.defaultcolor,
   },
 });

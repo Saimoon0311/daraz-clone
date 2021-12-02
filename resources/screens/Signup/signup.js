@@ -140,7 +140,7 @@ export default function Signup({navigation}) {
                 : (showMessage({
                     type: 'warning',
                     icon: 'auto',
-                    message: responseData?.email,
+                    message: responseData[0],
                     backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false));

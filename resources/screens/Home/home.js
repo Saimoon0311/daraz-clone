@@ -193,7 +193,7 @@ export default function Home({navigation}) {
   return (
     <SafeAreaView style={styles.main}>
       <StatusBar backgroundColor={color.statusbarColor} />
-      <View style={{marginTop: 9}}>
+      <View>
         <Animated.View>
           {toggleSearchBar ? (
             <View style={styles.searchBarWrap}>
@@ -222,7 +222,6 @@ export default function Home({navigation}) {
                 style={{
                   width: 81,
                   height: 36.5,
-                  // backgroundColor: 'red',
                   marginLeft: wp('4'),
                 }}
               />
