@@ -36,16 +36,16 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
   see: {
-    marginTop: 13,
+    marginTop: hp('2'),
     backgroundColor: '#F3F5F7',
     marginLeft: 'auto',
     marginRight: 22,
-    width: 63,
-    height: 23,
+    width: wp('20'),
+    height: hp('4.5'),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    borderWidth: 0.1,
+    borderWidth: 0.2,
   },
   searchBarWrap: {
     justifyContent: 'space-around',
@@ -54,8 +54,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     width: wp('80%'),
-    paddingBottom: hp('1'),
-    paddingTop: hp('1'),
+    marginBottom: hp('1'),
+    marginTop: hp('1'),
   },
   item: {
     backgroundColor: '#716f25',
@@ -81,5 +81,9 @@ export const styles = StyleSheet.create({
     height: hp('5%'),
     paddingLeft: 10,
     color: color.defaultcolor,
+    fontSize: hp('2'),
+    // top: 0,
+    paddingBottom: hp('1'),
+    // color:"red"
   },
 });

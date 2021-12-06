@@ -13,13 +13,13 @@ export const styles = StyleSheet.create({
   },
   appbarStyle: {
     backgroundColor: '#FFDDC9',
-    paddingBottom: 10,
+    // paddingBottom: hp('5'),
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '16' : '14'),
+    height: hp(Platform?.OS == 'ios' ? '16' : '15'),
   },
   searchbar: {
     width: wp('70%'),
@@ -124,7 +124,6 @@ export const styles = StyleSheet.create({
     paddingRight: wp('3%'),
     backgroundColor: '#FFDDC9',
     // backgroundColor: 'red',
-
   },
   but: {
     flexDirection: 'row',

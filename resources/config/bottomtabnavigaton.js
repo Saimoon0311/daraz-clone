@@ -48,7 +48,7 @@ function MybottomTabs() {
         name="Home"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="home" color={color} size={20} />
+            <Ionicons name="home" color={color} size={hp('3')} />
           ),
           title: 'Home',
           tabBarLabelStyle: {
@@ -64,7 +64,7 @@ function MybottomTabs() {
         name="cate"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="list" color={color} size={30} />
+            <Ionicons name="list" color={color} size={hp('3')} />
           ),
           // tabBarActiveTintColor:"yellow",
           // tabBarInactiveTintColor:"green",
@@ -101,7 +101,7 @@ function MybottomTabs() {
         name="setting"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="settings-sharp" color={color} size={25} />
+            <Ionicons name="settings-sharp" color={color} size={hp('3')} />
           ),
           title: 'Setting',
           tabBarLabelStyle: {

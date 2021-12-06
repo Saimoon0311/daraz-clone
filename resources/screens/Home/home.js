@@ -244,7 +244,7 @@ export default function Home({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: 100, marginLeft: 30}}>
+          contentContainerStyle={{paddingBottom: hp('24'), marginLeft: 30}}>
           <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
             <Alldata

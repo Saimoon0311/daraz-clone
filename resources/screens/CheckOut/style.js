@@ -98,9 +98,10 @@ export const styles = StyleSheet.create({
   text: {
     //     backgroundColor: '#F3F5F7',
     backgroundColor: 'white',
-    height: hp('7'),
+    height: hp('8'),
     width: wp('75'),
     alignSelf: 'center',
+    fontSize: hp('2.5'),
     //     marginLeft:wp('4%')
   },
   radioText: {

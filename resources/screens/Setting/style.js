@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     marginRight: wp('5'),
   },
   well: {
-    padding: 15,
+    padding: hp('1'),
     backgroundColor: '#CFA891',
     // alignItems: 'flex-start',
   },

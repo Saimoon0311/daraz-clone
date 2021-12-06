@@ -1,7 +1,5 @@
-export const API_BASED_URL =
-  'https://test-links.com/elitedesignhub/moyen-express/public/api/';
-export const Images_API =
-  'https://test-links.com/elitedesignhub/moyen-express/public/products';
+export const API_BASED_URL = 'https://moyenexpress.com/public/api/';
+export const Images_API = 'https://moyenexpress.com/public/products';
 
 export const getApi = endpoint => API_BASED_URL + endpoint;
 

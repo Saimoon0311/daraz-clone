@@ -65,7 +65,7 @@ export default function Alldata(prop, {navigation}) {
   // };
   const flatListRender = item => {
     return (
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
           <TouchableOpacity onPress={() => prop.detailss(item)}>
             <ImageBackground
@@ -184,10 +184,11 @@ export default function Alldata(prop, {navigation}) {
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            // source={{uri: `${Images_API}/${item?.image}`}}
-            source={{
-              uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-            }}></ImageBackground>
+            source={{uri: `${Images_API}/${item?.image}`}}
+            // source={{
+            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            // }}
+          ></ImageBackground>
           <Text style={styles.boxImageStyle}>{item?.name}</Text>
           {/* </TouchableOpacity> */}
         </View>

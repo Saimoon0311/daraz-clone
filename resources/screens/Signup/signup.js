@@ -39,7 +39,7 @@ export default function Signup({navigation}) {
   const savedata = async () => {
     setLoadingButton(true);
     let netFlag = 0;
-    var res
+    var res;
     await NetInfo.fetch('wifi').then(async state => {
       if (state.isConnected) {
         netFlag = 1;
@@ -118,6 +118,7 @@ export default function Signup({navigation}) {
             // console.log("res=== ",res)
             .then(response => response.json())
             .then(async responseData => {
+              const prop = responseData?.email ? 'email' : 'phone_number';
               responseData[0]
                 ? (showMessage({
                     type: 'success',
@@ -126,27 +127,27 @@ export default function Signup({navigation}) {
                     backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false),
-                   res = await action.login({
+                  (res = await action.login({
                     email,
                     password,
-                  }),
+                  })),
                   // setEmail(''),
                   // setUsername(''),
                   // setPhone_number(''),
                   // setPassword(''),
                   // setConfirm(''),
-                  console.log(133,res)
-                  )
+                  console.log(133, res))
                 : (showMessage({
                     type: 'warning',
                     icon: 'auto',
-                    message: responseData[0],
+                    message: `This ${prop} has already taken`,
                     backgroundColor: '#E9691D',
                   }),
                   setLoadingButton(false));
-             
+
               // console.log('jijijijjijjiji', responseData);
             })
+
             .done();
         }
       } else {
@@ -248,42 +249,42 @@ export default function Signup({navigation}) {
               message="Loading..."
             />
           ) : ( */}
-            <TouchableOpacity
-              onPress={()=>savedata()}
+          <TouchableOpacity
+            onPress={() => savedata()}
+            style={{
+              width: wp('60%'),
+              height: hp('6%'),
+              backgroundColor: '#FF7E33',
+              alignSelf: 'center',
+              marginTop: 30,
+              borderRadius: 7,
+              flexDirection: 'row',
+              // alignItems:'center',
+              // justifyContent:'center'
+            }}>
+            <View
               style={{
-                width: wp('60%'),
+                width: wp('15%'),
                 height: hp('6%'),
-                backgroundColor: '#FF7E33',
-                alignSelf: 'center',
-                marginTop: 30,
-                borderRadius: 7,
-                flexDirection: 'row',
-                // alignItems:'center',
-                // justifyContent:'center'
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              <View
-                style={{
-                  width: wp('15%'),
-                  height: hp('6%'),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Ionicons
-                  style={{marginLeft: wp('3%')}}
-                  name="create"
-                  size={25}
-                  color={'white'}
-                />
-              </View>
-              <View
-                style={{
-                  width: wp('35%'),
-                  height: hp('6%'),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  // backgroundColor:'red'
-                }}>
-                   {loadingButton ? (
+              <Ionicons
+                style={{marginLeft: wp('3%')}}
+                name="create"
+                size={25}
+                color={'white'}
+              />
+            </View>
+            <View
+              style={{
+                width: wp('35%'),
+                height: hp('6%'),
+                alignItems: 'center',
+                justifyContent: 'center',
+                // backgroundColor:'red'
+              }}>
+              {loadingButton ? (
                 <ActivityIndicator color="white" size="small" />
               ) : (
                 <Text
@@ -294,15 +295,16 @@ export default function Signup({navigation}) {
                     alignSelf: 'center',
                   }}>
                   Create Account
-                </Text>)}
-              </View>
-              <View
-                style={{
-                  width: wp('10%'),
-                  height: hp('7%'),
-                }}></View>
-            </TouchableOpacity>
-          
+                </Text>
+              )}
+            </View>
+            <View
+              style={{
+                width: wp('10%'),
+                height: hp('7%'),
+              }}></View>
+          </TouchableOpacity>
+
           {/* <TouchableOpacity style={styles.buts}>
             <View style={{marginLeft: 20, justifyContent: 'center'}}>
               <Ionicons name="logo-facebook" size={18} color={'white'} />

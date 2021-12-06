@@ -10,6 +10,7 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
+  Keyboard,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -107,7 +108,10 @@ export default function cate({navigation}) {
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}
               value={seacrhData}
+              onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
+              // onTouchCancel={}
+              // keyboardAppearance={true}
             />
             <TouchableOpacity onPress={() => onSubmitSeacrhItem()}>
               <Ionicons name="search" color="#512500" size={20} />
@@ -169,20 +173,20 @@ export default function cate({navigation}) {
           </View>
         )}
         <View style={{width: wp('65%')}}>
-          {subcatdata?.length > 0 &&
-          <TouchableOpacity style={styles.but}>
-            <Text style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
-              See All Product
-            </Text>
-            <Ionicons
-              name="chevron-forward-outline"
-              color="#512500"
-              size={30}
-              style={{marginLeft: 'auto'}}
-            />
-          </TouchableOpacity>
-          
-          }
+          {subcatdata?.length > 0 && (
+            <TouchableOpacity style={styles.but}>
+              <Text
+                style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
+                See All Product
+              </Text>
+              <Ionicons
+                name="chevron-forward-outline"
+                color="#512500"
+                size={30}
+                style={{marginLeft: 'auto'}}
+              />
+            </TouchableOpacity>
+          )}
           {subloading ? (
             <View
               style={{

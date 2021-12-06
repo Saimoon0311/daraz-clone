@@ -435,7 +435,8 @@ export default function Cart({navigation}) {
                               <View
                                 style={{
                                   flexDirection: 'row',
-                                  width: wp('40%'),
+                                  width: wp('55%'),
+                                  // flexWrap: 'wrap',
                                 }}>
                                 <Text
                                   style={{
@@ -448,25 +449,32 @@ export default function Cart({navigation}) {
                                   }}>
                                   Attribute :
                                 </Text>
-
-                                {att &&
-                                  att?.map(res => {
-                                    return (
-                                      <Text
-                                        // numberOfLines={1}
-                                        style={{
-                                          fontSize: hp('1.9'),
-                                          // color: color.textColorRedCart,
-                                          // fontWeight: 'bold',
-                                          color: '#512500',
-
-                                          marginLeft: wp('1'),
-                                          alignItems: 'center',
-                                        }}>
-                                        {res}
-                                      </Text>
-                                    );
-                                  })}
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    // backgroundColor: 'green',
+                                    width: wp('35'),
+                                  }}>
+                                  {att &&
+                                    att?.map(res => {
+                                      return (
+                                        <Text
+                                          numberOfLines={1}
+                                          style={{
+                                            fontSize: hp('1.9'),
+                                            // color: color.textColorRedCart,
+                                            // fontWeight: 'bold',
+                                            color: '#512500',
+                                            marginLeft: wp('1'),
+                                            alignItems: 'center',
+                                            // width: wp('34'),
+                                          }}>
+                                          {res}
+                                        </Text>
+                                      );
+                                    })}
+                                </View>
                               </View>
                             )}
                           </View>
@@ -548,7 +556,7 @@ export default function Cart({navigation}) {
                                 name="remove-circle-sharp"
                                 size={25}
                                 color={color.themColorPrimary}
-                                style={{paddingTop: 18, marginRight: 10}}
+                                style={{paddingTop: hp('2'), marginRight: 10}}
                               />
                             </TouchableOpacity>
                           )}
@@ -558,7 +566,7 @@ export default function Cart({navigation}) {
                                 Platform?.OS == 'ios' ? '2.2' : '2',
                               ),
                               marginRight: 10,
-                              fontSize: hp('2.5'),
+                              fontSize: hp('3.2'),
                               color: '#EEB08B',
                               fontWeight: 'bold',
                             }}>
@@ -577,7 +585,7 @@ export default function Cart({navigation}) {
                               name="add-circle-sharp"
                               size={25}
                               color={color.themColorPrimary}
-                              style={{paddingTop: 18, marginRight: 10}}
+                              style={{paddingTop: hp('2'), marginRight: 10}}
                             />
                           </TouchableOpacity>
                         </View>
