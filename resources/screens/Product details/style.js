@@ -74,7 +74,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
-    
   },
   buttonParent: {
     width: wp('75%'),
@@ -183,5 +182,23 @@ export const styles = StyleSheet.create({
     width: wp('27%'),
     height: hp('15%'),
     borderRadius: 10,
+  },
+  submitreviews: {
+    backgroundColor: color.themColorPrimary,
+    textAlign: 'center',
+    width: wp('50'),
+    alignSelf: 'center',
+    height: hp('6'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+
+  devider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'black',
+    marginTop: hp('1'),
+    marginBottom: hp('1'),
   },
 });

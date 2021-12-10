@@ -30,39 +30,7 @@ export default function Alldata(prop, {navigation}) {
   const s = id => {
     prop.addtowishlist(id);
   };
-  // const addtowishlist = id => {
-  //   fetch(`${ADDTOWISHLIST}/${id}/${prop?.userid}`)
-  //     .then(async response => await response.json())
-  //     .then(json => {
-  //       if (json[0]?.message == 'Added to wishlist') {
-  //         // parentFunction()
-  //         // prop.detailss
-  //         showMessage({
-  //           type: 'success',
-  //           icon: 'success',
-  //           message: json[0]?.message,
-  //           backgroundColor: '#E9691D',
-  //         });
-  //       } else if(json[0]?.message=="This item has been removed from your wishlist"){
-  //         // parentFunction()
-  //         showMessage({
-  //           type: "success",
-  //           icon: "auto",
-  //           message: json[0]?.message,
-  //           backgroundColor: '#E9691D',
-  //         });
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error(109, error)
-  //       showMessage({
-  //         type: "danger",
-  //         icon: "danger",
-  //         message: "Something went wrong.",
-  //         backgroundColor: '#E9691D',
-  //       })
-  //     });
-  // };
+
   const flatListRender = item => {
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>

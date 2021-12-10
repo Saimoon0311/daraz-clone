@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Avatar} from 'react-native-elements';
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Platform,
+  TextInput,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -17,7 +19,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker, PickerIOS} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
-import {ADDTOCART, Images_API} from '../../config/url';
+import {ADDTOCART, Images_API, REVIEWS} from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import AnimatedLoader from 'react-native-animated-loader';
@@ -40,8 +42,13 @@ export default function Details({route, navigation}) {
   const [favValue, setFavValue] = useState(false);
   // const [pickerValue, setPickerValue] = useState({});
   const [attributeArray, setAttributeArray] = useState([]);
-  const [starCount, setstarCount] = useState(4);
-
+  const [starCount, setstarCount] = useState(0);
+  const [reviewsName, setreviewName] = useState('');
+  const [reviewsEmail, setreviewEmail] = useState('');
+  const [reviewLoading, setreviewLoading] = useState(false);
+  const [reviews, setreview] = useState('');
+  const [allReviews, setallReviews] = useState();
+  const [allreviewsLoading, setallreviewsLoading] = useState(true);
   const onStarRatingPress = rating => {
     setstarCount(rating);
   };
@@ -68,6 +75,7 @@ export default function Details({route, navigation}) {
 
   useEffect(() => {
     // console.log(39, item);
+    getAllReviews();
     setUserId();
   }, []);
   const setUserId = async () => {
@@ -88,6 +96,104 @@ export default function Details({route, navigation}) {
       message: message,
       backgroundColor: '#E9691D',
     });
+  };
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const submitReviews = () => {
+    setreviewLoading(true);
+    if (
+      (reviewsEmail !== '' &&
+        reviewsEmail !== null &&
+        reviewsName !== '' &&
+        reviewsName !== null &&
+        reviews !== '' &&
+        reviews !== null &&
+        starCount > 0 &&
+        !reviewsEmail) ||
+      reg.test(reviewsEmail) !== false
+    ) {
+      var myHeaders = new Headers();
+      myHeaders.append('Accept', 'application/json');
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        name: reviewsName,
+        email: reviewsEmail,
+        stars: starCount,
+        review: reviews,
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(`${REVIEWS}/${product_id}`, requestOptions)
+        .then(response => response.json())
+        .then(json => {
+          setreviewLoading(false);
+          setreview('');
+          setreviewEmail('');
+          setreviewName('');
+          setstarCount(0);
+          json?.success == true
+            ? showMessage({
+                type: 'success',
+                icon: 'success',
+                message: 'Your review has been posted.',
+                backgroundColor: '#E9691D',
+              })
+            : showMessage({
+                type: 'danger',
+                icon: 'danger',
+                message: 'Some thing is wrong.',
+                backgroundColor: '#E9691D',
+              });
+        })
+        .catch(err => {
+          showMessage({
+            type: 'danger',
+            icon: 'danger',
+            message: 'Some thing is wrong.',
+            backgroundColor: '#E9691D',
+          });
+          setreviewLoading(false);
+          // console.log(err);
+        });
+    } else {
+      showMessage({
+        type: 'danger',
+        icon: 'danger',
+        message: 'Please enter the correct informations.',
+        backgroundColor: '#E9691D',
+      });
+      setreviewLoading(false);
+    }
+  };
+
+  const getAllReviews = () => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    fetch(`${REVIEWS}/${product_id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setallreviewsLoading(false);
+        setallReviews(result.data);
+      })
+      .catch(error => {
+        setallreviewsLoading(false);
+
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Some thing is wrong.',
+          backgroundColor: '#E9691D',
+        });
+      });
   };
 
   const validateCartAdd = () => {
@@ -322,16 +428,6 @@ export default function Details({route, navigation}) {
               </View>
             )}
             <Text style={styles.tep}>SKU : {item?.sku}</Text>
-            <StarRating
-              containerStyle={{width: wp('10')}}
-              starSize={20}
-              fullStarColor="#E9691D"
-              starStyle={{marginBottom: hp('0.5'), marginTop: hp('0.5')}}
-              disabled={true}
-              maxStars={5}
-              rating={starCount}
-              selectedStar={rating => onStarRatingPress(rating)}
-            />
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               Description :
             </Text>
@@ -421,6 +517,151 @@ export default function Details({route, navigation}) {
                 })}
             </View>
           )}
+          <View style={styles.box}>
+            <Text style={{color: color.defaultcolor}}>Submit Your Review</Text>
+            <Text></Text>
+            <Text>
+              Your email address will not be published. Required fields are
+              marked *
+            </Text>
+            <Text></Text>
+            <StarRating
+              containerStyle={{width: wp('10')}}
+              starSize={20}
+              fullStarColor="#E9691D"
+              starStyle={{marginBottom: hp('0.5'), marginTop: hp('0.5')}}
+              maxStars={5}
+              rating={starCount}
+              selectedStar={rating => onStarRatingPress(rating)}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+                // paddingTop: hp('-300'),
+              }}
+              // minHeight={hp('20')}
+              multiline
+              value={reviews}
+              onChangeText={text => setreview(text)}
+              placeholder="Write Your Reviews Here.."
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+              }}
+              value={reviewsName}
+              placeholder="Enter Your Name*"
+              onChangeText={text => setreviewName(text)}
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+              }}
+              placeholder="Enter Your Email*"
+              value={reviewsEmail}
+              onChangeText={text => setreviewEmail(text)}
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TouchableOpacity
+              style={styles.submitreviews}
+              onPress={() => submitReviews()}>
+              {reviewLoading ? (
+                <ActivityIndicator size={'small'} color={'white'} />
+              ) : (
+                <Text style={{color: 'white', fontSize: hp('2')}}>Submit</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          {allreviewsLoading ? (
+            <ActivityIndicator
+              style={{marginTop: hp('5')}}
+              size={'large'}
+              color={color.themColorPrimary}
+            />
+          ) : allReviews?.length > 0 ? (
+            <View style={styles.box}>
+              {allReviews.map(res => {
+                return (
+                  <View style={{flexDirection: 'row'}}>
+                    {/* <Avatar
+                      // rounded
+                      size={50}
+                      source={require('../../images/avata.png')}
+                    /> */}
+                    <Image
+                      source={require('../../images/avata.png')}
+                      // width={wp('5')}
+                      // height={hp('5')}
+                      resizeMode="contain"
+                      style={{
+                        // borderRadius: hp('20'),
+                        width: wp('15'),
+                        height: hp('9'),
+                        marginRight: wp('5'),
+                      }}
+                    />
+                    <View>
+                      <Text>{res.name}</Text>
+                      <StarRating
+                        containerStyle={{width: wp('10')}}
+                        starSize={15}
+                        fullStarColor="#E9691D"
+                        starStyle={{
+                          marginBottom: hp('0.5'),
+                          marginTop: hp('0.5'),
+                        }}
+                        maxStars={5}
+                        rating={res?.stars}
+                        disabled={true}
+                        // selectedStar={rating => onStarRatingPress(rating)}
+                      />
+                      <Text numberOfLines={10}>{res.review}</Text>
+                      <View
+                        style={{
+                          ...styles.devider,
+                          width: wp('60'),
+                          alignSelf: 'center',
+                          backgroundColor: '#C8C8C8',
+                        }}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          ) : (
+            <>
+              <Image
+                resizeMode="contain"
+                style={{
+                  // borderRadius: hp('20'),
+                  width: wp('30'),
+                  height: hp('20'),
+                  alignSelf: 'center',
+                  // marginRight: wp('10'),
+                  marginTop: hp('5'),
+                }}
+                source={require('../../images/newVec.png')}
+              />
+              <Text
+                style={{color: color.textColorRedCart, textAlign: 'center'}}>
+                No reviews yet.
+              </Text>
+            </>
+          )}
+
           {renderSlider()}
         </View>
       </ScrollView>
@@ -446,10 +687,8 @@ export default function Details({route, navigation}) {
               <DotsLoader color="#E9691D" size={20} />
             ) : (
               <View style={styles.buttonParent}>
-                
-                {item?.is_wishlisted==true ? (
-                  <View
-                    style={styles.favButton}>
+                {item?.is_wishlisted == true ? (
+                  <View style={styles.favButton}>
                     <Ionicons
                       style={{color: 'white'}}
                       name="heart"
