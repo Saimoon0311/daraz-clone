@@ -19,7 +19,12 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker, PickerIOS} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
-import {ADDTOCART, Images_API, REVIEWS} from '../../config/url';
+import {
+  ADDTOCART,
+  Images_API,
+  REVIEWS,
+  SUBCATPRODUCTDATA,
+} from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import AnimatedLoader from 'react-native-animated-loader';
@@ -35,6 +40,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import {styles} from './style';
 import StarRating from 'react-native-star-rating';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 export default function Details({route, navigation}) {
   const [user_id, setUser_id] = useState();
@@ -46,6 +52,7 @@ export default function Details({route, navigation}) {
   const [reviewsName, setreviewName] = useState('');
   const [reviewsEmail, setreviewEmail] = useState('');
   const [reviewLoading, setreviewLoading] = useState(false);
+  const [subCatLoading, setSubCatLoading] = useState(true);
   const [reviews, setreview] = useState('');
   const [allReviews, setallReviews] = useState();
   const [allreviewsLoading, setallreviewsLoading] = useState(true);
@@ -72,11 +79,13 @@ export default function Details({route, navigation}) {
       id: 6,
     },
   ]);
-
+  const [subCatdata, setSubCatdata] = useState();
+  var items = subCatdata;
   useEffect(() => {
     // console.log(39, item);
     getAllReviews();
     setUserId();
+    get_child_product();
   }, []);
   const setUserId = async () => {
     const userId = await getUserData();
@@ -84,10 +93,26 @@ export default function Details({route, navigation}) {
     setUser_id(users);
   };
 
+  const child_id = route?.child_category_id;
   const item = route?.params;
   const imm = item?.images;
 
   const product_id = item?.id;
+
+  const get_child_product = () => {
+    // fetch(`${SUBCATPRODUCTDATA}/${child_id}/${user_id}`)
+    fetch(`${SUBCATPRODUCTDATA}/81/${user_id}`)
+      .then(res => res.json())
+      .then(json => {
+        setSubCatdata(json[0]);
+        console.log(json);
+        setSubCatLoading(false);
+      })
+      .catch(err => {
+        setSubCatLoading(true);
+        console.log(err);
+      });
+  };
 
   const returnTopAlert = (type, message) => {
     return showMessage({
@@ -276,39 +301,67 @@ export default function Details({route, navigation}) {
           marginBottom: hp('20'),
           marginTop: hp('2'),
         }}>
-        <View style={{...styles.recentTextContainer}}>
-          <TouchableOpacity>
-            <Text style={{...styles.sliderText, color: 'grey'}}>
-              Related Products
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.sliderText}>See All</Text>
-          </TouchableOpacity>
+        <View style={styles.bottomImageScroller}>
+          {subCatLoading ? (
+            <SkeletonPlaceholder>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+              </View>
+            </SkeletonPlaceholder>
+          ) : (
+            subCatdata?.length > 0 && (
+              <View>
+                <View style={{...styles.recentTextContainer}}>
+                  {/* <TouchableOpacity> */}
+                  <Text style={{...styles.sliderText, color: 'grey'}}>
+                    Related Products
+                  </Text>
+                  {/* </TouchableOpacity> */}
+                  {/* <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('subcatdetails', {
+                    item: item?.child_category_id,
+                    screenData: 'subCat',
+                  })
+                }>
+                <Text style={styles.sliderText}>See All</Text>
+              </TouchableOpacity> */}
+                </View>
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  nestedScrollEnabled
+                  horizontal={true}>
+                  {subCatdata?.map(res => {
+                    return (
+                      <View style={styles.bottomimages}>
+                        <Image
+                          style={styles.imagss}
+                          // source={{
+                          //   uri: `${Images_API}/${res.get_products.images[0].name}`,
+                          // }}
+                          source={{
+                            uri: `${Images_API}/${res?.images[0]?.name}`,
+                          }}
+                          // source={{
+                          //   uri: 'https://picsum.photos/200',
+                          // }}
+                        />
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )
+          )}
         </View>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          nestedScrollEnabled
-          horizontal={true}>
-          <View style={styles.bottomImageScroller}>
-            {silderData?.length > 0 &&
-              silderData?.map(res => {
-                return (
-                  <View style={styles.bottomimages}>
-                    <Image
-                      style={styles.imagss}
-                      // source={{
-                      //   uri: `${Images_API}/${res.get_products.images[0].name}`,
-                      // }}
-                      source={{
-                        uri: 'https://picsum.photos/200',
-                      }}
-                    />
-                  </View>
-                );
-              })}
-          </View>
-        </ScrollView>
       </View>
     );
   };
@@ -591,7 +644,15 @@ export default function Details({route, navigation}) {
               color={color.themColorPrimary}
             />
           ) : allReviews?.length > 0 ? (
-            <View style={styles.box}>
+            <ScrollView
+              nestedScrollEnabled={true}
+              showsVerticalScrollIndicator={false}
+              style={{
+                ...styles.box,
+                height: 'auto',
+                maxHeight: hp('50'),
+              }}>
+              {/* <View> */}
               {allReviews.map(res => {
                 return (
                   <View style={{flexDirection: 'row'}}>
@@ -640,7 +701,8 @@ export default function Details({route, navigation}) {
                   </View>
                 );
               })}
-            </View>
+              {/* </View> */}
+            </ScrollView>
           ) : (
             <>
               <Image

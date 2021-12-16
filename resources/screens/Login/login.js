@@ -15,6 +15,7 @@ import {
   Alert,
   Button,
   StatusBar,
+  Linking,
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -159,7 +160,10 @@ export default function Login({navigation}) {
             />
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL('https://moyenexpress.com/forgot-password')
+          }>
           <Text
             style={{
               paddingTop: 36.5,

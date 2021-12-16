@@ -1,4 +1,4 @@
-import {StyleSheet,Platform} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {color} from '../../config/color';
 import {
   widthPercentageToDP as wp,
@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   main: {
     backgroundColor: color.defaultBackgroundColor,
   },
-  
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
   },
   icon: {
     margin: 20,
+    height: hp('5'),
   },
   box: {
     padding: 13,
@@ -45,7 +46,7 @@ export const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 20,
   },
-  
+
   te: {
     textAlign: 'center',
     fontSize: 18,
@@ -75,7 +76,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
-  
+
   pickerParentStyle: {
     width: wp('80'),
     height: hp(Platform?.OS == 'ios' ? '20' : '7'),
@@ -86,9 +87,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     color: '#512500',
-
   },
-  
+
   pickerStyle: {
     width: wp('80'),
     height: hp(Platform?.OS == 'ios' ? '20' : '7'),
@@ -101,9 +101,9 @@ export const styles = StyleSheet.create({
     // opacity: 0.5,
     overflow: 'hidden',
     // textAlign:"center",
-    paddingLeft:wp('2'),
-    textAlignVertical:"center",
-    fontSize:hp('2'),
-    fontWeight:"bold",
+    paddingLeft: wp('2'),
+    textAlignVertical: 'center',
+    fontSize: hp('2'),
+    fontWeight: 'bold',
   },
 });

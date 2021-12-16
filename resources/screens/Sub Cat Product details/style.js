@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     color: '#512500',
     fontWeight: 'bold',
     marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.7'),
+    width: wp('70'),
   },
   loader: {
     justifyContent: 'center',

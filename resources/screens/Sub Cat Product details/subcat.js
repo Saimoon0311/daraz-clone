@@ -445,7 +445,9 @@ export default function subcatdetails({route, navigation}) {
             style={{...styles.icon, marginLeft: wp('3')}}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{renderHeaderText()}</Text>
+        <Text numberOfLines={1} style={styles.te}>
+          {renderHeaderText()}
+        </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"

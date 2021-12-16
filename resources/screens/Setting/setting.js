@@ -157,7 +157,7 @@ export default function setting({navigation}) {
           />
           <Text style={styles.orte}>Orders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.shadow}>
+        {/* <TouchableOpacity style={styles.shadow}>
           <Ionicons
             name="document-text-outline"
             size={20}
@@ -165,7 +165,7 @@ export default function setting({navigation}) {
             color="gray"
           />
           <Text style={styles.orte}>Ratings & Reviews</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('subcatdetails', {
@@ -204,7 +204,7 @@ export default function setting({navigation}) {
           My Settings
         </Text>
 
-        <TouchableOpacity style={styles.shadow}>
+        {/* <TouchableOpacity style={styles.shadow}>
           <Ionicons
             name="book-outline"
             size={20}
@@ -212,7 +212,7 @@ export default function setting({navigation}) {
             color="gray"
           />
           <Text style={styles.orte}>Address Book</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.shadow}
           onPress={() => navigation.navigate('changepassword')}>

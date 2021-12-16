@@ -315,11 +315,11 @@ export default function Home({navigation}) {
             />
             {/* <Alldata detailss={detailss} data={data} isLoading={isLoading} /> */}
           </NativeBaseProvider>
-          <View style={styles.see}>
+          {/* <View style={styles.see}>
             <TouchableOpacity>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </ScrollView>
         <AwesomeAlert
           show={showAlert}
