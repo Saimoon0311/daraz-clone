@@ -30,6 +30,10 @@ export const ORDERPLACE = getApi('place-an-order');
 export const GETCLIENTSECRET = getApi('stripe-form/submit');
 export const SENDINTENTANDORDERDATA = getApi('stripe-form/aftersubmit');
 export const REVIEWS = getApi('reviews');
+export const ALLDATA = getApi('featured-data-all');
+
+// export const StripePKey =
+//   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 
 export const StripePKey =
-  'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
+  'pk_live_51K5P49EoiJYB55N4fClLpBw782KOcOakMNZGmbx2KSVJ59cBhoyIAY4WIF4bINlTF1g0h9rImBDCHEJj9KF2UymM00CL5YnH4E';

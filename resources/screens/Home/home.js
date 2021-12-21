@@ -65,6 +65,7 @@ export default function Home({navigation}) {
     setRefreshing(true);
     setLoading(true);
     setAloading(true);
+    setBloading(true);
     wait(2000).then(() => {
       datacallss(), setRefreshing(false);
     });
@@ -225,11 +226,15 @@ export default function Home({navigation}) {
                   marginLeft: wp('4'),
                 }}
               />
-              <TouchableOpacity
-                onPress={() => setToggleSearchBar(!toggleSearchBar)}
+              <View
+                // onPress={() => setToggleSearchBar(!toggleSearchBar)}
                 style={{marginLeft: wp('10%')}}>
-                <Ionicons name="search" size={27} color={color.defaultcolor} />
-              </TouchableOpacity>
+                <Ionicons
+                  name="search"
+                  size={27}
+                  color={color.defaultBackgroundColor}
+                />
+              </View>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Cart')}
                 style={{marginRight: wp('5%')}}>

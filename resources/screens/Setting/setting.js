@@ -183,7 +183,7 @@ export default function setting({navigation}) {
           <Text style={styles.orte}>Saved Items</Text>
         </TouchableOpacity>
         {/* </View> */}
-        <TouchableOpacity style={styles.shadow}>
+        {/* <TouchableOpacity style={styles.shadow}>
           <Ionicons
             name="eye-outline"
             size={20}
@@ -191,7 +191,7 @@ export default function setting({navigation}) {
             color="gray"
           />
           <Text style={styles.orte}>Recently Viewed</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <Text
           style={{

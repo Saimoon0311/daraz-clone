@@ -573,7 +573,7 @@ export default function Details({route, navigation}) {
           <View style={styles.box}>
             <Text style={{color: color.defaultcolor}}>Submit Your Review</Text>
             <Text></Text>
-            <Text>
+            <Text style={{color: 'gray'}}>
               Your email address will not be published. Required fields are
               marked *
             </Text>
@@ -593,6 +593,7 @@ export default function Details({route, navigation}) {
                 borderWidth: 0.5,
                 borderRadius: 5,
                 paddingLeft: wp('5'),
+                color: 'black',
                 // paddingTop: hp('-300'),
               }}
               // minHeight={hp('20')}
@@ -608,6 +609,7 @@ export default function Details({route, navigation}) {
                 borderWidth: 0.5,
                 borderRadius: 5,
                 paddingLeft: wp('5'),
+                color: 'black',
               }}
               value={reviewsName}
               placeholder="Enter Your Name*"
@@ -620,6 +622,7 @@ export default function Details({route, navigation}) {
                 borderWidth: 0.5,
                 borderRadius: 5,
                 paddingLeft: wp('5'),
+                color: 'black',
               }}
               placeholder="Enter Your Email*"
               value={reviewsEmail}
@@ -674,7 +677,7 @@ export default function Details({route, navigation}) {
                       }}
                     />
                     <View>
-                      <Text>{res.name}</Text>
+                      <Text style={{color: 'gray'}}>{res?.name}</Text>
                       <StarRating
                         containerStyle={{width: wp('10')}}
                         starSize={15}
@@ -688,7 +691,9 @@ export default function Details({route, navigation}) {
                         disabled={true}
                         // selectedStar={rating => onStarRatingPress(rating)}
                       />
-                      <Text numberOfLines={10}>{res.review}</Text>
+                      <Text numberOfLines={10} style={{color: 'gray'}}>
+                        {res?.review}
+                      </Text>
                       <View
                         style={{
                           ...styles.devider,

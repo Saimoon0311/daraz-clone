@@ -48,7 +48,7 @@ export default function cate({navigation}) {
       })
       .catch(error => setNshowAlert(true));
 
-    const api = SUBCAT + 3;
+    const api = SUBCAT + 22;
     fetch(api)
       .then(async response => await response.json())
       .then(json => {
@@ -174,7 +174,13 @@ export default function cate({navigation}) {
         )}
         <View style={{width: wp('65%')}}>
           {subcatdata?.length > 0 && (
-            <TouchableOpacity style={styles.but}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('subcatdetails', {
+                  screenData: 'featured-data-all/',
+                })
+              }
+              style={styles.but}>
               <Text
                 style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
                 See All Product

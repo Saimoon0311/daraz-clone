@@ -101,14 +101,15 @@ export default function subcatdetails({route, navigation}) {
       .then(json => {
         setAllData(json[0]), setLoading(false);
       })
-      .catch(error =>
+      .catch(error => {
+        console.log(error);
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: 'Something want wrong.',
+          message: 'Something want wrongs.',
           backgroundColor: '#E9691D',
-        }),
-      );
+        });
+      });
   };
   const parentFunction = async () => {
     if (paramData?.screenData == 'subCat') {
@@ -175,6 +176,8 @@ export default function subcatdetails({route, navigation}) {
       return <Text>Wishlist</Text>;
     } else if (paramData?.screenData == 'search-products') {
       return <Text>Search Items</Text>;
+    } else if (paramData?.screenData == 'featured-data-all/') {
+      return <Text>All Products</Text>;
     }
   };
 

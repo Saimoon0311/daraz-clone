@@ -24,6 +24,8 @@ import cate from '../screens/Catergory/catagery';
 import Order from '../screens/OrderDetails/OrderDetails';
 import setting from '../screens/Setting/setting';
 import {color} from '../config/color';
+import seacrhScreen from '../screens/SeacrhScreen/seacrScreen';
+import Cart from '../screens/Cart/cart';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,22 +35,24 @@ function MybottomTabs() {
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: '#E9691D',
-        tabBarInactiveTintColor: '#512500',
+        tabBarActiveTintColor: '#512500',
+        // tabBarInactiveTintColor: '#512500',
+        // tabBarInactiveTintColor: '#E9691D',
         swipeEnabled: true,
         animationEnabled: true,
-        tabBarActiveBackgroundColor: '#FFDDC9',
-        tabBarInactiveBackgroundColor: '#FFDDC9',
+        tabBarActiveBackgroundColor: 'white',
+        tabBarInactiveBackgroundColor: 'white',
         tabBarStyle: {
           height: hp(Platform?.OS == 'ios' ? '10%' : '8%'),
           backgroundColor: '#FFDDC9',
+          // paddingTop: hp('-2'),
         },
       })}>
       <Tab.Screen
         name="Home"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="home" color={color} size={hp('3')} />
+            <Ionicons name="home-outline" color={color} size={hp('3')} />
           ),
           title: 'Home',
           tabBarLabelStyle: {
@@ -72,7 +76,7 @@ function MybottomTabs() {
           tabBarIconStyle: {
             color: 'red',
           },
-          title: 'Category',
+          title: 'Shop',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
@@ -101,9 +105,9 @@ function MybottomTabs() {
         name="setting"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="settings-sharp" color={color} size={hp('3')} />
+            <Ionicons name="person-outline" color={color} size={hp('3')} />
           ),
-          title: 'Setting',
+          title: 'Account',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
@@ -111,6 +115,36 @@ function MybottomTabs() {
           },
         }}
         component={setting}
+      />
+      <Tab.Screen
+        name="Cart"
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="cart-outline" color={color} size={hp('3')} />
+          ),
+          title: 'Cart',
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
+          },
+        }}
+        component={Cart}
+      />
+      <Tab.Screen
+        name="seacrhScreen"
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="search-sharp" color={color} size={hp('3')} />
+          ),
+          title: 'Search',
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
+          },
+        }}
+        component={seacrhScreen}
       />
     </Tab.Navigator>
   );
