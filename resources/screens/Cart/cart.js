@@ -637,7 +637,7 @@ export default function Cart({navigation}) {
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.recentTextContainer}>
+                  {/* <View style={styles.recentTextContainer}>
                     <TouchableOpacity>
                       <Text style={{...styles.sliderText, color: 'grey'}}>
                         Recent Views
@@ -646,9 +646,9 @@ export default function Cart({navigation}) {
                     <TouchableOpacity>
                       <Text style={styles.sliderText}>See All</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
 
-                  <ScrollView
+                  {/* <ScrollView
                     showsHorizontalScrollIndicator={false}
                     nestedScrollEnabled
                     horizontal={true}>
@@ -670,7 +670,7 @@ export default function Cart({navigation}) {
                           );
                         })}
                     </View>
-                  </ScrollView>
+                  </ScrollView> */}
                 </View>
               )}
             </View>

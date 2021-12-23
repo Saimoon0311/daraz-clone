@@ -151,11 +151,6 @@ export default function seacrhScreen({navigation}) {
                 />
               </TouchableOpacity>
             )}
-            {/* <TouchableOpacity
-                                                                                                              style={styles.icons}
-                                                                                                              onPress={() => addtowishlist(item?.id)}>
-                                                                                                              <Ionicons name="heart" color={color.themColorPrimary} size={30} />
-                                                                                                            </TouchableOpacity> */}
           </ImageBackground>
           <View style={{width: wp('35%')}}>
             <Text style={styles.text} numberOfLines={1}>
@@ -277,6 +272,17 @@ export default function seacrhScreen({navigation}) {
       {loading ? (
         <View style={{margin: hp('22%'), alignSelf: 'center'}}>
           <BubblesLoader size={50} dotRadius={10} color="#512500" />
+        </View>
+      ) : allData.length == 0 ? (
+        <View style={styles.imm}>
+          <Ionicons name="cart" color="#E9691D" size={80} />
+          <Text style={styles.tee}>You have no items in this list</Text>
+          {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
+          {/* <TouchableOpacity
+            style={styles.maior}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.or}>Continue Shopping</Text>
+          </TouchableOpacity> */}
         </View>
       ) : (
         <FlatList

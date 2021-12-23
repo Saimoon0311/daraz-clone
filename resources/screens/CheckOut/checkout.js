@@ -493,7 +493,7 @@ export default function checkOut({navigation, route}) {
                 setPaymentMethodValue(nextValue);
               }}
               colorScheme={'orange'}>
-              <Radio value="Direct Bank Transfer" my={1}>
+              {/* <Radio value="Direct Bank Transfer" my={1}>
                 <Text style={styles.radioText}>Direct Bank Transfer</Text>
               </Radio>
               <View
@@ -503,7 +503,7 @@ export default function checkOut({navigation, route}) {
                   alignSelf: 'center',
                   backgroundColor: '#C8C8C8',
                 }}
-              />
+              /> */}
               {/* {paymentMethodValue== 'Direct Bank Transfer'?
             cardDetails():
             null  
@@ -519,7 +519,7 @@ export default function checkOut({navigation, route}) {
                   backgroundColor: '#C8C8C8',
                 }}
               />
-              <Radio value="PayPal" my={1}>
+              {/* <Radio value="PayPal" my={1}>
                 <Text style={styles.radioText}>PayPal</Text>
               </Radio>
               <View
@@ -529,7 +529,7 @@ export default function checkOut({navigation, route}) {
                   alignSelf: 'center',
                   backgroundColor: '#C8C8C8',
                 }}
-              />
+              /> */}
               <Radio value="Stripe Payment" my={1}>
                 <Text style={styles.radioText}>Stripe Payment</Text>
               </Radio>
