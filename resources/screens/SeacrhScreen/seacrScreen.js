@@ -37,13 +37,14 @@ import {styles} from './style';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from '../../config/color';
 
 export default function seacrhScreen({navigation}) {
   const [seacrhData, setSearchData] = useState('');
   const [userId, setUserId] = useState();
-  const [allData, setAllData] = useState();
+  const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(false);
   const onSubmitSeacrhItem = () => {
     setLoading(true);
@@ -62,16 +63,25 @@ export default function seacrhScreen({navigation}) {
     //       // setToggleSearchBar(false);
     //       setSearchData('');
     //     }
-
-    fetch(`${API_BASED_URL}search-products/${userId}?name=${seacrhData}`)
-      .then(response => response.json())
-      .then(json => {
-        console.log(86, json);
-        setAllData(json[0]), setLoading(false);
-      })
-      .catch(error => {
-        console.log(90, error);
+    if (seacrhData !== '' && seacrhData !== null) {
+      fetch(`${API_BASED_URL}search-products/${userId}?name=${seacrhData}`)
+        .then(response => response.json())
+        .then(json => {
+          console.log(86, json);
+          setAllData(json[0]), setLoading(false);
+        })
+        .catch(error => {
+          console.log(90, error);
+        });
+    } else {
+      setLoading(false);
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter correct Seacrh.',
+        backgroundColor: '#E9691D',
       });
+    }
   };
 
   const addtowishlist = id => {
@@ -247,6 +257,8 @@ export default function seacrhScreen({navigation}) {
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}
               value={seacrhData}
+              autoFocus={true}
+              focusable={true}
               onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
               //               autoFocus={ena}
@@ -273,10 +285,14 @@ export default function seacrhScreen({navigation}) {
         <View style={{margin: hp('22%'), alignSelf: 'center'}}>
           <BubblesLoader size={50} dotRadius={10} color="#512500" />
         </View>
-      ) : allData.length == 0 ? (
+      ) : allData?.length == 0 ? (
         <View style={styles.imm}>
-          <Ionicons name="cart" color="#E9691D" size={80} />
-          <Text style={styles.tee}>You have no items in this list</Text>
+          <MaterialCommunityIcons
+            name="database-remove"
+            color="#E9691D"
+            size={80}
+          />
+          <Text style={styles.tee}>No product found in this list.</Text>
           {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
           {/* <TouchableOpacity
             style={styles.maior}

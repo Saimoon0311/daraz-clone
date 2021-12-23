@@ -108,6 +108,7 @@ export default function cate({navigation}) {
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}
               value={seacrhData}
+              // autoFocus={true}
               onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
               // onTouchCancel={}

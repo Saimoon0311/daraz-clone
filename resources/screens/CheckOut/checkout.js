@@ -72,6 +72,7 @@ export default function checkOut({navigation, route}) {
   const [cardData, setCardData] = useState(null);
   const [clientSecret, setClientSecret] = useState('');
   const [stripeData, setStripeData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   //ADD localhost address of your server
   const API_URL =
     Platform?.OS == 'ios' ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
@@ -116,6 +117,13 @@ export default function checkOut({navigation, route}) {
         initPaymentScreenStripe(res?.client_secret);
       })
       .catch(err => {
+        setIsLoading(false);
+        showMessage({
+          type: 'warning',
+          icon: 'warning',
+          message: 'Error while fetching client data.',
+          backgroundColor: '#E9691D',
+        });
         console.log(122, err);
       });
   };
@@ -128,6 +136,13 @@ export default function checkOut({navigation, route}) {
       customerId: userDataLocal?.id,
     });
     if (error) {
+      setIsLoading(false);
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Error while fetching client data.',
+        backgroundColor: '#E9691D',
+      });
       console.log(119, error);
     } else {
       validateHitOrderPlaceApi('stripe', data);
@@ -141,6 +156,7 @@ export default function checkOut({navigation, route}) {
 
     if (error) {
       console.log(156, error);
+      setIsLoading(false);
     } else {
       const {paymentIntent, error} = await retrievePaymentIntent(data);
       if (paymentIntent) {
@@ -445,7 +461,7 @@ export default function checkOut({navigation, route}) {
         <View>
           {/* {topButton()} */}
           {accountDetails()}
-          {deliveryMethod()}
+          {/* {deliveryMethod()} */}
           {orderDetailsRenderdata()}
           {bottomButton()}
         </View>
@@ -455,7 +471,7 @@ export default function checkOut({navigation, route}) {
         <View>
           {/* {topButton()} */}
           {accountDetailsSummy()}
-          {deliveryMethod()}
+          {/* {deliveryMethod()} */}
           {/* {paymentMethod()} */}
           {orderDetailsRenderdata()}
           {bottomButton()}
@@ -696,8 +712,20 @@ export default function checkOut({navigation, route}) {
         {totalPriceCard()}
         <TouchableOpacity
           style={styles.maior}
-          onPress={() => processTopPayment()}>
-          <Text style={styles.or}>Proceed</Text>
+          onPress={() => {
+            setIsLoading(true);
+
+            processTopPayment();
+          }}>
+          {isLoading ? (
+            <ActivityIndicator
+              animating={isLoading}
+              size={'small'}
+              color={'white'}
+            />
+          ) : (
+            <Text style={styles.or}>Proceed</Text>
+          )}
         </TouchableOpacity>
       </>
     );
@@ -718,7 +746,7 @@ export default function checkOut({navigation, route}) {
 
   const validateHitOrderPlaceApi = (stringValue, data) => {
     if (
-      deliveryMethodValue !== null &&
+      // deliveryMethodValue !== null &&
       paymentMethodValue !== null &&
       userDataLocal?.username !== '' &&
       userDataLocal?.username !== null &&
@@ -740,16 +768,19 @@ export default function checkOut({navigation, route}) {
       } else {
         hitOrderPlaceApi();
       }
-    } else
+    } else {
+      setIsLoading(false);
       showMessage({
         type: 'warning',
         icon: 'warning',
         message: 'Please enter all delivery information',
         backgroundColor: '#E9691D',
       });
+    }
   };
 
   const hitOrderPlaceApi = async paymentIntentdata => {
+    // console.log(753, paymentIntentdata);
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
@@ -783,13 +814,32 @@ export default function checkOut({navigation, route}) {
       .then(response => response.json())
       .then(result => {
         // console.log(785, result);
-        if (result?.message == 'Checkout Completed') {
+        if (
+          result?.message == 'Checkout Completed' &&
+          paymentMethodValue == 'Stripe Payment'
+        ) {
+          setIsLoading(false);
           sendPaymentIntentData(result, paymentIntentdata);
+        } else {
+          setIsLoading(false);
+
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: 'Your order has been sucessfully placed.',
+            backgroundColor: '#E9691D',
+          });
+          setButtonState(4);
         }
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setIsLoading(false);
+
+        console.log('780', error);
+      });
   };
   const sendPaymentIntentData = async (result, paymentIntentdata) => {
+    console.log(793, paymentIntentdata);
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
@@ -798,7 +848,7 @@ export default function checkOut({navigation, route}) {
       orderId: result?.order?.id,
       stripeId: paymentIntentdata?.id,
     });
-
+    console.log(801, raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -815,6 +865,8 @@ export default function checkOut({navigation, route}) {
       .then(result => {
         console.log(result);
         if (result?.success == true) {
+          setIsLoading(false);
+
           showMessage({
             type: 'success',
             icon: 'success',
@@ -823,6 +875,8 @@ export default function checkOut({navigation, route}) {
           });
           setButtonState(4);
         } else {
+          setIsLoading(false);
+
           showMessage({
             type: 'warning',
             icon: 'warning',
@@ -832,13 +886,15 @@ export default function checkOut({navigation, route}) {
         }
       })
       .catch(error => {
+        setIsLoading(false);
+
         showMessage({
           type: 'warning',
           icon: 'warning',
           message: 'Something went wrong.',
           backgroundColor: '#E9691D',
         });
-        console.log('error', error);
+        console.log('841', error);
       });
   };
   const orderCompleteScreen = () => {

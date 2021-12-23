@@ -53,7 +53,7 @@ function MybottomTabs() {
         name="Home"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="home-outline" color={color} size={hp('3')} />
+            <Ionicons name="home" color={color} size={hp('3')} />
           ),
           title: 'Home',
           tabBarLabelStyle: {
@@ -106,7 +106,7 @@ function MybottomTabs() {
         name="setting"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="person-outline" color={color} size={hp('3')} />
+            <Ionicons name="person" color={color} size={hp('3')} />
           ),
           title: 'Account',
           tabBarLabelStyle: {
@@ -121,7 +121,7 @@ function MybottomTabs() {
         name="Cart"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="cart-outline" color={color} size={hp('3')} />
+            <Ionicons name="cart" color={color} size={hp('3')} />
           ),
           title: 'Cart',
           tabBarLabelStyle: {
@@ -136,7 +136,7 @@ function MybottomTabs() {
         name="seacrhScreen"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="search-sharp" color={color} size={hp('3')} />
+            <Ionicons name="search" color={color} size={hp('3')} />
           ),
           title: 'Search',
           tabBarLabelStyle: {

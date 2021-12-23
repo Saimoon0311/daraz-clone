@@ -181,6 +181,7 @@ export default function Signup({navigation}) {
             label="Email *"
             style={[styles.te, {width: wp('75%')}]}
             underlineColor="gray"
+            autoCapitalize="none"
             theme={{colors: {primary: color.themColorPrimary}}}
             selectionColor="#FF7E33"
             value={email}
@@ -322,11 +323,11 @@ export default function Signup({navigation}) {
             </View>
           </TouchableOpacity> */}
         </View>
-        <TouchableOpacity style={styles.ty}>
+        <View style={styles.ty}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
-            Aleardy Have An Account ?
+            Already Have An Account ?
           </Text>
-        </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           style={styles.ty}

@@ -137,7 +137,7 @@ export default function Cartdetails({route, navigation}) {
               </View>
             )}
             <Text style={styles.tep}>SKU : {item?.get_products?.sku}</Text>
-            <StarRating
+            {/* <StarRating
               containerStyle={{width: wp('10')}}
               starSize={20}
               fullStarColor="#E9691D"
@@ -146,7 +146,7 @@ export default function Cartdetails({route, navigation}) {
               maxStars={5}
               rating={starCount}
               selectedStar={rating => onStarRatingPress(rating)}
-            />
+            /> */}
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               Description :
             </Text>

@@ -21,7 +21,7 @@ import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {showMessage} from 'react-native-flash-message';
 import action from '../../redux/action';
-import {LOGIN} from '../../config/url';
+import {FORGETPASSWORD, LOGIN} from '../../config/url';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import {color} from '../../config/color';
 import {styles} from './style';
@@ -135,6 +135,7 @@ export default function Login({navigation}) {
             label="Email *"
             underlineColor="gray"
             value={email}
+            autoCapitalize="none"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
             onChangeText={email => updateState({email})}
@@ -160,10 +161,7 @@ export default function Login({navigation}) {
             />
           </View>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            Linking.openURL('https://moyenexpress.com/forgot-password')
-          }>
+        <TouchableOpacity onPress={() => Linking.openURL(FORGETPASSWORD)}>
           <Text
             style={{
               paddingTop: 36.5,
@@ -257,11 +255,11 @@ export default function Login({navigation}) {
             </View>
           </TouchableOpacity> */}
         </View>
-        <TouchableOpacity style={styles.ty}>
+        <View style={styles.ty}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
             New on Moyen?
           </Text>
-        </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={styles.ty}
           onPress={() => navigation.navigate('Signup')}>

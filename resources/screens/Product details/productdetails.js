@@ -626,6 +626,7 @@ export default function Details({route, navigation}) {
               }}
               placeholder="Enter Your Email*"
               value={reviewsEmail}
+              autoCapitalize="none"
               onChangeText={text => setreviewEmail(text)}
               placeholderTextColor={'gray'}
             />

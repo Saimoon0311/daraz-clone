@@ -1,5 +1,5 @@
-export const API_BASED_URL = 'https://moyenexpress.com/public/api/';
-export const Images_API = 'https://moyenexpress.com/public/products';
+export const API_BASED_URL = 'https://moyenxpress.com/public/api/';
+export const Images_API = 'https://moyenxpress.com/public/products';
 
 export const getApi = endpoint => API_BASED_URL + endpoint;
 
@@ -31,6 +31,7 @@ export const GETCLIENTSECRET = getApi('stripe-form/submit');
 export const SENDINTENTANDORDERDATA = getApi('stripe-form/aftersubmit');
 export const REVIEWS = getApi('reviews');
 export const ALLDATA = getApi('featured-data-all');
+export const FORGETPASSWORD = 'https://moyenxpress.com/forgot-password';
 
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
