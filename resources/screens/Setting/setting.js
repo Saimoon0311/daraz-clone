@@ -23,13 +23,16 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function setting({navigation}) {
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [dummy, setDummy] = useState('');
-
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
   const isFocused = useIsFocused();
   // if(route?.params==screenUpdatess){
   //  setDummy("a")
@@ -96,7 +99,7 @@ export default function setting({navigation}) {
           }}>
           My Account
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"
             size={35}
@@ -106,7 +109,13 @@ export default function setting({navigation}) {
               marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <View
+          style={{
+            marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
+          }}>
+          <HomeCartIcon navigations={navigationProps} />
+        </View>
       </View>
       <View style={styles.well}>
         <Text style={{...styles.we}}>Welcome</Text>
@@ -131,7 +140,7 @@ export default function setting({navigation}) {
           style={{
             ...styles.acc,
             marginTop: hp('3'),
-            marginRight: wp(Platform?.OS == 'ios' ? '47' : '53'),
+            marginLeft: wp(Platform?.OS == 'ios' ? '-43' : '-36'),
           }}>
           My Moyen Account
         </Text>
@@ -198,8 +207,9 @@ export default function setting({navigation}) {
             ...styles.acc,
             marginTop: hp('3'),
             marginBottom: hp('1'),
-            marginRight: wp('60'),
-            marginRight: wp(Platform?.OS == 'ios' ? '60' : '65'),
+            // marginRight: wp('60'),
+            // marginRight: wp(Platform?.OS == 'ios' ? '0' : '0'),
+            marginLeft: wp(Platform?.OS == 'ios' ? '-43' : '-53'),
           }}>
           My Settings
         </Text>

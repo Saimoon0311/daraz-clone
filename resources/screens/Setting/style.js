@@ -27,8 +27,9 @@ export const styles = StyleSheet.create({
   },
   acc: {
     color: '#512500',
-    fontSize: 16,
+    fontSize: hp('3'),
     fontWeight: 'bold',
+    // backgroundColor: 'red',
   },
   vacc: {
     margin: 30,

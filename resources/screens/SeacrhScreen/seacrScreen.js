@@ -40,12 +40,16 @@ import {showMessage} from 'react-native-flash-message';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from '../../config/color';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function seacrhScreen({navigation}) {
   const [seacrhData, setSearchData] = useState('');
   const [userId, setUserId] = useState();
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
   const onSubmitSeacrhItem = () => {
     setLoading(true);
     //     if (seacrhData == '') {
@@ -269,7 +273,7 @@ export default function seacrhScreen({navigation}) {
               <Ionicons name="search" color="#512500" size={20} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Ionicons
               size={37.5}
               color="#512500"
@@ -278,7 +282,13 @@ export default function seacrhScreen({navigation}) {
                 marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.5'),
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View
+            style={{
+              marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.7'),
+            }}>
+            <HomeCartIcon navigations={navigationProps} />
+          </View>
         </View>
       </View>
       {loading ? (

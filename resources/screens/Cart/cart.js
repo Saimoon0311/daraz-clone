@@ -35,7 +35,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
 
 export default function Cart({navigation}) {
-  const [cartdata, setCartdata] = useState(null);
+  const [cartdata, setCartdata] = useState([1]);
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
   const [quantity, setQuantity] = useState(null);
@@ -125,10 +125,10 @@ export default function Cart({navigation}) {
 
   useEffect(() => {
     (() => {
-      getCartCall();
+      // getCartCall();
       // getRecentData();
       if (isFocused) {
-        // setLoading(true)
+        setLoading(true);
         getCartCall();
         // getRecentData();
       } else {
@@ -324,7 +324,9 @@ export default function Cart({navigation}) {
               <TouchableOpacity
                 style={styles.maior}
                 // onPress={() => navigation.navigate('checkOut')}
-                onPress={() => navigation.goBack()}>
+                onPress={() => {
+                  navigation.goBack();
+                }}>
                 <Text style={styles.or}>Continue Shopping</Text>
               </TouchableOpacity>
             </View>

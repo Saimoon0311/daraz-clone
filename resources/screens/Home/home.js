@@ -36,6 +36,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -70,6 +71,10 @@ export default function Home({navigation}) {
       datacallss(), setRefreshing(false);
     });
   }, []);
+
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
 
   const addtowishlist = productid => {
     fetch(`${ADDTOWISHLIST}/${productid}/${id}`)
@@ -235,11 +240,12 @@ export default function Home({navigation}) {
                   color={color.defaultBackgroundColor}
                 />
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => navigation.navigate('Cart')}
                 style={{marginRight: wp('5%')}}>
                 <Ionicons name="cart" size={27} color={color.defaultcolor} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <HomeCartIcon navigations={navigationProps} />
             </View>
           )}
         </Animated.View>

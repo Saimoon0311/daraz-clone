@@ -35,6 +35,7 @@ import {
   BubblesLoader,
 } from 'react-native-indicator';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function subcatdetails({route, navigation}) {
   const paramData = route?.params;
@@ -62,6 +63,9 @@ export default function subcatdetails({route, navigation}) {
       .catch(error => {
         console.log(58, error);
       });
+  };
+  const navigationProps = () => {
+    navigation.navigate('Cart');
   };
   const getSavedItemsData = async () => {
     const userId = await getUserData()?.then(res => res?.id);
@@ -451,14 +455,17 @@ export default function subcatdetails({route, navigation}) {
         <Text numberOfLines={1} style={styles.te}>
           {renderHeaderText()}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"
             size={35}
             color="#512500"
             style={{...styles.icon, marginRight: wp('3')}}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <View style={{...styles.icon}}>
+          <HomeCartIcon navigations={navigationProps} />
+        </View>
       </View>
       <View style={{...styles.body}}>
         {isLoading ? (

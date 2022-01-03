@@ -41,6 +41,7 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import {styles} from './style';
 import StarRating from 'react-native-star-rating';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function Details({route, navigation}) {
   const [user_id, setUser_id] = useState();
@@ -98,7 +99,9 @@ export default function Details({route, navigation}) {
   const imm = item?.images;
 
   const product_id = item?.id;
-
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
   const get_child_product = () => {
     // fetch(`${SUBCATPRODUCTDATA}/${child_id}/${user_id}`)
     fetch(`${SUBCATPRODUCTDATA}/81/${user_id}`)
@@ -378,18 +381,24 @@ export default function Details({route, navigation}) {
           />
         </TouchableOpacity>
         <Text style={styles.te}>Details</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"
             size={30}
             color="#512500"
             style={{
               ...styles.icon,
-
               marginRight: wp('3'),
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <View
+          style={{
+            ...styles.icon,
+            marginLeft: wp('0'),
+          }}>
+          <HomeCartIcon navigations={navigationProps} />
+        </View>
       </View>
       <ScrollView
         contentContainerStyle={

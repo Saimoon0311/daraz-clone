@@ -713,7 +713,7 @@ export default function checkOut({navigation, route}) {
         <TouchableOpacity
           style={styles.maior}
           onPress={() => {
-            setIsLoading(true);
+            // setIsLoading(true);
 
             processTopPayment();
           }}>
@@ -736,6 +736,7 @@ export default function checkOut({navigation, route}) {
     } else if (buttonState == 2) {
       setButtonState(3);
     } else if (buttonState == 3) {
+      setIsLoading(true);
       if (paymentMethodValue == 'Stripe Payment') {
         startPaymentProcess();
       } else {

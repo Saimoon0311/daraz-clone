@@ -31,6 +31,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -57,7 +58,9 @@ export default function cate({navigation}) {
     // .catch(error => setNshowAlert(true))
     // .finally(() => setSubloading(false),setClick(0));
   };
-
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
   const onSubmitSeacrhItem = () => {
     if (seacrhData == '') {
       showMessage({
@@ -118,7 +121,7 @@ export default function cate({navigation}) {
               <Ionicons name="search" color="#512500" size={20} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Ionicons
               size={37.5}
               color="#512500"
@@ -127,7 +130,13 @@ export default function cate({navigation}) {
                 marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.5'),
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View
+            style={{
+              marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.7'),
+            }}>
+            <HomeCartIcon navigations={navigationProps} />
+          </View>
         </View>
       </View>
       <View style={styles.body}>

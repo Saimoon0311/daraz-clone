@@ -43,6 +43,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {G} from 'react-native-svg';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function OrderDetails({navigation}) {
   const [activeSession, setActiveSession] = useState([]);
@@ -54,7 +55,9 @@ export default function OrderDetails({navigation}) {
       getOrderDetails();
     })();
   }, []);
-
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
   const getOrderDetails = async () => {
     const user = await getUserData();
     const id = user?.id;
@@ -99,7 +102,7 @@ export default function OrderDetails({navigation}) {
           }}>
           My Orders
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"
             size={30}
@@ -110,7 +113,13 @@ export default function OrderDetails({navigation}) {
               marginRight: wp('3'),
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <View
+          style={{
+            marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '2'),
+          }}>
+          <HomeCartIcon navigations={navigationProps} />
+        </View>
       </View>
     );
   };
