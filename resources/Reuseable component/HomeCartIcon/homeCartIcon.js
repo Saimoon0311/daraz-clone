@@ -63,25 +63,28 @@ export const HomeCartIcon = props => {
       <View
         style={{
           position: 'absolute',
-          backgroundColor: color.themColorPrimary,
+          // backgroundColor: color.themColorPrimary,
           // height: hp('10'),
           borderRadius: Math.round(
             Dimensions.get('window').width + Dimensions.get('window').height,
           ),
           // alignSelf: 'center',
-          width: Dimensions.get('screen').width * 0.05,
-          height: Dimensions.get('screen').width * 0.05,
-          justifyContent: 'center',
-          alignItems: 'center',
+          width: Dimensions.get('window').width * 0.07,
+          height: Dimensions.get('window').width * 0.06,
+          // justifyContent: 'center',
+          // alignItems: 'center',
           marginLeft: wp('7'),
+          // backgroundColor: 'red',
+          // width: wp('3'),
         }}>
         <Text
+          numberOfLines={1}
           style={{
-            color: 'white',
+            color: color.textColorRedCart,
             fontSize: hp('2'),
             // bottom: hp('0.1'),
-            textAlign: 'center',
-            justifyContent: 'center',
+            textAlign: 'left',
+            // justifyContent: 'center',
             // backgroundColor: 'red',
           }}>
           {cartLength}
