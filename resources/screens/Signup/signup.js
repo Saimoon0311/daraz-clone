@@ -115,40 +115,62 @@ export default function Signup({navigation}) {
               phone_number,
             }),
           })
-            // console.log("res=== ",res)
             .then(response => response.json())
             .then(async responseData => {
               const prop = responseData?.email ? 'email' : 'phone_number';
-              responseData[0]
-                ? (showMessage({
-                    type: 'success',
-                    icon: 'auto',
-                    message: responseData[0]?.message,
-                    backgroundColor: '#E9691D',
-                  }),
-                  setLoadingButton(false),
-                  (res = await action.login({
-                    email,
-                    password,
-                  })),
-                  // setEmail(''),
-                  // setUsername(''),
-                  // setPhone_number(''),
-                  // setPassword(''),
-                  // setConfirm(''),
-                  console.log(133, res))
-                : (showMessage({
-                    type: 'warning',
-                    icon: 'auto',
-                    message: `This ${prop} has already taken`,
-                    backgroundColor: '#E9691D',
-                  }),
-                  setLoadingButton(false));
-
-              // console.log('jijijijjijjiji', responseData);
+              if (responseData[0]?.message == 'User Created Successfully') {
+                showMessage({
+                  type: 'success',
+                  icon: 'auto',
+                  message: responseData[0]?.message,
+                  backgroundColor: '#E9691D',
+                });
+                setLoadingButton(false);
+                res = await action.login({
+                  email,
+                  password,
+                });
+              } else if (
+                responseData?.email[0] == 'The email has already been taken.'
+              ) {
+                showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: responseData?.email[0],
+                  backgroundColor: '#E9691D',
+                });
+                setLoadingButton(false);
+              } else if (
+                responseData?.phone_number[0] ==
+                'The number has already been taken.'
+              ) {
+                showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: responseData?.phone_number[0],
+                  backgroundColor: '#E9691D',
+                });
+                setLoadingButton(false);
+              } else {
+                showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: 'Something went wrong.',
+                  backgroundColor: '#E9691D',
+                });
+                setLoadingButton(false);
+              }
             })
-
-            .done();
+            .catch(err => {
+              console.log(165, err);
+              showMessage({
+                type: 'warning',
+                icon: 'auto',
+                message: 'Something went wrong.',
+                backgroundColor: '#E9691D',
+              });
+              setLoadingButton(false);
+            });
         }
       } else {
         setShowAlert(true);
