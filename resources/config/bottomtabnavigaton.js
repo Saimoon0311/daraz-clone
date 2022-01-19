@@ -42,10 +42,9 @@ function MybottomTabs() {
         animationEnabled: true,
         tabBarActiveBackgroundColor: 'white',
         tabBarInactiveBackgroundColor: 'white',
-
         tabBarStyle: {
           height: hp(Platform?.OS == 'ios' ? '10%' : '8%'),
-          backgroundColor: '#FFDDC9',
+          backgroundColor: 'white',
           // paddingTop: hp('-2'),
         },
       })}>

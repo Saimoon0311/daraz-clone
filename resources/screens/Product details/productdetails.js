@@ -44,6 +44,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function Details({route, navigation}) {
+  const [updateCart, setUpdateCart] = useState(false);
   const [user_id, setUser_id] = useState();
   const [loading, setLoading] = useState(false);
   const [favValue, setFavValue] = useState(false);
@@ -87,7 +88,7 @@ export default function Details({route, navigation}) {
     getAllReviews();
     setUserId();
     get_child_product();
-  }, []);
+  }, [updateCart]);
   const setUserId = async () => {
     const userId = await getUserData();
     const users = userId?.id;
@@ -267,6 +268,7 @@ export default function Details({route, navigation}) {
       .then(json => {
         // console.log(106, json);
         if (json[0]?.message == 'Successfully added to cart') {
+          setUpdateCart(true);
           showMessage({
             type: 'success',
             icon: 'auto',
@@ -397,7 +399,7 @@ export default function Details({route, navigation}) {
             ...styles.icon,
             marginLeft: wp('0'),
           }}>
-          <HomeCartIcon navigations={navigationProps} />
+          <HomeCartIcon updateCart={updateCart} navigations={navigationProps} />
         </View>
       </View>
       <ScrollView
@@ -603,6 +605,10 @@ export default function Details({route, navigation}) {
                 borderRadius: 5,
                 paddingLeft: wp('5'),
                 color: 'black',
+                height: hp('8'),
+                width: wp('85'),
+                alignSelf: 'center',
+                paddingTop: hp('1.1'),
                 // paddingTop: hp('-300'),
               }}
               // minHeight={hp('20')}
@@ -619,6 +625,9 @@ export default function Details({route, navigation}) {
                 borderRadius: 5,
                 paddingLeft: wp('5'),
                 color: 'black',
+                height: hp('5'),
+                width: wp('85'),
+                alignSelf: 'center',
               }}
               value={reviewsName}
               placeholder="Enter Your Name*"
@@ -632,6 +641,9 @@ export default function Details({route, navigation}) {
                 borderRadius: 5,
                 paddingLeft: wp('5'),
                 color: 'black',
+                height: hp('5'),
+                width: wp('85'),
+                alignSelf: 'center',
               }}
               placeholder="Enter Your Email*"
               value={reviewsEmail}
@@ -785,7 +797,6 @@ export default function Details({route, navigation}) {
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
-                  //  onPress={cartadd}
                   onPress={validateCartAdd}>
                   <View
                     style={{

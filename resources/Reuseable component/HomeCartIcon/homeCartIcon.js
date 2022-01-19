@@ -28,7 +28,6 @@ import {testCART} from '../../config/url';
 
 export const HomeCartIcon = props => {
   const [cartLength, setCartLength] = useState(0);
-  // const [dummy,set]
   const isFocused = useIsFocused();
 
   const getCartData = async () => {
@@ -54,7 +53,7 @@ export const HomeCartIcon = props => {
     } else {
       console.log('45');
     }
-  }, [isFocused]);
+  }, [isFocused, props?.updateCart]);
   return (
     <TouchableOpacity
       onPress={() => props?.navigations()}

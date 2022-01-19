@@ -119,6 +119,10 @@ export default function Login({navigation}) {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
+      // style={{
+      //   width: wp('100'),
+      //   height: hp('100'),
+      // }}
       contentContainerStyle={{flex: 1}}>
       <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View

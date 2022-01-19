@@ -140,7 +140,7 @@ export default function setting({navigation}) {
           style={{
             ...styles.acc,
             marginTop: hp('3'),
-            marginLeft: wp(Platform?.OS == 'ios' ? '-43' : '-36'),
+            marginLeft: wp(Platform?.OS == 'ios' ? '-36' : '-36'),
           }}>
           My Moyen Account
         </Text>

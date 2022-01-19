@@ -49,7 +49,7 @@ export default function cate({navigation}) {
       })
       .catch(error => setNshowAlert(true));
 
-    const api = SUBCAT + 22;
+    const api = SUBCAT + 24;
     fetch(api)
       .then(async response => await response.json())
       .then(json => {

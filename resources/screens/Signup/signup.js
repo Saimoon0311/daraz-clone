@@ -179,7 +179,11 @@ export default function Signup({navigation}) {
     });
   };
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{
+        backgroundColor: 'white',
+      }}
+      showsVerticalScrollIndicator={false}>
       <View
         style={{
           backgroundColor: 'white',
@@ -187,7 +191,12 @@ export default function Signup({navigation}) {
           paddingRight: 25.5,
           paddingBottom: 100,
         }}>
-        <View style={{backgroundColor: 'white'}}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            // width: wp('100'),
+            // height: hp('100'),
+          }}>
           <Text style={{marginBottom: 5}}></Text>
           <TextInput
             label="Enter Your Name *"
