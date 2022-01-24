@@ -117,6 +117,8 @@ export default function Signup({navigation}) {
           })
             .then(response => response.json())
             .then(async responseData => {
+              console.log(119, responseData);
+
               const prop = responseData?.email ? 'email' : 'phone_number';
               if (responseData[0]?.message == 'User Created Successfully') {
                 showMessage({

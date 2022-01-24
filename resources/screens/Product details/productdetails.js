@@ -82,13 +82,39 @@ export default function Details({route, navigation}) {
     },
   ]);
   const [subCatdata, setSubCatdata] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   var items = subCatdata;
   useEffect(() => {
-    // console.log(39, item);
-    getAllReviews();
-    setUserId();
-    get_child_product();
-  }, [updateCart]);
+    (async () => {
+      await checkStatus();
+      getAllReviews();
+      setUserId();
+      get_child_product();
+    })();
+  }, []);
+  const checkStatus = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(100);
+      setIsLoggedIn(false);
+    } else if (user !== null) {
+      console.log(103);
+      setIsLoggedIn(true);
+    }
+  };
+  // useEffect(() => {
+  //   // console.log(39, item);
+
+  //   getAllReviews();
+  //   setUserId();
+  //   get_child_product();
+  // }, [updateCart]);
+  const routeToLogin = () => {
+    console.log(22222);
+    navigation.navigate('MyTabs');
+  };
   const setUserId = async () => {
     const userId = await getUserData();
     const users = userId?.id;
@@ -795,7 +821,7 @@ export default function Details({route, navigation}) {
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
-                  onPress={validateCartAdd}>
+                  onPress={isLoggedIn == true ? validateCartAdd : routeToLogin}>
                   <View
                     style={{
                       flexDirection: 'row',

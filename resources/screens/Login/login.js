@@ -70,7 +70,7 @@ export default function Login({navigation}) {
               email,
               password,
             });
-            // console.log('res=== 83', res);
+            console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
               showMessage({
                 type: 'danger',
