@@ -25,6 +25,8 @@ import {
   BRANDDATA,
   FEATURED,
   GETPRODUCT,
+  featuredDefault,
+  newArrivalDefault,
 } from '../../config/url';
 import {NativeBaseProvider, Box, Center} from 'native-base';
 import Alldata from '../../data/alldata';
@@ -59,8 +61,9 @@ export default function Home({navigation}) {
   const detailss = item => {
     navigation.navigate('Details', item);
   };
-
   const [refreshing, setRefreshing] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -68,7 +71,7 @@ export default function Home({navigation}) {
     setAloading(true);
     setBloading(true);
     wait(2000).then(() => {
-      datacallss(), setRefreshing(false);
+      datacallss(isLoggedIn == true ? true : false), setRefreshing(false);
     });
   }, []);
 
@@ -76,6 +79,34 @@ export default function Home({navigation}) {
     navigation.navigate('Cart');
   };
 
+  useEffect(() => {
+    (async () => {
+      await checkStatus();
+      // await datacallss();
+    })();
+  }, []);
+  const routeToLogin = () => {
+    console.log(22222);
+    navigation.navigate('MyTabs');
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{name: 'MyTabs'}],
+    // });
+  };
+
+  const checkStatus = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+      await datacallss(false);
+    } else if (user !== null) {
+      console.log(244);
+      setIsLoggedIn(true);
+      await datacallss(true);
+    }
+  };
   const addtowishlist = productid => {
     fetch(`${ADDTOWISHLIST}/${productid}/${id}`)
       .then(async response => await response.json())
@@ -83,7 +114,7 @@ export default function Home({navigation}) {
         if (json[0]?.message == 'Added to wishlist') {
           // parentFunction()
           // prop.detailss
-          datacallss();
+          datacallss(isLoggedIn == true ? true : false);
           showMessage({
             type: 'success',
             icon: 'success',
@@ -94,7 +125,7 @@ export default function Home({navigation}) {
           json[0]?.message == 'This item has been removed from your wishlist'
         ) {
           // parentFunction()
-          datacallss();
+          datacallss(isLoggedIn == true ? true : false);
           showMessage({
             type: 'success',
             icon: 'auto',
@@ -114,39 +145,18 @@ export default function Home({navigation}) {
       });
   };
 
-  const datacallss = async () => {
+  const datacallss = async isLogIn => {
     const user = await getUserData();
     let userId = user?.id;
+    console.log(130, userId);
+    console.log(131, isLogIn);
     setId(userId);
-    let netFlag = 0;
-    await NetInfo.fetch().then(async state => {
-      if (state.isConnected) {
-        netFlag = 1;
-        fetch(`${FEATURED}/${userId}`)
-          .then(response => response.json())
-          .then(json => {
-            setData(json[0]), setLoading(false);
-          })
-          .catch(e => {
-            // setShowAlert(true);
-            showMessage({
-              type: 'danger',
-              icon: 'danger',
-              message: 'Something want wrong',
-              backgroundColor: '#E9691D',
-            });
-          });
-        fetch(`${ARRIVALS}/${userId}`)
-          .then(response => response.json())
-          .then(json => {
-            setArrvals(json[0]), setAloading(false);
-          });
-        fetch(BRANDDATA)
-          .then(response => response.json())
-          .then(json => {
-            setBrand(json[0]), setBloading(false);
-          });
-      } else {
+    fetch(isLogIn == true ? `${FEATURED}/${userId}` : featuredDefault)
+      .then(response => response.json())
+      .then(json => {
+        setData(json[0]), setLoading(false);
+      })
+      .catch(e => {
         // setShowAlert(true);
         showMessage({
           type: 'danger',
@@ -154,21 +164,17 @@ export default function Home({navigation}) {
           message: 'Something want wrong',
           backgroundColor: '#E9691D',
         });
-      }
-    });
-    if (toggleSearchBar) {
-      Animated.timing(searchBarAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(searchBarAnim, {
-        toValue: -45,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
+      });
+    fetch(isLogIn == true ? `${ARRIVALS}/${userId}` : newArrivalDefault)
+      .then(response => response.json())
+      .then(json => {
+        setArrvals(json[0]), setAloading(false);
+      });
+    fetch(BRANDDATA)
+      .then(response => response.json())
+      .then(json => {
+        setBrand(json[0]), setBloading(false);
+      });
   };
 
   const onSubmitSeacrhItem = () => {
@@ -189,13 +195,6 @@ export default function Home({navigation}) {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      // const user = await getUserData()
-      //  setId(user?.id)
-      datacallss();
-    })();
-  }, []);
   return (
     <SafeAreaView style={styles.main}>
       <StatusBar backgroundColor={color.statusbarColor} />
@@ -263,7 +262,7 @@ export default function Home({navigation}) {
               data={data}
               isLoading={isLoading}
               userid={id}
-              addtowishlist={addtowishlist}
+              addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
@@ -278,17 +277,12 @@ export default function Home({navigation}) {
           </View>
           <Text style={styles.te}>New Arrivals</Text>
           <NativeBaseProvider>
-            {/* <Arrivals
-              detailss={detailss}
-              arrivals={arrivals}
-              aisLoading={aisLoading}
-            /> */}
             <Alldata
               detailss={detailss}
               data={arrivals}
               isLoading={aisLoading}
               userid={id}
-              addtowishlist={addtowishlist}
+              addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
@@ -308,7 +302,7 @@ export default function Home({navigation}) {
               data={data}
               isLoading={isLoading}
               userid={id}
-              addtowishlist={addtowishlist}
+              addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
             />
           </NativeBaseProvider>
           <View style={styles.see}>

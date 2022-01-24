@@ -27,10 +27,9 @@ import {addtowishlist} from '../screens/Home/home';
 
 export default function Alldata(prop, {navigation}) {
   // console.log(29,addtowishlist)
-  const s = id => {
+  const passedFunction = id => {
     prop.addtowishlist(id);
   };
-
   const flatListRender = item => {
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -56,7 +55,7 @@ export default function Alldata(prop, {navigation}) {
               {item?.is_wishlisted == true ? (
                 <TouchableOpacity
                   style={styles.icons}
-                  onPress={() => s(item?.id)}>
+                  onPress={() => passedFunction(item?.id)}>
                   <Ionicons
                     name="heart"
                     color={color.themColorPrimary}
@@ -66,7 +65,7 @@ export default function Alldata(prop, {navigation}) {
               ) : (
                 <TouchableOpacity
                   style={styles.icons}
-                  onPress={() => s(item?.id)}>
+                  onPress={() => passedFunction(item?.id)}>
                   <Ionicons
                     name="heart-outline"
                     color={color.themColorPrimary}
