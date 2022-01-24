@@ -609,9 +609,7 @@ export default function Details({route, navigation}) {
                 width: wp('85'),
                 alignSelf: 'center',
                 paddingTop: hp('1.1'),
-                // paddingTop: hp('-300'),
               }}
-              // minHeight={hp('20')}
               multiline
               value={reviews}
               onChangeText={text => setreview(text)}
