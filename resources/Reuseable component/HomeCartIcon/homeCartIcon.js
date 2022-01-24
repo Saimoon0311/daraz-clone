@@ -33,6 +33,7 @@ export const HomeCartIcon = props => {
   const getCartData = async () => {
     const user = await getUserData();
     const userId = user.id;
+    // if (props.isLoggedIn == true) {
     fetch(`${testCART}/${userId}`, {
       method: 'GET',
     })
@@ -45,8 +46,12 @@ export const HomeCartIcon = props => {
         }
       })
       .catch(err => console.log(40, err));
+    // } else {
+    //   setCartLength('0');
+    // }
   };
   useEffect(() => {
+    console.log(54, 'chal raha ha');
     if (isFocused) {
       getCartData();
       console.log('49');
@@ -86,7 +91,8 @@ export const HomeCartIcon = props => {
             // justifyContent: 'center',
             // backgroundColor: 'red',
           }}>
-          {cartLength}
+          {props?.isLoggedIn == true ? cartLength : '0'}
+          {/* {cartLength} */}
         </Text>
       </View>
     </TouchableOpacity>

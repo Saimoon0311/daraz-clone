@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {color} from "../../config/color"
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
   te: {
-    backgroundColor: 'white',
-    marginLeft:wp('4%')
+    backgroundColor: color.primaryBackground,
+    marginLeft: wp('4%'),
   },
   but: {
     flexDirection: 'row',
     marginLeft: 10,
-    justifyContent:"center",
+    justifyContent: 'center',
     width: wp('80%'),
     backgroundColor: '#FF7E33',
     height: hp('6%'),
@@ -32,10 +32,10 @@ export const styles = StyleSheet.create({
   ty: {
     marginTop: 31,
   },
-  input:{
-    flexDirection:"row"
+  input: {
+    flexDirection: 'row',
   },
-  indicator:{
-    marginTop:35
-  }
+  indicator: {
+    marginTop: 35,
+  },
 });

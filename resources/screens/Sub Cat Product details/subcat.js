@@ -19,8 +19,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   ADDTOCART,
   ADDTOWISHLIST,
+  AllDataWithOutUserId,
   API_BASED_URL,
   Images_API,
+  searchDataWithOutUserID,
+  SubCategoryDataWithOutUserID,
   SUBCATPRODUCTDATA,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
@@ -47,13 +50,19 @@ export default function subcatdetails({route, navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [cartloading, setCartloading] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const getSubCatData = async () => {
-    const user = await getUserData();
-    const id = user?.id;
+  const getSubCatData = async confirm => {
+    // const user = await getUserData();
+    // const id = user?.id;
     // console.log(50, productData?.id);
     // ${productData?.id}
-    fetch(`${SUBCATPRODUCTDATA}/${productData?.id}/${id}`)
+    console.log(58, confirm);
+    fetch(
+      confirm == true
+        ? `${SUBCATPRODUCTDATA}/${productData?.id}/${user_id}`
+        : SubCategoryDataWithOutUserID + productData?.id,
+    )
       // fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
       .then(response => response.json())
       .then(json => {
@@ -81,11 +90,14 @@ export default function subcatdetails({route, navigation}) {
       });
   };
 
-  const searchAllData = async () => {
+  const searchAllData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
+    console.log(96, confirm);
     fetch(
-      `${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`,
+      confirm == true
+        ? `${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`
+        : searchDataWithOutUserID + '?name=' + getSearchData,
     )
       .then(response => response.json())
       .then(json => {
@@ -97,10 +109,15 @@ export default function subcatdetails({route, navigation}) {
       });
   };
 
-  const getAllData = async () => {
+  const getAllData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
-    fetch(`${API_BASED_URL}${paramData?.screenData}${id}`)
+    console.log(111, confirm);
+    fetch(
+      confirm == true
+        ? `${API_BASED_URL}${paramData?.screenData}${id}`
+        : AllDataWithOutUserId,
+    )
       .then(response => response.json())
       .then(json => {
         setAllData(json[0]), setLoading(false);
@@ -115,22 +132,36 @@ export default function subcatdetails({route, navigation}) {
         });
       });
   };
-  const parentFunction = async () => {
+  const parentFunction = async confirm => {
     if (paramData?.screenData == 'subCat') {
-      await getSubCatData();
+      await getSubCatData(confirm);
     } else if (paramData?.screenData == 'wishlist') {
       await getSavedItemsData();
     } else if (paramData?.screenData == 'search-products') {
-      await searchAllData();
-    } else {
-      await getAllData();
+      await searchAllData(confirm);
+    } else if (paramData?.screenData == 'featured-data-all/') {
+      await getAllData(confirm);
+    }
+  };
+  const checkStatus = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+      await parentFunction(false);
+    } else if (user !== null) {
+      console.log(244);
+      const userId = await getUserData()?.then(res => res?.id);
+      setUser_id(userId);
+      setIsLoggedIn(true);
+      await parentFunction(true);
     }
   };
   useEffect(() => {
     (async () => {
-      const userId = await getUserData()?.then(res => res?.id);
-      await setUser_id(userId);
-      await parentFunction();
+      // await parentFunction();
+      await checkStatus();
     })();
   }, []);
 
@@ -139,7 +170,7 @@ export default function subcatdetails({route, navigation}) {
       .then(async response => await response.json())
       .then(json => {
         if (json[0]?.message == 'Added to wishlist') {
-          parentFunction();
+          parentFunction(true);
           showMessage({
             type: 'success',
             icon: 'success',
@@ -149,7 +180,7 @@ export default function subcatdetails({route, navigation}) {
         } else if (
           json[0]?.message == 'This item has been removed from your wishlist'
         ) {
-          parentFunction();
+          parentFunction(true);
           showMessage({
             type: 'success',
             icon: 'auto',
@@ -184,7 +215,14 @@ export default function subcatdetails({route, navigation}) {
       return <Text>All Products</Text>;
     }
   };
-
+  const routeToLogin = () => {
+    console.log(22222);
+    navigation.navigate('MyTabs');
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{name: 'MyTabs'}],
+    // });
+  };
   const renderCards = item => {
     console.log(207, item);
     return (
@@ -209,7 +247,9 @@ export default function subcatdetails({route, navigation}) {
             {item?.is_wishlisted == true ? (
               <TouchableOpacity
                 style={styles.icons}
-                onPress={() => addtowishlist(item?.id)}>
+                onPress={() => {
+                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+                }}>
                 <Ionicons
                   name="heart"
                   color={color.themColorPrimary}
@@ -219,7 +259,9 @@ export default function subcatdetails({route, navigation}) {
             ) : (
               <TouchableOpacity
                 style={styles.icons}
-                onPress={() => addtowishlist(item?.id)}>
+                onPress={() => {
+                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+                }}>
                 <Ionicons
                   name="heart-outline"
                   color={color.themColorPrimary}
@@ -464,7 +506,7 @@ export default function subcatdetails({route, navigation}) {
           />
         </TouchableOpacity> */}
         <View style={{...styles.icon}}>
-          <HomeCartIcon navigations={navigationProps} />
+          <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
       </View>
       <View style={{...styles.body}}>

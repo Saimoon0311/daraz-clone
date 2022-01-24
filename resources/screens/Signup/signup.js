@@ -188,28 +188,28 @@ export default function Signup({navigation}) {
       showsVerticalScrollIndicator={false}>
       <View
         style={{
-          backgroundColor: 'white',
+          backgroundColor: color.primaryBackground,
           paddingLeft: 28.5,
           paddingRight: 25.5,
           paddingBottom: 100,
         }}>
         <View
           style={{
-            backgroundColor: 'white',
+            backgroundColor: color.primaryBackground,
             // width: wp('100'),
             // height: hp('100'),
           }}>
-          <Text style={{marginBottom: 5}}></Text>
+          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
             label="Enter Your Name *"
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
-            style={[styles.te, {width: wp('75%')}]}
+            style={[styles.te, {width: wp('75%'), marginTop: hp('5')}]}
             value={username}
             selectionColor="#FF7E33"
             onChangeText={text => setUsername(text)}
           />
-          <Text style={{marginBottom: 5}}></Text>
+          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
             label="Email *"
             style={[styles.te, {width: wp('75%')}]}
@@ -220,7 +220,7 @@ export default function Signup({navigation}) {
             value={email}
             onChangeText={text => setEmail(text)}
           />
-          <Text style={{marginBottom: 5}}></Text>
+          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
             label="Number *"
             underlineColor="gray"
@@ -231,13 +231,13 @@ export default function Signup({navigation}) {
             selectionColor="#FF7E33"
             onChangeText={text => setPhone_number(text)}
           />
-          <Text style={{marginBottom: 5}}></Text>
+          {/* <Text style={{marginBottom: 5}}></Text> */}
           <View style={{flexDirection: 'row'}}>
             <TextInput
               label="Password *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('78%')}]}
+              style={[styles.te, {width: wp('75%')}]}
               secureTextEntry={show ? false : true}
               value={password}
               selectionColor="#FF7E33"
@@ -251,13 +251,13 @@ export default function Signup({navigation}) {
               name={show ? 'eye-outline' : 'eye-off-outline'}
             />
           </View>
-          <Text style={{marginBottom: 5}}></Text>
+          {/* <Text style={{marginBottom: 5}}></Text> */}
           <View style={{flexDirection: 'row'}}>
             <TextInput
               label="Confirm Password *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('78%')}]}
+              style={[styles.te, {width: wp('75%')}]}
               secureTextEntry={cshow ? false : true}
               value={confirm}
               selectionColor="#FF7E33"
@@ -271,7 +271,7 @@ export default function Signup({navigation}) {
               name={cshow ? 'eye-outline' : 'eye-off-outline'}
             />
           </View>
-          <Text style={{marginBottom: 20.4}}></Text>
+          {/* <Text style={{marginBottom: 20.4}}></Text> */}
         </View>
         <View>
           {/* {loadingButton ? (

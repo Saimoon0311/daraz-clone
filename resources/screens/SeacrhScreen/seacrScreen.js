@@ -24,6 +24,7 @@ import {
   CATEGORY,
   Images_API,
   SEARCH,
+  searchDataWithOutUserID,
   SUBCAT,
 } from '../../config/url';
 import {
@@ -41,34 +42,45 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from '../../config/color';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useIsFocused} from '@react-navigation/native';
+import {getUserData} from '../../utils/utils';
 
 export default function seacrhScreen({navigation}) {
+  const isFocused = useIsFocused();
+
   const [seacrhData, setSearchData] = useState('');
   const [userId, setUserId] = useState();
-  const [allData, setAllData] = useState([]);
+  const [allData, setAllData] = useState();
   const [loading, setLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkStatus = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+      await onSubmitSeacrhItem(false);
+    } else if (user !== null) {
+      console.log(244);
+      setUserId(user.id);
+      setIsLoggedIn(true);
+      await onSubmitSeacrhItem(true, user.id);
+    }
+  };
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
-  const onSubmitSeacrhItem = () => {
+  const onSubmitSeacrhItem = async confirm => {
+    console.log(72, confirm);
     setLoading(true);
-    //     if (seacrhData == '') {
-    //       showMessage({
-    //         type: 'warning',
-    //         icon: 'warning',
-    //         message: 'Please type something to search...',
-    //         backgroundColor: '#E9691D',
-    //       });
-    //     } else {
-    //       navigation.navigate('subcatdetails', {
-    //         seacrhDatas: seacrhData,
-    //         screenData: 'search-products',
-    //       });
-    //       // setToggleSearchBar(false);
-    //       setSearchData('');
-    //     }
     if (seacrhData !== '' && seacrhData !== null) {
-      fetch(`${API_BASED_URL}search-products/${userId}?name=${seacrhData}`)
+      fetch(
+        confirm == true
+          ? `${API_BASED_URL}search-products/${userId}?name=${seacrhData}`
+          : searchDataWithOutUserID + '?name=' + seacrhData,
+      )
         .then(response => response.json())
         .then(json => {
           console.log(86, json);
@@ -89,11 +101,13 @@ export default function seacrhScreen({navigation}) {
   };
 
   const addtowishlist = id => {
+    // console.log(126, id);
+    // console.log(127, userId);
     fetch(`${ADDTOWISHLIST}/${id}/${userId}`)
       .then(async response => await response.json())
       .then(json => {
         if (json[0]?.message == 'Added to wishlist') {
-          onSubmitSeacrhItem();
+          onSubmitSeacrhItem(true);
           showMessage({
             type: 'success',
             icon: 'success',
@@ -103,7 +117,7 @@ export default function seacrhScreen({navigation}) {
         } else if (
           json[0]?.message == 'This item has been removed from your wishlist'
         ) {
-          onSubmitSeacrhItem();
+          onSubmitSeacrhItem(true);
           showMessage({
             type: 'success',
             icon: 'auto',
@@ -122,9 +136,16 @@ export default function seacrhScreen({navigation}) {
         });
       });
   };
-
+  const routeToLogin = () => {
+    console.log(22222);
+    navigation.navigate('MyTabs');
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{name: 'MyTabs'}],
+    // });
+  };
   const renderCards = item => {
-    console.log(207, item);
+    // console.log(207, item);
     return (
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
@@ -147,7 +168,9 @@ export default function seacrhScreen({navigation}) {
             {item?.is_wishlisted == true ? (
               <TouchableOpacity
                 style={styles.icons}
-                onPress={() => addtowishlist(item?.id)}>
+                onPress={() => {
+                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+                }}>
                 <Ionicons
                   name="heart"
                   color={color.themColorPrimary}
@@ -157,7 +180,9 @@ export default function seacrhScreen({navigation}) {
             ) : (
               <TouchableOpacity
                 style={styles.icons}
-                onPress={() => addtowishlist(item?.id)}>
+                onPress={() => {
+                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+                }}>
                 <Ionicons
                   name="heart-outline"
                   color={color.themColorPrimary}
@@ -240,12 +265,24 @@ export default function seacrhScreen({navigation}) {
     );
   };
 
-  useEffect(() => {
-    async () => {
-      const user = await getUserData();
-      setUserId(user?.id);
-    };
-  }, []);
+  // useEffect(() => {
+  //   async () => {
+  //     const user = await getUserData();
+  //     setUserId(user.id);
+  //     console.log(48, user);
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     await checkStatus();
+  //     if (isFocused) {
+  //       await checkStatus();
+  //     } else {
+  //       console.log('Screen is not focused');
+  //     }
+  //     // await datacallss();
+  //   })();
+  // }, [isFocused]);
   return (
     <View>
       <View style={styles.appbarStyle}>
@@ -259,7 +296,7 @@ export default function seacrhScreen({navigation}) {
               placeholder="Search..."
               placeholderTextColor="#512500"
               style={styles.searchbar}
-              onSubmitEditing={() => onSubmitSeacrhItem()}
+              onSubmitEditing={() => checkStatus()}
               value={seacrhData}
               autoFocus={true}
               focusable={true}
@@ -269,7 +306,7 @@ export default function seacrhScreen({navigation}) {
               // onTouchCancel={}
               // keyboardAppearance={true}
             />
-            <TouchableOpacity onPress={() => onSubmitSeacrhItem()}>
+            <TouchableOpacity onPress={() => checkStatus()}>
               <Ionicons name="search" color="#512500" size={20} />
             </TouchableOpacity>
           </View>
@@ -287,7 +324,10 @@ export default function seacrhScreen({navigation}) {
             style={{
               marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.7'),
             }}>
-            <HomeCartIcon navigations={navigationProps} />
+            <HomeCartIcon
+              isLoggedIn={isLoggedIn}
+              navigations={navigationProps}
+            />
           </View>
         </View>
       </View>
@@ -297,18 +337,25 @@ export default function seacrhScreen({navigation}) {
         </View>
       ) : allData?.length == 0 ? (
         <View style={styles.imm}>
-          <MaterialCommunityIcons
-            name="database-remove"
-            color="#E9691D"
-            size={80}
-          />
-          <Text style={styles.tee}>No product found in this list.</Text>
+          <MaterialIcons name="search-off" color="#E9691D" size={80} />
+          <Text style={styles.tee}>No product found.</Text>
           {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
           {/* <TouchableOpacity
             style={styles.maior}
             onPress={() => navigation.goBack()}>
             <Text style={styles.or}>Continue Shopping</Text>
           </TouchableOpacity> */}
+        </View>
+      ) : allData == null ? (
+        <View style={styles.imm}>
+          <MaterialCommunityIcons
+            name="shopping-search"
+            color="#E9691D"
+            size={60}
+          />
+          <Text style={{...styles.tee, fontSize: hp('2.5')}}>
+            Kindly search to see products listings.
+          </Text>
         </View>
       ) : (
         <FlatList

@@ -118,7 +118,7 @@ export default function OrderDetails({navigation}) {
           style={{
             marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '2'),
           }}>
-          <HomeCartIcon navigations={navigationProps} />
+          <HomeCartIcon isLoggedIn={true} navigations={navigationProps} />
         </View>
       </View>
     );

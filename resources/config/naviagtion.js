@@ -53,24 +53,24 @@ export default function Navigation() {
       {/* {!!userData && userData.id ? (
         <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
       ) : (
-        <> */}
-      {/* <Stack.Screen
-        options={{
-          title: 'Sign In',
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#FFDDC9',
-          },
-          headerTintColor: '#512500',
+        <>
+          <Stack.Screen
+            options={{
+              title: 'Sign In',
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#FFDDC9',
+              },
+              headerTintColor: '#512500',
 
-          headerTitleStyle: {
-            fontSize: 18,
-          },
-        }}
-        name="MyTabs"
-        component={MyTabs}
-      /> */}
-      {/* </>
+              headerTitleStyle: {
+                fontSize: 18,
+              },
+            }}
+            name="MyTabs"
+            component={MyTabs}
+          />
+        </>
       )} */}
 
       {/* <Stack.Screen name="Home" component={Home} /> */}

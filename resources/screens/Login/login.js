@@ -16,6 +16,7 @@ import {
   Button,
   StatusBar,
   Linking,
+  Image,
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -36,8 +37,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: '',
-    password: '',
+    email: 'saimoon@gmail.com',
+    password: '03110052141',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -66,10 +67,13 @@ export default function Login({navigation}) {
             setLoadingButton(false);
         } else {
           try {
-            const res = await action.login({
-              email,
-              password,
-            });
+            const res = await action.login(
+              {
+                email,
+                password,
+              },
+              navigation,
+            );
             console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
               showMessage({
@@ -100,6 +104,7 @@ export default function Login({navigation}) {
             }
           } catch (error) {
             // console.log('errot', error);
+            setLoadingButton(false);
             showMessage({
               type: 'danger',
               icon: 'danger',
@@ -127,14 +132,44 @@ export default function Login({navigation}) {
       <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View
         style={{
-          backgroundColor: 'white',
+          backgroundColor: color.primaryBackground,
           paddingLeft: 28.5,
           paddingRight: 27.5,
           paddingBottom: 150,
           flex: 1,
         }}>
-        <View style={{backgroundColor: 'white'}}>
-          <Text style={{marginBottom: 15}}></Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'center',
+            // backgroundColor: 'yellow',
+          }}>
+          <Image
+            source={require('../../images/logo.png')}
+            style={{
+              // alignSelf: 'center',
+              width: wp('20'),
+              height: hp('8'),
+              marginTop: hp('4'),
+              // backgroundColor: 'red',
+            }}
+            resizeMode="contain"
+          />
+          <Image
+            source={require('../../images/Group66.png')}
+            style={{
+              // alignSelf: 'center',
+              width: wp('20'),
+              height: hp('8'),
+              marginTop: hp('4'),
+              // backgroundColor: 'green',
+            }}
+            resizeMode="contain"
+          />
+        </View>
+
+        <View style={{backgroundColor: color.primaryBackground}}>
+          {/* <Text style={{marginBottom: 15}}></Text> */}
           <TextInput
             label="Email *"
             underlineColor="gray"
@@ -168,13 +203,13 @@ export default function Login({navigation}) {
         <TouchableOpacity onPress={() => Linking.openURL(FORGETPASSWORD)}>
           <Text
             style={{
-              paddingTop: 36.5,
+              paddingTop: hp('2'),
               color: '#B64400',
-              fontSize: 14,
+              fontSize: hp('2'),
               fontWeight: 'bold',
               textAlign: 'right',
             }}>
-            Forget Your Password?
+            Forgot password?
           </Text>
         </TouchableOpacity>
         <View>

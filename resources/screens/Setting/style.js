@@ -79,4 +79,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  loginContainer: {
+    alignSelf: 'center',
+    width: wp('30'),
+    height: hp('5'),
+    backgroundColor: '#512500',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  loginText: {color: 'white', fontSize: hp('2')},
 });

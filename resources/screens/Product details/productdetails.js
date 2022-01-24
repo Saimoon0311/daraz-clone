@@ -425,7 +425,11 @@ export default function Details({route, navigation}) {
             ...styles.icon,
             marginLeft: wp('0'),
           }}>
-          <HomeCartIcon updateCart={updateCart} navigations={navigationProps} />
+          <HomeCartIcon
+            isLoggedIn={isLoggedIn}
+            updateCart={updateCart}
+            navigations={navigationProps}
+          />
         </View>
       </View>
       <ScrollView
@@ -649,7 +653,7 @@ export default function Details({route, navigation}) {
                 borderRadius: 5,
                 paddingLeft: wp('5'),
                 color: 'black',
-                height: hp('5'),
+                height: hp('6'),
                 width: wp('85'),
                 alignSelf: 'center',
               }}
@@ -665,7 +669,7 @@ export default function Details({route, navigation}) {
                 borderRadius: 5,
                 paddingLeft: wp('5'),
                 color: 'black',
-                height: hp('5'),
+                height: hp('6'),
                 width: wp('85'),
                 alignSelf: 'center',
               }}

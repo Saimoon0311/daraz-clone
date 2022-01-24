@@ -32,6 +32,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {getUserData} from '../../utils/utils';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function cate({navigation}) {
   const [isLoading, setLoading] = useState(true);
@@ -41,6 +43,9 @@ export default function cate({navigation}) {
   const [click, setClick] = useState(null);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [seacrhData, setSearchData] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isFocused = useIsFocused();
+
   const apicall = () => {
     fetch(CATEGORY)
       .then(async response => await response.json())
@@ -78,12 +83,29 @@ export default function cate({navigation}) {
       setSearchData('');
     }
   };
+  const checkStatus = async () => {
+    const user = await getUserData();
+    // console.log(236, user);
+    if (user == null) {
+      console.log(240);
 
+      setIsLoggedIn(false);
+      // await datacallss(false);
+    } else if (user !== null) {
+      console.log(244);
+      setIsLoggedIn(true);
+
+      // await datacallss(true);
+    }
+  };
   useEffect(() => {
-    (async () => {
-      apicall();
-    })();
-  }, []);
+    if (isFocused) {
+      (async () => {
+        apicall();
+        await checkStatus();
+      })();
+    }
+  }, [isFocused]);
   const getData = async (id, index) => {
     // setStyless(true)
     setClick(index);
@@ -135,7 +157,10 @@ export default function cate({navigation}) {
             style={{
               marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.7'),
             }}>
-            <HomeCartIcon navigations={navigationProps} />
+            <HomeCartIcon
+              isLoggedIn={isLoggedIn}
+              navigations={navigationProps}
+            />
           </View>
         </View>
       </View>

@@ -30,10 +30,13 @@ export default function setting({navigation}) {
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [dummy, setDummy] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [islogout, setIslogout] = useState();
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
   const isFocused = useIsFocused();
+
   // if(route?.params==screenUpdatess){
   //  setDummy("a")
   //  console.log(47,"update")
@@ -42,19 +45,48 @@ export default function setting({navigation}) {
   // }
   const user = async () => {
     const userId = await getUserData();
+    // const name = 'bdfndbf';
     const name = JSON.stringify(userId.username);
 
     setNames(name);
     setUsers(userId);
   };
+  const checkStatus = async () => {
+    const user = await getUserData();
+    // console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+      // await datacallss(false);
+    } else if (user !== null) {
+      console.log(244);
+      setIsLoggedIn(true);
 
-  useEffect(() => {
-    user();
-    if (isFocused) {
-      user();
-    } else {
-      console.log(58, 'screen is not Focused');
+      // await datacallss(true);
     }
+  };
+  // useEffect(async () => {
+  //   // user();
+  //   // await checkStatus();
+  //   if (isFocused) {
+  //     await checkStatus();
+  //     user();
+  //   } else {
+  //     // await checkStatus();
+  //     console.log(58, 'screen is not Focused');
+  //   }
+  // }, [isFocused]);
+  useEffect(() => {
+    (async () => {
+      await checkStatus();
+      if (isFocused) {
+        await checkStatus();
+        user();
+      } else {
+        console.log('Screen is not focused');
+      }
+      // await datacallss();
+    })();
   }, [isFocused]);
   const onLogoutAlert = () => {
     setShowAlert(true);
@@ -62,6 +94,8 @@ export default function setting({navigation}) {
   const logout = () => {
     setTimeout(() => {
       actions.logout();
+      setIsLoggedIn(false);
+      setIslogout(true);
       // showMessage({
       //   type: 'success',
       //   icon: 'auto',
@@ -70,8 +104,37 @@ export default function setting({navigation}) {
       // });
     }, 10);
   };
+
   var stringName = names;
   stringName = stringName?.replace(/^"|"$/g, '');
+
+  const welcomeContainer = () => {
+    return (
+      <View style={styles.well}>
+        <Text style={{...styles.we}}>Welcome</Text>
+        <Text
+          style={{
+            ...styles.we,
+            color: 'white',
+            // marginLeft: wp('4%'),
+            marginTop: hp('1%'),
+          }}>
+          {stringName}
+        </Text>
+      </View>
+    );
+  };
+  const loginContainer = () => {
+    return (
+      <View style={styles.well}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MyTabs')}
+          style={styles.loginContainer}>
+          <Text style={styles.loginText}>Login/Signup</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
     <View style={styles.main}>
       <StatusBar backgroundColor="#94725f" />
@@ -80,7 +143,6 @@ export default function setting({navigation}) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           backgroundColor: '#FFDDC9',
-          // backgroundColor: 'red',
           height: hp('10%'),
         }}>
         <Ionicons
@@ -114,21 +176,15 @@ export default function setting({navigation}) {
           style={{
             marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
           }}>
-          <HomeCartIcon navigations={navigationProps} />
+          <HomeCartIcon
+            // islogout={islogout == true ? true : false}
+            isLoggedIn={isLoggedIn}
+            navigations={navigationProps}
+          />
         </View>
       </View>
-      <View style={styles.well}>
-        <Text style={{...styles.we}}>Welcome</Text>
-        <Text
-          style={{
-            ...styles.we,
-            color: 'white',
-            // marginLeft: wp('4%'),
-            marginTop: hp('1%'),
-          }}>
-          {stringName}
-        </Text>
-      </View>
+      {isLoggedIn ? welcomeContainer() : loginContainer()}
+      {/* {loginContainer()} */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -146,7 +202,16 @@ export default function setting({navigation}) {
         </Text>
         <TouchableOpacity
           style={styles.shadow}
-          onPress={() => navigation.navigate('Userdeatils')}>
+          onPress={() => {
+            isLoggedIn
+              ? navigation.navigate('Userdeatils')
+              : showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: 'Kindly login first',
+                  backgroundColor: '#E9691D',
+                });
+          }}>
           <Ionicons
             name="person-circle-outline"
             size={20}
@@ -156,7 +221,16 @@ export default function setting({navigation}) {
           <Text style={styles.orte}>My Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('OrderDetails')}
+          onPress={() => {
+            isLoggedIn
+              ? navigation.navigate('OrderDetails')
+              : showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: 'Kindly login first',
+                  backgroundColor: '#E9691D',
+                });
+          }}
           style={styles.shadow}>
           <Ionicons
             name="albums-outline"
@@ -176,12 +250,19 @@ export default function setting({navigation}) {
           <Text style={styles.orte}>Ratings & Reviews</Text>
         </TouchableOpacity> */}
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('subcatdetails', {
-              screenData: 'wishlist',
-              isWishlist: true,
-            })
-          }
+          onPress={() => {
+            isLoggedIn
+              ? navigation.navigate('subcatdetails', {
+                  screenData: 'wishlist',
+                  isWishlist: true,
+                })
+              : showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: 'Kindly login first',
+                  backgroundColor: '#E9691D',
+                });
+          }}
           style={styles.shadow}>
           <Ionicons
             name="heart-outline"
@@ -225,7 +306,16 @@ export default function setting({navigation}) {
         </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.shadow}
-          onPress={() => navigation.navigate('changepassword')}>
+          onPress={() => {
+            isLoggedIn
+              ? navigation.navigate('changepassword')
+              : showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: 'Kindly login first',
+                  backgroundColor: '#E9691D',
+                });
+          }}>
           <Ionicons
             name="keypad-outline"
             size={20}
@@ -234,15 +324,17 @@ export default function setting({navigation}) {
           />
           <Text style={styles.orte}>Change Password</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
-          <Ionicons
-            name="log-out-outline"
-            size={20}
-            style={{marginRight: 20}}
-            color="gray"
-          />
-          <Text style={styles.orte}>Logout</Text>
-        </TouchableOpacity>
+        {isLoggedIn && (
+          <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
+            <Ionicons
+              name="log-out-outline"
+              size={20}
+              style={{marginRight: 20}}
+              color="gray"
+            />
+            <Text style={styles.orte}>Logout</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
       <AwesomeAlert
         show={showAlert}

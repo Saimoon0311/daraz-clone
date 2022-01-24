@@ -39,12 +39,15 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {useIsFocused} from '@react-navigation/native';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 export default function Home({navigation}) {
+  const isFocused = useIsFocused();
+
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
   const [titleSearchValue, onChangeText] = useState('');
   const [search, setSearch] = useState();
@@ -82,9 +85,14 @@ export default function Home({navigation}) {
   useEffect(() => {
     (async () => {
       await checkStatus();
+      if (isFocused) {
+        await checkStatus();
+      } else {
+        console.log('Screen is not focused');
+      }
       // await datacallss();
     })();
-  }, []);
+  }, [isFocused]);
   const routeToLogin = () => {
     console.log(22222);
     navigation.navigate('MyTabs');
@@ -244,7 +252,10 @@ export default function Home({navigation}) {
                 style={{marginRight: wp('5%')}}>
                 <Ionicons name="cart" size={27} color={color.defaultcolor} />
               </TouchableOpacity> */}
-              <HomeCartIcon navigations={navigationProps} />
+              <HomeCartIcon
+                isLoggedIn={isLoggedIn}
+                navigations={navigationProps}
+              />
             </View>
           )}
         </Animated.View>

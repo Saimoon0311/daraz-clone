@@ -16,19 +16,27 @@ export default function MyTabs() {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarActiveTintColor: '#E9691D',
+        // tabBarActiveTintColor: 'red',
+        tabBarActiveTintColor: '#512500',
+        // tabBarActiveBackgroundColor: 'red',
         tabBarActiveBackgroundColor: '#E9691D',
         tabBarInactiveTintColor: '#512500',
         upperCaseLabel: false,
+        tabBarStyle: {
+          backgroundColor: color.primaryTabBackground,
+        },
         tabBarIndicatorStyle: {
-          backgroundColor: '#E9691D',
+          // backgroundColor: 'red',
+          backgroundColor: '#512500',
         },
       })}>
       <Tab.Screen
         name="Login"
         options={{
           headerStyle: {
-            backgroundColor: '#FFDDC9',
+            backgroundColor: 'red',
+            // color: 'black',
+            // backgroundColor: '#FFDDC9',
           },
           tabBarLabelStyle: {
             fontWeight: 'bold',
@@ -44,6 +52,7 @@ export default function MyTabs() {
         options={{
           title: 'Create Account',
           tabBarLabelStyle: {
+            // backgroundColor: 'blue',
             fontWeight: 'bold',
             textTransform: 'none',
             fontSize: hp('2'),

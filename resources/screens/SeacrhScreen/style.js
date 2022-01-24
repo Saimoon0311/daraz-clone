@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
   },
   tee: {
     color: '#512500',
-    fontSize: 20,
+    fontSize: hp('3'),
     marginBottom: 10,
   },
   maior: {

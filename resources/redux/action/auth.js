@@ -28,7 +28,7 @@ export const saveUserData = data => {
 //     return apiPost(SIGNUP,data)
 // }
 
-export function login(data) {
+export function login(data, navigation) {
   return new Promise((resolve, reject) => {
     return apiPost(LOGIN, data)
       .then(res => {
@@ -37,6 +37,7 @@ export function login(data) {
           setUserData(data).then(() => {
             resolve(res);
             saveUserData(data);
+            navigation.goBack();
           });
           return;
         }

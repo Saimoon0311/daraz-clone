@@ -47,6 +47,23 @@ export default function Cart({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [silderData, setSliderData] = useState(null);
   const isFocused = useIsFocused();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkStatus = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+      setCartdata([]);
+      setLoading(false);
+      await getCartCall(false);
+    } else if (user !== null) {
+      console.log(244);
+      setIsLoggedIn(true);
+      await getCartCall(true);
+    }
+  };
   const recentArray = [
     {
       id: 0,
@@ -68,36 +85,38 @@ export default function Cart({navigation}) {
     },
   ];
 
-  const getCartCall = async () => {
-    const userId = await getUserData();
-    const users = userId.id;
-    // console.log(48, userId?.id);
-    setUser_id(users);
-    fetch(`${testCART}/${users}`, {
-      method: 'GET',
-    })
-      .then(async response => await response.json())
-      .then(async json => {
-        if (json.message == 'Cart is empty') {
-          setCartdata([]);
-          setSliderData([]);
-          setLoading(false);
-        } else {
-          setCartdata(json[0]);
-          totalprice(json[0]);
-          setLoading(false);
-          // console.log(54, json[0]);
-          // console.log(63, JSON?.parse(json[0][2]?.attributes));
-        }
+  const getCartCall = async confirm => {
+    if (confirm) {
+      const userId = await getUserData();
+      const users = userId.id;
+      // console.log(48, userId?.id);
+      setUser_id(users);
+      fetch(`${testCART}/${users}`, {
+        method: 'GET',
       })
-      .catch(e => {
-        showMessage({
-          type: 'danger',
-          icon: 'danger',
-          message: 'Something want wrong',
-          backgroundColor: '#E9691D',
+        .then(async response => await response.json())
+        .then(async json => {
+          if (json.message == 'Cart is empty') {
+            setCartdata([]);
+            setSliderData([]);
+            setLoading(false);
+          } else {
+            setCartdata(json[0]);
+            totalprice(json[0]);
+            setLoading(false);
+            // console.log(54, json[0]);
+            // console.log(63, JSON?.parse(json[0][2]?.attributes));
+          }
+        })
+        .catch(e => {
+          showMessage({
+            type: 'danger',
+            icon: 'danger',
+            message: 'Something want wrong',
+            backgroundColor: '#E9691D',
+          });
         });
-      });
+    }
   };
   // const getRecentData = async () => {
   //   const userId = await getUserData();
@@ -124,12 +143,15 @@ export default function Cart({navigation}) {
   // };
 
   useEffect(() => {
-    (() => {
+    (async () => {
       // getCartCall();
       // getRecentData();
+      await checkStatus();
+
       if (isFocused) {
-        setLoading(true);
-        getCartCall();
+        await checkStatus();
+        // setLoading(true);
+        // getCartCall();
         // getRecentData();
       } else {
         console.log(58, 'screen is not Focused');
@@ -233,7 +255,7 @@ export default function Cart({navigation}) {
             message: json[0].message,
             backgroundColor: '#E9691D',
           });
-          getCartCall();
+          getCartCall(true);
           // setLoading(false);
         } else {
           showMessage({
@@ -242,7 +264,7 @@ export default function Cart({navigation}) {
             message: json[0].message,
             backgroundColor: '#E9691D',
           });
-          getCartCall();
+          getCartCall(true);
           // setLoading(false)
         }
       });
@@ -319,7 +341,12 @@ export default function Cart({navigation}) {
           ) : cartdata?.length == 0 ? (
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />
-              <Text style={styles.tee}>You have no items in the cart</Text>
+              <Text numberOfLines={1} style={styles.tee}>
+                {' '}
+                {isLoggedIn
+                  ? 'You have no items in the cart.'
+                  : 'Kindly login to add item in your cart.'}{' '}
+              </Text>
               <Text style={{color: 'gray'}}>Add items you want to shop</Text>
               <TouchableOpacity
                 style={styles.maior}
