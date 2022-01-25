@@ -72,7 +72,7 @@ function App({navigation}) {
     if (Platform?.OS == 'android') {
       return 5000;
     } else {
-      return 0;
+      return 5000;
     }
   };
 

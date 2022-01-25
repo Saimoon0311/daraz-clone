@@ -39,6 +39,7 @@ import {
 } from 'react-native-indicator';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function subcatdetails({route, navigation}) {
   const paramData = route?.params;
@@ -51,6 +52,7 @@ export default function subcatdetails({route, navigation}) {
   const [cartloading, setCartloading] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isFocused = useIsFocused();
 
   const getSubCatData = async confirm => {
     // const user = await getUserData();
@@ -160,10 +162,12 @@ export default function subcatdetails({route, navigation}) {
   };
   useEffect(() => {
     (async () => {
+      if (isFocused) {
+        await checkStatus();
+      }
       // await parentFunction();
-      await checkStatus();
     })();
-  }, []);
+  }, [isFocused]);
 
   const addtowishlist = id => {
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)

@@ -69,6 +69,18 @@ export default function seacrhScreen({navigation}) {
       await onSubmitSeacrhItem(true, user.id);
     }
   };
+  const checkStatusForCartUpdate = async () => {
+    const user = await getUserData();
+    console.log(236, user);
+    if (user == null) {
+      console.log(240);
+      setIsLoggedIn(false);
+    } else if (user !== null) {
+      console.log(244);
+      setUserId(user.id);
+      setIsLoggedIn(true);
+    }
+  };
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
@@ -272,17 +284,17 @@ export default function seacrhScreen({navigation}) {
   //     console.log(48, user);
   //   };
   // }, []);
-  // useEffect(() => {
-  //   (async () => {
-  //     await checkStatus();
-  //     if (isFocused) {
-  //       await checkStatus();
-  //     } else {
-  //       console.log('Screen is not focused');
-  //     }
-  //     // await datacallss();
-  //   })();
-  // }, [isFocused]);
+  useEffect(() => {
+    (async () => {
+      // await checkStatus();
+      if (isFocused) {
+        await checkStatusForCartUpdate();
+      } else {
+        console.log('Screen is not focused');
+      }
+      // await datacallss();
+    })();
+  }, [isFocused]);
   return (
     <View>
       <View style={styles.appbarStyle}>

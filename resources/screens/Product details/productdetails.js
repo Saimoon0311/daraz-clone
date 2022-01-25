@@ -682,7 +682,16 @@ export default function Details({route, navigation}) {
             <Text></Text>
             <TouchableOpacity
               style={styles.submitreviews}
-              onPress={() => submitReviews()}>
+              onPress={() =>
+                isLoggedIn == true
+                  ? submitReviews()
+                  : showMessage({
+                      type: 'warning',
+                      icon: 'auto',
+                      message: 'Kindly login to give a review.',
+                      backgroundColor: '#E9691D',
+                    })
+              }>
               {reviewLoading ? (
                 <ActivityIndicator size={'small'} color={'white'} />
               ) : (

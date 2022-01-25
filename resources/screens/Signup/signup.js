@@ -128,10 +128,16 @@ export default function Signup({navigation}) {
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
-                res = await action.login({
-                  email,
-                  password,
-                });
+                res = await action.login(
+                  {
+                    email,
+                    password,
+                  },
+                  navigation,
+                );
+                setTimeout(() => {
+                  navigation.goBack();
+                }, 1500);
               } else if (
                 responseData?.email[0] == 'The email has already been taken.'
               ) {
