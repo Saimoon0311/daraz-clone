@@ -57,7 +57,7 @@ export default function Userdeatils({navigation}) {
   };
   const ff = async () => {
     const userDatas = await getUserData();
-    console.log(99, userDatas);
+    // console.log(99, userDatas);
   };
   const updatValue = (value, attribute) => {
     setDummyState(value);
@@ -89,7 +89,7 @@ export default function Userdeatils({navigation}) {
             message: 'Profile Updated Successfully',
             backgroundColor: '#E9691D',
           });
-          console.log(106, result?.data);
+          // console.log(106, result?.data);
           setLoadingButton(false);
           setUserData(result?.data);
 
@@ -101,7 +101,8 @@ export default function Userdeatils({navigation}) {
         }
       })
       .catch(error => {
-        console.log('111', error), setShowAlert(false);
+        setShowAlert(false);
+        // console.log('111', error)
       });
 
     // fetch(USERPROFILEUPDATE,{

@@ -20,6 +20,10 @@ import {
   ADDTOCART,
   ADDTOWISHLIST,
   AllDataWithOutUserId,
+  ALLFEATUREDPRODUCTS,
+  AllFeaturedProductWithOutUser,
+  ALLNEWARRIVALS,
+  AllNewArrivalsDataSkipUser,
   API_BASED_URL,
   Images_API,
   searchDataWithOutUserID,
@@ -59,7 +63,7 @@ export default function subcatdetails({route, navigation}) {
     // const id = user?.id;
     // console.log(50, productData?.id);
     // ${productData?.id}
-    console.log(58, confirm);
+    // console.log(58, confirm);
     fetch(
       confirm == true
         ? `${SUBCATPRODUCTDATA}/${productData?.id}/${user_id}`
@@ -72,7 +76,7 @@ export default function subcatdetails({route, navigation}) {
         setAllData(json[0]), setLoading(false);
       })
       .catch(error => {
-        console.log(58, error);
+        // console.log(58, error);
       });
   };
   const navigationProps = () => {
@@ -84,18 +88,18 @@ export default function subcatdetails({route, navigation}) {
     fetch(`${API_BASED_URL}${paramData?.screenData}/${userId}`)
       .then(response => response.json())
       .then(json => {
-        console.log(69, json);
+        // console.log(69, json);
         setAllData(json[0]), setLoading(false);
       })
       .catch(error => {
-        console.log(70, error);
+        // console.log(70, error);
       });
   };
 
   const searchAllData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
-    console.log(96, confirm);
+    // console.log(96, confirm);
     fetch(
       confirm == true
         ? `${API_BASED_URL}${paramData?.screenData}/${id}?name=${getSearchData}`
@@ -103,18 +107,18 @@ export default function subcatdetails({route, navigation}) {
     )
       .then(response => response.json())
       .then(json => {
-        console.log(86, json);
+        // console.log(86, json);
         setAllData(json[0]), setLoading(false);
       })
       .catch(error => {
-        console.log(90, error);
+        // console.log(90, error);
       });
   };
 
   const getAllData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
-    console.log(111, confirm);
+    // console.log(111, confirm);
     fetch(
       confirm == true
         ? `${API_BASED_URL}${paramData?.screenData}${id}`
@@ -125,7 +129,51 @@ export default function subcatdetails({route, navigation}) {
         setAllData(json[0]), setLoading(false);
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrongs.',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
+  const getAllNewArrivalsData = async confirm => {
+    const user = await getUserData();
+    const id = user?.id;
+    // console.log(111, confirm);
+    fetch(
+      confirm == true ? `${ALLNEWARRIVALS}${id}` : AllNewArrivalsDataSkipUser,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setAllData(json[0]), setLoading(false);
+      })
+      .catch(error => {
+        // console.log(error);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrongs.',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
+  const getAllFeaturedsData = async confirm => {
+    const user = await getUserData();
+    const id = user?.id;
+    // console.log(111, confirm);
+    fetch(
+      confirm == true
+        ? `${ALLFEATUREDPRODUCTS}${id}`
+        : AllFeaturedProductWithOutUser,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setAllData(json[0]), setLoading(false);
+      })
+      .catch(error => {
+        // console.log(error);
         showMessage({
           type: 'danger',
           icon: 'danger',
@@ -143,17 +191,19 @@ export default function subcatdetails({route, navigation}) {
       await searchAllData(confirm);
     } else if (paramData?.screenData == 'featured-data-all/') {
       await getAllData(confirm);
+    } else if (paramData?.screenData == ALLNEWARRIVALS) {
+      await getAllNewArrivalsData(confirm);
+    } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
+      await getAllFeaturedsData(confirm);
     }
   };
   const checkStatus = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(240);
       setIsLoggedIn(false);
       await parentFunction(false);
     } else if (user !== null) {
-      console.log(244);
       const userId = await getUserData()?.then(res => res?.id);
       setUser_id(userId);
       setIsLoggedIn(true);
@@ -205,9 +255,9 @@ export default function subcatdetails({route, navigation}) {
   };
 
   const renderHeaderText = () => {
-    if (paramData?.screenData == 'products-featured/') {
+    if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
       return <Text>Featured</Text>;
-    } else if (paramData?.screenData == 'all-new-arrivals/') {
+    } else if (paramData?.screenData == ALLNEWARRIVALS) {
       return <Text>New Arrivals</Text>;
     } else if (paramData?.screenData == 'subCat') {
       return <Text>{productData?.name}</Text>;
@@ -220,7 +270,7 @@ export default function subcatdetails({route, navigation}) {
     }
   };
   const routeToLogin = () => {
-    console.log(22222);
+    // console.log(22222);
     navigation.navigate('MyTabs');
     // navigation.reset({
     //   index: 0,
@@ -228,7 +278,7 @@ export default function subcatdetails({route, navigation}) {
     // });
   };
   const renderCards = item => {
-    console.log(207, item);
+    // console.log(207, item);
     return (
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>

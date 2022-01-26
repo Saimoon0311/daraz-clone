@@ -40,26 +40,33 @@ export default function cate({navigation}) {
   const [subloading, setSubloading] = useState(true);
   const [catdata, setCatdata] = useState();
   const [subcatdata, setSubcatdata] = useState();
-  const [click, setClick] = useState(null);
+  const [click, setClick] = useState(0);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [seacrhData, setSearchData] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [firstParentCat, setFirstParentCat] = useState(1);
   const isFocused = useIsFocused();
 
-  const apicall = () => {
-    fetch(CATEGORY)
-      .then(async response => await response.json())
-      .then(json => {
+  const apicall = async () => {
+    await fetch(CATEGORY)
+      .then(response => response.json())
+      .then(async json => {
         setCatdata(json), setLoading(false);
+        // console.log(55, json[0]);
+        getData(json[0].id, click);
+        // firstParentCat == 1 && setFirstParentCat(firstParentCat + 1);
+        // await setFirstParentCat(json[0]?.id);
       })
-      .catch(error => setNshowAlert(true));
-
-    const api = SUBCAT + 24;
-    fetch(api)
-      .then(async response => await response.json())
-      .then(json => {
-        setSubcatdata(json), setClick(0), setSubloading(false);
+      .catch(error => {
+        console.log(error);
       });
+
+    // const api = SUBCAT + catdata[0]?.id;
+    // fetch(api)
+    //   .then(async response => await response.json())
+    //   .then(json => {
+    //     setSubcatdata(json), setClick(0), setSubloading(false);
+    //   });
     // .catch(error => setNshowAlert(true))
     // .finally(() => setSubloading(false),setClick(0));
   };
@@ -87,12 +94,12 @@ export default function cate({navigation}) {
     const user = await getUserData();
     // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
 
       setIsLoggedIn(false);
       // await datacallss(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setIsLoggedIn(true);
 
       // await datacallss(true);
@@ -101,8 +108,9 @@ export default function cate({navigation}) {
   useEffect(() => {
     if (isFocused) {
       (async () => {
-        apicall();
         await checkStatus();
+        await apicall();
+        // await apicallChildCat(firstParentCat, 0);
       })();
     }
   }, [isFocused]);
@@ -116,7 +124,14 @@ export default function cate({navigation}) {
       .then(json => {
         setSubcatdata(json), setSubloading(false);
       })
-      .catch(error => setNshowAlert(true));
+      .catch(error => {
+        showMessage({
+          type: 'danger',
+          icon: 'auto',
+          message: 'Issue while fetching categories.',
+          backgroundColor: '#E9691D',
+        });
+      });
   };
   return (
     <View style={styles.mains}>

@@ -124,7 +124,7 @@ export default function checkOut({navigation, route}) {
           message: 'Error while fetching client data.',
           backgroundColor: '#E9691D',
         });
-        console.log(122, err);
+        // console.log(122, err);
       });
   };
 
@@ -143,7 +143,7 @@ export default function checkOut({navigation, route}) {
         message: 'Error while fetching client data.',
         backgroundColor: '#E9691D',
       });
-      console.log(119, error);
+      // console.log(119, error);
     } else {
       validateHitOrderPlaceApi('stripe', data);
     }
@@ -155,7 +155,7 @@ export default function checkOut({navigation, route}) {
     });
 
     if (error) {
-      console.log(156, error);
+      // console.log(156, error);
       setIsLoading(false);
     } else {
       const {paymentIntent, error} = await retrievePaymentIntent(data);
@@ -836,11 +836,11 @@ export default function checkOut({navigation, route}) {
       .catch(error => {
         setIsLoading(false);
 
-        console.log('780', error);
+        // console.log('780', error);
       });
   };
   const sendPaymentIntentData = async (result, paymentIntentdata) => {
-    console.log(793, paymentIntentdata);
+    // console.log(793, paymentIntentdata);
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
@@ -849,7 +849,7 @@ export default function checkOut({navigation, route}) {
       orderId: result?.order?.id,
       stripeId: paymentIntentdata?.id,
     });
-    console.log(801, raw);
+    // console.log(801, raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -864,7 +864,7 @@ export default function checkOut({navigation, route}) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result?.success == true) {
           setIsLoading(false);
 
@@ -895,7 +895,7 @@ export default function checkOut({navigation, route}) {
           message: 'Something went wrong.',
           backgroundColor: '#E9691D',
         });
-        console.log('841', error);
+        // console.log('841', error);
       });
   };
   const orderCompleteScreen = () => {

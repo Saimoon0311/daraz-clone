@@ -55,11 +55,11 @@ export default function setting({navigation}) {
     const user = await getUserData();
     // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
       setIsLoggedIn(false);
       // await datacallss(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setIsLoggedIn(true);
 
       // await datacallss(true);

@@ -95,12 +95,12 @@ export default function Details({route, navigation}) {
   }, []);
   const checkStatus = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(100);
+      // console.log(100);
       setIsLoggedIn(false);
     } else if (user !== null) {
-      console.log(103);
+      // console.log(103);
       setIsLoggedIn(true);
     }
   };
@@ -112,7 +112,7 @@ export default function Details({route, navigation}) {
   //   get_child_product();
   // }, [updateCart]);
   const routeToLogin = () => {
-    console.log(22222);
+    // console.log(22222);
     navigation.navigate('MyTabs');
   };
   const setUserId = async () => {
@@ -135,12 +135,12 @@ export default function Details({route, navigation}) {
       .then(res => res.json())
       .then(json => {
         setSubCatdata(json[0]);
-        console.log(json);
+        // console.log(json);
         setSubCatLoading(false);
       })
       .catch(err => {
         setSubCatLoading(true);
-        console.log(err);
+        // console.log(err);
       });
   };
 

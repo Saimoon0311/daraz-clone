@@ -51,12 +51,12 @@ export const HomeCartIcon = props => {
     // }
   };
   useEffect(() => {
-    console.log(54, 'chal raha ha');
+    // console.log(54, 'chal raha ha');
     if (isFocused) {
       getCartData();
-      console.log('49');
+      // console.log('49');
     } else {
-      console.log('45');
+      // console.log('45');
     }
   }, [isFocused, props?.updateCart]);
   return (

@@ -26,7 +26,7 @@ export const WISHLISTDATA = getApi('wishlist');
 export const SEARCH = getApi('search-products');
 export const PASSWORDCHNAGE = getApi('changeUserPassword');
 export const USERPROFILEUPDATE = getApi('user-detail-update');
-export const ALLNEWARRIVALS = getApi('all-new-arrivals');
+export const ALLNEWARRIVALS = getApi('all-new-arrivals/');
 export const USERORDERDEATILS = getApi('shop/user-order-details/');
 export const QUANTITYINCREASE = getApi('cart-data');
 export const ORDERPLACE = getApi('place-an-order');
@@ -34,13 +34,17 @@ export const GETCLIENTSECRET = getApi('stripe-form/submit');
 export const SENDINTENTANDORDERDATA = getApi('stripe-form/aftersubmit');
 export const REVIEWS = getApi('reviews');
 export const ALLDATA = getApi('featured-data-all');
-export const featuredDefault = getApi('featured-data-all-userskip/');
-export const newArrivalDefault = getApi('all-new-arrivals-userskip/');
 export const searchDataWithOutUserID = getApi('search-products-userskip/');
+export const AllFeaturedProductWithOutUser = getApi(
+  'products-featured-userskip',
+);
+export const featuredDefault = getApi('featured-data-all-userskip/');
+export const newArrivalDefault = getApi('new-arrivals-userskip/');
 export const SubCategoryDataWithOutUserID = getApi(
   'shop/sub-category-userskip/',
 );
 export const AllDataWithOutUserId = getApi('featured-data-all-over-userskip');
+export const AllNewArrivalsDataSkipUser = getApi('all-new-arrivals-userskip/');
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 

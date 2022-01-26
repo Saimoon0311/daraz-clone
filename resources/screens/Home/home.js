@@ -27,8 +27,10 @@ import {
   GETPRODUCT,
   featuredDefault,
   newArrivalDefault,
+  ALLNEWARRIVALS,
+  ALLFEATUREDPRODUCTS,
 } from '../../config/url';
-import {NativeBaseProvider, Box, Center} from 'native-base';
+import {NativeBaseProvider, Box, Center, AspectRatio} from 'native-base';
 import Alldata from '../../data/alldata';
 import NetInfo from '@react-native-community/netinfo';
 import Arrivals from '../../data/arrivals';
@@ -68,14 +70,16 @@ export default function Home({navigation}) {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setLoading(true);
     setAloading(true);
     setBloading(true);
-    wait(2000).then(() => {
-      datacallss(isLoggedIn == true ? true : false), setRefreshing(false);
-    });
+    // datacallss(isLoggedIn == true ? true : false), setRefreshing(false);
+    await checkStatus();
+    setRefreshing(false);
+    // wait(2000).then(() => {
+    // });
   }, []);
 
   const navigationProps = () => {
@@ -94,7 +98,7 @@ export default function Home({navigation}) {
     })();
   }, [isFocused]);
   const routeToLogin = () => {
-    console.log(22222);
+    // console.log(22222);
     navigation.navigate('MyTabs');
     // navigation.reset({
     //   index: 0,
@@ -104,14 +108,15 @@ export default function Home({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
       setIsLoggedIn(false);
       await datacallss(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setIsLoggedIn(true);
+      // console.log(118, user);
       await datacallss(true);
     }
   };
@@ -156,8 +161,8 @@ export default function Home({navigation}) {
   const datacallss = async isLogIn => {
     const user = await getUserData();
     let userId = user?.id;
-    console.log(130, userId);
-    console.log(131, isLogIn);
+    // console.log(130, userId);
+    // console.log(131, isLogIn);
     setId(userId);
     fetch(isLogIn == true ? `${FEATURED}/${userId}` : featuredDefault)
       .then(response => response.json())
@@ -280,7 +285,7 @@ export default function Home({navigation}) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('subcatdetails', {
-                  screenData: 'products-featured/',
+                  screenData: ALLFEATUREDPRODUCTS,
                 })
               }>
               <Text style={{color: '#E9691D'}}>See All</Text>
@@ -300,7 +305,7 @@ export default function Home({navigation}) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('subcatdetails', {
-                  screenData: 'all-new-arrivals/',
+                  screenData: ALLNEWARRIVALS,
                 })
               }>
               <Text style={{color: '#E9691D'}}>See All</Text>
@@ -317,7 +322,12 @@ export default function Home({navigation}) {
             />
           </NativeBaseProvider>
           <View style={styles.see}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('subcatdetails', {
+                  screenData: ALLFEATUREDPRODUCTS,
+                })
+              }>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
@@ -357,5 +367,3 @@ export default function Home({navigation}) {
     </SafeAreaView>
   );
 }
-
-// style={{ transform: [{ translateY: searchBarAnim }] }}

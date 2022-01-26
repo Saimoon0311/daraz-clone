@@ -51,15 +51,15 @@ export default function Cart({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
       setIsLoggedIn(false);
       setCartdata([]);
       setLoading(false);
       await getCartCall(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setIsLoggedIn(true);
       await getCartCall(true);
     }
@@ -193,7 +193,7 @@ export default function Cart({navigation}) {
     const userId = await getUserData();
     const users = userId.id;
     const a = `${API_BASED_URL}${type}/${users}/${id}`;
-    console.log(163, a);
+    // console.log(163, a);
     // if (quantity >= 0) {
 
     // } else{
@@ -212,7 +212,7 @@ export default function Cart({navigation}) {
 
   const deleteCartItem = id => {
     setLoading(true);
-    console.log(140, id);
+    // console.log(140, id);
     // console.log('before ------->>>>>', cartdata);
     const api = CARTDELETE + '/' + id + '/' + user_id;
     // console.log(api);
@@ -234,7 +234,7 @@ export default function Cart({navigation}) {
         // console.log(68, cartdata);
       })
       .catch(e => {
-        console.log(170, e);
+        // console.log(170, e);
         setLoading(false);
       });
     // .finally(() => setLoading(false));
@@ -244,7 +244,7 @@ export default function Cart({navigation}) {
     var product_id = id;
     //  setCartloading(true)
     //  await ff()
-    console.log('id', id, 'userid', user_id);
+    // console.log('id', id, 'userid', user_id);
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {

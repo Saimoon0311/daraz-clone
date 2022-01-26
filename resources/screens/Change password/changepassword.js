@@ -116,14 +116,14 @@ export default function changepassword({navigation}) {
       redirect: 'follow',
     };
 
-    console.log('108', API_BASED_URL + PASSWORDCHNAGE + '/' + userId);
-    console.log('108', API_BASED_URL);
-    console.log('110', PASSWORDCHNAGE);
+    // console.log('108', API_BASED_URL + PASSWORDCHNAGE + '/' + userId);
+    // console.log('108', API_BASED_URL);
+    // console.log('110', PASSWORDCHNAGE);
 
     fetch(`${PASSWORDCHNAGE}/${userId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(109, result);
+        // console.log(109, result);
         setLoadingButton(false);
         setPassword('');
         setCurrent_password('');

@@ -66,7 +66,7 @@ export default function OrderDetails({navigation}) {
     fetch(url)
       .then(data => data?.json())
       .then(res => {
-        console.log(54, res);
+        // console.log(54, res);
         if (res) {
           setOrderData(res);
           setIsLoading(false);
@@ -75,7 +75,7 @@ export default function OrderDetails({navigation}) {
         }
       })
       .catch(e => {
-        console.log(57, e);
+        // console.log(57, e);
         setOrderData([]);
       });
   };
@@ -215,7 +215,7 @@ export default function OrderDetails({navigation}) {
             }}>
             <Text style={styles.parentCarddTextStyle}>Total:</Text>
             <Text style={styles.parentCarddTextStyle}>
-              ${item?.grand_total} For {item?.get_order_items[0]?.quantity} Item
+              ${item?.grand_total} For {item?.item_count} Item
             </Text>
           </View>
         </View>

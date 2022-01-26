@@ -24,7 +24,7 @@ const Stack = createNativeStackNavigator();
 export default function Navigation() {
   const userData = useSelector(state => state.auth.userData);
   const [isLoggedIn, setIsLoggedIn] = useState();
-  console.log('26', userData);
+  // console.log('26', userData);
 
   useEffect(() => {
     (async () => {
@@ -34,10 +34,10 @@ export default function Navigation() {
 
   const checkStatus = async () => {
     if (Object.keys(userData).length === 0) {
-      console.log(29);
+      // console.log(29);
       setIsLoggedIn(false);
     } else if (Object.keys(userData).length > 0) {
-      console.log(29);
+      // console.log(29);
       setIsLoggedIn(true);
     }
   };

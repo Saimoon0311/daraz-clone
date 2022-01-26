@@ -74,7 +74,7 @@ export default function Login({navigation}) {
               },
               navigation,
             );
-            console.log('res=== 83', res);
+            // console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
               showMessage({
                 type: 'danger',
@@ -99,7 +99,7 @@ export default function Login({navigation}) {
               //   icon: 'success',
               //   message: 'User Login Success',
               // });
-              console.log(res);
+              // console.log(res);
               setLoadingButton(false);
             }
           } catch (error) {

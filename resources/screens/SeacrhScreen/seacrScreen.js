@@ -57,13 +57,13 @@ export default function seacrhScreen({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
       setIsLoggedIn(false);
       await onSubmitSeacrhItem(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setUserId(user.id);
       setIsLoggedIn(true);
       await onSubmitSeacrhItem(true, user.id);
@@ -71,12 +71,12 @@ export default function seacrhScreen({navigation}) {
   };
   const checkStatusForCartUpdate = async () => {
     const user = await getUserData();
-    console.log(236, user);
+    // console.log(236, user);
     if (user == null) {
-      console.log(240);
+      // console.log(240);
       setIsLoggedIn(false);
     } else if (user !== null) {
-      console.log(244);
+      // console.log(244);
       setUserId(user.id);
       setIsLoggedIn(true);
     }
@@ -85,7 +85,7 @@ export default function seacrhScreen({navigation}) {
     navigation.navigate('Cart');
   };
   const onSubmitSeacrhItem = async confirm => {
-    console.log(72, confirm);
+    // console.log(72, confirm);
     setLoading(true);
     if (seacrhData !== '' && seacrhData !== null) {
       fetch(
@@ -95,11 +95,11 @@ export default function seacrhScreen({navigation}) {
       )
         .then(response => response.json())
         .then(json => {
-          console.log(86, json);
+          // console.log(86, json);
           setAllData(json[0]), setLoading(false);
         })
         .catch(error => {
-          console.log(90, error);
+          // console.log(90, error);
         });
     } else {
       setLoading(false);
@@ -149,7 +149,7 @@ export default function seacrhScreen({navigation}) {
       });
   };
   const routeToLogin = () => {
-    console.log(22222);
+    // console.log(22222);
     navigation.navigate('MyTabs');
     // navigation.reset({
     //   index: 0,
@@ -312,7 +312,7 @@ export default function seacrhScreen({navigation}) {
               value={seacrhData}
               autoFocus={false}
               focusable={true}
-              onPressIn={() => console.log(111)}
+              // onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
               //               autoFocus={ena}
               // onTouchCancel={}
