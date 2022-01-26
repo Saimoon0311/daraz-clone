@@ -112,7 +112,7 @@ function App({navigation}) {
     return (
       <Provider store={store}>
         {isVisible === true ? (
-          Platform?.OS == 'android' && Splash_Screen
+          Splash_Screen
         ) : (
           <NavigationContainer>
             <Navigation />

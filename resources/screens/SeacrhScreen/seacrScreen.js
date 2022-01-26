@@ -310,7 +310,7 @@ export default function seacrhScreen({navigation}) {
               style={styles.searchbar}
               onSubmitEditing={() => checkStatus()}
               value={seacrhData}
-              autoFocus={true}
+              autoFocus={false}
               focusable={true}
               onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
