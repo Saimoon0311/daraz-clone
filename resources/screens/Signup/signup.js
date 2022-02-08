@@ -138,9 +138,7 @@ export default function Signup({navigation}) {
                 setTimeout(() => {
                   navigation.goBack();
                 }, 1500);
-              } else if (
-                responseData?.email[0] == 'The email has already been taken.'
-              ) {
+              } else if (responseData?.email) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
@@ -148,10 +146,7 @@ export default function Signup({navigation}) {
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
-              } else if (
-                responseData?.phone_number[0] ==
-                'The number has already been taken.'
-              ) {
+              } else if (responseData?.phone_number) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
