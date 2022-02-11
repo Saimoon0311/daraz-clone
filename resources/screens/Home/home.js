@@ -13,6 +13,7 @@ import {
   SafeAreaView,
   RefreshControl,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -210,7 +211,10 @@ export default function Home({navigation}) {
 
   return (
     <SafeAreaView style={styles.main}>
-      <StatusBar backgroundColor={color.statusbarColor} />
+      <StatusBar
+        barStyle={Platform?.OS == 'ios' && 'dark-content'}
+        backgroundColor={color.statusbarColor}
+      />
       <View>
         <Animated.View>
           {toggleSearchBar ? (

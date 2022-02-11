@@ -165,7 +165,7 @@ export default function Signup({navigation}) {
               }
             })
             .catch(err => {
-              // console.log(165, err);
+              console.log(165, err);
               showMessage({
                 type: 'warning',
                 icon: 'auto',
