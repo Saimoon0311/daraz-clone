@@ -212,7 +212,7 @@ export default function Home({navigation}) {
   return (
     <SafeAreaView style={styles.main}>
       <StatusBar
-        barStyle={Platform?.OS == 'ios' && 'dark-content'}
+        barStyle={Platform?.OS == 'ios' ? 'dark-content' : 'light-content'}
         backgroundColor={color.statusbarColor}
       />
       <View>
