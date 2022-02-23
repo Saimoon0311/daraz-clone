@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Platform,
+  Modal,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -48,6 +49,8 @@ import {
   useStripe,
   useConfirmPayment,
 } from '@stripe/stripe-react-native';
+import axios from 'axios';
+import {WebView} from 'react-native-webview';
 
 export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
@@ -73,6 +76,12 @@ export default function checkOut({navigation, route}) {
   const [clientSecret, setClientSecret] = useState('');
   const [stripeData, setStripeData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [accessToken, setAccessToken] = useState(null);
+  const [approvalUrl, setApprovalUrl] = useState(null);
+  const [paymentId, setPaymentId] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
   //ADD localhost address of your server
   const API_URL =
     Platform?.OS == 'ios' ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
@@ -95,6 +104,135 @@ export default function checkOut({navigation, route}) {
 
   const startPaymentProcess = async () => {
     await fetchClientSecret();
+  };
+
+  const startPayPalProcedureOne = () => {
+    console.log(108);
+    // let currency = '100';
+    // currency.replace(' USD', '');
+
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+    myHeaders.append(
+      'Authorization',
+      'Basic QVNuek5NUXY5a3ktS0cyd0Z2QkV3N2pmYVNhRXBRMVRiWGxWbHpaTzltWEFiaWtmS0tmZ0ZkcmtCOVRXcV90WldrN19YVmd1U2o3blBaQXY6RUM1VkhhTE1CMEpMS1MybXRjR3E2dG44RDd5Nmc1LS05WXlIUDZ0eVVvRDNRZnlKbUZmdHNhQ1laX1pGY3YwZ2pENHVjQU9oWS11My1od0s=',
+    );
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append('grant_type', 'client_credentials');
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded.toString(),
+      redirect: 'follow',
+    };
+
+    fetch('https://api.sandbox.paypal.com/v1/oauth2/token', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(160, result);
+        setAccessToken(result.access_token);
+
+        startPayPalProcedureTwo();
+      })
+      .catch(error => {
+        console.log(163, error);
+        setIsLoading(false);
+      });
+  };
+
+  const startPayPalProcedureTwo = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Bearer ' + accessToken);
+    myHeaders.append('Content-Type', 'application/json');
+
+    let amount = itemTotalPrice;
+    var raw = JSON.stringify({
+      intent: 'sale',
+      payer: {
+        payment_method: 'paypal',
+      },
+      transactions: [
+        {
+          amount: {
+            total: amount,
+            currency: 'USD',
+            details: {
+              subtotal: amount,
+              tax: '0',
+              shipping: '0',
+              handling_fee: '0',
+              shipping_discount: '0',
+              insurance: '0',
+            },
+          },
+        },
+      ],
+      redirect_urls: {
+        return_url: 'https://example.com',
+        cancel_url: 'https://example.com',
+      },
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('https://api.sandbox.paypal.com/v1/payments/payment', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(252, result);
+        const {id, links} = result;
+        const approvalUrl = links.find(data => data.rel == 'approval_url');
+
+        setIsLoading(false);
+        setPaymentId(id);
+        setApprovalUrl(approvalUrl.href);
+        if (result.state == 'created') {
+          setIsVisible(true);
+        }
+      })
+      .catch(error => {
+        console.log(253, error);
+        setIsLoading(false);
+      });
+  };
+
+  const _onNavigationStateChange = webViewState => {
+    console.log(208, webViewState);
+    if (webViewState.url.includes('https://example.com/')) {
+      var url = webViewState.url;
+      var paymentId = /paymentId=([^&]+)/.exec(url)[1]; // Value is in [1] ('384' in our case)
+      var PayerID = /PayerID=([^&]+)/.exec(url)[1]; // Value is in [1] ('384' in our case)
+
+      console.log(228, url);
+      console.log(229, paymentId);
+      console.log(230, PayerID);
+      axios
+        .post(
+          `https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}/execute`,
+          {payer_id: PayerID},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + accessToken,
+            },
+          },
+        )
+        .then(response => {
+          console.log(224, response);
+          if (response.status == 200) {
+            hitOrderPlaceApi();
+          }
+        })
+        .catch(err => {
+          console.log(227, err);
+        });
+    }
   };
 
   const fetchClientSecret = async () => {
@@ -427,6 +565,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              maxLength={7}
               keyboardType="numeric"
               value={
                 userDataLocal?.zipcode == null
@@ -535,7 +674,7 @@ export default function checkOut({navigation, route}) {
                   backgroundColor: '#C8C8C8',
                 }}
               />
-              {/* <Radio value="PayPal" my={1}>
+              <Radio value="PayPal" my={1}>
                 <Text style={styles.radioText}>PayPal</Text>
               </Radio>
               <View
@@ -545,7 +684,7 @@ export default function checkOut({navigation, route}) {
                   alignSelf: 'center',
                   backgroundColor: '#C8C8C8',
                 }}
-              /> */}
+              />
               <Radio value="Stripe Payment" my={1}>
                 <Text style={styles.radioText}>Stripe Payment</Text>
               </Radio>
@@ -739,6 +878,8 @@ export default function checkOut({navigation, route}) {
       setIsLoading(true);
       if (paymentMethodValue == 'Stripe Payment') {
         startPaymentProcess();
+      } else if (paymentMethodValue == 'PayPal') {
+        validateHitOrderPlaceApi('PayPal');
       } else {
         validateHitOrderPlaceApi();
       }
@@ -766,6 +907,8 @@ export default function checkOut({navigation, route}) {
     ) {
       if (stringValue == 'stripe') {
         handlePayment(data);
+      } else if (stringValue == 'PayPal') {
+        startPayPalProcedureOne();
       } else {
         hitOrderPlaceApi();
       }
@@ -814,7 +957,7 @@ export default function checkOut({navigation, route}) {
     fetch(`${ORDERPLACE}/${userDataLocal?.id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(785, result);
+        console.log(785, result);
         if (
           result?.message == 'Checkout Completed' &&
           paymentMethodValue == 'Stripe Payment'
@@ -1018,6 +1161,24 @@ export default function checkOut({navigation, route}) {
           {/* {orderCompleteScreen()} */}
         </ScrollView>
       </View>
+      {approvalUrl && (
+        <Modal
+          animationType="slide"
+          onRequestClose={() => {
+            setIsVisible(false);
+          }}
+          visible={isVisible}>
+          <WebView
+            style={{height: hp('50'), width: wp('100')}}
+            source={{uri: approvalUrl}}
+            onNavigationStateChange={_onNavigationStateChange}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            startInLoadingState={false}
+            style={{marginTop: 20}}
+          />
+        </Modal>
+      )}
     </StripeProvider>
   );
 }
