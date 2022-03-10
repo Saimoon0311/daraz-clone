@@ -834,7 +834,15 @@ export default function Details({route, navigation}) {
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
-                  onPress={isLoggedIn == true ? validateCartAdd : routeToLogin}>
+                  // onPress={isLoggedIn == true ? validateCartAdd : routeToLogin}
+                  onPress={() => {
+                    const body = {
+                      product_id,
+                      user_id,
+                      attribute: attributeArray,
+                    };
+                    console.log(844, body);
+                  }}>
                   <View
                     style={{
                       flexDirection: 'row',
