@@ -29,11 +29,11 @@ import {testCART} from '../../config/url';
 export const HomeCartIcon = props => {
   const [cartLength, setCartLength] = useState(0);
   const isFocused = useIsFocused();
-
+  const {saveProduct} = useSelector(state => state.savePosts);
+  var saveProductLength = saveProduct.length;
   const getCartData = async () => {
     const user = await getUserData();
     const userId = user.id;
-    // if (props.isLoggedIn == true) {
     fetch(`${testCART}/${userId}`, {
       method: 'GET',
     })
@@ -46,17 +46,11 @@ export const HomeCartIcon = props => {
         }
       })
       .catch(err => console.log(40, err));
-    // } else {
-    //   setCartLength('0');
-    // }
   };
   useEffect(() => {
-    // console.log(54, 'chal raha ha');
     if (isFocused) {
       getCartData();
-      // console.log('49');
     } else {
-      // console.log('45');
     }
   }, [isFocused, props?.updateCart]);
   return (
@@ -75,24 +69,16 @@ export const HomeCartIcon = props => {
           // alignSelf: 'center',
           width: Dimensions.get('window').width * 0.07,
           height: Dimensions.get('window').width * 0.06,
-          // justifyContent: 'center',
-          // alignItems: 'center',
           marginLeft: wp('7'),
-          // backgroundColor: 'red',
-          // width: wp('3'),
         }}>
         <Text
           numberOfLines={1}
           style={{
             color: color.textColorRedCart,
             fontSize: hp('2'),
-            // bottom: hp('0.1'),
             textAlign: 'left',
-            // justifyContent: 'center',
-            // backgroundColor: 'red',
           }}>
-          {props?.isLoggedIn == true ? cartLength : '0'}
-          {/* {cartLength} */}
+          {props?.isLoggedIn == true ? cartLength : saveProductLength}
         </Text>
       </View>
     </TouchableOpacity>

@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import store from '../redux/store';
 import types from '../redux/type';
 
-const {dispatch, getState} = store;
+// const {dispatch, getState} = store;
 
 export async function getHeaders() {
   let userData = await AsyncStorage.getItem('userData');
@@ -21,6 +21,7 @@ export async function apiReq(
   data,
   method,
   headers,
+  dispatch,
   requestOptions = {},
 ) {
   return new Promise(async (res, rej) => {
@@ -73,16 +74,16 @@ export async function apiReq(
   });
 }
 
-export function apiPost(endPoint, data, headers = {}) {
-  return apiReq(endPoint, data, 'post', headers);
+export function apiPost(endPoint, data, dispatch, headers = {}) {
+  return apiReq(endPoint, data, 'post', headers, dispatch);
 }
 
 export function apiDelete(endPoint, data, headers = {}) {
   return apiReq(endPoint, data, 'delete', headers);
 }
 
-export function apiGet(endPoint, data, headers = {}, requestOptions) {
-  return apiReq(endPoint, data, 'get', headers, requestOptions);
+export function apiGet(endPoint, data, headers, dispatch = {}, requestOptions) {
+  return apiReq(endPoint, data, 'get', headers, dispatch, requestOptions);
 }
 
 export function apiPut(endPoint, data, headers = {}) {
@@ -113,7 +114,7 @@ export function clearAsyncStorate(key) {
 export function setUserData(data) {
   // data = JSON.stringify(data);
   data = JSON.stringify(data);
-  return AsyncStorage.setItem('userData', data)
+  return AsyncStorage.setItem('userData', data);
 }
 
 export async function getUserData() {

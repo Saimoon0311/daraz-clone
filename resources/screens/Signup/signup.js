@@ -23,6 +23,7 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {color} from '../../config/color';
+import {useDispatch} from 'react-redux';
 
 export default function Signup({navigation}) {
   const [loadingButton, setLoadingButton] = useState(false);
@@ -37,6 +38,7 @@ export default function Signup({navigation}) {
   const [cshow, setCshow] = useState(false);
   const handleClicks = () => setCshow(!cshow);
   const savedata = async () => {
+    const dispatch = useDispatch();
     setLoadingButton(true);
     let netFlag = 0;
     var res;
@@ -134,6 +136,7 @@ export default function Signup({navigation}) {
                     password,
                   },
                   navigation,
+                  dispatch,
                 );
                 setTimeout(() => {
                   navigation.goBack();

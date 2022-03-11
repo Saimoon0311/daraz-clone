@@ -20,6 +20,7 @@ import StarRating from 'react-native-star-rating';
 
 export default function Cartdetails({route, navigation}) {
   const item = route.params;
+  // const imm = item.images;
   const imm = item.get_products.images;
   const [starCount, setstarCount] = useState(4);
 
@@ -38,7 +39,6 @@ export default function Cartdetails({route, navigation}) {
           />
         </TouchableOpacity>
         <Text style={styles.te}>Details</Text>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}> */}
         <Ionicons
           name="cart"
           size={30}
@@ -48,7 +48,6 @@ export default function Cartdetails({route, navigation}) {
             marginRight: wp('4'),
           }}
         />
-        {/* </TouchableOpacity> */}
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: hp('10')}}>
         <View style={{margin: 20}}>
@@ -59,7 +58,6 @@ export default function Cartdetails({route, navigation}) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
               alignSelf: 'center',
-              // backgroundColor: 'red',
             }}
             renderItem={({item}) => {
               return (
@@ -74,9 +72,6 @@ export default function Cartdetails({route, navigation}) {
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               {item?.get_products?.name}
             </Text>
-            {/* <Text style={styles.tep}>
-            Category : {item?.getchildcategory?.name}
-          </Text> */}
             {item?.get_products?.is_discounted == 2 ? (
               <View
                 style={{

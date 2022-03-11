@@ -13,7 +13,7 @@ export default function saveProduct(state = initialState, action) {
       return {
         ...state,
         saveProduct: state.saveProduct.filter(
-          saveProduct => saveProduct._id !== action.payload._id,
+          saveProduct => saveProduct.id !== action.payload.id,
         ),
       };
       break;

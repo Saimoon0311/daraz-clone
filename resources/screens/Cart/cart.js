@@ -33,8 +33,13 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import types from '../../redux/type';
 
 export default function Cart({navigation}) {
+  const {saveProduct} = useSelector(state => state.savePosts);
+  const dispatch = useDispatch();
+  console.log(42, saveProduct);
   const [cartdata, setCartdata] = useState([1]);
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
@@ -48,6 +53,7 @@ export default function Cart({navigation}) {
   const [silderData, setSliderData] = useState(null);
   const isFocused = useIsFocused();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dummy, setDummy] = useState(1);
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -55,8 +61,9 @@ export default function Cart({navigation}) {
     if (user == null) {
       // console.log(240);
       setIsLoggedIn(false);
-      setCartdata([]);
+      setCartdata(saveProduct);
       setLoading(false);
+      notLogintotalprice(saveProduct);
       await getCartCall(false);
     } else if (user !== null) {
       // console.log(244);
@@ -157,7 +164,7 @@ export default function Cart({navigation}) {
         console.log(58, 'screen is not Focused');
       }
     })();
-  }, [isFocused]);
+  }, [isFocused, saveProduct]);
 
   const showDeleteAlert = id => {
     return (
@@ -289,9 +296,518 @@ export default function Cart({navigation}) {
       setTotalPrice(sum);
     }
   };
+  const notLogintotalprice = data => {
+    // console.log(134);
+
+    // console.log(306, total);
+    if (data.length > 0) {
+      var total = 0;
+      data.map(res => {
+        // console.log(302, Number(res.price));
+        total = total + Number(res.price);
+      }); // console.log(148, data);
+      // let sum = 0;
+      // data.forEach(obj => {
+      //   for (let property in obj) {
+      //     if (property == 'price') {
+      //       console.log(152, property.price);
+      //       // console.log(154);
+      //       sum += obj[property];
+      //     }
+      //   }
+      // });
+      // console.log(161, sum);
+      // return sum;
+      setTotalPrice(total);
+    }
+  };
+  const loginData = (item, att) => {
+    return (
+      <View style={styles.box}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Cartdetails', item)}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={{
+                uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
+              }}
+              style={{
+                width: wp('30%'),
+                height: hp('15%'),
+                borderRadius: 10,
+              }}
+            />
+            <View style={{marginTop: 20}}>
+              <Text
+                numberOfLines={1}
+                style={{
+                  width: wp('40%'),
+                  fontSize: hp('1.8'),
+                  color: color.textColorRedCart,
+                  marginLeft: 10,
+                  marginBottom: hp('1'),
+                  fontWeight: 'bold',
+                }}>
+                {item?.get_products?.name}
+              </Text>
+              <View
+                style={{
+                  width: wp('50%'),
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: hp('2'),
+                    // color: color.textColorRedCart,
+                    color: '#512500',
+
+                    // fontWeight: 'bold',
+                    marginLeft: 10,
+                    marginBottom: hp('1'),
+                  }}>
+                  Price : ${/* Price : ${item?.get_products?.price} */}
+                </Text>
+                {item?.get_products?.is_discounted == 2 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: hp('2'),
+                        // color: color.textColorRedCart,
+                        color: '#512500',
+
+                        // fontWeight: 'bold',
+                        textDecorationLine: 'line-through',
+                      }}>
+                      {item?.get_products?.price}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: hp('2'),
+                        color: 'red',
+                        // fontWeight: 'bold',
+                        marginLeft: wp('2'),
+                      }}>
+                      {item?.get_products?.discounted_price}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: hp('2'),
+                      // color: '#512500',
+
+                      color: color.textColorRedCart,
+                      // fontWeight: 'bold',
+                      marginBottom: hp('1'),
+                    }}>
+                    {item?.get_products?.price}
+                  </Text>
+                )}
+              </View>
+              {item?.attributes?.length == 0 ? null : (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: wp('55%'),
+                    // flexWrap: 'wrap',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: hp('2'),
+                      color: '#512500',
+
+                      // color: color.textColorRedCart,
+                      // fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}>
+                    Attribute :
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      // backgroundColor: 'green',
+                      width: wp('35'),
+                    }}>
+                    {att &&
+                      att?.map(res => {
+                        return (
+                          <Text
+                            numberOfLines={1}
+                            style={{
+                              fontSize: hp('1.9'),
+                              // color: color.textColorRedCart,
+                              // fontWeight: 'bold',
+                              color: '#512500',
+                              marginLeft: wp('1'),
+                              alignItems: 'center',
+                              // width: wp('34'),
+                            }}>
+                            {res}
+                          </Text>
+                        );
+                      })}
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            height: 2,
+            backgroundColor: '#C8C8C8',
+            marginTop: hp('1'),
+          }}
+        />
+        <View style={{flexDirection: 'row'}}>
+          {item?.is_wishlisted == true ? (
+            <TouchableOpacity onPress={() => addtowishlist(item?.product_id)}>
+              <Ionicons
+                style={{paddingTop: hp('2.5')}}
+                name="heart"
+                color="#B64400"
+                size={20}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => addtowishlist(item?.product_id)}>
+              <Ionicons
+                style={{paddingTop: hp('2.5')}}
+                name="heart-outline"
+                color="#B64400"
+                size={20}
+              />
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity
+      onPress={() => addtowishlist(item?.product_id)}>
+      <Ionicons
+        style={{paddingTop: hp('2.5')}}
+        name="heart-outline"
+        color="#B64400"
+        size={20}
+      />
+    </TouchableOpacity> */}
+          <View style={styles.verticleLine}></View>
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => {
+              setItemId(item?.id);
+              // setProduct_id(item?.product_id)
+              showDeleteAlert(item?.id);
+              setShowAlert(true);
+              // console.log(356,item.id)
+            }}>
+            <Ionicons
+              style={{paddingTop: hp('2.5'), marginRight: 10}}
+              name="trash"
+              size={20}
+              color="#B64400"
+            />
+            <Text style={styles.remov}>Remove</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              marginLeft: 'auto',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}>
+            {item?.quantity > 1 && (
+              <TouchableOpacity
+                onPress={() =>
+                  quantityIncrease(
+                    'decrement-cart-data',
+                    item?.id,
+                    item?.quantity,
+                  )
+                }>
+                <Ionicons
+                  name="remove-circle-sharp"
+                  size={25}
+                  color={color.themColorPrimary}
+                  style={{paddingTop: hp('2'), marginRight: 10}}
+                />
+              </TouchableOpacity>
+            )}
+            <Text
+              style={{
+                paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
+                marginRight: 10,
+                fontSize: hp('3.2'),
+                color: '#EEB08B',
+                fontWeight: 'bold',
+              }}>
+              {' '}
+              {item?.quantity}{' '}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                quantityIncrease(
+                  'increment-cart-data',
+                  item?.id,
+                  item?.quantity,
+                )
+              }>
+              <Ionicons
+                name="add-circle-sharp"
+                size={25}
+                color={color.themColorPrimary}
+                style={{paddingTop: hp('2'), marginRight: 10}}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const logoutData = item => {
+    const att = item?.attributeValue;
+    return (
+      <View style={styles.box}>
+        <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={{
+                uri: `${Images_API}/${item?.images[0]?.name}`,
+              }}
+              style={{
+                width: wp('30%'),
+                height: hp('15%'),
+                borderRadius: 10,
+              }}
+            />
+            <View style={{marginTop: 20}}>
+              <Text
+                numberOfLines={1}
+                style={{
+                  width: wp('40%'),
+                  fontSize: hp('1.8'),
+                  color: color.textColorRedCart,
+                  marginLeft: 10,
+                  marginBottom: hp('1'),
+                  fontWeight: 'bold',
+                }}>
+                {item?.name}
+              </Text>
+              <View
+                style={{
+                  width: wp('50%'),
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: hp('2'),
+                    color: '#512500',
+                    marginLeft: 10,
+                    marginBottom: hp('1'),
+                  }}>
+                  Price : ${/* Price : ${item?.get_products?.price} */}
+                </Text>
+                {item?.is_discounted == 2 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: hp('2'),
+                        color: '#512500',
+                        textDecorationLine: 'line-through',
+                      }}>
+                      {item?.price}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: hp('2'),
+                        color: 'red',
+                        marginLeft: wp('2'),
+                      }}>
+                      {item?.discounted_price}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: hp('2'),
+                      color: color.textColorRedCart,
+                      marginBottom: hp('1'),
+                    }}>
+                    {item?.price}
+                  </Text>
+                )}
+              </View>
+              {item?.attributeValue?.length == 0 ? null : (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: wp('55%'),
+                    // flexWrap: 'wrap',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: hp('2'),
+                      color: '#512500',
+
+                      // color: color.textColorRedCart,
+                      // fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}>
+                    Attribute :
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      // backgroundColor: 'green',
+                      width: wp('35'),
+                    }}>
+                    {att &&
+                      att?.map(res => {
+                        return (
+                          <Text
+                            numberOfLines={1}
+                            style={{
+                              fontSize: hp('1.9'),
+                              // color: color.textColorRedCart,
+                              // fontWeight: 'bold',
+                              color: '#512500',
+                              marginLeft: wp('1'),
+                              alignItems: 'center',
+                              // width: wp('34'),
+                            }}>
+                            {res}
+                          </Text>
+                        );
+                      })}
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            height: 2,
+            backgroundColor: '#C8C8C8',
+            marginTop: hp('1'),
+          }}
+        />
+        <View style={{flexDirection: 'row'}}>
+          {item?.is_wishlisted == true ? (
+            <TouchableOpacity onPress={() => navigation.navigate('MyTabs')}>
+              <Ionicons
+                style={{paddingTop: hp('2.5')}}
+                name="heart"
+                color="#B64400"
+                size={20}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => navigation.navigate('MyTabs')}>
+              <Ionicons
+                style={{paddingTop: hp('2.5')}}
+                name="heart-outline"
+                color="#B64400"
+                size={20}
+              />
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity
+      onPress={() => addtowishlist(item?.product_id)}>
+      <Ionicons
+        style={{paddingTop: hp('2.5')}}
+        name="heart-outline"
+        color="#B64400"
+        size={20}
+      />
+    </TouchableOpacity> */}
+          <View style={styles.verticleLine}></View>
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => {
+              dispatch({
+                type: types.UNSAVEPRODUCT,
+                payload: item,
+              });
+              setCartdata(saveProduct);
+              notLogintotalprice(saveProduct);
+              // setItemId(item?.id);
+              // showDeleteAlert(item?.id);
+              // setShowAlert(true);
+            }}>
+            <Ionicons
+              style={{paddingTop: hp('2.5'), marginRight: 10}}
+              name="trash"
+              size={20}
+              color="#B64400"
+            />
+            <Text style={styles.remov}>Remove</Text>
+          </TouchableOpacity>
+          {/* <View
+            style={{
+              marginLeft: 'auto',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}>
+            {item?.quantity > 1 && (
+              <TouchableOpacity
+                onPress={() =>
+                  quantityIncrease(
+                    'decrement-cart-data',
+                    item?.id,
+                    item?.quantity,
+                  )
+                }>
+                <Ionicons
+                  name="remove-circle-sharp"
+                  size={25}
+                  color={color.themColorPrimary}
+                  style={{paddingTop: hp('2'), marginRight: 10}}
+                />
+              </TouchableOpacity>
+            )}
+            <Text
+              style={{
+                paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
+                marginRight: 10,
+                fontSize: hp('3.2'),
+                color: '#EEB08B',
+                fontWeight: 'bold',
+              }}>
+              {' '}
+              {item?.quantity}{' '}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                quantityIncrease(
+                  'increment-cart-data',
+                  item?.id,
+                  item?.quantity,
+                )
+              }>
+              <Ionicons
+                name="add-circle-sharp"
+                size={25}
+                color={color.themColorPrimary}
+                style={{paddingTop: hp('2'), marginRight: 10}}
+              />
+            </TouchableOpacity>
+          </View> */}
+        </View>
+      </View>
+    );
+  };
+
   const testfunction = () => {
-    // setShowAlert(true);
-    // console.log(78, showAlert);
     return (
       <AwesomeAlert
         show={showAlert}
@@ -299,10 +815,7 @@ export default function Cart({navigation}) {
         message="Are you sure you want to remove this item from your cart."
         confirmText="Yessss"
         showConfirmButton={true}
-        onConfirmPressed={() => {
-          // deleteCartItem(id);
-          // setShowAlert(false);
-        }}
+        onConfirmPressed={() => {}}
       />
     );
   };
@@ -358,272 +871,21 @@ export default function Cart({navigation}) {
               </TouchableOpacity>
             </View>
           ) : (
-            // <SafeAreaView style={{flex: 1}}>
             <View>
               <FlatList
                 data={cartdata}
                 nestedScrollEnabled
-                // keyExtractor={item => item.key}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
-                  // console.log(215,cartdata)
                   const att = item?.attributes;
                   const data = item;
-                  // {console.log(294,att)}
-                  return (
-                    <View style={styles.box}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('Cartdetails', item)
-                        }>
-                        <View style={{flexDirection: 'row'}}>
-                          <Image
-                            source={{
-                              uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
-                            }}
-                            style={{
-                              width: wp('30%'),
-                              height: hp('15%'),
-                              borderRadius: 10,
-                            }}
-                          />
-                          <View style={{marginTop: 20}}>
-                            <Text
-                              numberOfLines={1}
-                              style={{
-                                width: wp('40%'),
-                                fontSize: hp('1.8'),
-                                color: color.textColorRedCart,
-                                marginLeft: 10,
-                                marginBottom: hp('1'),
-                                fontWeight: 'bold',
-                              }}>
-                              {item?.get_products?.name}
-                            </Text>
-                            <View
-                              style={{
-                                width: wp('50%'),
-                                flexDirection: 'row',
-                              }}>
-                              <Text
-                                numberOfLines={1}
-                                style={{
-                                  fontSize: hp('2'),
-                                  // color: color.textColorRedCart,
-                                  color: '#512500',
-
-                                  // fontWeight: 'bold',
-                                  marginLeft: 10,
-                                  marginBottom: hp('1'),
-                                }}>
-                                Price : $
-                                {/* Price : ${item?.get_products?.price} */}
-                              </Text>
-                              {item?.get_products?.is_discounted == 2 ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                  }}>
-                                  <Text
-                                    style={{
-                                      fontSize: hp('2'),
-                                      // color: color.textColorRedCart,
-                                      color: '#512500',
-
-                                      // fontWeight: 'bold',
-                                      textDecorationLine: 'line-through',
-                                    }}>
-                                    {item?.get_products?.price}
-                                  </Text>
-                                  <Text
-                                    style={{
-                                      fontSize: hp('2'),
-                                      color: 'red',
-                                      // fontWeight: 'bold',
-                                      marginLeft: wp('2'),
-                                    }}>
-                                    {item?.get_products?.discounted_price}
-                                  </Text>
-                                </View>
-                              ) : (
-                                <Text
-                                  style={{
-                                    fontSize: hp('2'),
-                                    // color: '#512500',
-
-                                    color: color.textColorRedCart,
-                                    // fontWeight: 'bold',
-                                    marginBottom: hp('1'),
-                                  }}>
-                                  {item?.get_products?.price}
-                                </Text>
-                              )}
-                            </View>
-                            {item?.attributes?.length == 0 ? null : (
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  width: wp('55%'),
-                                  // flexWrap: 'wrap',
-                                }}>
-                                <Text
-                                  style={{
-                                    fontSize: hp('2'),
-                                    color: '#512500',
-
-                                    // color: color.textColorRedCart,
-                                    // fontWeight: 'bold',
-                                    marginLeft: 10,
-                                  }}>
-                                  Attribute :
-                                </Text>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    flexWrap: 'wrap',
-                                    // backgroundColor: 'green',
-                                    width: wp('35'),
-                                  }}>
-                                  {att &&
-                                    att?.map(res => {
-                                      return (
-                                        <Text
-                                          numberOfLines={1}
-                                          style={{
-                                            fontSize: hp('1.9'),
-                                            // color: color.textColorRedCart,
-                                            // fontWeight: 'bold',
-                                            color: '#512500',
-                                            marginLeft: wp('1'),
-                                            alignItems: 'center',
-                                            // width: wp('34'),
-                                          }}>
-                                          {res}
-                                        </Text>
-                                      );
-                                    })}
-                                </View>
-                              </View>
-                            )}
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                      <View
-                        style={{
-                          flex: 1,
-                          height: 2,
-                          backgroundColor: '#C8C8C8',
-                          marginTop: hp('1'),
-                        }}
-                      />
-                      <View style={{flexDirection: 'row'}}>
-                        {item?.is_wishlisted == true ? (
-                          <TouchableOpacity
-                            onPress={() => addtowishlist(item?.product_id)}>
-                            <Ionicons
-                              style={{paddingTop: hp('2.5')}}
-                              name="heart"
-                              color="#B64400"
-                              size={20}
-                            />
-                          </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity
-                            onPress={() => addtowishlist(item?.product_id)}>
-                            <Ionicons
-                              style={{paddingTop: hp('2.5')}}
-                              name="heart-outline"
-                              color="#B64400"
-                              size={20}
-                            />
-                          </TouchableOpacity>
-                        )}
-                        {/* <TouchableOpacity
-                          onPress={() => addtowishlist(item?.product_id)}>
-                          <Ionicons
-                            style={{paddingTop: hp('2.5')}}
-                            name="heart-outline"
-                            color="#B64400"
-                            size={20}
-                          />
-                        </TouchableOpacity> */}
-                        <View style={styles.verticleLine}></View>
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          onPress={() => {
-                            setItemId(item?.id);
-                            // setProduct_id(item?.product_id)
-                            showDeleteAlert(item?.id);
-                            setShowAlert(true);
-                            // console.log(356,item.id)
-                          }}>
-                          <Ionicons
-                            style={{paddingTop: hp('2.5'), marginRight: 10}}
-                            name="trash"
-                            size={20}
-                            color="#B64400"
-                          />
-                          <Text style={styles.remov}>Remove</Text>
-                        </TouchableOpacity>
-                        <View
-                          style={{
-                            marginLeft: 'auto',
-                            justifyContent: 'space-between',
-                            flexDirection: 'row',
-                          }}>
-                          {item?.quantity > 1 && (
-                            <TouchableOpacity
-                              onPress={() =>
-                                quantityIncrease(
-                                  'decrement-cart-data',
-                                  item?.id,
-                                  item?.quantity,
-                                )
-                              }>
-                              <Ionicons
-                                name="remove-circle-sharp"
-                                size={25}
-                                color={color.themColorPrimary}
-                                style={{paddingTop: hp('2'), marginRight: 10}}
-                              />
-                            </TouchableOpacity>
-                          )}
-                          <Text
-                            style={{
-                              paddingTop: hp(
-                                Platform?.OS == 'ios' ? '2.2' : '2',
-                              ),
-                              marginRight: 10,
-                              fontSize: hp('3.2'),
-                              color: '#EEB08B',
-                              fontWeight: 'bold',
-                            }}>
-                            {' '}
-                            {item?.quantity}{' '}
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() =>
-                              quantityIncrease(
-                                'increment-cart-data',
-                                item?.id,
-                                item?.quantity,
-                              )
-                            }>
-                            <Ionicons
-                              name="add-circle-sharp"
-                              size={25}
-                              color={color.themColorPrimary}
-                              style={{paddingTop: hp('2'), marginRight: 10}}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    </View>
-                  );
+                  // return loginData(item, att);
+                  return isLoggedIn == true
+                    ? loginData(item, att)
+                    : logoutData(item, att);
                 }}
               />
-
               {cartdata?.length > 0 && (
                 <View>
                   <View style={styles.box}>
@@ -658,10 +920,12 @@ export default function Cart({navigation}) {
                     <TouchableOpacity
                       style={styles.maior}
                       onPress={() =>
-                        navigation.navigate('checkOut', {
-                          screenData: cartdata,
-                          totalPrice: totalPriceShow,
-                        })
+                        isLoggedIn == true
+                          ? navigation.navigate('checkOut', {
+                              screenData: cartdata,
+                              totalPrice: totalPriceShow,
+                            })
+                          : navigation.navigate('MyTabs')
                       }>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>

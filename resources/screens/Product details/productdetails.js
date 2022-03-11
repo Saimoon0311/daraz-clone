@@ -42,8 +42,17 @@ import {styles} from './style';
 import StarRating from 'react-native-star-rating';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {useDispatch, useSelector} from 'react-redux';
+import types from '../../redux/type';
 
 export default function Details({route, navigation}) {
+  const child_id = route?.child_category_id;
+  const item = route?.params;
+  const imm = item?.images;
+  const {saveProduct} = useSelector(state => state.savePosts);
+  const {userData} = useSelector(state => state.auth);
+  console.log(50, userData);
+  const dispatch = useDispatch();
   const [updateCart, setUpdateCart] = useState(false);
   const [user_id, setUser_id] = useState();
   const [loading, setLoading] = useState(false);
@@ -58,6 +67,8 @@ export default function Details({route, navigation}) {
   const [reviews, setreview] = useState('');
   const [allReviews, setallReviews] = useState();
   const [allreviewsLoading, setallreviewsLoading] = useState(true);
+  const [productData, setProductData] = useState(item);
+
   const onStarRatingPress = rating => {
     setstarCount(rating);
   };
@@ -95,35 +106,32 @@ export default function Details({route, navigation}) {
   }, []);
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(100);
       setIsLoggedIn(false);
     } else if (user !== null) {
-      // console.log(103);
       setIsLoggedIn(true);
     }
   };
-  // useEffect(() => {
-  //   // console.log(39, item);
-
-  //   getAllReviews();
-  //   setUserId();
-  //   get_child_product();
-  // }, [updateCart]);
   const routeToLogin = () => {
-    // console.log(22222);
-    navigation.navigate('MyTabs');
+    productData['attributeValue'] = attributeArray;
+    dispatch({
+      type: types.SAVEPRODUCT,
+      payload: item,
+    });
+    setUpdateCart(true);
+    showMessage({
+      type: 'success',
+      icon: 'auto',
+      message: 'Your Product Has Been Add To Cart',
+      backgroundColor: '#E9691D',
+    });
+    console.log(128, saveProduct);
   };
   const setUserId = async () => {
     const userId = await getUserData();
     const users = userId?.id;
     setUser_id(users);
   };
-
-  const child_id = route?.child_category_id;
-  const item = route?.params;
-  const imm = item?.images;
 
   const product_id = item?.id;
   const navigationProps = () => {
@@ -266,7 +274,7 @@ export default function Details({route, navigation}) {
           'Kindly select the product attributes before adding to cart.',
         );
       } else if (!gotUndefined) {
-        cartadd();
+        isLoggedIn == true ? cartadd() : routeToLogin();
       }
     } else {
       returnTopAlert(
@@ -277,6 +285,7 @@ export default function Details({route, navigation}) {
   };
 
   const cartadd = () => {
+    // console.log(285, attributeArray);
     setLoading(true);
     fetch(ADDTOCART, {
       method: 'POST',
@@ -834,15 +843,22 @@ export default function Details({route, navigation}) {
                 )}
                 <TouchableOpacity
                   style={styles.carttouch}
-                  // onPress={isLoggedIn == true ? validateCartAdd : routeToLogin}
                   onPress={() => {
-                    const body = {
-                      product_id,
-                      user_id,
-                      attribute: attributeArray,
-                    };
-                    console.log(844, body);
-                  }}>
+                    validateCartAdd();
+                  }}
+                  // onPress={() => {
+                  //   dispatch({
+                  //     type: types.SAVEPRODUCT,
+                  //     payload: item,
+                  //   });
+                  //   const body = {
+                  //     product_id,
+                  //     user_id,
+                  //     attribute: attributeArray,
+                  //   };
+                  //   // console.log(844, body);
+                  // }}
+                >
                   <View
                     style={{
                       flexDirection: 'row',

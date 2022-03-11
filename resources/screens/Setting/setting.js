@@ -10,7 +10,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import actions from '../../redux/action';
 import {getUserData} from '../../utils/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -91,9 +91,10 @@ export default function setting({navigation}) {
   const onLogoutAlert = () => {
     setShowAlert(true);
   };
+  const dispatch = useDispatch();
   const logout = () => {
     setTimeout(() => {
-      actions.logout();
+      actions.logout(dispatch);
       setIsLoggedIn(false);
       setIslogout(true);
       // showMessage({

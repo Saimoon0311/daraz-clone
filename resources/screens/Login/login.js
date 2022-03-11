@@ -27,8 +27,10 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {useDispatch} from 'react-redux';
 
 export default function Login({navigation}) {
+  const dispatch = useDispatch();
   const [loadingButton, setLoadingButton] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -37,8 +39,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: '',
-    password: '',
+    email: 'shaheer031123@gmail.com',
+    password: '123654789',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -73,6 +75,7 @@ export default function Login({navigation}) {
                 password,
               },
               navigation,
+              dispatch,
             );
             // console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
