@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
+  ADDTOCART,
   ADDTOWISHLIST,
   API_BASED_URL,
   CART,
@@ -66,9 +67,47 @@ export default function Cart({navigation}) {
       notLogintotalprice(saveProduct);
       await getCartCall(false);
     } else if (user !== null) {
-      // console.log(244);
       setIsLoggedIn(true);
+      sendSaveCartData();
+    }
+  };
+  const mapOnCartData = async () => {
+    saveProduct.map(res => {
+      fetch(ADDTOCART, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON?.stringify({
+          product_id: res.id,
+          user_id: user_id,
+          attribute: res?.attributeValue,
+        }),
+      })
+        .then(res => res.json())
+        .then(async json => {
+          console.log(91);
+        })
+        .catch(err => {
+          showMessage({
+            type: 'danger',
+            icon: 'danger',
+            message: 'Something want wrong',
+            backgroundColor: '#E9691D',
+          });
+        });
+    });
+  };
+  const sendSaveCartData = async () => {
+    if (saveProduct.length > 0) {
+      await mapOnCartData();
+      dispatch({
+        type: types.CLEAR_SAVE_PRODUCT,
+      });
       await getCartCall(true);
+    } else {
+      getCartCall(true);
     }
   };
   const recentArray = [
@@ -151,15 +190,9 @@ export default function Cart({navigation}) {
 
   useEffect(() => {
     (async () => {
-      // getCartCall();
-      // getRecentData();
       await checkStatus();
-
       if (isFocused) {
         await checkStatus();
-        // setLoading(true);
-        // getCartCall();
-        // getRecentData();
       } else {
         console.log(58, 'screen is not Focused');
       }
@@ -408,7 +441,8 @@ export default function Cart({navigation}) {
                   </Text>
                 )}
               </View>
-              {item?.attributes?.length == 0 ? null : (
+              {item?.attributes?.length == 0 ||
+              item?.attributes == null ? null : (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -807,19 +841,6 @@ export default function Cart({navigation}) {
     );
   };
 
-  const testfunction = () => {
-    return (
-      <AwesomeAlert
-        show={showAlert}
-        title="Remove from Cart!"
-        message="Are you sure you want to remove this item from your cart."
-        confirmText="Yessss"
-        showConfirmButton={true}
-        onConfirmPressed={() => {}}
-      />
-    );
-  };
-
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -851,7 +872,7 @@ export default function Cart({navigation}) {
             <View style={{alignSelf: 'center', marginTop: hp('20%')}}>
               <BubblesLoader size={50} color="#512500" dotRadius={10} />
             </View>
-          ) : cartdata?.length == 0 ? (
+          ) : cartdata.length == 0 ? (
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />
               <Text numberOfLines={1} style={styles.tee}>

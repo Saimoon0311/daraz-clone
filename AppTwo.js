@@ -72,9 +72,9 @@ function AppTwo({navigation}) {
   };
   const time = () => {
     if (Platform?.OS == 'android') {
-      return 5000;
+      return 2000;
     } else {
-      return 5000;
+      return 2000;
     }
   };
 
