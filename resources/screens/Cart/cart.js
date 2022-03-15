@@ -41,7 +41,7 @@ export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
   const dispatch = useDispatch();
   console.log(42, saveProduct);
-  const [cartdata, setCartdata] = useState([1]);
+  const [cartdata, setCartdata] = useState([]);
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
   const [quantity, setQuantity] = useState(null);
@@ -58,20 +58,20 @@ export default function Cart({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
-    if (user == null) {
+    if (user == null || user == undefined) {
       // console.log(240);
-      setIsLoggedIn(false);
       setCartdata(saveProduct);
+      setIsLoggedIn(false);
       setLoading(false);
       notLogintotalprice(saveProduct);
-      await getCartCall(false);
-    } else if (user !== null) {
+    } else if (user !== null || user !== undefined) {
       setIsLoggedIn(true);
       sendSaveCartData();
     }
   };
+  console.log(4273, cartdata);
   const mapOnCartData = async () => {
+    const user = await getUserData();
     saveProduct.map(res => {
       fetch(ADDTOCART, {
         method: 'POST',
@@ -81,19 +81,19 @@ export default function Cart({navigation}) {
         },
         body: JSON?.stringify({
           product_id: res.id,
-          user_id: user_id,
+          user_id: user.id,
           attribute: res?.attributeValue,
         }),
       })
         .then(res => res.json())
         .then(async json => {
-          console.log(91);
+          console.log(91, json);
         })
         .catch(err => {
           showMessage({
             type: 'danger',
             icon: 'danger',
-            message: 'Something want wrong',
+            message: 'Something want',
             backgroundColor: '#E9691D',
           });
         });
@@ -162,6 +162,8 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
         });
+    } else {
+      setCartdata([]);
     }
   };
   // const getRecentData = async () => {
@@ -193,6 +195,7 @@ export default function Cart({navigation}) {
       await checkStatus();
       if (isFocused) {
         await checkStatus();
+        console.log(58, 'screen is Focused');
       } else {
         console.log(58, 'screen is not Focused');
       }
@@ -876,10 +879,7 @@ export default function Cart({navigation}) {
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />
               <Text numberOfLines={1} style={styles.tee}>
-                {' '}
-                {isLoggedIn
-                  ? 'You have no items in the cart.'
-                  : 'Kindly login to add item in your cart.'}{' '}
+                You have no items in the cart.
               </Text>
               <Text style={{color: 'gray'}}>Add items you want to shop</Text>
               <TouchableOpacity
@@ -914,7 +914,9 @@ export default function Cart({navigation}) {
                       <Text style={{color: 'gray', fontSize: hp('2%')}}>
                         Subtotal
                       </Text>
-                      <Text style={styles.ty}>{totalPriceShow}</Text>
+                      <Text style={styles.ty}>
+                        $ {totalPriceShow.toFixed(3)}
+                      </Text>
                     </View>
                     <Text></Text>
                     <View
@@ -935,7 +937,7 @@ export default function Cart({navigation}) {
                           styles.ty,
                           {color: color.textColorRedCart, fontWeight: 'bold'},
                         ]}>
-                        {totalPriceShow}
+                        $ {totalPriceShow.toFixed(3)}
                       </Text>
                     </View>
                     <TouchableOpacity
@@ -944,7 +946,7 @@ export default function Cart({navigation}) {
                         isLoggedIn == true
                           ? navigation.navigate('checkOut', {
                               screenData: cartdata,
-                              totalPrice: totalPriceShow,
+                              totalPrice: totalPriceShow.toFixed(3),
                             })
                           : navigation.navigate('MyTabs')
                       }>

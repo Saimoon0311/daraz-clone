@@ -208,7 +208,16 @@ export default function Home({navigation}) {
       setSearchData('');
     }
   };
-
+  const checkNavigationForFavourite = () => {
+    if (isLoggedIn == true) {
+      navigation.navigate('subcatdetails', {
+        screenData: 'wishlist',
+        isWishlist: true,
+      });
+    } else if (isLoggedIn == false) {
+      navigation.navigate('MyTabs');
+    }
+  };
   return (
     <SafeAreaView style={styles.main}>
       <StatusBar
@@ -239,15 +248,21 @@ export default function Home({navigation}) {
             </View>
           ) : (
             <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => checkNavigationForFavourite()}
+                style={{marginLeft: wp('5'), alignSelf: 'center'}}>
+                <Ionicons name="heart" size={27} color={color.defaultcolor} />
+              </TouchableOpacity>
               <Image
                 source={require('../../images/Group66.png')}
                 style={{
                   width: 81,
                   height: 36.5,
-                  marginLeft: wp('4'),
+                  alignSelf: 'center',
+                  // marginLeft: wp('4'),
                 }}
               />
-              <View
+              {/* <View
                 // onPress={() => setToggleSearchBar(!toggleSearchBar)}
                 style={{marginLeft: wp('10%')}}>
                 <Ionicons
@@ -255,7 +270,7 @@ export default function Home({navigation}) {
                   size={27}
                   color={color.defaultBackgroundColor}
                 />
-              </View>
+              </View> */}
               {/* <TouchableOpacity
                 onPress={() => navigation.navigate('Cart')}
                 style={{marginRight: wp('5%')}}>

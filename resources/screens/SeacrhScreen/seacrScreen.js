@@ -365,7 +365,8 @@ export default function seacrhScreen({navigation}) {
             color="#E9691D"
             size={60}
           />
-          <Text style={{...styles.tee, fontSize: hp('2.5')}}>
+          <Text
+            style={{...styles.tee, fontSize: hp('2.5'), textAlign: 'center'}}>
             Kindly search to see products listings.
           </Text>
         </View>

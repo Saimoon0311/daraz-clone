@@ -100,6 +100,7 @@ export const styles = StyleSheet.create({
     color: '#512500',
     fontSize: hp('3'),
     marginBottom: 10,
+    textAlign: 'center',
   },
   maior: {
     width: wp('70%'),

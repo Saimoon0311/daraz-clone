@@ -30,8 +30,8 @@ export const HomeCartIcon = props => {
   const [cartLength, setCartLength] = useState(0);
   const isFocused = useIsFocused();
   const {saveProduct} = useSelector(state => state.savePosts);
-  var saveProductLength = 0;
-  // var saveProductLength = saveProduct.length;
+  // var saveProductLength = 0;
+  var saveProductLength = saveProduct.length;
   const getCartData = async () => {
     const user = await getUserData();
     const userId = user.id;

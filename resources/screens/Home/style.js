@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: wp('36%'),
+    // paddingLeft: wp('36%'),
     borderBottomWidth: 0.5,
     // height:hp(''),
     paddingBottom: 10,

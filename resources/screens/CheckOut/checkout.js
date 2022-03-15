@@ -465,7 +465,7 @@ export default function checkOut({navigation, route}) {
         </View> */}
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={styles.subtotalText}>Sub Total</Text>
-          <Text style={styles.subtotalPrice}>{itemTotalPrice}</Text>
+          <Text style={styles.subtotalPrice}>$ {itemTotalPrice}</Text>
         </View>
         <View
           style={{
@@ -481,7 +481,7 @@ export default function checkOut({navigation, route}) {
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
-            {itemTotalPrice}
+            $ {itemTotalPrice}
           </Text>
         </View>
       </View>
@@ -819,12 +819,12 @@ export default function checkOut({navigation, route}) {
                 {res?.get_products?.is_discounted == 2 ? (
                   <>
                     <Text style={{textDecorationLine: 'line-through'}}>
-                      {itemPrice}{' '}
+                      $ {itemPrice}{' '}
                     </Text>
-                    {quantityCalculate(itemQuantity, discountedPrice)}
+                    $ {quantityCalculate(itemQuantity, discountedPrice)}
                   </>
                 ) : (
-                  quantityCalculate(itemQuantity, itemPrice)
+                  <Text>$ {quantityCalculate(itemQuantity, itemPrice)}</Text>
                 )}
               </Text>
             </View>

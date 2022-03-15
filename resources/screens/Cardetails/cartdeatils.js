@@ -165,7 +165,7 @@ export default function Cartdetails({route, navigation}) {
             </Text>
           </View>
           {item?.attributes?.length == 0 ? null : (
-            <View style={{...styles.box, marginTop: 20}}>
+            <View style={{...styles.box, marginTop: hp('3')}}>
               <View>
                 <Text style={[styles.tep, {fontWeight: 'bold'}]}>
                   Attributes :{' '}

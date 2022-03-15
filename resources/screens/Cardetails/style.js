@@ -19,11 +19,13 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '10' : '10'),
+    height: hp(Platform?.OS == 'ios' ? '10' : '9'),
   },
   icon: {
-    margin: 20,
-    height: hp('5'),
+    // margin: 20,
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2.5'),
+    marginLeft: wp('3'),
+    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   box: {
     padding: 13,
@@ -79,10 +81,10 @@ export const styles = StyleSheet.create({
 
   pickerParentStyle: {
     width: wp('80'),
-    height: hp(Platform?.OS == 'ios' ? '20' : '7'),
+    height: hp(Platform?.OS == 'ios' ? '15' : '7'),
     borderRadius: 10,
     overflow: 'hidden',
-    marginTop: hp(Platform?.OS == 'ios' ? '-5' : '2'),
+    marginTop: hp(Platform?.OS == 'ios' ? '-3' : '2'),
     // backgroundColor: '#FFDDC9',
     alignItems: 'center',
     justifyContent: 'center',
@@ -91,10 +93,10 @@ export const styles = StyleSheet.create({
 
   pickerStyle: {
     width: wp('80'),
-    height: hp(Platform?.OS == 'ios' ? '20' : '7'),
+    height: hp(Platform?.OS == 'ios' ? '7' : '7'),
     // height: hp('2'),
     color: '#512500',
-    backgroundColor: Platform?.OS == 'ios' ? 'transparent' : '#FFDDC9',
+    backgroundColor: Platform?.OS == 'ios' ? '#FFDDC9' : '#FFDDC9',
     // alignItems: 'center',
     // padding: 0,
     alignSelf: 'center',
@@ -105,5 +107,7 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'center',
     fontSize: hp('2'),
     fontWeight: 'bold',
+    borderRadius: 10,
+    paddingTop: Platform.OS == 'ios' ? hp('2.3') : hp('0'),
   },
 });

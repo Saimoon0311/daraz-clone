@@ -18,7 +18,7 @@ export default function saveProduct(state = initialState, action) {
       };
       break;
     case types.CLEAR_SAVE_PRODUCT:
-      return (state.saveProduct = []);
+      return {saveProduct: []};
       break;
     default:
       return state;
