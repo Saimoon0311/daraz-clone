@@ -15,7 +15,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  LogBox
+  LogBox,
 } from 'react-native';
 import Navigation from './resources/config/naviagtion';
 import {NavigationContainer} from '@react-navigation/native';
@@ -34,7 +34,7 @@ import store from './resources/redux/store';
 import {getUserData} from './resources/utils/utils';
 import {saveUserData} from './resources/redux/action/auth';
 
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from '@react-native-community/netinfo';
 // export default class App extends Component
 // {
 //    constructor(){
@@ -119,10 +119,9 @@ function App({navigation}) {
     setIsVisible(false);
   };
 
-  useEffect( async () => {
+  useEffect(async () => {
     (async () => {
-
-    LogBox.ignoreAllLogs()
+      LogBox.ignoreAllLogs();
 
       const userData = await getUserData();
       console.log('user data App.js', userData);
