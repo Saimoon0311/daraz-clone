@@ -39,8 +39,8 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    email: 'shaheer031123@gmail.com',
-    password: '123654789',
+    email: '',
+    password: '',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));

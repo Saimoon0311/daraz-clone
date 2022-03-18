@@ -663,17 +663,17 @@ export default function checkOut({navigation, route}) {
             cardDetails():
             null  
             } */}
-              <Radio value="Cash on Delivery" my={1}>
+              {/* <Radio value="Cash on Delivery" my={1}>
                 <Text style={styles.radioText}>Cash on Delivery</Text>
-              </Radio>
-              <View
+              </Radio> */}
+              {/* <View
                 style={{
                   ...styles.devider,
                   width: wp('75'),
                   alignSelf: 'center',
                   backgroundColor: '#C8C8C8',
                 }}
-              />
+              /> */}
               <Radio value="PayPal" my={1}>
                 <Text style={styles.radioText}>PayPal</Text>
               </Radio>
