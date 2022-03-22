@@ -1,25 +1,49 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {color} from "../../config/color"
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor,
-// backgroundColor:"red",
-flex:1
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
+    // backgroundColor:"red",
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFDDC9',
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 5,
+    height: hp(Platform?.OS == 'ios' ? '10' : '9'),
+  },
+  te: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#512500',
+    fontWeight: 'bold',
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.2'),
+    marginLeft: wp('3'),
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2.5'),
+    marginLeft: wp('3'),
+    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   box: {
     padding: 13,
     margin: 20,
     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.4,
+    shadowOffset: {width: 1, height: 1},
+
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
@@ -32,14 +56,14 @@ flex:1
     height: 30,
     width: 1,
     backgroundColor: '#909090',
-    marginTop: 10,
+    marginTop: hp('2'),
     marginLeft: 10,
     marginRight: 10,
   },
   ty: {
     marginLeft: 'auto',
-    color:"gray",
-    fontSize:hp('2%')
+    color: 'gray',
+    fontSize: hp('2%'),
   },
   maior: {
     width: wp('70%'),
@@ -75,12 +99,42 @@ flex:1
   remov: {
     color: '#B64400',
     fontSize: 16,
-    fontWeight: 'bold',
-    top:13
+    // fontWeight: 'bold',
+    top: hp('2.5'),
   },
-  buttonstyle:{
-    width:wp("20%"),
-    alignItems:"center",
-    justifyContent:"center"
-  }
+  buttonstyle: {
+    width: wp('20%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomimages: {
+    borderColor: 'black',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginRight: 10,
+  },
+  imagss: {
+    width: wp('27%'),
+    height: hp('15%'),
+    borderRadius: 10,
+  },
+  recentTextContainer: {
+    width: wp('90%'),
+    height: hp('5%'),
+    alignSelf: 'center',
+    // backgroundColor: 'green',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  bottomImageScroller: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 20,
+    marginTop: hp('3%'),
+  },
+  sliderText: {
+    fontSize: hp('2%'),
+    color: color.themColorPrimary,
+  },
 });

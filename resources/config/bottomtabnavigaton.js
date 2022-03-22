@@ -1,6 +1,10 @@
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home/home';
 import Deal from '../screens/Deal/deal';
@@ -14,11 +18,14 @@ import {
   SafeAreaView,
   Image,
   Linking,
+  Platform,
 } from 'react-native';
 import cate from '../screens/Catergory/catagery';
-import Order from '../screens/Order/order';
+import Order from '../screens/OrderDetails/OrderDetails';
 import setting from '../screens/Setting/setting';
-import {color} from "../config/color"
+import {color} from '../config/color';
+import seacrhScreen from '../screens/SeacrhScreen/seacrScreen';
+import Cart from '../screens/Cart/cart';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,21 +36,29 @@ function MybottomTabs() {
         headerShown: false,
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: '#512500',
-        tabBarInactiveTintColor: '#FFDDC9',
+        // tabBarInactiveTintColor: '#512500',
+        // tabBarInactiveTintColor: '#E9691D',
         swipeEnabled: true,
         animationEnabled: true,
-        tabBarActiveBackgroundColor: '#FFDDC9',
-        tabBarInactiveBackgroundColor: '#FFDDC9',
-      })}
-      >
+        tabBarActiveBackgroundColor: 'white',
+        tabBarInactiveBackgroundColor: 'white',
+        tabBarStyle: {
+          height: hp(Platform?.OS == 'ios' ? '10%' : '8%'),
+          backgroundColor: 'white',
+          // paddingTop: hp('-2'),
+        },
+      })}>
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: () => <Ionicons name="home"  color={color.bottomNavColor} size={20} />,
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="home" color={color} size={hp('3')} />
+          ),
           title: 'Home',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={Home}
@@ -52,11 +67,20 @@ function MybottomTabs() {
       <Tab.Screen
         name="cate"
         options={{
-          tabBarIcon: () => <Ionicons name="list" color={color.bottomNavColor} size={30} />,
-          title: 'Category',
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="list" color={color} size={hp('3')} />
+          ),
+          // tabBarActiveTintColor:"yellow",
+          // tabBarInactiveTintColor:"green",
+          // tabBarActiveIconColor:"blue",
+          tabBarIconStyle: {
+            color: 'red',
+          },
+          title: 'Shop',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={cate}
@@ -80,16 +104,47 @@ function MybottomTabs() {
       <Tab.Screen
         name="setting"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="settings-sharp" color={color.bottomNavColor} size={25} />
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="person" color={color} size={hp('3')} />
           ),
-          title: 'Setting',
+          title: 'Account',
           tabBarLabelStyle: {
             fontSize: 15,
             fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={setting}
+      />
+      <Tab.Screen
+        name="Cart"
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="cart" color={color} size={hp('3')} />
+          ),
+          title: 'Cart',
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
+          },
+        }}
+        component={Cart}
+      />
+      <Tab.Screen
+        name="seacrhScreen"
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Ionicons name="search" color={color} size={hp('3')} />
+          ),
+          title: 'Search',
+          tabBarLabelStyle: {
+            fontSize: 15,
+            fontWeight: 'bold',
+            marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
+          },
+        }}
+        component={seacrhScreen}
       />
     </Tab.Navigator>
   );

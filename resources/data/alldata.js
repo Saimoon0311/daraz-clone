@@ -16,13 +16,161 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {GETPRODUCT, Images_API} from '../config/url';
+import {ADDTOWISHLIST, GETPRODUCT, Images_API} from '../config/url';
 import {VStack, Box, Divider} from 'native-base';
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient';
 import Svg, {Circle, Rect} from 'react-native-svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {color} from '../config/color';
+import {showMessage} from 'react-native-flash-message';
+import {addtowishlist} from '../screens/Home/home';
 
 export default function Alldata(prop, {navigation}) {
+  // console.log(29,addtowishlist)
+  const passedFunction = id => {
+    prop.addtowishlist(id);
+  };
+  const flatListRender = item => {
+    return (
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.box}>
+          <TouchableOpacity onPress={() => prop.detailss(item)}>
+            <ImageBackground
+              style={styles.im}
+              imageStyle={{borderRadius: 20}}
+              source={{uri: `${Images_API}/${item.images[0]?.name}`}}>
+              {item.featured == 1 ? (
+                <View style={styles.fea}>
+                  <Text style={styles.textStyle}>Featured</Text>
+                </View>
+              ) : null}
+              {item.is_discounted == 2 ? (
+                <View style={styles.fea}>
+                  <Text
+                    style={[styles.textStyle, {backgroundColor: '#512500'}]}>
+                    {item.discounted_percentage}%OFF
+                  </Text>
+                </View>
+              ) : null}
+              {item?.is_wishlisted == true ? (
+                <TouchableOpacity
+                  style={styles.icons}
+                  onPress={() => passedFunction(item?.id)}>
+                  <Ionicons
+                    name="heart"
+                    color={color.themColorPrimary}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.icons}
+                  onPress={() => passedFunction(item?.id)}>
+                  <Ionicons
+                    name="heart-outline"
+                    color={color.themColorPrimary}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              )}
+            </ImageBackground>
+            <Text></Text>
+
+            <Text
+              numberOfLines={1}
+              style={{
+                color: '#512500',
+                fontSize: 14,
+                width: wp('30'),
+                fontWeight: 'bold',
+                textAlign: 'center',
+                alignSelf: 'center',
+              }}>
+              {item?.name}
+            </Text>
+            {item.is_discounted == 2 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  width: wp('33'),
+                  alignSelf: 'center',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    color: '#512500',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    textDecorationLine: 'line-through',
+                    // alignSelf:"center"
+                  }}>
+                  $ {item.price}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    color: 'red',
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }}>
+                  {' '}
+                  $ {item.discounted_price}
+                </Text>
+              </View>
+            ) : (
+              <Text
+                numberOfLines={1}
+                style={{
+                  color: '#512500',
+                  fontSize: hp('2%'),
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  width: wp('30'),
+                  alignSelf: 'center',
+                }}>
+                $ {item.price}
+              </Text>
+            )}
+            <Text></Text>
+            {/* </View> */}
+          </TouchableOpacity>
+        </View>
+        <Text></Text>
+      </ScrollView>
+    );
+  };
+
+  const flatListRenderBrands = item => {
+    return (
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <View style={styles.box}>
+          {/* <TouchableOpacity onPress={() => prop.detailss(item)}> */}
+          <ImageBackground
+            style={styles.im}
+            imageStyle={{borderRadius: 20}}
+            source={{uri: `${Images_API}/${item?.image}`}}
+            // source={{
+            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            // }}
+          ></ImageBackground>
+          <Text style={styles.boxImageStyle}>{item?.name}</Text>
+          {/* </TouchableOpacity> */}
+        </View>
+      </ScrollView>
+    );
+  };
+
+  const checkSliderType = item => {
+    if (prop?.isBrand) {
+      return flatListRenderBrands(item);
+    } else {
+      return flatListRender(item);
+    }
+  };
+
   return (
     <View>
       {prop.isLoading ? (
@@ -42,86 +190,26 @@ export default function Alldata(prop, {navigation}) {
             />
           </View>
         </SkeletonPlaceholder>
+      ) : prop?.data?.length == 0 ? (
+        <View style={styles.imm}>
+          {/* <Ionicons name="cart" color="#E9691D" size={30} /> */}
+          <Text style={styles.tee}>You have no items in this list</Text>
+          {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
+          {/* <TouchableOpacity
+            style={styles.maior}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.or}>Continue Shopping</Text>
+          </TouchableOpacity> */}
+        </View>
       ) : (
         <FlatList
           data={prop.data}
-          keyExtractor={item => item.key}
+          keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => {
-            return (
-              <ScrollView showsHorizontalScrollIndicator={false}>
-                <View style={styles.box}>
-                  <TouchableOpacity onPress={() => prop.detailss(item)}>
-                    <ImageBackground
-                      style={styles.im}
-                      imageStyle={{borderRadius: 20}}
-                      source={{uri: `${Images_API}/${item.images[0].name}`}}>
-                      {item.featured == 1 ? (
-                        <Text style={styles.fea}>Featured</Text>
-                      ) : null}
-                      {item.is_discounted == 2 ? (
-                        <Text
-                          style={[styles.fea, {backgroundColor: '#512500'}]}>
-                          {item.discounted_percentage}%OFF
-                        </Text>
-                      ) : null}
-                    </ImageBackground>
-                    <Text></Text>
-                    <Text
-                      style={{
-                        color: '#512500',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }}>
-                      {item.name}
-                    </Text>
-                    {item.is_discounted == 2 ? (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: hp('2%'),
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            textDecorationLine: 'line-through',
-                          }}>
-                          $ {item.price}
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'red',
-                            fontSize: hp('2%'),
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                          }}>
-                          {' '}
-                          $ {item.discounted_price}
-                        </Text>
-                      </View>
-                    ) : (
-                      <Text
-                        style={{
-                          color: '#512500',
-                          fontSize: hp('2%'),
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                        }}>
-                        $ {item.price}
-                      </Text>
-                    )}
-                    <Text></Text>
-                    {/* </View> */}
-                  </TouchableOpacity>
-                </View>
-                <Text></Text>
-              </ScrollView>
-            );
+            // return flatListRender(item);
+            return checkSliderType(item);
           }}
         />
       )}
@@ -162,7 +250,38 @@ const styles = StyleSheet.create({
     color: 'white',
     width: wp('15%'),
     borderRadius: 10,
+
     textAlign: 'center',
     fontSize: 10,
+    overflow: 'hidden',
+  },
+  textStyle: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 10,
+  },
+  boxImageStyle: {
+    color: '#512500',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: hp('2%'),
+    marginBottom: hp('2%'),
+  },
+  icons: {
+    marginTop: 'auto',
+    marginLeft: 5,
+    width: wp('9%'),
+  },
+  imm: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('5%'),
+  },
+  tee: {
+    color: '#512500',
+    fontSize: 20,
+    marginBottom: 10,
   },
 });
