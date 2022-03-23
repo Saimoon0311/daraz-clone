@@ -4,6 +4,7 @@ export const color = {
   defaultBackgroundColor: '#F6F6F6',
   defaultcolor: '#512500',
   textColorRedCart: '#B64400',
+  whatAppColor: 'green',
   themColorPrimary: '#FF7E33',
   primaryBackground: 'white',
   // primaryBackground: '#FFECCE',

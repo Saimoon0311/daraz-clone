@@ -89,4 +89,8 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
   loginText: {color: 'white', fontSize: hp('2')},
+  questionMarkContainer: {
+    justifyContent: 'center',
+    marginLeft: wp('6'),
+  },
 });

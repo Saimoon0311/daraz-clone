@@ -21,7 +21,9 @@ import {Picker, PickerIOS} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
 import {
   ADDTOCART,
+  getFollowApi,
   Images_API,
+  postFollowApi,
   REVIEWS,
   SUBCATPRODUCTDATA,
 } from '../../config/url';
@@ -44,14 +46,17 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
+import {flexDirection, get, width} from 'styled-system';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function Details({route, navigation}) {
   const child_id = route?.child_category_id;
   const item = route?.params;
   const imm = item?.images;
+  // console.log(55, imm);
   const {saveProduct} = useSelector(state => state.savePosts);
   const {userData} = useSelector(state => state.auth);
-  console.log(50, userData);
+  // console.log(50, userData);
   const dispatch = useDispatch();
   const [updateCart, setUpdateCart] = useState(false);
   const [user_id, setUser_id] = useState();
@@ -94,21 +99,59 @@ export default function Details({route, navigation}) {
   ]);
   const [subCatdata, setSubCatdata] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [getFollow, setGetFollow] = useState();
+  const [followLoader, setFollowLoader] = useState(true);
+  const [postfollowLoader, setPostFollowLoader] = useState(true);
+
+  const followApi = user => {
+    const id = user.id;
+    var url = getFollowApi + '/' + id + '/' + item.get_shop.get_vendor.id;
+    // console.log(107, url);
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        setGetFollow(json);
+        setFollowLoader(false);
+        // console.log(110, getFollow, json);
+      })
+      .catch(e => {
+        console.log(113, e);
+      });
+  };
+
+  const pFollowApi = () => {
+    setFollowLoader(true);
+    var url = postFollowApi + '/' + user_id + '/' + item.get_shop.get_vendor.id;
+    // console.log(106, url);
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+    };
+
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setGetFollow(result), setFollowLoader(false);
+      })
+      .catch(error => console.log('error', error));
+  };
 
   var items = subCatdata;
   useEffect(() => {
     (async () => {
       await checkStatus();
       getAllReviews();
-      setUserId();
       get_child_product();
     })();
   }, []);
+
   const checkStatus = async () => {
     const user = await getUserData();
     if (user == null) {
       setIsLoggedIn(false);
     } else if (user !== null) {
+      await setUserId();
+      followApi(user);
       setIsLoggedIn(true);
     }
   };
@@ -125,7 +168,7 @@ export default function Details({route, navigation}) {
       message: 'Your Product Has Been Add To Cart',
       backgroundColor: '#E9691D',
     });
-    console.log(128, saveProduct);
+    // console.log(128, saveProduct);
   };
   const setUserId = async () => {
     const userId = await getUserData();
@@ -143,7 +186,6 @@ export default function Details({route, navigation}) {
       .then(res => res.json())
       .then(json => {
         setSubCatdata(json[0]);
-        // console.log(json);
         setSubCatLoading(false);
       })
       .catch(err => {
@@ -285,7 +327,6 @@ export default function Details({route, navigation}) {
   };
 
   const cartadd = () => {
-    // console.log(285, attributeArray);
     setLoading(true);
     fetch(ADDTOCART, {
       method: 'POST',
@@ -301,7 +342,6 @@ export default function Details({route, navigation}) {
     })
       .then(response => response.json())
       .then(json => {
-        // console.log(106, json);
         if (json[0]?.message == 'Successfully added to cart') {
           setUpdateCart(true);
           showMessage({
@@ -418,17 +458,7 @@ export default function Details({route, navigation}) {
           />
         </TouchableOpacity>
         <Text style={styles.te}>Details</Text>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons
-            name="cart"
-            size={30}
-            color="#512500"
-            style={{
-              ...styles.icon,
-              marginRight: wp('3'),
-            }}
-          />
-        </TouchableOpacity> */}
+
         <View
           style={{
             ...styles.icon,
@@ -458,6 +488,7 @@ export default function Details({route, navigation}) {
               // backgroundColor: 'red',
             }}
             renderItem={({item}) => {
+              // console.log(490, item?.name);
               return (
                 <Image
                   resizeMode="cover"
@@ -467,6 +498,7 @@ export default function Details({route, navigation}) {
               );
             }}
           />
+
           <View style={styles.box}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
             <Text style={styles.tep}>
@@ -542,16 +574,6 @@ export default function Details({route, navigation}) {
                 marginTop: hp('0.5%'),
               }}>
               {item?.description}
-              {/* Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum. */}
             </Text>
           </View>
           {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
@@ -567,30 +589,6 @@ export default function Details({route, navigation}) {
                         {itemName}
                       </Text>
                       <View style={styles.pickerParentStyle}>
-                        {/* {Platform?.OS == 'ios' && (
-                      <PickerIOS style={styles.pickerStyle}></PickerIOS>
-                    )} */}
-                        {/* {res?.value?.map(res => {
-                      return (
-                        <RNPickerSelect
-                          onValueChange={value => console.log(value)}
-                          items={
-                            res?.value?.map(res=>{
-                              return res
-                            })
-                          }
-                        />
-                      );
-                    })} */}
-                        {/* <RNPickerSelect
-                      onValueChange={value => console.log(value)}
-                      
-                      items={[
-                        {label: 'Football', value: 'football'},
-                        {label: 'Baseball', value: 'baseball'},
-                        {label: 'Hockey', value: 'hockey',},
-                      ]}
-                    /> */}
                         <Picker
                           mode="dialog"
                           selectedValue={attributeArray[i]}
@@ -621,6 +619,84 @@ export default function Details({route, navigation}) {
                 })}
             </View>
           )}
+
+          {/* //ljsadklfj */}
+
+          {isLoggedIn == true && (
+            <View style={styles.box}>
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    color: color.defaultcolor,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    fontSize: hp('2.5'),
+                  }}>
+                  Vendor: {item['get_shop']['get_vendor']['username']}
+                </Text>
+                <TouchableOpacity
+                  style={styles.followButton}
+                  onPress={() => pFollowApi()}>
+                  <View style={styles.followViewContainer}>
+                    <Text style={styles.followText}>
+                      {followLoader == true ? (
+                        <ActivityIndicator
+                          style={{alignSelf: 'center', marginTop: hp('2')}}
+                          // style={{marginTop: hp('5')}}
+                          size={'small'}
+                          color={'white'}
+                        />
+                      ) : getFollow.status == 1 ? (
+                        'Unfollow'
+                      ) : (
+                        'Follow'
+                      )}
+                    </Text>
+                    {followLoader == false && getFollow.status == 1 ? (
+                      <AntDesign
+                        name="minus"
+                        size={15}
+                        color="white"
+                        style={styles.followIcon}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="ios-add"
+                        size={15}
+                        color="white"
+                        style={styles.followIcon}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <Text></Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.vendorLeftTextStyle}>Store Name:</Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['name']}
+                </Text>
+              </View>
+              <Text></Text>
+              <View style={{flexDirection: 'row', width: wp('70')}}>
+                <Text style={styles.vendorLeftTextStyle}>Address: </Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['get_vendor']['address_one'] +
+                    item['get_shop']['get_vendor']['address_two']}
+                </Text>
+              </View>
+              <Text></Text>
+              <View style={{flexDirection: 'row', width: wp('70')}}>
+                <Text style={styles.vendorLeftTextStyle}>Phone: </Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['get_vendor']['phone_number']}
+                </Text>
+              </View>
+            </View>
+          )}
+
           <View style={styles.box}>
             <Text style={{color: color.defaultcolor}}>Submit Your Review</Text>
             <Text></Text>
@@ -846,20 +922,7 @@ export default function Details({route, navigation}) {
                   style={styles.carttouch}
                   onPress={() => {
                     validateCartAdd();
-                  }}
-                  // onPress={() => {
-                  //   dispatch({
-                  //     type: types.SAVEPRODUCT,
-                  //     payload: item,
-                  //   });
-                  //   const body = {
-                  //     product_id,
-                  //     user_id,
-                  //     attribute: attributeArray,
-                  //   };
-                  //   // console.log(844, body);
-                  // }}
-                >
+                  }}>
                   <View
                     style={{
                       flexDirection: 'row',

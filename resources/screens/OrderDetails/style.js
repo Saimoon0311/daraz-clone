@@ -153,4 +153,20 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: hp('3'),
   },
+  cancelViewContainer: {
+    backgroundColor: color.themColorPrimary,
+    marginTop: hp('2'),
+    textAlign: 'center',
+    width: wp('30'),
+    height: hp('4'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginLeft: 'auto',
+    marginRight: wp('2'),
+  },
+  cancelText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });

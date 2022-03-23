@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import actions from '../../redux/action';
 import {getUserData} from '../../utils/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -29,9 +30,14 @@ export default function setting({navigation}) {
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
+  const [showWhatsApp, setWhatsApp] = useState(false);
   const [dummy, setDummy] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [islogout, setIslogout] = useState();
+
+  const onWhatAppAlert = () => {
+    setWhatsApp(true);
+  };
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
@@ -146,12 +152,16 @@ export default function setting({navigation}) {
           backgroundColor: '#FFDDC9',
           height: hp('10%'),
         }}>
-        <Ionicons
-          name="arrow-back-sharp"
-          size={30}
-          color="#FFDDC9"
-          style={styles.icon}
-        />
+        <TouchableOpacity
+          onPress={() => onWhatAppAlert()}
+          style={styles.questionMarkContainer}>
+          <AntDesign
+            name="questioncircleo"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+        </TouchableOpacity>
         <Text
           style={{
             textAlign: 'center',
@@ -363,6 +373,33 @@ export default function setting({navigation}) {
         }}
         onCancelPressed={() => {
           setShowAlert(false);
+        }}
+      />
+      <AwesomeAlert
+        show={showWhatsApp}
+        showProgress={false}
+        title="Warning!"
+        message="Help For user To Contact Super Admin"
+        contentContainerStyle={{width: wp('80%')}}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        // showConfirmButton={true}
+        // confirmText="Yes"
+        cancelText="Whatsapp"
+        cancelButtonStyle={styles.buttonstyle}
+        cancelButtonTextStyle={{fontSize: hp('2%')}}
+        // confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+        // confirmButtonColor={color.textColorRedCart}
+        cancelButtonColor={color.whatAppColor}
+        // onConfirmPressed={() => {
+        //   setWhatsApp(false);
+        //   setTimeout(() => {
+        //     // logout();
+        //   }, 1000);
+        // }}
+        onCancelPressed={() => {
+          setWhatsApp(false);
         }}
       />
     </View>

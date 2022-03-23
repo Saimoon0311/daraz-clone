@@ -23,8 +23,8 @@ export const FilterModal = props => {
   const [categories, setCategories] = useState([]);
   const [catLoading, setCatLoading] = useState(true);
   const [seletedCategory, setSeletedCategory] = useState(null);
-  const [endingPrice, setEndingPrice] = useState(2500000);
-  const [startingPrice, setStartingPrice] = useState(0);
+  const [endingPrice, setEndingPrice] = useState('2500000');
+  const [startingPrice, setStartingPrice] = useState('0');
   const [seletedIndex, setSeletedIndex] = useState();
   //   var seletedIndex;
   const getCategoryData = () => {
@@ -44,8 +44,8 @@ export const FilterModal = props => {
   };
   const clearFilter = () => {
     setSeletedIndex();
-    setStartingPrice(0);
-    setEndingPrice(250000);
+    setStartingPrice('0');
+    setEndingPrice('250000');
     setSeletedCategory(null);
   };
   var filter = props?.filterModal;
@@ -123,20 +123,20 @@ export const FilterModal = props => {
             <Text style={styles.headings}>Price :</Text>
             <View style={{...styles.innerView, alignItems: 'center'}}>
               <TextInput
-                value={JSON.stringify(startingPrice)}
+                value={startingPrice}
                 keyboardType="number-pad"
                 style={styles.priceInput}
                 onChangeText={e => {
-                  setStartingPrice(Number(e));
+                  setStartingPrice(e);
                 }}
               />
               <Text style={{fontSize: hp('2')}}> - </Text>
               <TextInput
-                value={JSON.stringify(endingPrice)}
+                value={endingPrice}
                 keyboardType="number-pad"
                 style={styles.priceInput}
                 onChangeText={e => {
-                  setEndingPrice(Number(e));
+                  setEndingPrice(e);
                 }}
               />
             </View>
@@ -144,10 +144,10 @@ export const FilterModal = props => {
               onPress={() => {
                 props?.applyFilter(
                   seletedCategory,
-                  //   startingPrice.toFixed(2),
-                  //   endingPrice.toFixed(2),
                   startingPrice,
                   endingPrice,
+                  // startingPrice,
+                  // endingPrice,
                 );
                 props.onPress();
               }}

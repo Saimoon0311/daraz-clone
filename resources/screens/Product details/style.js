@@ -201,4 +201,42 @@ export const styles = StyleSheet.create({
     marginTop: hp('1'),
     marginBottom: hp('1'),
   },
+  vendorLeftTextStyle: {
+    fontWeight: 'bold',
+    width: wp('20.5'),
+    fontSize: hp('1.5'),
+    // backgroundColor: 'yellow',
+  },
+  followViewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    alignContent: 'center',
+  },
+  followButton: {
+    backgroundColor: color.themColorPrimary,
+    textAlign: 'center',
+    width: wp('30'),
+    height: hp('5'),
+    justifyContent: 'center',
+    borderRadius: 5,
+    marginLeft: 'auto',
+    alignSelf: 'flex-end',
+  },
+  followText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: hp('2'),
+  },
+  followIcon: {
+    marginLeft: wp('1'),
+    // marginTop: hp('1'),
+    // marginTop: wp(Platform?.OS == 'ios' ? '3' : '1'),
+  },
+  vendorRightText: {
+    color: 'black',
+    fontSize: hp('1.5'),
+    width: wp('65'),
+  },
 });

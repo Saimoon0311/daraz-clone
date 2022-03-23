@@ -50,6 +50,11 @@ export default function OrderDetails({navigation}) {
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const cancelAlert = () => {
+    setShowAlert(true);
+  };
+
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -547,6 +552,12 @@ export default function OrderDetails({navigation}) {
             </View>
           </View>
         </View>
+        <TouchableOpacity
+          onPress={() => cancelAlert()}
+          style={styles.cancelViewContainer}>
+          <Text style={styles.cancelText}>Cancel Order</Text>
+        </TouchableOpacity>
+
         {item?.notes !== null && item?.notes !== '' && (
           <View style={styles.parentCardIconHolder}>
             <Foundation
@@ -572,6 +583,34 @@ export default function OrderDetails({navigation}) {
             </View>
           </View>
         )}
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Warning!"
+          message="The order cannot be cancel"
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          // showConfirmButton={true}
+          // confirmText="Yes"
+          cancelText="No"
+          // confirmButtonStyle={styles.buttonstyle}
+          cancelButtonStyle={styles.buttonstyle}
+          cancelButtonTextStyle={{fontSize: hp('2.2%')}}
+          // confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+          // confirmButtonColor={color.textColorRedCart}
+          cancelButtonColor={color.textColorRedCart}
+          onConfirmPressed={() => {
+            setShowAlert(false);
+            setTimeout(() => {
+              // logout();
+            }, 1000);
+          }}
+          onCancelPressed={() => {
+            setShowAlert(false);
+          }}
+        />
       </View>
     );
   };
