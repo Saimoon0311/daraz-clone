@@ -44,7 +44,7 @@ export default function setting({navigation}) {
   };
   const isFocused = useIsFocused();
 
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileNumber, setMobileNumber] = useState(4707758326);
   const whatAppPhone = () => {
     Linking.openURL(`whatsapp://send?text=hello&phone=${mobileNumber}`);
   };

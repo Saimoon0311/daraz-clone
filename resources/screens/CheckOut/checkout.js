@@ -685,8 +685,10 @@ export default function checkOut({navigation, route}) {
                   backgroundColor: '#C8C8C8',
                 }}
               />
-              <Radio value="Stripe Payment" my={1}>
-                <Text style={styles.radioText}>Stripe Payment</Text>
+              <Radio value="American Express, Mastercard, Visa" my={1}>
+                <Text style={styles.radioText}>
+                  American Express, Mastercard, Visa
+                </Text>
               </Radio>
             </Radio.Group>
           </NativeBaseProvider>
@@ -876,7 +878,7 @@ export default function checkOut({navigation, route}) {
       setButtonState(3);
     } else if (buttonState == 3) {
       setIsLoading(true);
-      if (paymentMethodValue == 'Stripe Payment') {
+      if (paymentMethodValue == 'American Express, Mastercard, Visa') {
         startPaymentProcess();
       } else if (paymentMethodValue == 'PayPal') {
         validateHitOrderPlaceApi('PayPal');

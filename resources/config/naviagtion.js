@@ -19,7 +19,6 @@ import OrderDetails from '../screens/OrderDetails/OrderDetails';
 import Home from '../screens/Home/home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingScreen from '../screens/OnBoardScreen/OnboardingScreen';
-import HomeScreen from '../screens/HomeScreen';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -110,7 +109,6 @@ export default function Navigation() {
         {isAppFirstLaunched && (
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         )}
-        {/* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */}
         <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="Cart" component={Cart} />
