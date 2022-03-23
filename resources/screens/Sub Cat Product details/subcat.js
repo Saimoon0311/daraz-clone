@@ -10,6 +10,7 @@ import {
   FlatList,
   ActivityIndicator,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -25,6 +26,8 @@ import {
   ALLNEWARRIVALS,
   AllNewArrivalsDataSkipUser,
   API_BASED_URL,
+  CATEGORY,
+  CATEGORYALLDATA,
   Images_API,
   searchDataWithOutUserID,
   SubCategoryDataWithOutUserID,
@@ -44,6 +47,9 @@ import {
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {useIsFocused} from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
+import Foundation from 'react-native-vector-icons/Foundation';
+import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
 
 export default function subcatdetails({route, navigation}) {
   const paramData = route?.params;
@@ -52,12 +58,14 @@ export default function subcatdetails({route, navigation}) {
   const [user_id, setUser_id] = useState();
   const [subcatdata, setSubcatdata] = useState();
   const [allData, setAllData] = useState([]);
+  const [priceData, setPriceData] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [cartloading, setCartloading] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const isFocused = useIsFocused();
-
+  const [filterModal, setFilterModal] = useState(false);
+  const [checksubcat, setChecksubcat] = useState(true);
   const getSubCatData = async confirm => {
     // const user = await getUserData();
     // const id = user?.id;
@@ -184,16 +192,22 @@ export default function subcatdetails({route, navigation}) {
   };
   const parentFunction = async confirm => {
     if (paramData?.screenData == 'subCat') {
+      setChecksubcat(false);
       await getSubCatData(confirm);
     } else if (paramData?.screenData == 'wishlist') {
+      setChecksubcat(true);
       await getSavedItemsData();
     } else if (paramData?.screenData == 'search-products') {
+      setChecksubcat(true);
       await searchAllData(confirm);
     } else if (paramData?.screenData == 'featured-data-all/') {
+      setChecksubcat(true);
       await getAllData(confirm);
     } else if (paramData?.screenData == ALLNEWARRIVALS) {
+      setChecksubcat(true);
       await getAllNewArrivalsData(confirm);
     } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
+      setChecksubcat(true);
       await getAllFeaturedsData(confirm);
     }
   };
@@ -210,14 +224,6 @@ export default function subcatdetails({route, navigation}) {
       await parentFunction(true);
     }
   };
-  useEffect(() => {
-    (async () => {
-      if (isFocused) {
-        await checkStatus();
-      }
-      // await parentFunction();
-    })();
-  }, [isFocused]);
 
   const addtowishlist = id => {
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
@@ -536,6 +542,80 @@ export default function subcatdetails({route, navigation}) {
       return renderCards(item);
     }
   };
+  const categoryDataCall = category => {
+    setLoading(true);
+    var url = CATEGORYALLDATA + '/' + category.id;
+    console.log(547, url);
+    fetch(url)
+      .then(response => response.json())
+      .then(async json => {
+        setAllData(json[0]), setLoading(false);
+        // getData(json[0].id, click);
+      })
+      .catch(error => {
+        console.log(554, error);
+      });
+
+    // const api = SUBCAT + catdata[0]?.id;
+    // fetch(api)
+    //   .then(async response => await response.json())
+    //   .then(json => {
+    //     setSubcatdata(json), setClick(0), setSubloading(false);
+    //   });
+    // .catch(error => setNshowAlert(true))
+    // .finally(() => setSubloading(false),setClick(0));
+  };
+  const applyFilter = (category, start, end) => {
+    console.log(552, allData[0]?.price);
+    console.log(544, start, end, category);
+    if (category != null && category != '') {
+      categoryDataCall(category);
+      allData.filter(checkPrice);
+      function checkPrice(age) {
+        // return age?.price >= start && age?.price <= end;
+        console.log(576, age?.price);
+      }
+      console.log(549, checkPrice());
+    } else {
+      // console.table(allData);
+      setPriceData(allData);
+      setPriceData(priceData => {
+        return priceData.filter(checkPrice);
+      });
+      function checkPrice(data) {
+        // console.log(6666, data?.price, data?.price >= start, start);
+        return data?.price >= start && data?.price <= end;
+
+        //   console.log('else');
+        // console.log(576, data?.price, start, end, 'else');
+        // return Number(data?.price) > Number(start);
+        //  && data?.price << end;
+      }
+
+      console.log(549, allData);
+    }
+    // allData.filter(
+    //   (item, index) =>
+    //     item.price >= start.toFixed(2) && item.price <= end.toFixed(2),
+    // );
+    // console.table(556, data);
+    // setAllData(data);
+    // allData.filter(data);
+
+    // function data() {
+    //   return Data?.price <= end && Data?.price >= start;
+    // }
+    // console.log(558, data);
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (isFocused) {
+        await checkStatus();
+      }
+      // await parentFunction();
+    })();
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -563,6 +643,18 @@ export default function subcatdetails({route, navigation}) {
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
       </View>
+      <TouchableOpacity
+        onPress={() => setFilterModal(true)}
+        style={styles.filterView}>
+        <Text style={styles.filterText}>Filter</Text>
+        <Foundation size={35} color="#512500" name="filter" />
+      </TouchableOpacity>
+      <FilterModal
+        subCatCheck={checksubcat}
+        filterModal={filterModal}
+        onPress={() => setFilterModal(false)}
+        applyFilter={applyFilter}
+      />
       <View style={{...styles.body}}>
         {isLoading ? (
           <View style={{margin: hp('22%'), alignSelf: 'center'}}>
@@ -582,17 +674,19 @@ export default function subcatdetails({route, navigation}) {
         ) : (
           <FlatList
             // data={subcatdata}
-            data={allData}
+            data={priceData != null ? priceData : allData}
             // keyExtractor={item => item.key}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             numColumns={2}
+            extraData={allData}
             contentContainerStyle={{
               paddingBottom: hp('20%'),
               width: wp('100%'),
               alignSelf: 'flex-start',
             }}
             renderItem={({item, index}) => {
+              console.log(68934, allData);
               // return renderCards(item);
               return checkRender(item);
             }}

@@ -78,6 +78,7 @@ export const styles = StyleSheet.create({
     width: wp('20%'),
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
   },
   loginContainer: {
     alignSelf: 'center',

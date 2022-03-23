@@ -9,6 +9,7 @@ import {
   ScrollView,
   StatusBar,
   Platform,
+  Linking,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import actions from '../../redux/action';
@@ -43,12 +44,11 @@ export default function setting({navigation}) {
   };
   const isFocused = useIsFocused();
 
-  // if(route?.params==screenUpdatess){
-  //  setDummy("a")
-  //  console.log(47,"update")
-  // } else{
-  //   console.log("no update")
-  // }
+  const [mobileNumber, setMobileNumber] = useState('');
+  const whatAppPhone = () => {
+    Linking.openURL(`whatsapp://send?text=hello&phone=${mobileNumber}`);
+  };
+
   const user = async () => {
     const userId = await getUserData();
     // const name = 'bdfndbf';
@@ -71,17 +71,7 @@ export default function setting({navigation}) {
       // await datacallss(true);
     }
   };
-  // useEffect(async () => {
-  //   // user();
-  //   // await checkStatus();
-  //   if (isFocused) {
-  //     await checkStatus();
-  //     user();
-  //   } else {
-  //     // await checkStatus();
-  //     console.log(58, 'screen is not Focused');
-  //   }
-  // }, [isFocused]);
+
   useEffect(() => {
     (async () => {
       await checkStatus();
@@ -155,11 +145,11 @@ export default function setting({navigation}) {
         <TouchableOpacity
           onPress={() => onWhatAppAlert()}
           style={styles.questionMarkContainer}>
-          <AntDesign
-            name="questioncircleo"
-            size={20}
-            style={{marginRight: 20}}
-            color="gray"
+          <Ionicons
+            name="ios-logo-whatsapp"
+            size={30}
+            style={{marginRight: wp('1.5')}}
+            color={color.bottomNavColor}
           />
         </TouchableOpacity>
         <Text
@@ -347,6 +337,7 @@ export default function setting({navigation}) {
           </TouchableOpacity>
         )}
       </ScrollView>
+
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
@@ -378,7 +369,8 @@ export default function setting({navigation}) {
       <AwesomeAlert
         show={showWhatsApp}
         showProgress={false}
-        title="Warning!"
+        title="Contact With Admin"
+        titleStyle={{color: 'black', fontWeight: 'bold'}}
         message="Help For user To Contact Super Admin"
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
@@ -388,10 +380,9 @@ export default function setting({navigation}) {
         // confirmText="Yes"
         cancelText="Whatsapp"
         cancelButtonStyle={styles.buttonstyle}
-        cancelButtonTextStyle={{fontSize: hp('2%')}}
+        cancelButtonTextStyle={{fontSize: hp('1.9')}}
         // confirmButtonTextStyle={{fontSize: hp('2.2%')}}
-        // confirmButtonColor={color.textColorRedCart}
-        cancelButtonColor={color.whatAppColor}
+
         // onConfirmPressed={() => {
         //   setWhatsApp(false);
         //   setTimeout(() => {
@@ -400,6 +391,7 @@ export default function setting({navigation}) {
         // }}
         onCancelPressed={() => {
           setWhatsApp(false);
+          whatAppPhone();
         }}
       />
     </View>

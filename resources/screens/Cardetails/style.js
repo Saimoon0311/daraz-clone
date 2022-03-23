@@ -54,7 +54,8 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: hp(Platform?.OS == 'ios' ? '6' : '4'),
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.2'),
+    marginLeft: wp('3'),
   },
   tep: {
     color: '#512500',
