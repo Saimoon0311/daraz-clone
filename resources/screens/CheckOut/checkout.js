@@ -53,7 +53,7 @@ import {
 } from '@stripe/stripe-react-native';
 import axios from 'axios';
 import {WebView} from 'react-native-webview';
-import {textColor} from 'styled-system';
+import {textAlign, textColor} from 'styled-system';
 import {set} from 'immer/dist/internal';
 
 export default function checkOut({navigation, route}) {
@@ -85,6 +85,7 @@ export default function checkOut({navigation, route}) {
   const [approvalUrl, setApprovalUrl] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const [shippingFullName, setShippingFullName] = useState('');
   const [shippinggAddress, setShippingAddress] = useState('');
@@ -99,8 +100,12 @@ export default function checkOut({navigation, route}) {
   const [billingState, setBillingState] = useState('');
   const [billingZipCode, setBillingZipCode] = useState('');
   const [billingPhone, setBillingPhone] = useState('');
-
-  const [checkBox, setCheckBox] = useState('checked');
+  const showAlert = () => {
+    setTimeout(() => {
+      setAlert(true);
+    }, 1000);
+  };
+  const [checkBox, setCheckBox] = useState('unchecked');
 
   //ADD localhost address of your server
   const API_URL =
@@ -116,9 +121,9 @@ export default function checkOut({navigation, route}) {
 
   useEffect(() => {
     (async () => {
+      showAlert();
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
-      CheckShippingDetail(userDatas);
       makeArrays();
     })();
   }, []);
@@ -418,8 +423,19 @@ export default function checkOut({navigation, route}) {
       <TouchableOpacity
         onPress={onPress}
         style={styles.checkBoxButtonContainer}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Checkbox status={status} color={color.themColorPrimary} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            // backgroundColor: 'yellow',
+          }}>
+          <View style={Platform.OS == 'ios' && styles.checkStyle}>
+            <Checkbox
+              status={status}
+              uncheckedColor={'black'}
+              color={color.themColorPrimary}
+            />
+          </View>
           <Text style={{fontWeight: 'bold'}}>{label}</Text>
         </View>
       </TouchableOpacity>
@@ -696,9 +712,9 @@ export default function checkOut({navigation, route}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
               editable={buttonState == 1 ? true : false}
-              value={userDataLocal?.username}
+              value={billingFullName}
               onChangeText={text => {
-                updatValue(text, 'username');
+                setBillingFullName(text);
               }}
             />
             <TextInput
@@ -707,10 +723,10 @@ export default function checkOut({navigation, route}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
               editable={buttonState == 1 ? true : false}
-              value={userDataLocal?.address_one}
+              value={billinggAddress}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(text, 'address_one');
+                setBillingAddress(text);
               }}
             />
             {/* <TextInput
@@ -731,10 +747,10 @@ export default function checkOut({navigation, route}) {
               style={styles.text}
               editable={buttonState == 1 ? true : false}
               keyboardType="default"
-              value={userDataLocal?.city}
+              value={billingCity}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(text, 'city');
+                setBillingCity(text);
               }}
             />
             <TextInput
@@ -743,10 +759,10 @@ export default function checkOut({navigation, route}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
               editable={buttonState == 1 ? true : false}
-              value={userDataLocal?.country}
+              value={billingState}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(text, 'country');
+                setBillingState(text);
               }}
             />
             <TextInput
@@ -756,10 +772,10 @@ export default function checkOut({navigation, route}) {
               style={styles.text}
               editable={buttonState == 1 ? true : false}
               keyboardType="number-pad"
-              value={userDataLocal?.phone_number}
+              value={billingPhone}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(text, 'phone_number');
+                setBillingPhone(text);
               }}
             />
             <TextInput
@@ -770,11 +786,11 @@ export default function checkOut({navigation, route}) {
               editable={buttonState == 1 ? true : false}
               maxLength={7}
               keyboardType="numeric"
-              value={userDataLocal?.zipcode}
+              value={billingZipCode}
               // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(text, 'zipcode');
+                setBillingZipCode(text);
               }}
             />
             <TextInput
@@ -794,6 +810,15 @@ export default function checkOut({navigation, route}) {
       </>
     );
   };
+  const setdetails = () => {
+    setCheckBox('checked');
+    setBillingFullName(shippingFullName);
+    setBillingPhone(shippingPhone);
+    setBillingState(shippingState);
+    setBillingZipCode(shippingZipCode);
+    setBillingCity(shippingCity);
+    setBillingAddress(shippinggAddress);
+  };
   const renderScreen = () => {
     if (buttonState == 1) {
       return (
@@ -806,13 +831,11 @@ export default function checkOut({navigation, route}) {
             </View>
           </NativeBaseProvider> */}
           <CheckBox
-            label={checkBox == 'checked' && 'Same as Shipping Address '}
+            label={'Same as Shipping Address '}
             status={checkBox}
-            onPress={() =>
-              checkBox == 'checked'
-                ? setCheckBox('unchecked')
-                : setCheckBox('checked')
-            }
+            onPress={() => {
+              checkBox == 'checked' ? setCheckBox('unchecked') : setdetails();
+            }}
           />
           {checkBox == 'unchecked' && billingAddress()}
 
@@ -1134,22 +1157,31 @@ export default function checkOut({navigation, route}) {
 
   const validateHitOrderPlaceApi = (stringValue, data) => {
     if (
-      // deliveryMethodValue !== null &&
       paymentMethodValue !== null &&
-      userDataLocal?.username !== '' &&
-      userDataLocal?.username !== null &&
-      userDataLocal?.phone_number !== '' &&
-      userDataLocal?.phone_number !== null &&
-      userDataLocal?.city !== '' &&
-      userDataLocal?.city !== null &&
-      userDataLocal?.address_one !== '' &&
-      userDataLocal?.address_one !== null &&
-      // userDataLocal?.address_two !== '' &&
-      // userDataLocal?.address_two !== null &&
-      userDataLocal?.zipcode !== '' &&
-      userDataLocal?.zipcode !== null &&
-      userDataLocal?.country !== '' &&
-      userDataLocal?.country !== null
+      shippingFullName !== '' &&
+      shippingFullName !== null &&
+      shippingPhone !== '' &&
+      shippingPhone !== null &&
+      shippingCity !== '' &&
+      shippingCity !== null &&
+      shippinggAddress !== '' &&
+      shippinggAddress !== null &&
+      shippingZipCode !== '' &&
+      shippingZipCode !== null &&
+      shippingState !== '' &&
+      shippingState !== null &&
+      billingFullName != null &&
+      billingFullName != '' &&
+      billingPhone !== '' &&
+      billingPhone !== null &&
+      billingCity !== '' &&
+      billingCity !== null &&
+      billinggAddress !== '' &&
+      billinggAddress !== null &&
+      billingZipCode !== '' &&
+      billingZipCode !== null &&
+      billingState !== '' &&
+      billingState !== null
     ) {
       if (stringValue == 'stripe') {
         handlePayment(data);
@@ -1435,6 +1467,33 @@ export default function checkOut({navigation, route}) {
           />
         </Modal>
       )}
+      <AwesomeAlert
+        show={alert}
+        showProgress={false}
+        title="Alert!"
+        message="Would like to same address from your last one"
+        contentContainerStyle={{width: wp('80%')}}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        confirmText="Yes"
+        cancelText="No"
+        messageStyle={{textAlign: 'center'}}
+        confirmButtonStyle={styles.buttonstyle}
+        cancelButtonStyle={styles.buttonstyle}
+        cancelButtonTextStyle={{fontSize: hp('2.2%')}}
+        confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+        confirmButtonColor={color.textColorRedCart}
+        cancelButtonColor={color.textColorRedCart}
+        onConfirmPressed={() => {
+          CheckShippingDetail(userDataLocal);
+          setAlert(false);
+        }}
+        onCancelPressed={() => {
+          setAlert(false);
+        }}
+      />
     </StripeProvider>
   );
 }

@@ -219,4 +219,20 @@ export const styles = StyleSheet.create({
     marginTop: hp('2'),
     marginLeft: wp('7'),
   },
+  checkStyle: {
+    borderWidth: 0.5,
+    borderColor: color.themColorPrimary,
+    borderRadius: 60,
+    width: wp('8.5'),
+    height: hp('4.1'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp('2'),
+  },
+  buttonstyle: {
+    width: wp('20%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.textColorRedCart,
+  },
 });

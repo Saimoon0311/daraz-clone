@@ -98,6 +98,6 @@ export const styles = StyleSheet.create({
   loginText: {color: 'white', fontSize: hp('2')},
   questionMarkContainer: {
     justifyContent: 'center',
-    marginLeft: wp('6'),
+    marginLeft: wp('3'),
   },
 });
