@@ -50,6 +50,10 @@ export const AllNewArrivalsDataSkipUser = getApi('all-new-arrivals-userskip/');
 export const filterProductUrl = getApi('get-filter/');
 export const getFollowApi = getApi('get-follow');
 export const postFollowApi = getApi('post-follow');
+export const shippingDetailsApi = getApi(
+  'get-order-details-with-shipping-billing/',
+);
+
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 
