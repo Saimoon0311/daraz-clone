@@ -203,7 +203,9 @@ export const styles = StyleSheet.create({
   },
   vendorLeftTextStyle: {
     fontWeight: 'bold',
-    width: wp('17'),
+    width: wp('20.5'),
+    fontSize: hp('1.5'),
+    // backgroundColor: 'yellow',
   },
   followViewContainer: {
     flexDirection: 'row',
@@ -215,20 +217,26 @@ export const styles = StyleSheet.create({
   followButton: {
     backgroundColor: color.themColorPrimary,
     textAlign: 'center',
-    width: wp('35'),
-    height: hp('6'),
+    width: wp('30'),
+    height: hp('5'),
     justifyContent: 'center',
     borderRadius: 5,
-    marginLeft: wp('2'),
+    marginLeft: 'auto',
+    alignSelf: 'flex-end',
   },
   followText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: hp('3'),
+    fontSize: hp('2'),
   },
   followIcon: {
     marginLeft: wp('1'),
-    marginTop: hp('1'),
+    // marginTop: hp('1'),
     // marginTop: wp(Platform?.OS == 'ios' ? '3' : '1'),
+  },
+  vendorRightText: {
+    color: 'black',
+    fontSize: hp('1.5'),
+    width: wp('65'),
   },
 });

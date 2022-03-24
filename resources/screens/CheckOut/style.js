@@ -121,12 +121,25 @@ export const styles = StyleSheet.create({
     fontSize: hp(1.8),
   },
   maior: {
-    width: wp('70%'),
+    width: wp('65%'),
     height: hp('6%'),
     backgroundColor: '#FF7E33',
     alignItems: 'center',
     marginBottom: hp('5'),
     marginTop: hp('5'),
+    borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  bottomBackButtonContainer: {
+    width: wp('20%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignItems: 'center',
+    marginBottom: hp('5'),
+    marginTop: hp('5'),
+    marginHorizontal: wp('1'),
     borderRadius: 10,
     alignContent: 'center',
     justifyContent: 'center',
@@ -201,5 +214,9 @@ export const styles = StyleSheet.create({
   payButtonText: {
     color: 'white',
     fontSize: hp('1.7'),
+  },
+  checkBoxButtonContainer: {
+    marginTop: hp('2'),
+    marginLeft: wp('7'),
   },
 });

@@ -42,7 +42,6 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
-  const [zipCodeText, setZipCodeText] = useState();
 
   const getUserAllData = async () => {
     const userDatas = await getUserData();
@@ -292,17 +291,11 @@ export default function Userdeatils({navigation}) {
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="numeric"
               value={userDataLocal?.zipcode}
-              // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                // setZipCodeText(text);
-                // updatValue(zipCodeText, 'zipcode');
                 updatValue(text, 'zipcode');
-
-                console.log(299, zipCodeText);
               }}
             />
-            {console.log(307, userDataLocal)}
 
             <TextInput
               label="Country *"

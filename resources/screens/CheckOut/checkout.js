@@ -17,6 +17,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {
   ADDTOCART,
   ADDTOWISHLIST,
@@ -27,6 +28,7 @@ import {
   StripePKey,
   GETCLIENTSECRET,
   SENDINTENTANDORDERDATA,
+  shippingDetailsApi,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
@@ -40,8 +42,8 @@ import {
   BubblesLoader,
 } from 'react-native-indicator';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import {HelperText, TextInput, RadioButton} from 'react-native-paper';
-import {Radio, NativeBaseProvider} from 'native-base';
+import {HelperText, TextInput, Checkbox, RadioButton} from 'react-native-paper';
+import {HStack, Radio, NativeBaseProvider} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   StripeProvider,
@@ -51,6 +53,8 @@ import {
 } from '@stripe/stripe-react-native';
 import axios from 'axios';
 import {WebView} from 'react-native-webview';
+import {textColor} from 'styled-system';
+import {set} from 'immer/dist/internal';
 
 export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
@@ -82,6 +86,22 @@ export default function checkOut({navigation, route}) {
   const [paymentId, setPaymentId] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const [shippingFullName, setShippingFullName] = useState('');
+  const [shippinggAddress, setShippingAddress] = useState('');
+  const [shippingCity, setShippingCity] = useState('');
+  const [shippingState, setShippingState] = useState('');
+  const [shippingZipCode, setShippingZipCode] = useState('');
+  const [shippingPhone, setShippingPhone] = useState('');
+
+  const [billingFullName, setBillingFullName] = useState('');
+  const [billinggAddress, setBillingAddress] = useState('');
+  const [billingCity, setBillingCity] = useState('');
+  const [billingState, setBillingState] = useState('');
+  const [billingZipCode, setBillingZipCode] = useState('');
+  const [billingPhone, setBillingPhone] = useState('');
+
+  const [checkBox, setCheckBox] = useState('checked');
+
   //ADD localhost address of your server
   const API_URL =
     Platform?.OS == 'ios' ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
@@ -98,10 +118,49 @@ export default function checkOut({navigation, route}) {
     (async () => {
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
+      CheckShippingDetail(userDatas);
       makeArrays();
     })();
   }, []);
 
+  const CheckShippingDetail = user => {
+    var url = shippingDetailsApi + user.id;
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        // json.status == 1 ? setCheckBox(true) : setCheckBox(false);
+        if (json.status == 0) {
+          setShippingFullName(user.username);
+          setShippingAddress(user.address_one);
+          setShippingCity(user.city);
+          setShippingState(user.country);
+          setShippingZipCode(user.zipcode);
+          setShippingPhone(user.phone_number);
+        } else if (json.status == 1) {
+          setShippingFullName(json.shipping.shipping_fullname);
+          setShippingAddress(json.shipping.shipping_address);
+          setShippingCity(json.shipping.shipping_city);
+          setShippingState(json.shipping.shipping_state);
+          setShippingZipCode(json.shipping_zipcode);
+          setShippingPhone(json.shipping.shipping_phone);
+          if (json.billing.billing_fullname != null) {
+            setBillingFullName(json.billing.billing_fullname);
+            setBillingAddress(json.billing.billing_address);
+            setBillingCity(json.billing.billing_city);
+            setBillingState(json.billing.billing_state);
+            setBillingZipCode(json.billing.billing_zipcode);
+            setBillingPhone(json.billing.billing_phone);
+          }
+        }
+      })
+      .catch(e => {
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something is wrong',
+        });
+      });
+  };
   const startPaymentProcess = async () => {
     await fetchClientSecret();
   };
@@ -342,6 +401,31 @@ export default function checkOut({navigation, route}) {
     }
   };
 
+  // const CheckBoxButton = () => {
+  //   return (
+  //     <HStack space={6}>
+  //       <Checkbox
+  //         onChange={e => setCheckBox(e)}
+  //         colorScheme="orange"
+  //         accessibilityLabel="This is a dummy checkbox"
+  //       />
+  //     </HStack>
+  //   );
+  // };
+
+  function CheckBox({label, status, onPress}) {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={styles.checkBoxButtonContainer}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Checkbox status={status} color={color.themColorPrimary} />
+          <Text style={{fontWeight: 'bold'}}>{label}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   const header = text => {
     var t = text;
     return (
@@ -371,8 +455,7 @@ export default function checkOut({navigation, route}) {
   const topButton = () => {
     return (
       <View style={styles.topMain}>
-        <TouchableOpacity
-          onPress={() => updateButtonState(1)}
+        <View
           style={
             buttonState == 1 ? styles.topButtonActive : styles.topButtonInactive
           }>
@@ -384,9 +467,8 @@ export default function checkOut({navigation, route}) {
             }>
             Delivery
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => updateButtonState(2)}
+        </View>
+        <View
           style={
             buttonState == 2 ? styles.topButtonActive : styles.topButtonInactive
           }>
@@ -398,9 +480,8 @@ export default function checkOut({navigation, route}) {
             }>
             Summary
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => updateButtonState(3)}
+        </View>
+        <View
           style={
             buttonState == 3 ? styles.topButtonActive : styles.topButtonInactive
           }>
@@ -412,7 +493,7 @@ export default function checkOut({navigation, route}) {
             }>
             Payment
           </Text>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -487,17 +568,134 @@ export default function checkOut({navigation, route}) {
       </View>
     );
   };
-  const accountDetails = () => {
+  const shippingAddress = () => {
     return (
       <>
         <ScrollView>
-          <Text style={styles.centerText}>Account Details</Text>
+          <Text style={styles.centerText}>Shipping Details</Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
               label="Full Name *"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              value={shippingFullName}
+              onChangeText={text => {
+                setShippingFullName(text);
+                // updatValue(text, 'username');
+              }}
+            />
+            <TextInput
+              label="Address *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              value={shippinggAddress}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setShippingAddress(text);
+                // updatValue(text, 'address_one');
+              }}
+            />
+            {/* <TextInput
+              label="Address Two *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              value={userDataLocal?.address_two}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                updatValue(text, 'address_two');
+              }}
+            /> */}
+            <TextInput
+              label="City *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              keyboardType="default"
+              value={shippingCity}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setShippingCity(text);
+                // updatValue(text, 'city');
+              }}
+            />
+            <TextInput
+              label="Country *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              value={shippingState}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setShippingState(text);
+                // updatValue(text, 'country');
+              }}
+            />
+            <TextInput
+              label="Number *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              keyboardType="number-pad"
+              value={shippingPhone}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setShippingPhone(text);
+                // updatValue(text, 'phone_number');
+              }}
+            />
+            <TextInput
+              label="ZipCode *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              maxLength={7}
+              keyboardType="numeric"
+              value={shippingZipCode}
+              // value={JSON?.stringify(userDataLocal?.zipcode)}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setShippingZipCode(text);
+                // updatValue(text, 'zipcode');
+              }}
+            />
+            <TextInput
+              label="Note"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
+              value={note}
+              selectionColor="#FF7E33"
+              onChangeText={text => {
+                setNote(text);
+              }}
+            />
+          </View>
+        </ScrollView>
+      </>
+    );
+  };
+  const billingAddress = () => {
+    return (
+      <>
+        <ScrollView>
+          <Text style={styles.centerText}>Billing Address</Text>
+          <View style={{...styles.box, paddingBottom: 30}}>
+            <TextInput
+              label="Full Name *"
+              underlineColor="gray"
+              theme={{colors: {primary: color.themColorPrimary}}}
+              style={styles.text}
+              editable={buttonState == 1 ? true : false}
               value={userDataLocal?.username}
               onChangeText={text => {
                 updatValue(text, 'username');
@@ -508,6 +706,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               value={userDataLocal?.address_one}
               selectionColor="#FF7E33"
               onChangeText={text => {
@@ -530,6 +729,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               keyboardType="default"
               value={userDataLocal?.city}
               selectionColor="#FF7E33"
@@ -542,6 +742,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               value={userDataLocal?.country}
               selectionColor="#FF7E33"
               onChangeText={text => {
@@ -553,6 +754,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               keyboardType="number-pad"
               value={userDataLocal?.phone_number}
               selectionColor="#FF7E33"
@@ -565,17 +767,14 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               maxLength={7}
               keyboardType="numeric"
-              value={
-                userDataLocal?.zipcode == null
-                  ? null
-                  : JSON?.stringify(userDataLocal?.zipcode)
-              }
+              value={userDataLocal?.zipcode}
               // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(Number(text), 'zipcode');
+                updatValue(text, 'zipcode');
               }}
             />
             <TextInput
@@ -583,6 +782,7 @@ export default function checkOut({navigation, route}) {
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
+              editable={buttonState == 1 ? true : false}
               value={note}
               selectionColor="#FF7E33"
               onChangeText={text => {
@@ -599,7 +799,23 @@ export default function checkOut({navigation, route}) {
       return (
         <View>
           {/* {topButton()} */}
-          {accountDetails()}
+          {shippingAddress()}
+          {/* <NativeBaseProvider>
+            <View style={styles.checkBoxButtonContainer}>
+              <CheckBoxButton />
+            </View>
+          </NativeBaseProvider> */}
+          <CheckBox
+            label={checkBox == 'checked' && 'Same as Shipping Address '}
+            status={checkBox}
+            onPress={() =>
+              checkBox == 'checked'
+                ? setCheckBox('unchecked')
+                : setCheckBox('checked')
+            }
+          />
+          {checkBox == 'unchecked' && billingAddress()}
+
           {/* {deliveryMethod()} */}
           {orderDetailsRenderdata()}
           {bottomButton()}
@@ -609,10 +825,13 @@ export default function checkOut({navigation, route}) {
       return (
         <View>
           {/* {topButton()} */}
-          {accountDetailsSummy()}
+          {/* {accountDetailsSummy()} */}
+          {shippingAddress()}
+          {billingAddress()}
           {/* {deliveryMethod()} */}
           {/* {paymentMethod()} */}
           {orderDetailsRenderdata()}
+
           {bottomButton()}
         </View>
       );
@@ -629,6 +848,7 @@ export default function checkOut({navigation, route}) {
 
             </TouchableOpacity>
           )} */}
+
           {bottomButton()}
         </View>
       );
@@ -758,11 +978,7 @@ export default function checkOut({navigation, route}) {
             editable={false}
             keyboardType="number-pad"
             underlineColor="gray"
-            value={
-              userDataLocal?.zipcode == null
-                ? null
-                : JSON?.stringify(userDataLocal?.zipcode)
-            }
+            value={userDataLocal?.zipcode}
             theme={{colors: {primary: color.themColorPrimary}}}
             style={styles.text}
           />
@@ -849,28 +1065,38 @@ export default function checkOut({navigation, route}) {
   };
   const bottomButton = () => {
     return (
-      <>
+      <View>
         {totalPriceCard()}
-        <TouchableOpacity
-          style={styles.maior}
-          onPress={() => {
-            // setIsLoading(true);
-
-            processTopPayment();
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
           }}>
-          {isLoading ? (
-            <ActivityIndicator
-              animating={isLoading}
-              size={'small'}
-              color={'white'}
-            />
-          ) : (
-            <Text style={styles.or}>Proceed</Text>
-          )}
-        </TouchableOpacity>
-      </>
+          <TouchableOpacity
+            onPress={() => backProcessTopPayment()}
+            style={styles.bottomBackButtonContainer}>
+            <Text style={styles.or}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.maior}
+            onPress={() => {
+              processTopPayment();
+            }}>
+            {isLoading ? (
+              <ActivityIndicator
+                animating={isLoading}
+                size={'small'}
+                color={'white'}
+              />
+            ) : (
+              <Text style={styles.or}>Proceed</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
+
   const processTopPayment = () => {
     if (buttonState == 1) {
       setButtonState(2);
@@ -886,6 +1112,24 @@ export default function checkOut({navigation, route}) {
         validateHitOrderPlaceApi();
       }
     }
+  };
+
+  const backProcessTopPayment = () => {
+    if (buttonState == 2) {
+      setButtonState(1);
+    } else if (buttonState == 3) {
+      setButtonState(2);
+    }
+    // else if (buttonState == 3) {
+    //   setIsLoading(true);
+    //   if (paymentMethodValue == 'American Express, Mastercard, Visa') {
+    //     startPaymentProcess();
+    //   } else if (paymentMethodValue == 'PayPal') {
+    //     validateHitOrderPlaceApi('PayPal');
+    //   } else {
+    //     validateHitOrderPlaceApi();
+    //   }
+    // }
   };
 
   const validateHitOrderPlaceApi = (stringValue, data) => {
@@ -936,12 +1180,22 @@ export default function checkOut({navigation, route}) {
       product_id: productIdArray,
       shop_id: shopIdArray,
       quantity: quantityArray,
-      shipping_fullname: userDataLocal?.username,
-      shipping_address: userDataLocal?.address_one,
-      shipping_city: userDataLocal?.city,
-      shipping_state: userDataLocal?.country,
-      shipping_zipcode: userDataLocal?.zipcode,
-      shipping_phone: userDataLocal?.phone_number,
+      shipping_fullname: shippingFullName,
+      shipping_address: shippinggAddress,
+      shipping_city: shippingCity,
+      shipping_state: shippingState,
+      shipping_zipcode: shippingZipCode,
+      shipping_phone: shippingPhone,
+      notes: note,
+      billing_fullname:
+        checkBox == 'unchecked' ? billingFullName : shippingFullName,
+      billing_address:
+        checkBox == 'unchecked' ? billinggAddress : shippinggAddress,
+      billing_city: checkBox == 'unchecked' ? billingCity : shippingCity,
+      billing_state: checkBox == 'unchecked' ? billingState : shippingState,
+      billing_zipcode:
+        checkBox == 'unchecked' ? billingZipCode : shippingZipCode,
+      billing_phone: checkBox == 'unchecked' ? billingPhone : shippingPhone,
       notes: note,
       attributes: attributesArray,
       payment_method: paymentMethodValue,
@@ -1177,7 +1431,7 @@ export default function checkOut({navigation, route}) {
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={false}
-            style={{marginTop: 20}}
+            // style={{marginTop: 20}}
           />
         </Modal>
       )}

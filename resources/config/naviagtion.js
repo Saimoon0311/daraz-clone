@@ -26,24 +26,19 @@ const Stack = createNativeStackNavigator();
 export default function Navigation() {
   const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(null);
 
-  React.useEffect(async () => {
-    const appData = await AsyncStorage.getItem('isAppFirstLaunched');
-    if (appData == null) {
-      setIsAppFirstLaunched(true);
-      AsyncStorage.setItem('isAppFirstLaunched', 'false');
-    } else {
-      setIsAppFirstLaunched(false);
-    }
-
-    // AsyncStorage.removeItem('isAppFirstLaunched');
-  }, []);
-
   const userData = useSelector(state => state.auth.userData);
   const [isLoggedIn, setIsLoggedIn] = useState();
   // console.log('26', userData);
 
   useEffect(() => {
     (async () => {
+      const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+      if (appData == null) {
+        setIsAppFirstLaunched(true);
+        AsyncStorage.setItem('isAppFirstLaunched', 'false');
+      } else {
+        setIsAppFirstLaunched(false);
+      }
       await checkStatus();
     })();
   }, []);

@@ -66,7 +66,11 @@ export default function subcatdetails({route, navigation}) {
   const isFocused = useIsFocused();
   const [filterModal, setFilterModal] = useState(false);
   const [checksubcat, setChecksubcat] = useState(true);
+  const [filter, setFilter] = useState(false);
+  const [dummy, setDummy] = useState(1);
   const getSubCatData = async confirm => {
+    const user = await getUserData();
+    const id = user?.id;
     // const user = await getUserData();
     // const id = user?.id;
     // console.log(50, productData?.id);
@@ -74,7 +78,7 @@ export default function subcatdetails({route, navigation}) {
     // console.log(58, confirm);
     fetch(
       confirm == true
-        ? `${SUBCATPRODUCTDATA}/${productData?.id}/${user_id}`
+        ? `${SUBCATPRODUCTDATA}/${productData?.id}/${id}`
         : SubCategoryDataWithOutUserID + productData?.id,
     )
       // fetch(`${SUBCATPRODUCTDATA}/20/${id}`)
@@ -250,7 +254,7 @@ export default function subcatdetails({route, navigation}) {
         }
       })
       .catch(error => {
-        console.error(109, error);
+        // console.error(109, error);
         showMessage({
           type: 'danger',
           icon: 'danger',
@@ -545,67 +549,42 @@ export default function subcatdetails({route, navigation}) {
   const categoryDataCall = category => {
     setLoading(true);
     var url = CATEGORYALLDATA + '/' + category.id;
-    console.log(547, url);
     fetch(url)
       .then(response => response.json())
       .then(async json => {
         setAllData(json[0]), setLoading(false);
-        // getData(json[0].id, click);
       })
       .catch(error => {
         console.log(554, error);
       });
-
-    // const api = SUBCAT + catdata[0]?.id;
-    // fetch(api)
-    //   .then(async response => await response.json())
-    //   .then(json => {
-    //     setSubcatdata(json), setClick(0), setSubloading(false);
-    //   });
-    // .catch(error => setNshowAlert(true))
-    // .finally(() => setSubloading(false),setClick(0));
   };
-  const applyFilter = (category, start, end) => {
-    console.log(552, allData[0]?.price);
-    console.log(544, start, end, category);
-    if (category != null && category != '') {
-      categoryDataCall(category);
-      allData.filter(checkPrice);
-      function checkPrice(age) {
-        // return age?.price >= start && age?.price <= end;
-        console.log(576, age?.price);
-      }
-      console.log(549, checkPrice());
-    } else {
-      // console.table(allData);
-      setPriceData(allData);
-      setPriceData(priceData => {
-        return priceData.filter(checkPrice);
-      });
-      function checkPrice(data) {
-        // console.log(6666, data?.price, data?.price >= start, start);
-        return data?.price >= start && data?.price <= end;
-
-        //   console.log('else');
-        // console.log(576, data?.price, start, end, 'else');
-        // return Number(data?.price) > Number(start);
-        //  && data?.price << end;
-      }
-
-      console.log(549, allData);
+  var data = [];
+  const filterprice = async (start, end) => {
+    data = allData.filter(checkPrice);
+    // setPriceData(allData);
+    // setPriceData(priceData => {
+    //   return priceData.filter(checkPrice);
+    // });
+    function checkPrice(datas) {
+      return datas?.price >= start && datas?.price <= end;
     }
-    // allData.filter(
-    //   (item, index) =>
-    //     item.price >= start.toFixed(2) && item.price <= end.toFixed(2),
-    // );
-    // console.table(556, data);
-    // setAllData(data);
-    // allData.filter(data);
+    setFilter(true);
+    // console.log(55847538, data);
+    // setLoading(false);
+  };
+  const applyFilter = async (category, start, end) => {
+    if (category != null && category != '') {
+      await filterprice(start, end);
+      categoryDataCall(category);
+    } else {
+      setLoading(true);
+      filterprice(start, end);
+      setLoading(false);
+      console.log(55847538, data);
 
-    // function data() {
-    //   return Data?.price <= end && Data?.price >= start;
-    // }
-    // console.log(558, data);
+      // console.log(581, allData);
+      // setDummy(dummy + 1);
+    }
   };
 
   useEffect(() => {
@@ -613,9 +592,8 @@ export default function subcatdetails({route, navigation}) {
       if (isFocused) {
         await checkStatus();
       }
-      // await parentFunction();
     })();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.main}>
@@ -631,14 +609,6 @@ export default function subcatdetails({route, navigation}) {
         <Text numberOfLines={1} style={styles.te}>
           {renderHeaderText()}
         </Text>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons
-            name="cart"
-            size={35}
-            color="#512500"
-            style={{...styles.icon, marginRight: wp('3')}}
-          />
-        </TouchableOpacity> */}
         <View style={{...styles.icon}}>
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
@@ -673,21 +643,20 @@ export default function subcatdetails({route, navigation}) {
           </View>
         ) : (
           <FlatList
-            // data={subcatdata}
-            data={priceData != null ? priceData : allData}
-            // keyExtractor={item => item.key}
+            // data={data}
+            data={filter == true ? data : allData}
+            // data={priceData != null ? priceData : allData}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             numColumns={2}
-            extraData={allData}
+            // extraData={data}
             contentContainerStyle={{
               paddingBottom: hp('20%'),
               width: wp('100%'),
               alignSelf: 'flex-start',
             }}
             renderItem={({item, index}) => {
-              console.log(68934, allData);
-              // return renderCards(item);
+              console.log(6534353453445364563546, item);
               return checkRender(item);
             }}
           />

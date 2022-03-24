@@ -47,14 +47,16 @@ import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon'
 import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
 import {flexDirection, get, width} from 'styled-system';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function Details({route, navigation}) {
   const child_id = route?.child_category_id;
   const item = route?.params;
   const imm = item?.images;
+  // console.log(55, imm);
   const {saveProduct} = useSelector(state => state.savePosts);
   const {userData} = useSelector(state => state.auth);
-  console.log(50, userData);
+  // console.log(50, userData);
   const dispatch = useDispatch();
   const [updateCart, setUpdateCart] = useState(false);
   const [user_id, setUser_id] = useState();
@@ -101,21 +103,26 @@ export default function Details({route, navigation}) {
   const [followLoader, setFollowLoader] = useState(true);
   const [postfollowLoader, setPostFollowLoader] = useState(true);
 
-  const followApi = () => {
-    var url = getFollowApi + '/' + user_id + '/' + item.get_shop.get_vendor.id;
+  const followApi = user => {
+    const id = user.id;
+    var url = getFollowApi + '/' + id + '/' + item.get_shop.get_vendor.id;
+    // console.log(107, url);
     fetch(url)
       .then(res => res.json())
       .then(json => {
         setGetFollow(json);
         setFollowLoader(false);
-        console.log(110, getFollow, json);
+        // console.log(110, getFollow, json);
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        console.log(113, e);
+      });
   };
 
   const pFollowApi = () => {
     setFollowLoader(true);
     var url = postFollowApi + '/' + user_id + '/' + item.get_shop.get_vendor.id;
+    // console.log(106, url);
     var requestOptions = {
       method: 'POST',
       redirect: 'follow',
@@ -143,8 +150,8 @@ export default function Details({route, navigation}) {
     if (user == null) {
       setIsLoggedIn(false);
     } else if (user !== null) {
-      followApi();
-      setUserId();
+      await setUserId();
+      followApi(user);
       setIsLoggedIn(true);
     }
   };
@@ -161,7 +168,7 @@ export default function Details({route, navigation}) {
       message: 'Your Product Has Been Add To Cart',
       backgroundColor: '#E9691D',
     });
-    console.log(128, saveProduct);
+    // console.log(128, saveProduct);
   };
   const setUserId = async () => {
     const userId = await getUserData();
@@ -481,6 +488,7 @@ export default function Details({route, navigation}) {
               // backgroundColor: 'red',
             }}
             renderItem={({item}) => {
+              // console.log(490, item?.name);
               return (
                 <Image
                   resizeMode="cover"
@@ -623,50 +631,58 @@ export default function Details({route, navigation}) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     alignSelf: 'center',
-                    fontSize: hp('2.5  '),
+                    fontSize: hp('2.5'),
                   }}>
                   Vendor: {item['get_shop']['get_vendor']['username']}
                 </Text>
                 <TouchableOpacity
                   style={styles.followButton}
                   onPress={() => pFollowApi()}>
-                  {reviewLoading ? (
-                    <ActivityIndicator size={'small'} color={'white'} />
-                  ) : (
-                    <View style={styles.followViewContainer}>
-                      <Text style={styles.followText}>
-                        {followLoader == true ? (
-                          <ActivityIndicator
-                            style={{marginTop: hp('5')}}
-                            size={'large'}
-                            color={color.themColorPrimary}
-                          />
-                        ) : getFollow.status == 1 ? (
-                          'Unfollow'
-                        ) : (
-                          'Follow'
-                        )}
-                      </Text>
+                  <View style={styles.followViewContainer}>
+                    <Text style={styles.followText}>
+                      {followLoader == true ? (
+                        <ActivityIndicator
+                          style={{alignSelf: 'center', marginTop: hp('2')}}
+                          // style={{marginTop: hp('5')}}
+                          size={'small'}
+                          color={'white'}
+                        />
+                      ) : getFollow.status == 1 ? (
+                        'Unfollow'
+                      ) : (
+                        'Follow'
+                      )}
+                    </Text>
+                    {followLoader == false && getFollow.status == 1 ? (
+                      <AntDesign
+                        name="minus"
+                        size={15}
+                        color="white"
+                        style={styles.followIcon}
+                      />
+                    ) : (
                       <Ionicons
                         name="ios-add"
                         size={15}
                         color="white"
                         style={styles.followIcon}
                       />
-                    </View>
-                  )}
+                    )}
+                  </View>
                 </TouchableOpacity>
               </View>
 
               <Text></Text>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.vendorLeftTextStyle}>Store Name:</Text>
-                <Text>{item['get_shop']['name']}</Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['name']}
+                </Text>
               </View>
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
                 <Text style={styles.vendorLeftTextStyle}>Address: </Text>
-                <Text>
+                <Text style={styles.vendorRightText}>
                   {item['get_shop']['get_vendor']['address_one'] +
                     item['get_shop']['get_vendor']['address_two']}
                 </Text>
@@ -674,7 +690,9 @@ export default function Details({route, navigation}) {
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
                 <Text style={styles.vendorLeftTextStyle}>Phone: </Text>
-                <Text>{item['get_shop']['get_vendor']['phone_number']}</Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['get_vendor']['phone_number']}
+                </Text>
               </View>
             </View>
           )}
