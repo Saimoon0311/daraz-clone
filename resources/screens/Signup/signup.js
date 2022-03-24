@@ -37,8 +37,8 @@ export default function Signup({navigation}) {
   const handleClick = () => setShow(!show);
   const [cshow, setCshow] = useState(false);
   const handleClicks = () => setCshow(!cshow);
+  const dispatch = useDispatch();
   const savedata = async () => {
-    const dispatch = useDispatch();
     setLoadingButton(true);
     let netFlag = 0;
     var res;
@@ -119,7 +119,7 @@ export default function Signup({navigation}) {
           })
             .then(response => response.json())
             .then(async responseData => {
-              // console.log(119, responseData);
+              console.log(119, responseData);
 
               const prop = responseData?.email ? 'email' : 'phone_number';
               if (responseData[0]?.message == 'User Created Successfully') {

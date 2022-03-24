@@ -20,6 +20,7 @@ import {showMessage} from 'react-native-flash-message';
 import {
   ADDTOWISHLIST,
   API_BASED_URL,
+  CANCELORDER,
   CART,
   CARTDELETE,
   Images_API,
@@ -36,7 +37,6 @@ import {HelperText, TextInput} from 'react-native-paper';
 import NetInfo from '@react-native-community/netinfo';
 import Accordion from 'react-native-collapsible/Accordion';
 import moment from 'moment';
-
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -51,10 +51,47 @@ export default function OrderDetails({navigation}) {
   const [orderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
-  const cancelAlert = () => {
+  const [seletedOrder, setSeletedOrder] = useState();
+  const cancelOrder = item => {
+    setSeletedOrder(item);
     setShowAlert(true);
   };
-
+  const cancelOrderConfirm = async () => {
+    const user = await getUserData();
+    const id = user?.id;
+    setShowAlert(false);
+    var url = CANCELORDER + '/' + id + '/' + seletedOrder.order_number;
+    fetch(url, {
+      method: 'POST',
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.status == 1) {
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: json.message,
+            backgroundColor: '#E9691D',
+          });
+          getOrderDetails();
+        } else if (json.status == 0) {
+          showMessage({
+            type: 'warning',
+            icon: 'warning',
+            message: json.message,
+            backgroundColor: '#E9691D',
+          });
+        }
+      })
+      .catch(err => {
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Some thing is wrong',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
   useEffect(() => {
     (async () => {
       getOrderDetails();
@@ -553,7 +590,7 @@ export default function OrderDetails({navigation}) {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => cancelAlert()}
+          onPress={() => cancelOrder(item)}
           style={styles.cancelViewContainer}>
           <Text style={styles.cancelText}>Cancel Order</Text>
         </TouchableOpacity>
@@ -587,25 +624,23 @@ export default function OrderDetails({navigation}) {
           show={showAlert}
           showProgress={false}
           title="Warning!"
-          message="The order cannot be cancel"
+          message="Are you sure want to cancel this order."
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
-          // showConfirmButton={true}
-          // confirmText="Yes"
+          titleStyle={{color: 'black'}}
+          showConfirmButton={true}
+          confirmText="Yes"
           cancelText="No"
-          // confirmButtonStyle={styles.buttonstyle}
+          confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}
-          // confirmButtonTextStyle={{fontSize: hp('2.2%')}}
-          // confirmButtonColor={color.textColorRedCart}
+          confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+          confirmButtonColor={color.textColorRedCart}
           cancelButtonColor={color.textColorRedCart}
           onConfirmPressed={() => {
-            setShowAlert(false);
-            setTimeout(() => {
-              // logout();
-            }, 1000);
+            cancelOrderConfirm();
           }}
           onCancelPressed={() => {
             setShowAlert(false);

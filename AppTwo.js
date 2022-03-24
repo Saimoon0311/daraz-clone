@@ -112,8 +112,6 @@ function AppTwo({navigation}) {
     );
 
     return (
-      // <Provider store={store}>
-      //   <PersistGate loading={null} persistor={persistor}>
       <>
         {isVisible === true ? (
           Splash_Screen

@@ -6,6 +6,12 @@ import {
 import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
+  buttonstyle: {
+    width: wp('20%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.textColorRedCart,
+  },
   main: {
     backgroundColor: color.defaultBackgroundColor,
     // backgroundColor: 'red',

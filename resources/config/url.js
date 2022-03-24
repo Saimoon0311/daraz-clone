@@ -38,6 +38,7 @@ export const searchDataWithOutUserID = getApi('search-products-userskip/');
 export const AllFeaturedProductWithOutUser = getApi(
   'products-featured-userskip',
 );
+export const CANCELORDER = getApi('cancel_order');
 export const CATEGORYALLDATA = getApi('shop/category-all-data');
 export const featuredDefault = getApi('featured-data-all-userskip/');
 export const newArrivalDefault = getApi('new-arrivals-userskip/');
@@ -46,7 +47,7 @@ export const SubCategoryDataWithOutUserID = getApi(
 );
 export const AllDataWithOutUserId = getApi('featured-data-all-over-userskip');
 export const AllNewArrivalsDataSkipUser = getApi('all-new-arrivals-userskip/');
-
+export const filterProductUrl = getApi('get-filter/');
 export const getFollowApi = getApi('get-follow');
 export const postFollowApi = getApi('post-follow');
 // export const StripePKey =

@@ -28,6 +28,7 @@ import {
   API_BASED_URL,
   CATEGORY,
   CATEGORYALLDATA,
+  filterProductUrl,
   Images_API,
   searchDataWithOutUserID,
   SubCategoryDataWithOutUserID,
@@ -67,7 +68,11 @@ export default function subcatdetails({route, navigation}) {
   const [filterModal, setFilterModal] = useState(false);
   const [checksubcat, setChecksubcat] = useState(true);
   const [filter, setFilter] = useState(false);
+  const [price, setPrice] = useState([]);
   const [dummy, setDummy] = useState(1);
+  const [catergory, setCategory] = useState(null);
+  const [end, setEnd] = useState('2500000');
+  const [start, setStart] = useState('0');
   const getSubCatData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
@@ -217,7 +222,6 @@ export default function subcatdetails({route, navigation}) {
   };
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
       setIsLoggedIn(false);
       await parentFunction(false);
@@ -234,7 +238,11 @@ export default function subcatdetails({route, navigation}) {
       .then(async response => await response.json())
       .then(json => {
         if (json[0]?.message == 'Added to wishlist') {
-          parentFunction(true);
+          if (filter == true) {
+            categoryDataCall(catergory, start, end);
+          } else if (filter == false) {
+            parentFunction(true);
+          }
           showMessage({
             type: 'success',
             icon: 'success',
@@ -244,7 +252,11 @@ export default function subcatdetails({route, navigation}) {
         } else if (
           json[0]?.message == 'This item has been removed from your wishlist'
         ) {
-          parentFunction(true);
+          if (filter == true) {
+            categoryDataCall(catergory, start, end);
+          } else if (filter == false) {
+            parentFunction(true);
+          }
           showMessage({
             type: 'success',
             icon: 'auto',
@@ -546,45 +558,50 @@ export default function subcatdetails({route, navigation}) {
       return renderCards(item);
     }
   };
-  const categoryDataCall = category => {
-    setLoading(true);
-    var url = CATEGORYALLDATA + '/' + category.id;
-    fetch(url)
+  var checkApiType;
+  const checkFilterFunction = async () => {
+    if (paramData?.screenData == 'subCat') {
+      checkApiType = `child_category_id/${productData?.id}`;
+    } else if (paramData?.screenData == 'featured-data-all/') {
+      checkApiType = `featured/1`;
+    } else if (paramData?.screenData == ALLNEWARRIVALS) {
+      checkApiType = `newarrivals/0`;
+    } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
+      checkApiType = `alldata/0`;
+    }
+  };
+  const categoryDataCall = async (category, start, end) => {
+    setCategory(category), setStart(start);
+    setEnd(end);
+    var userID = isLoggedIn == true ? user_id : '0';
+    console.log(577, userID);
+    await checkFilterFunction();
+    var price = start + ',' + end;
+    var checkUrlType =
+      category !== null
+        ? `${filterProductUrl + userID}/cat_id/${
+            category.id
+          }?filter[pricebetween]=${price}`
+        : `${
+            filterProductUrl + userID
+          }/${checkApiType}?filter[pricebetween]=${price}`;
+
+    fetch(checkUrlType)
       .then(response => response.json())
-      .then(async json => {
-        setAllData(json[0]), setLoading(false);
+      .then(json => {
+        setAllData(json[0]);
+        setLoading(false);
       })
       .catch(error => {
         console.log(554, error);
       });
   };
   var data = [];
-  const filterprice = async (start, end) => {
-    data = allData.filter(checkPrice);
-    // setPriceData(allData);
-    // setPriceData(priceData => {
-    //   return priceData.filter(checkPrice);
-    // });
-    function checkPrice(datas) {
-      return datas?.price >= start && datas?.price <= end;
-    }
-    setFilter(true);
-    // console.log(55847538, data);
-    // setLoading(false);
-  };
-  const applyFilter = async (category, start, end) => {
-    if (category != null && category != '') {
-      await filterprice(start, end);
-      categoryDataCall(category);
-    } else {
-      setLoading(true);
-      filterprice(start, end);
-      setLoading(false);
-      console.log(55847538, data);
 
-      // console.log(581, allData);
-      // setDummy(dummy + 1);
-    }
+  const applyFilter = async (category, start, end) => {
+    console.log(613);
+    setLoading(true);
+    categoryDataCall(category, start, end);
   };
 
   useEffect(() => {
@@ -624,6 +641,8 @@ export default function subcatdetails({route, navigation}) {
         filterModal={filterModal}
         onPress={() => setFilterModal(false)}
         applyFilter={applyFilter}
+        filterValue={filter}
+        setFilter={confirm => setFilter(confirm)}
       />
       <View style={{...styles.body}}>
         {isLoading ? (
@@ -632,6 +651,7 @@ export default function subcatdetails({route, navigation}) {
           </View>
         ) : allData?.length == 0 ? (
           <View style={styles.imm}>
+            {/* {console.log(664, price)} */}
             <Ionicons name="cart" color="#E9691D" size={80} />
             <Text style={styles.tee}>You have no items in this list</Text>
             {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
@@ -642,24 +662,39 @@ export default function subcatdetails({route, navigation}) {
             </TouchableOpacity>
           </View>
         ) : (
-          <FlatList
-            // data={data}
-            data={filter == true ? data : allData}
-            // data={priceData != null ? priceData : allData}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-            numColumns={2}
-            // extraData={data}
-            contentContainerStyle={{
-              paddingBottom: hp('20%'),
-              width: wp('100%'),
-              alignSelf: 'flex-start',
-            }}
-            renderItem={({item, index}) => {
-              console.log(6534353453445364563546, item);
-              return checkRender(item);
-            }}
-          />
+          <>
+            {catergory !== null && (
+              <Text
+                style={{
+                  color: '#512500',
+                  fontSize: hp('2'),
+                  marginLeft: wp('4'),
+                  marginBottom: hp('2'),
+                }}>
+                Catergory : {catergory.name}
+              </Text>
+            )}
+
+            <FlatList
+              data={allData}
+              // data={filter == true ? data : allData}
+              // data={priceData != null ? priceData : allData}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+              extraData={allData}
+              // extraData={filter == true ? data : allData}
+              contentContainerStyle={{
+                paddingBottom: hp('20%'),
+                width: wp('100%'),
+                alignSelf: 'flex-start',
+              }}
+              renderItem={({item}) => {
+                // console.log(6534353453445364563546, item.is_wishlisted);
+                return checkRender(item);
+              }}
+            />
+          </>
         )}
       </View>
       <AwesomeAlert

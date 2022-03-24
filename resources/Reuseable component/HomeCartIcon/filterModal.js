@@ -47,6 +47,7 @@ export const FilterModal = props => {
     setStartingPrice('0');
     setEndingPrice('250000');
     setSeletedCategory(null);
+    props.setFilter(false);
   };
   var filter = props?.filterModal;
   useEffect(() => {
@@ -150,6 +151,8 @@ export const FilterModal = props => {
                   // endingPrice,
                 );
                 props.onPress();
+                // setLoading(true);
+                props.setFilter(true);
               }}
               style={styles.bottomButton}>
               <Text style={styles.buttonText}>Apply Filter</Text>

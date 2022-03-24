@@ -42,6 +42,7 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
+  const [zipCodeText, setZipCodeText] = useState();
 
   const getUserAllData = async () => {
     const userDatas = await getUserData();
@@ -95,12 +96,15 @@ export default function Userdeatils({navigation}) {
 
           //  ff()
         } else {
+          console.log(99, result);
           setShowAlert(true);
           setLoadingButton(false);
           // console.log(result);
         }
       })
       .catch(error => {
+        console.log(106, error);
+
         setShowAlert(false);
         // console.log('111', error)
       });
@@ -154,6 +158,7 @@ export default function Userdeatils({navigation}) {
   useEffect(() => {
     (async () => {
       const userDatas = await getUserData();
+      console.log(161, userDatas);
       setUserDataLocal(userDatas);
     })();
   }, []);
@@ -286,17 +291,19 @@ export default function Userdeatils({navigation}) {
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
               keyboardType="numeric"
-              value={
-                userDataLocal?.zipcode == null
-                  ? null
-                  : JSON?.stringify(userDataLocal?.zipcode)
-              }
+              value={userDataLocal?.zipcode}
               // value={JSON?.stringify(userDataLocal?.zipcode)}
               selectionColor="#FF7E33"
               onChangeText={text => {
-                updatValue(Number(text), 'zipcode');
+                // setZipCodeText(text);
+                // updatValue(zipCodeText, 'zipcode');
+                updatValue(text, 'zipcode');
+
+                console.log(299, zipCodeText);
               }}
             />
+            {console.log(307, userDataLocal)}
+
             <TextInput
               label="Country *"
               underlineColor="gray"
@@ -319,9 +326,6 @@ export default function Userdeatils({navigation}) {
                 marginTop: 30,
                 borderRadius: 7,
                 flexDirection: 'row',
-                // marginBottom: hp('100%'),
-                // alignItems:'center',
-                // justifyContent:'center'
               }}>
               <View
                 style={{
