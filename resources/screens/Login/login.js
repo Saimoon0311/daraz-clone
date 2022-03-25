@@ -39,10 +39,10 @@ export default function Login({navigation}) {
   const handleClick = () => setShow(!show);
 
   const [state, setState] = useState({
-    // email: '',
-    // password: '',
-    email: 'shaheer031123@gmail.com',
-    password: '123654789',
+    email: '',
+    password: '',
+    // email: 'shaheer031123@gmail.com',
+    // password: '123654789',
   });
   const {email, password} = state;
   const updateState = data => setState(() => ({...state, ...data}));
@@ -279,24 +279,6 @@ export default function Login({navigation}) {
                 height: hp('7%'),
               }}></View>
           </TouchableOpacity>
-          {/* )} */}
-
-          {/* <TouchableOpacity style={styles.buts}>
-            <View style={{marginLeft: 20, justifyContent: 'center'}}>
-              <Ionicons name="logo-facebook" size={18} color={'white'} />
-            </View>
-            <View style={{justifyContent: 'center', marginLeft: wp("12%")}}>
-              <Text
-                style={{
-                  fontSize: hp("2%"),
-                  textAlign: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}>
-                Connect With Facebook
-              </Text>
-            </View>
-          </TouchableOpacity> */}
         </View>
         <View style={styles.ty}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
