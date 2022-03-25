@@ -7,12 +7,14 @@ import NetInfo from '@react-native-community/netinfo';
 import {
   View,
   Text,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import {WebView} from 'react-native-webview';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
@@ -36,6 +38,8 @@ export default function Signup({navigation}) {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const [cshow, setCshow] = useState(false);
+  const [appUrl, setAppUrl] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
   const handleClicks = () => setCshow(!cshow);
   const dispatch = useDispatch();
   const savedata = async () => {
@@ -184,6 +188,27 @@ export default function Signup({navigation}) {
       }
     });
   };
+  // const appViewPage = () => {
+  //   {
+  //     appUrl && (
+  //       <Modal
+  //         animationType="slide"
+  //         onRequestClose={() => {
+  //           setIsVisible(false);
+  //         }}
+  //         visible={isVisible}>
+  //         <WebView
+  //           style={{height: hp('50'), width: wp('100')}}
+  //           source={{uri: appUrl}}
+  //           javaScriptEnabled={true}
+  //           domStorageEnabled={true}
+  //           startInLoadingState={false}
+  //           // style={{marginTop: 20}}
+  //         />
+  //       </Modal>
+  //     );
+  //   }
+  // };
   return (
     <ScrollView
       style={{
@@ -382,7 +407,10 @@ export default function Signup({navigation}) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.privacyContainer}
-          onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
+          onPress={
+            () => navigation.navigate('PrivacyPolicyScreen')
+            // setAppUrl('https://www.moyenxpress.com/privacypolicy')
+          }>
           <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
             PrivacyPolicy
           </Text>
@@ -404,6 +432,7 @@ export default function Signup({navigation}) {
           setShowAlert(false);
         }}
       />
+      {/* {appViewPage()} */}
     </ScrollView>
   );
 }
