@@ -34,4 +34,10 @@ export const styles = StyleSheet.create({
   indicator: {
     marginTop: 35,
   },
+  faqContainer: {
+    marginTop: hp('3.5'),
+  },
+  privacyContainer: {
+    marginTop: hp('0.1'),
+  },
 });

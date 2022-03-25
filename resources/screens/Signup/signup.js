@@ -373,6 +373,20 @@ export default function Signup({navigation}) {
             Login
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.faqContainer}
+          onPress={() => navigation.navigate('FaqScreen')}>
+          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
+            FAQ
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.privacyContainer}
+          onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
+          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
+            PrivacyPolicy
+          </Text>
+        </TouchableOpacity>
       </View>
       <AwesomeAlert
         show={showAlert}

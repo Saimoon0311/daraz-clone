@@ -19,6 +19,8 @@ import OrderDetails from '../screens/OrderDetails/OrderDetails';
 import Home from '../screens/Home/home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingScreen from '../screens/OnBoardScreen/OnboardingScreen';
+import Faq from '../screens/faq/Faq';
+import PrivacyPolicy from '../screens/privacyPolicy/PrivacyPolicy';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -105,6 +107,8 @@ export default function Navigation() {
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         )}
         <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
+        <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicy} />
+        <Stack.Screen name="FaqScreen" component={Faq} />
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="Cartdetails" component={Cartdetails} />
