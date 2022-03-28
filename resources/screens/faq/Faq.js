@@ -1,5 +1,12 @@
-import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  Platform,
+  ScrollView,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -12,6 +19,7 @@ import {
 import moment from 'moment';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {FaqUrl} from '../../config/url';
 
 const Faq = ({navigation}) => {
   const [activeSessionHelp, setActiveSessionHelp] = useState([]);
@@ -37,49 +45,52 @@ const Faq = ({navigation}) => {
       title: 'Terms & Policies ',
     },
   ]);
-  const [helpSupport, setHelpSupport] = useState([
-    {
-      id: 1,
-    },
-  ]);
+  const [helpSupport, setHelpSupport] = useState([]);
+
   const renderHeaderHelp = item => {
     return (
       <View style={styles.AccordionHeaderContainer}>
-        <View style={{width: wp('12')}}>
-          <FontAwesome5 name="question-circle" color={'gray'} size={30} />
+        <View style={{width: wp('83')}}>
+          <Text style={styles.AccordionHeaderTitle}>{item.title}</Text>
         </View>
-        <View style={{width: wp('72')}}>
-          <Text style={styles.AccordionHeaderTitle}>Help & Support</Text>
-        </View>
-        <View style={{width: wp('12')}}>
+        <View style={{width: wp('7')}}>
           <MaterialIcons
             name={'keyboard-arrow-down'}
             size={30}
-            color={color.defaultTextColor}
+            color={color.bottomNavColor}
           />
         </View>
       </View>
     );
   };
   const renderContentHelp = item => {
-    return helpFunctiontag.map(res => {
-      return (
-        <TouchableOpacity style={{backgroundColor: 'red'}}>
-          {res.iconName == 'warning' ? (
-            <AntDesign name={res?.iconName} size={26} color={'gray'} />
-          ) : (
-            <FontAwesome5 name={res?.iconName} size={26} color={'gray'} />
-          )}
-          {/* <MaterialIcons name={res?.iconName} size={26} /> */}
-          <Text style={styles.AccordionContentTitle}>{res?.title}</Text>
-        </TouchableOpacity>
-      );
-    });
+    return (
+      <View style={styles.AccordionHeaderContainer}>
+        <Text
+          style={{
+            color: color.textColorRedCart,
+            fontSize: hp('1.7'),
+            width: wp('90'),
+          }}>
+          {item?.description}
+        </Text>
+      </View>
+    );
   };
   const updateSectionsHelp = e => {
     setActiveSessionHelp(e);
   };
-
+  const getFaqData = () => {
+    fetch(FaqUrl)
+      .then(res => res.json())
+      .then(json => {
+        setHelpSupport(json);
+      })
+      .catch(e => console.log(e));
+  };
+  useEffect(() => {
+    getFaqData();
+  }, []);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.header}>
@@ -91,17 +102,56 @@ const Faq = ({navigation}) => {
             style={styles.icon}
           />
         </TouchableOpacity>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            color: '#512500',
+            fontWeight: 'bold',
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
+            marginLeft: wp('-7'),
+          }}>
+          PrivacyPolicy
+        </Text>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+              <Ionicons
+                name="cart"
+                size={30}
+                color="#512500"
+                style={{
+                  ...styles.icon,
+    
+                  marginRight: wp('3'),
+                }}
+              />
+            </TouchableOpacity> */}
+        <View
+          style={{
+            marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '2'),
+          }}>
+          {/* <HomeCartIcon isLoggedIn={true} navigations={navigationProps} /> */}
+        </View>
       </View>
-      <Text style={styles.faqText}>Faq</Text>
-      <Accordion
-        activeSections={activeSessionHelp}
-        sections={helpSupport}
-        keyExtractor={(item, index) => `key-${index}`}
-        underlayColor="transparent"
-        renderHeader={e => renderHeaderHelp(e)}
-        renderContent={e => renderContentHelp(e)}
-        onChange={e => updateSectionsHelp(e)}
-      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: hp('10'),
+          backgroundColor: color.defaultBackgroundColor,
+        }}>
+        <Text style={styles.faqText}>FAQ</Text>
+        {helpSupport.length > 0 && (
+          <Accordion
+            activeSections={activeSessionHelp}
+            sections={helpSupport}
+            keyExtractor={(item, index) => `key-${index}`}
+            underlayColor="transparent"
+            // containerStyle={{borderWidth: 2}}
+            renderHeader={e => renderHeaderHelp(e)}
+            renderContent={e => renderContentHelp(e)}
+            onChange={e => updateSectionsHelp(e)}
+          />
+        )}
+      </ScrollView>
     </View>
   );
 };

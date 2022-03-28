@@ -171,6 +171,18 @@ export const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: wp('2'),
   },
+  returnViewContainer: {
+    backgroundColor: color.themColorPrimary,
+    marginTop: hp('2'),
+    textAlign: 'center',
+    width: wp('30'),
+    height: hp('4'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginRight: 'auto',
+    marginLeft: wp('3'),
+  },
   cancelText: {
     color: 'white',
     fontWeight: 'bold',

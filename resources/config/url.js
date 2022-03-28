@@ -45,6 +45,7 @@ export const newArrivalDefault = getApi('new-arrivals-userskip/');
 export const SubCategoryDataWithOutUserID = getApi(
   'shop/sub-category-userskip/',
 );
+export const FaqUrl = getApi('faqs_api');
 export const AllDataWithOutUserId = getApi('featured-data-all-over-userskip');
 export const AllNewArrivalsDataSkipUser = getApi('all-new-arrivals-userskip/');
 export const filterProductUrl = getApi('get-filter/');

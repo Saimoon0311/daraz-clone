@@ -85,6 +85,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
+  },
+  buttonstyleCancelWhatapp: {
+    width: wp('15'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
   },
   loginContainer: {
     alignSelf: 'center',

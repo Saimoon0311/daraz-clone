@@ -51,10 +51,14 @@ export default function OrderDetails({navigation}) {
   const [orderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const [returnAlter, setReturnAlert] = useState(false);
   const [seletedOrder, setSeletedOrder] = useState();
   const cancelOrder = item => {
     setSeletedOrder(item);
     setShowAlert(true);
+  };
+  const returnOrder = item => {
+    setReturnAlert(true);
   };
   const cancelOrderConfirm = async () => {
     const user = await getUserData();
@@ -589,11 +593,6 @@ export default function OrderDetails({navigation}) {
             </View>
           </View>
         </View>
-        <TouchableOpacity
-          onPress={() => cancelOrder(item)}
-          style={styles.cancelViewContainer}>
-          <Text style={styles.cancelText}>Cancel Order</Text>
-        </TouchableOpacity>
 
         {item?.notes !== null && item?.notes !== '' && (
           <View style={styles.parentCardIconHolder}>
@@ -620,6 +619,26 @@ export default function OrderDetails({navigation}) {
             </View>
           </View>
         )}
+        <View style={{flexDirection: 'row'}}>
+          {item.status == 'completed' && (
+            <TouchableOpacity
+              onPress={() => returnOrder(item)}
+              style={{
+                ...styles.returnViewContainer,
+                alignSelf: 'flex-start',
+                marginRight: 'auto',
+              }}>
+              <Text style={styles.cancelText}>Return Order</Text>
+            </TouchableOpacity>
+          )}
+          {item.status != 'completed' && (
+            <TouchableOpacity
+              onPress={() => cancelOrder(item)}
+              style={styles.cancelViewContainer}>
+              <Text style={styles.cancelText}>Cancel Order</Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
@@ -644,6 +663,32 @@ export default function OrderDetails({navigation}) {
           }}
           onCancelPressed={() => {
             setShowAlert(false);
+          }}
+        />
+        <AwesomeAlert
+          show={returnAlter}
+          showProgress={false}
+          title="Warning!"
+          message="Return policy are not available."
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          titleStyle={{color: 'black'}}
+          // showConfirmButton={true}
+          // confirmText="Yes"
+          cancelText="OK"
+          confirmButtonStyle={styles.buttonstyle}
+          cancelButtonStyle={styles.buttonstyle}
+          cancelButtonTextStyle={{fontSize: hp('2.2%')}}
+          confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+          confirmButtonColor={color.textColorRedCart}
+          cancelButtonColor={color.textColorRedCart}
+          // onConfirmPressed={() => {
+          //   setReturnAlert(false);
+          // }}
+          onCancelPressed={() => {
+            setReturnAlert(false);
           }}
         />
       </View>

@@ -330,7 +330,7 @@ export default function Home({navigation}) {
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.te}>Top sellers</Text>
+          {/* <Text style={styles.te}>Top sellers</Text>
           <NativeBaseProvider>
             <Alldata
               detailss={detailss}
@@ -349,7 +349,7 @@ export default function Home({navigation}) {
               }>
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <Text style={styles.te}>Brands</Text>
           <NativeBaseProvider>
             <Alldata

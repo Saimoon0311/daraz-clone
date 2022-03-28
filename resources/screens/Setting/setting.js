@@ -378,25 +378,23 @@ export default function setting({navigation}) {
         titleStyle={{color: 'black', fontWeight: 'bold'}}
         message="Help For user To Contact Super Admin"
         contentContainerStyle={{width: wp('80%')}}
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={true}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
         showCancelButton={true}
-        // showConfirmButton={true}
-        // confirmText="Yes"
-        cancelText="Whatsapp"
-        cancelButtonStyle={styles.buttonstyleWhatapp}
+        showConfirmButton={true}
+        confirmText="Whatsapp"
+        cancelText="No"
+        cancelButtonStyle={styles.buttonstyleCancelWhatapp}
         cancelButtonTextStyle={{fontSize: hp('1.9')}}
-        // confirmButtonTextStyle={{fontSize: hp('2.2%')}}
-
-        // onConfirmPressed={() => {
-        //   setWhatsApp(false);
-        //   setTimeout(() => {
-        //     // logout();
-        //   }, 1000);
-        // }}
-        onCancelPressed={() => {
+        confirmButtonTextStyle={{fontSize: hp('1.9')}}
+        confirmButtonStyle={styles.buttonstyleWhatapp}
+        onConfirmPressed={() => {
           setWhatsApp(false);
           whatAppPhone();
+        }}
+        onCancelPressed={() => {
+          setWhatsApp(false);
+          // whatAppPhone();
         }}
       />
     </View>

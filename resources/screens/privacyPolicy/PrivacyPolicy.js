@@ -7,7 +7,6 @@ const PrivacyPolicy = ({navigation}) => {
       source={{
         uri: 'https://www.moyenxpress.com/privacypolicy',
       }}
-      style={{marginTop: 20}}
     />
   );
 };

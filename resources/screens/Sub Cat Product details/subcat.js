@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Pressable,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -73,6 +74,7 @@ export default function subcatdetails({route, navigation}) {
   const [catergory, setCategory] = useState(null);
   const [end, setEnd] = useState('2500000');
   const [start, setStart] = useState('0');
+  const [wishlist, setWishlist] = useState(false);
   const getSubCatData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
@@ -204,6 +206,7 @@ export default function subcatdetails({route, navigation}) {
       setChecksubcat(false);
       await getSubCatData(confirm);
     } else if (paramData?.screenData == 'wishlist') {
+      // setWishlist(true);/
       setChecksubcat(true);
       await getSavedItemsData();
     } else if (paramData?.screenData == 'search-products') {
@@ -275,7 +278,7 @@ export default function subcatdetails({route, navigation}) {
         });
       });
   };
-
+  console.log(200, wishlist);
   const renderHeaderText = () => {
     if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
       return <Text>Featured</Text>;
@@ -626,16 +629,22 @@ export default function subcatdetails({route, navigation}) {
         <Text numberOfLines={1} style={styles.te}>
           {renderHeaderText()}
         </Text>
-        <View style={{...styles.icon}}>
+        <View
+          style={{
+            ...styles.icon,
+            marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+          }}>
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() => setFilterModal(true)}
-        style={styles.filterView}>
-        <Text style={styles.filterText}>Filter</Text>
-        <Foundation size={35} color="#512500" name="filter" />
-      </TouchableOpacity>
+      {paramData?.screenData != 'wishlist' && (
+        <TouchableOpacity
+          onPress={() => setFilterModal(true)}
+          style={styles.filterView}>
+          <Text style={styles.filterText}>Filter</Text>
+          <Foundation size={35} color="#512500" name="filter" />
+        </TouchableOpacity>
+      )}
       <FilterModal
         subCatCheck={checksubcat}
         filterModal={filterModal}

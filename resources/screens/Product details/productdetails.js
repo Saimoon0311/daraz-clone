@@ -463,6 +463,7 @@ export default function Details({route, navigation}) {
           style={{
             ...styles.icon,
             marginLeft: wp('0'),
+            marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
           }}>
           <HomeCartIcon
             isLoggedIn={isLoggedIn}
@@ -626,12 +627,14 @@ export default function Details({route, navigation}) {
             <View style={styles.box}>
               <View style={{flexDirection: 'row'}}>
                 <Text
+                  numberOfLines={2}
                   style={{
                     color: color.defaultcolor,
                     alignItems: 'center',
                     justifyContent: 'center',
                     alignSelf: 'center',
                     fontSize: hp('2.5'),
+                    width: wp('51'),
                   }}>
                   Vendor: {item['get_shop']['get_vendor']['username']}
                 </Text>

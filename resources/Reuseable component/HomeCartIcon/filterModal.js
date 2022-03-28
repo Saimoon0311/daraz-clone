@@ -136,6 +136,7 @@ export const FilterModal = props => {
                 value={endingPrice}
                 keyboardType="number-pad"
                 style={styles.priceInput}
+                textAlignVertical="bottom"
                 onChangeText={e => {
                   setEndingPrice(e);
                 }}
@@ -228,8 +229,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#512500',
     fontSize: hp('2'),
-    textAlignVertical: 'center',
+    textAlignVertical: 'bottom',
     justifyContent: 'center',
+    textBreakStrategy: 'highQuality',
+    paddingBottom: Platform.OS == 'android' ? hp('1') : hp('0'),
+    // paddingTop: 'auto',
   },
   bottomButton: {
     width: wp('40'),

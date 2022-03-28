@@ -211,7 +211,7 @@ export default function cate({navigation}) {
                       }
                       onPress={() => getData(item.id, index)}>
                       <View>
-                        <Text style={{...styles.cattext, fontSize: hp('2')}}>
+                        <Text style={{...styles.cattext, fontSize: hp('1.7')}}>
                           {item?.name}
                         </Text>
                       </View>
