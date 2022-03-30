@@ -637,14 +637,15 @@ export default function subcatdetails({route, navigation}) {
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
       </View>
-      {paramData?.screenData != 'wishlist' && (
-        <TouchableOpacity
-          onPress={() => setFilterModal(true)}
-          style={styles.filterView}>
-          <Text style={styles.filterText}>Filter</Text>
-          <Foundation size={35} color="#512500" name="filter" />
-        </TouchableOpacity>
-      )}
+      {paramData?.screenData != 'wishlist' &&
+        paramData?.screenData != 'search-products' && (
+          <TouchableOpacity
+            onPress={() => setFilterModal(true)}
+            style={styles.filterView}>
+            <Text style={styles.filterText}>Filter</Text>
+            <Foundation size={35} color="#512500" name="filter" />
+          </TouchableOpacity>
+        )}
       <FilterModal
         subCatCheck={checksubcat}
         filterModal={filterModal}

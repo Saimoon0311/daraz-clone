@@ -35,9 +35,16 @@ export const styles = StyleSheet.create({
     marginTop: 35,
   },
   faqContainer: {
-    marginTop: hp('3.5'),
+    // marginTop: hp('3.5'),
   },
   privacyContainer: {
     marginTop: hp('0.1'),
+  },
+  bottomText: {
+    fontSize: hp('1.7'),
+
+    textAlign: 'center',
+    color: '#E9691D',
+    textDecorationLine: 'underline',
   },
 });

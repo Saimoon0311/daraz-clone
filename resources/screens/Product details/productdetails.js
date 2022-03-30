@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Avatar} from 'react-native-elements';
 import {
   View,
@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Platform,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -48,8 +49,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
 import {flexDirection, get, width} from 'styled-system';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Carousel from 'react-native-snap-carousel';
 
 export default function Details({route, navigation}) {
+  const isCarousel = React.useRef(null);
+
   const child_id = route?.child_category_id;
   const item = route?.params;
   const imm = item?.images;
@@ -73,10 +77,28 @@ export default function Details({route, navigation}) {
   const [allReviews, setallReviews] = useState();
   const [allreviewsLoading, setallreviewsLoading] = useState(true);
   const [productData, setProductData] = useState(item);
-
+  const data = [
+    {
+      title: 'Aenean leo',
+      body: 'Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.',
+      imgUrl: 'https://picsum.photos/id/11/200/300',
+    },
+    {
+      title: 'In turpis',
+      body: 'Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ',
+      imgUrl: 'https://picsum.photos/id/10/200/300',
+    },
+    {
+      title: 'Lorem Ipsum',
+      body: 'Phasellus ullamcorper ipsum rutrum nunc. Nullam quis ante. Etiam ultricies nisi vel augue. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.',
+      imgUrl: 'https://picsum.photos/id/12/200/300',
+    },
+  ];
   const onStarRatingPress = rating => {
     setstarCount(rating);
   };
+  const SLIDER_WIDTH = Dimensions.get('window').width + 80;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
   const [silderData, setSliderData] = useState([
     {
       id: 1,
@@ -472,6 +494,7 @@ export default function Details({route, navigation}) {
           />
         </View>
       </View>
+      {/* {Viewpager()} */}
       <ScrollView
         contentContainerStyle={
           {
@@ -479,7 +502,7 @@ export default function Details({route, navigation}) {
           }
         }>
         <View style={{margin: 20}}>
-          <FlatList
+          {/* <FlatList
             data={imm}
             keyExtractor={(item, index) => index.toString()}
             horizontal
@@ -498,7 +521,37 @@ export default function Details({route, navigation}) {
                 />
               );
             }}
-          />
+          /> */}
+          <View style={{height: hp('45')}}>
+            <Carousel
+              data={imm}
+              layout={'stack'}
+              useScrollView={true}
+              ref={isCarousel}
+              layoutCardOffset={'8'}
+              contentContainerStyle={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+              sliderWidth={wp('100')}
+              itemWidth={wp('100')}
+              itemHeight={hp('100')}
+              renderItem={({item}) => {
+                return (
+                  <Image
+                    resizeMode="cover"
+                    // source={{uri: item?.imgUrl}}
+                    source={{uri: `${Images_API}/${item?.name}`}}
+                    style={styles.imm}
+                  />
+                );
+              }}
+            />
+          </View>
 
           <View style={styles.box}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>

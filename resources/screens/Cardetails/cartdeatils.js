@@ -17,8 +17,11 @@ import {Images_API} from '../../config/url';
 import {color} from '../../config/color';
 import {styles} from './style';
 import StarRating from 'react-native-star-rating';
+import Carousel from 'react-native-snap-carousel';
 
 export default function Cartdetails({route, navigation}) {
+  const isCarousel = React.useRef(null);
+
   const item = route.params;
   // const imm = item.images;
   const imm = item.get_products.images;
@@ -51,7 +54,37 @@ export default function Cartdetails({route, navigation}) {
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: hp('10')}}>
         <View style={{margin: 20}}>
-          <FlatList
+          <View style={{height: hp('45')}}>
+            <Carousel
+              data={imm}
+              layout={'stack'}
+              useScrollView={true}
+              ref={isCarousel}
+              layoutCardOffset={'8'}
+              contentContainerStyle={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+              sliderWidth={wp('100')}
+              itemWidth={wp('100')}
+              itemHeight={hp('100')}
+              renderItem={({item}) => {
+                return (
+                  <Image
+                    resizeMode="cover"
+                    // source={{uri: item?.imgUrl}}
+                    source={{uri: `${Images_API}/${item?.name}`}}
+                    style={styles.imm}
+                  />
+                );
+              }}
+            />
+          </View>
+          {/* <FlatList
             data={imm}
             keyExtractor={(item, index) => index.toString()}
             horizontal
@@ -68,7 +101,7 @@ export default function Cartdetails({route, navigation}) {
                 />
               );
             }}
-          />
+          /> */}
           <View style={{...styles.box, marginTop: 20}}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
               {item?.get_products?.name}

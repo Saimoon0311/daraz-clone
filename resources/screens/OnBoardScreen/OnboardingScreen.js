@@ -118,7 +118,7 @@ const OnboardingScreen = ({navigation}) => {
               <TouchableOpacity
                 style={styles.btn}
                 onPress={() => navigation.replace('MybottomTabs')}>
-                <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                <Text style={{fontWeight: 'bold', fontSize: 15, color: 'gray'}}>
                   GET STARTED
                 </Text>
               </TouchableOpacity>
@@ -154,6 +154,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
+                    color: 'gray',
                   }}>
                   NEXT
                 </Text>

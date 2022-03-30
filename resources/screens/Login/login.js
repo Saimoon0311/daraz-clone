@@ -280,32 +280,44 @@ export default function Login({navigation}) {
               }}></View>
           </TouchableOpacity>
         </View>
-        <View style={styles.ty}>
+        <View style={{...styles.ty, marginTop: hp('5')}}>
           <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
             New on Moyen?
           </Text>
         </View>
         <TouchableOpacity
-          style={styles.ty}
+          style={{...styles.ty, marginTop: hp('0')}}
           onPress={() => navigation.navigate('Signup')}>
           <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
             Create Account
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.faqContainer}
-          onPress={() => navigation.navigate('FaqScreen')}>
-          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            FAQ
+        <View
+          style={{
+            position: 'absolute',
+            width: wp('100'),
+            bottom: hp('5'),
+            // backgroundColor: 'yellow',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={styles.faqContainer}
+            onPress={() => navigation.navigate('FaqScreen')}>
+            <Text style={styles.bottomText}>FAQ</Text>
+          </TouchableOpacity>
+          <Text style={{...styles.bottomText, textDecorationLine: 'none'}}>
+            {' '}
+            /{' '}
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.privacyContainer}
-          onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
-          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            PrivacyPolicy
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.privacyContainer}
+            onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
+            <Text style={styles.bottomText}>PrivacyPolicy</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <AwesomeAlert
         show={showAlert}

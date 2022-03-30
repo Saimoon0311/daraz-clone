@@ -26,6 +26,7 @@ import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {color} from '../../config/color';
 import {useDispatch} from 'react-redux';
+import {Platform} from 'react-native';
 
 export default function Signup({navigation}) {
   const [loadingButton, setLoadingButton] = useState(false);
@@ -385,36 +386,47 @@ export default function Signup({navigation}) {
             </View>
           </TouchableOpacity> */}
         </View>
-        <View style={styles.ty}>
-          <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
-            Already Have An Account ?
-          </Text>
-        </View>
+        <View style={{...styles.ty, marginTop: hp('3')}}>
+          <View style={styles.ty}>
+            <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
+              Already Have An Account ?
+            </Text>
+          </View>
 
-        <TouchableOpacity
-          style={styles.ty}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            Login
+          <TouchableOpacity
+            // style={styles.ty}
+            style={{...styles.ty, marginTop: hp('0')}}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            width: wp('100'),
+            bottom: Platform.OS == 'ios' ? hp('-3') : hp('0'),
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={styles.faqContainer}
+            onPress={() => navigation.navigate('FaqScreen')}>
+            <Text style={styles.bottomText}>FAQ</Text>
+          </TouchableOpacity>
+          <Text style={{...styles.bottomText, textDecorationLine: 'none'}}>
+            {' '}
+            /{' '}
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.faqContainer}
-          onPress={() => navigation.navigate('FaqScreen')}>
-          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            FAQ
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.privacyContainer}
-          onPress={
-            () => navigation.navigate('PrivacyPolicyScreen')
-            // setAppUrl('https://www.moyenxpress.com/privacypolicy')
-          }>
-          <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            PrivacyPolicy
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.privacyContainer}
+            onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
+            <Text style={styles.bottomText}>PrivacyPolicy</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <AwesomeAlert
         show={showAlert}

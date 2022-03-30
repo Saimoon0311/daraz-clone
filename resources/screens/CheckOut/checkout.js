@@ -55,6 +55,7 @@ import axios from 'axios';
 import {WebView} from 'react-native-webview';
 import {textAlign, textColor} from 'styled-system';
 import {set} from 'immer/dist/internal';
+import * as Animatable from 'react-native-animatable';
 
 export default function checkOut({navigation, route}) {
   var itemOrder = route?.params?.screenData;
@@ -86,6 +87,7 @@ export default function checkOut({navigation, route}) {
   const [paymentId, setPaymentId] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [stateBounce, setStateBounce] = useState('');
 
   const [shippingFullName, setShippingFullName] = useState('');
   const [shippinggAddress, setShippingAddress] = useState('');
@@ -105,7 +107,7 @@ export default function checkOut({navigation, route}) {
       setAlert(true);
     }, 1000);
   };
-  const [checkBox, setCheckBox] = useState('unchecked');
+  const [checkBox, setCheckBox] = useState('checked');
 
   //ADD localhost address of your server
   const API_URL =
@@ -703,7 +705,12 @@ export default function checkOut({navigation, route}) {
   const billingAddress = () => {
     return (
       <>
-        <ScrollView>
+        <Animatable.View
+          // duration={2000}
+          // onAnimationEnd={() => setStateBounce('')}
+          animation={'bounceInLeft'}
+          // animation={'tada'}
+        >
           <Text style={styles.centerText}>Billing Address</Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
@@ -806,7 +813,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
           </View>
-        </ScrollView>
+        </Animatable.View>
       </>
     );
   };

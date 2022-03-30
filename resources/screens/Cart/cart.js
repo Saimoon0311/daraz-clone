@@ -40,7 +40,7 @@ import types from '../../redux/type';
 export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
   const dispatch = useDispatch();
-  console.log(42, saveProduct);
+  // console.log(42, saveProduct);
   const [cartdata, setCartdata] = useState([]);
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
@@ -69,7 +69,7 @@ export default function Cart({navigation}) {
       sendSaveCartData();
     }
   };
-  console.log(4273, cartdata);
+  // console.log(4273, cartdata);
   const mapOnCartData = async () => {
     const user = await getUserData();
     saveProduct.map(res => {
@@ -87,7 +87,7 @@ export default function Cart({navigation}) {
       })
         .then(res => res.json())
         .then(async json => {
-          console.log(91, json);
+          // console.log(91, json);
         })
         .catch(err => {
           showMessage({

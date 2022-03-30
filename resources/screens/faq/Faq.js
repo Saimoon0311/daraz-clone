@@ -20,9 +20,11 @@ import moment from 'moment';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {FaqUrl} from '../../config/url';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const Faq = ({navigation}) => {
   const [activeSessionHelp, setActiveSessionHelp] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [helpFunctiontag, setHelpFunctiontag] = useState([
     {
       id: 1,
@@ -85,6 +87,7 @@ const Faq = ({navigation}) => {
       .then(res => res.json())
       .then(json => {
         setHelpSupport(json);
+        setLoading(false);
       })
       .catch(e => console.log(e));
   };
@@ -111,7 +114,7 @@ const Faq = ({navigation}) => {
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
             marginLeft: wp('-7'),
           }}>
-          PrivacyPolicy
+          FAQ
         </Text>
         {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
               <Ionicons
@@ -137,9 +140,33 @@ const Faq = ({navigation}) => {
         contentContainerStyle={{
           paddingBottom: hp('10'),
           backgroundColor: color.defaultBackgroundColor,
+          // backgroundColor: 'gray',
+          paddingTop: hp('2'),
         }}>
-        <Text style={styles.faqText}>FAQ</Text>
-        {helpSupport.length > 0 && (
+        {loading ? (
+          <SkeletonPlaceholder>
+            <View>
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+              <View style={styles.AccordionHeaderContainer} />
+            </View>
+          </SkeletonPlaceholder>
+        ) : (
           <Accordion
             activeSections={activeSessionHelp}
             sections={helpSupport}

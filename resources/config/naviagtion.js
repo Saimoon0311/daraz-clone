@@ -119,7 +119,7 @@ export default function Navigation() {
         <Stack.Screen name="OrderDetails" component={OrderDetails} />
         <Stack.Screen
           options={{
-            title: 'Sign In',
+            title: 'Login / Register',
             headerShown: true,
             headerStyle: {
               backgroundColor: '#FFDDC9',
