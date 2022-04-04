@@ -36,6 +36,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
@@ -55,6 +56,8 @@ export default function Cart({navigation}) {
   const isFocused = useIsFocused();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [dummy, setDummy] = useState(1);
+  const [isSelected, setSelection] = useState(false);
+  const [checkBox, setCheckBox] = useState(false);
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -313,6 +316,34 @@ export default function Cart({navigation}) {
       });
   };
 
+  const notLogintotalprice = data => {
+    if (data.length > 0) {
+      var total = 0;
+      data.map(res => {
+        total = total + Number(res.price);
+      });
+      setTotalPrice(total);
+    }
+  };
+  var n = [];
+  const onChangeCheckValue = item => {
+    const newData = cartdata.map(res => {
+      if (res.id == item.id) {
+        return {
+          ...res,
+          seleted: !res.seleted,
+        };
+      }
+      return {
+        ...res,
+        seleted: res.seleted,
+      };
+    });
+    var y = [...newData];
+    n.push(newData);
+    setCartdata(newData);
+    console.log(361, y);
+  };
   const totalprice = data => {
     // console.log(134);
     if (data !== undefined) {
@@ -332,32 +363,26 @@ export default function Cart({navigation}) {
       setTotalPrice(sum);
     }
   };
-  const notLogintotalprice = data => {
-    // console.log(134);
+  const checkStatusType = async () => {
+    var listSeleted = cartdata.filter(item => item.seleted == true);
 
-    // console.log(306, total);
-    if (data.length > 0) {
-      var total = 0;
-      data.map(res => {
-        // console.log(302, Number(res.price));
-        total = total + Number(res.price);
-      }); // console.log(148, data);
-      // let sum = 0;
-      // data.forEach(obj => {
-      //   for (let property in obj) {
-      //     if (property == 'price') {
-      //       console.log(152, property.price);
-      //       // console.log(154);
-      //       sum += obj[property];
-      //     }
-      //   }
-      // });
-      // console.log(161, sum);
-      // return sum;
-      setTotalPrice(total);
+    if (listSeleted.length > 0) {
+      navigation.navigate('checkOut', {
+        screenData: listSeleted,
+        totalPrice: totalPriceShow.toFixed(3),
+      });
+    } else {
+      showMessage({
+        type: 'danger',
+        icon: 'auto',
+        message: 'Kindly selete at least 1 item',
+        backgroundColor: '#E9691D',
+      });
     }
+    // console.log(365, listSeleted);
   };
-  const loginData = (item, att) => {
+
+  const loginData = (item, att, index) => {
     return (
       <View style={styles.box}>
         <TouchableOpacity
@@ -373,7 +398,8 @@ export default function Cart({navigation}) {
                 borderRadius: 10,
               }}
             />
-            <View style={{marginTop: 20}}>
+
+            <View style={{marginTop: hp('2')}}>
               <Text
                 numberOfLines={1}
                 style={{
@@ -386,6 +412,7 @@ export default function Cart({navigation}) {
                 }}>
                 {item?.get_products?.name}
               </Text>
+
               <View
                 style={{
                   width: wp('50%'),
@@ -492,6 +519,21 @@ export default function Cart({navigation}) {
                 </View>
               )}
             </View>
+            <TouchableOpacity>
+              <CheckBox
+                tintColors={{true: 'yellow', false: 'red'}}
+                onTintColor={color.themColorPrimary}
+                onCheckColor={color.themColorPrimary}
+                disabled={false}
+                value={!item.seleted && !checkBox ? false : true}
+                onAnimationType="bounce"
+                offAnimationType="stroke"
+                boxType="circle"
+                tintColors={'red'}
+                style={styles.checkBox}
+                onValueChange={() => onChangeCheckValue(item, index)}
+              />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         <View
@@ -893,17 +935,32 @@ export default function Cart({navigation}) {
             </View>
           ) : (
             <View>
+              <CheckBox
+                tintColors={{true: 'yellow', false: 'red'}}
+                onTintColor={color.themColorPrimary}
+                onCheckColor={color.themColorPrimary}
+                disabled={false}
+                value={checkBox}
+                onAnimationType="bounce"
+                offAnimationType="stroke"
+                boxType="circle"
+                tintColors={'red'}
+                style={styles.checkBox}
+                onValueChange={value => {
+                  console.log(983, value), setCheckBox(value);
+                }}
+              />
               <FlatList
                 data={cartdata}
                 nestedScrollEnabled
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
-                renderItem={({item}) => {
+                renderItem={({item, index}) => {
                   const att = item?.attributes;
                   const data = item;
                   // return loginData(item, att);
                   return isLoggedIn == true
-                    ? loginData(item, att)
+                    ? loginData(item, att, index)
                     : logoutData(item, att);
                 }}
               />
@@ -942,14 +999,11 @@ export default function Cart({navigation}) {
                     </View>
                     <TouchableOpacity
                       style={styles.maior}
-                      onPress={() =>
+                      onPress={() => {
                         isLoggedIn == true
-                          ? navigation.navigate('checkOut', {
-                              screenData: cartdata,
-                              totalPrice: totalPriceShow.toFixed(3),
-                            })
-                          : navigation.navigate('MyTabs')
-                      }>
+                          ? checkStatusType()
+                          : navigation.navigate('MyTabs');
+                      }}>
                       <Text style={styles.or}>Complete your order</Text>
                     </TouchableOpacity>
                   </View>

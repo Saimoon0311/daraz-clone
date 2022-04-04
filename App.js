@@ -54,7 +54,7 @@ function App({navigation}) {
     Platform.OS == 'ios'
       ? 'https://apps.apple.com/pk/app/moyenxpress/id1604623592'
       : 'http://play.google.com/store/apps/details?id=com.ecoders';
-  console.log(45, version);
+  // console.log(45, version);
   var status;
   const checkVersion = () => {
     fetch(checkVersionUrl)
@@ -64,11 +64,11 @@ function App({navigation}) {
         if (Platform.OS == 'ios') {
           status = data[0].ios_version === version ? false : true;
           setCheckVersionStatus(status);
-          console.log(61, status, checkVersionStatus, data[0].ios_version);
+          // console.log(61, status, checkVersionStatus, data[0].ios_version);
         } else if (Platform.OS == 'android') {
           status = data[0].android_version === version ? false : true;
           setCheckVersionStatus(status);
-          console.log(61, status, checkVersionStatus, data[0].android_version);
+          // console.log(61, status, checkVersionStatus, data[0].android_version);
         }
       })
       .catch(err => {

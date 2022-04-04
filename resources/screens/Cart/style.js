@@ -38,15 +38,21 @@ export const styles = StyleSheet.create({
   },
   box: {
     padding: 13,
-    margin: 20,
+    // paddingTop: hp('1'),
+    // paddingLeft: wp('2'),
+    // margin: 20,
     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowOffset: {width: 1, height: 1},
-
+    // marginTop: hp('1'),
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
+    width: wp('95'),
+    alignSelf: 'center',
+    marginBottom: hp('2'),
+    marginTop: hp('2'),
   },
   container: {
     borderWidth: 0,
@@ -136,5 +142,10 @@ export const styles = StyleSheet.create({
   sliderText: {
     fontSize: hp('2%'),
     color: color.themColorPrimary,
+  },
+  checkBox: {
+    width: wp('8'),
+    marginLeft: wp('-4'),
+    height: hp('3.8'),
   },
 });

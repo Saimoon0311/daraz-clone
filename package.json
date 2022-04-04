@@ -15,6 +15,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-community/art": "^1.2.0",
+    "@react-native-community/checkbox": "^0.5.12",
     "@react-native-community/netinfo": "^6.0.2",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-native-picker/picker": "^2.1.0",
@@ -58,6 +59,7 @@
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
+    "react-native-select-multiple": "^2.1.0",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-star-rating": "^1.1.0",
