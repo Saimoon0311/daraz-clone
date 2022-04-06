@@ -15,7 +15,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  LogBox
+  LogBox,
+  Linking,
 } from 'react-native';
 import Navigation from './resources/config/naviagtion';
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,163 +30,79 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FlashMessage from 'react-native-flash-message';
-import {Provider} from 'react-redux';
-import store from './resources/redux/store';
+import {Provider, useDispatch} from 'react-redux';
+import {store, persistor} from './resources/redux/store';
 import {getUserData} from './resources/utils/utils';
 import {saveUserData} from './resources/redux/action/auth';
-
-import NetInfo from "@react-native-community/netinfo";
-// export default class App extends Component
-// {
-//    constructor(){
-//      super();
-//      this.state={
-//      isVisible : true,
-//     }
-//   }
-//    Hide_Splash_Screen=()=>{
-//     this.setState({
-//       isVisible : false
-//     });
-//   }
-
-//     componentDidMount (){
-//       async()=>{
-//               const userData = await getUserData()
-//               console.log("user data App.js",userData)
-//               if(!!userData){
-//                 saveUserData(userData)
-//               }
-//             }
-//     var that = this;
-//     setTimeout(function(){
-//       that.Hide_Splash_Screen();
-//     }, 5000)
-//    }
-
-//     render()
-
-//     {
-//         let Splash_Screen = (
-//              <View style={styles.SplashScreen_RootView}>
-//                  <View style={styles.SplashScreen_ChildView}>
-//                        <Image source={require('./resources/images/Component2.png')}
-//                     style={{width:150, height: "100%", resizeMode: 'contain'}} />
-//                 <Text>Hyuidn jfium dkuddkk</Text>
-//                 </View>
-//              </View> )
-//          return(
-//            <Provider store={store} >
-//               {(this.state.isVisible === true) ? Splash_Screen :
-//            <NavigationContainer>
-//            <Navigation/>
-//          </NavigationContainer>}
-//                <FlashMessage position="top" />
-//                </Provider>
-//               );
-//     }
-// }
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
-  },
-
-  SplashScreen_RootView: {
-    justifyContent: 'center',
-    flex: 1,
-    // margin: 10,
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
-
-  SplashScreen_ChildView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFDDC9',
-    flex: 1,
-  },
-});
+import NetInfo from '@react-native-community/netinfo';
+import {checkVersionUrl, StripePKey} from './resources/config/url';
+import {StripeProvider, initStripe} from '@stripe/stripe-react-native';
+import {PersistGate} from 'redux-persist/integration/react';
+import AppTwo from './AppTwo';
+import DeviceInfo from 'react-native-device-info';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 function App({navigation}) {
-  const [isVisible, setIsVisible] = useState(true);
-  Hide_Splash_Screen = () => {
-    // setState({
-    //   isVisible : false
-    // });
-    setIsVisible(false);
+  const version = DeviceInfo.getVersion();
+  const [checkVersionStatus, setCheckVersionStatus] = useState(false);
+  const [versionControl, setVersionControl] = useState('');
+  var url =
+    Platform.OS == 'ios'
+      ? 'https://apps.apple.com/pk/app/moyenxpress/id1604623592'
+      : 'http://play.google.com/store/apps/details?id=com.ecoders';
+  // console.log(45, version);
+  var status;
+  const checkVersion = () => {
+    fetch(checkVersionUrl)
+      .then(res => res.json())
+      .then(data => {
+        setVersionControl(data[0]);
+        if (Platform.OS == 'ios') {
+          status = data[0].ios_version === version ? false : true;
+          setCheckVersionStatus(status);
+          // console.log(61, status, checkVersionStatus, data[0].ios_version);
+        } else if (Platform.OS == 'android') {
+          status = data[0].android_version === version ? false : true;
+          setCheckVersionStatus(status);
+          // console.log(61, status, checkVersionStatus, data[0].android_version);
+        }
+      })
+      .catch(err => {
+        console.log(60, err);
+      });
   };
-
-  useEffect( async () => {
-    (async () => {
-
-    LogBox.ignoreAllLogs()
-
-      const userData = await getUserData();
-      console.log('user data App.js', userData);
-      if (!!userData) {
-        saveUserData(userData);
-      }
-    })();
-    setTimeout(function () {
-      Hide_Splash_Screen();
-    }, 5000);
+  useEffect(() => {
+    checkVersion();
   }, []);
-  {
-    let Splash_Screen = (
-      <View style={styles.SplashScreen_RootView}>
-        <View style={styles.SplashScreen_ChildView}>
-          <Image
-            source={require('./resources/images/Component2.png')}
-            style={{width: 150, height: '100%', resizeMode: 'contain'}}
-          />
-        </View>
-      </View>
-    );
-    return (
-      <Provider store={store}>
-        {isVisible === true ? (
-          Splash_Screen
-        ) : (
-          <NavigationContainer>
-            <Navigation />
-          </NavigationContainer>
-        )}
-        <FlashMessage position="top" />
-      </Provider>
-    );
-  }
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppTwo />
+        <AwesomeAlert
+          show={checkVersionStatus}
+          showProgress={false}
+          title="Warning!"
+          message={versionControl?.title}
+          contentContainerStyle={{width: wp('80%')}}
+          closeOnTouchOutside={false}
+          titleStyle={{color: 'black'}}
+          messageStyle={{color: 'gray'}}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="Update"
+          confirmButtonColor="#DD6B55"
+          onConfirmPressed={() => {
+            Linking.openURL(url);
+          }}
+        />
+      </PersistGate>
+    </Provider>
+  );
 }
-//   return (
-//     <Provider store={store} >
-//     <NavigationContainer>
-//       <Navigation />
-//     </NavigationContainer>
-//     <FlashMessage/>
-//     </Provider>
-//   )
-// }
-
-// const styles = StyleSheet.create({
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-// });
 
 export default App;

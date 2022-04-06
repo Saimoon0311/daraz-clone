@@ -1,283 +1,1006 @@
-
-import React,{useState,useEffect} from "react"
-import {View,Text,TouchableOpacity,StyleSheet,Image,FlatList,ScrollView,ActivityIndicator} from "react-native"
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, {useState, useEffect, useRef} from 'react';
+import {Avatar} from 'react-native-elements';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+  TextInput,
+  Dimensions,
+} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Picker} from '@react-native-picker/picker';
+import {Picker, PickerIOS} from '@react-native-picker/picker';
 import FlatListPicker from 'react-native-flatlist-picker';
-import { ADDTOCART, Images_API } from "../../config/url";
-import { showMessage } from "react-native-flash-message";
-import { getUserData } from "../../utils/utils";
-import AnimatedLoader from "react-native-animated-loader";
-import {color} from "../../config/color"
-import { CirclesLoader, PulseLoader, TextLoader, DotsLoader,BubblesLoader } from 'react-native-indicator';
-import { styles } from "./style";
+import {
+  ADDTOCART,
+  getFollowApi,
+  Images_API,
+  postFollowApi,
+  REVIEWS,
+  SUBCATPRODUCTDATA,
+} from '../../config/url';
+import {showMessage} from 'react-native-flash-message';
+import {getUserData} from '../../utils/utils';
+import AnimatedLoader from 'react-native-animated-loader';
+import {color} from '../../config/color';
+import {
+  CirclesLoader,
+  PulseLoader,
+  TextLoader,
+  DotsLoader,
+  BubblesLoader,
+} from 'react-native-indicator';
+import RNPickerSelect from 'react-native-picker-select';
+import {Rating, AirbnbRating} from 'react-native-ratings';
+import {styles} from './style';
+import StarRating from 'react-native-star-rating';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {useDispatch, useSelector} from 'react-redux';
+import types from '../../redux/type';
+import {flexDirection, get, width} from 'styled-system';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Carousel from 'react-native-snap-carousel';
 
-export default function Details ({ route, navigation }){
-  const [user_id,setUser_id] =useState()
-  const [loading,setLoading]=useState(false)
+export default function Details({route, navigation}) {
+  const isCarousel = React.useRef(null);
 
-  useEffect(()=>{
-    setUserId()
-  })
-  const setUserId = async ()=>{
-  
+  const child_id = route?.child_category_id;
+  const item = route?.params;
+  const imm = item?.images;
+  // console.log(55, imm);
+  const {saveProduct} = useSelector(state => state.savePosts);
+  const {userData} = useSelector(state => state.auth);
+  // console.log(50, userData);
+  const dispatch = useDispatch();
+  const [updateCart, setUpdateCart] = useState(false);
+  const [user_id, setUser_id] = useState();
+  const [loading, setLoading] = useState(false);
+  const [favValue, setFavValue] = useState(false);
+  // const [pickerValue, setPickerValue] = useState({});
+  const [attributeArray, setAttributeArray] = useState([]);
+  const [starCount, setstarCount] = useState(0);
+  const [reviewsName, setreviewName] = useState('');
+  const [reviewsEmail, setreviewEmail] = useState('');
+  const [reviewLoading, setreviewLoading] = useState(false);
+  const [subCatLoading, setSubCatLoading] = useState(true);
+  const [reviews, setreview] = useState('');
+  const [allReviews, setallReviews] = useState();
+  const [allreviewsLoading, setallreviewsLoading] = useState(true);
+  const [productData, setProductData] = useState(item);
+  const data = [
+    {
+      title: 'Aenean leo',
+      body: 'Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.',
+      imgUrl: 'https://picsum.photos/id/11/200/300',
+    },
+    {
+      title: 'In turpis',
+      body: 'Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ',
+      imgUrl: 'https://picsum.photos/id/10/200/300',
+    },
+    {
+      title: 'Lorem Ipsum',
+      body: 'Phasellus ullamcorper ipsum rutrum nunc. Nullam quis ante. Etiam ultricies nisi vel augue. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.',
+      imgUrl: 'https://picsum.photos/id/12/200/300',
+    },
+  ];
+  const onStarRatingPress = rating => {
+    setstarCount(rating);
+  };
+  const SLIDER_WIDTH = Dimensions.get('window').width + 80;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+  const [silderData, setSliderData] = useState([
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+    },
+    {
+      id: 4,
+    },
+    {
+      id: 5,
+    },
+    {
+      id: 6,
+    },
+  ]);
+  const [subCatdata, setSubCatdata] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [getFollow, setGetFollow] = useState();
+  const [followLoader, setFollowLoader] = useState(true);
+  const [postfollowLoader, setPostFollowLoader] = useState(true);
+
+  const followApi = user => {
+    const id = user.id;
+    var url = getFollowApi + '/' + id + '/' + item.get_shop.get_vendor.id;
+    // console.log(107, url);
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        setGetFollow(json);
+        setFollowLoader(false);
+        // console.log(110, getFollow, json);
+      })
+      .catch(e => {
+        console.log(113, e);
+      });
+  };
+
+  const pFollowApi = () => {
+    setFollowLoader(true);
+    var url = postFollowApi + '/' + user_id + '/' + item.get_shop.get_vendor.id;
+    // console.log(106, url);
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+    };
+
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setGetFollow(result), setFollowLoader(false);
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  var items = subCatdata;
+  useEffect(() => {
+    (async () => {
+      await checkStatus();
+      getAllReviews();
+      get_child_product();
+    })();
+  }, []);
+
+  const checkStatus = async () => {
+    const user = await getUserData();
+    if (user == null) {
+      setIsLoggedIn(false);
+    } else if (user !== null) {
+      await setUserId();
+      followApi(user);
+      setIsLoggedIn(true);
+    }
+  };
+  const routeToLogin = () => {
+    productData['attributeValue'] = attributeArray;
+    dispatch({
+      type: types.SAVEPRODUCT,
+      payload: item,
+    });
+    setUpdateCart(true);
+    showMessage({
+      type: 'success',
+      icon: 'auto',
+      message: 'Your Product Has Been Add To Cart',
+      backgroundColor: '#E9691D',
+    });
+    // console.log(128, saveProduct);
+  };
+  const setUserId = async () => {
     const userId = await getUserData();
-    const users = userId.id;
-    setUser_id(users)
-    console.log("18",user_id)
-  }
+    const users = userId?.id;
+    setUser_id(users);
+  };
 
-  const item = route.params;
-    const imm = item.images
-    const attribute = item.get_attribute_values
-    const product_id =item.id
+  const product_id = item?.id;
+  const navigationProps = () => {
+    navigation.navigate('Cart');
+  };
+  const get_child_product = () => {
+    // fetch(`${SUBCATPRODUCTDATA}/${child_id}/${user_id}`)
+    fetch(`${SUBCATPRODUCTDATA}/81/${user_id}`)
+      .then(res => res.json())
+      .then(json => {
+        setSubCatdata(json[0]);
+        setSubCatLoading(false);
+      })
+      .catch(err => {
+        setSubCatLoading(true);
+        // console.log(err);
+      });
+  };
 
-    const cartadd =  ()=>{
-      setLoading(true)
-      //  await ff()
-     console.log(user_id)
-       fetch(ADDTOCART, {
+  const returnTopAlert = (type, message) => {
+    return showMessage({
+      type: type,
+      icon: 'auto',
+      message: message,
+      backgroundColor: '#E9691D',
+    });
+  };
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const submitReviews = () => {
+    setreviewLoading(true);
+    if (
+      (reviewsEmail !== '' &&
+        reviewsEmail !== null &&
+        reviewsName !== '' &&
+        reviewsName !== null &&
+        reviews !== '' &&
+        reviews !== null &&
+        starCount > 0 &&
+        !reviewsEmail) ||
+      reg.test(reviewsEmail) !== false
+    ) {
+      var myHeaders = new Headers();
+      myHeaders.append('Accept', 'application/json');
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        name: reviewsName,
+        email: reviewsEmail,
+        stars: starCount,
+        review: reviews,
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(`${REVIEWS}/${product_id}`, requestOptions)
+        .then(response => response.json())
+        .then(json => {
+          setreviewLoading(false);
+          setreview('');
+          setreviewEmail('');
+          setreviewName('');
+          setstarCount(0);
+          json?.success == true
+            ? showMessage({
+                type: 'success',
+                icon: 'success',
+                message: 'Your review has been posted.',
+                backgroundColor: '#E9691D',
+              })
+            : showMessage({
+                type: 'danger',
+                icon: 'danger',
+                message: 'Some thing is wrong.',
+                backgroundColor: '#E9691D',
+              });
+        })
+        .catch(err => {
+          showMessage({
+            type: 'danger',
+            icon: 'danger',
+            message: 'Some thing is wrong.',
+            backgroundColor: '#E9691D',
+          });
+          setreviewLoading(false);
+          // console.log(err);
+        });
+    } else {
+      showMessage({
+        type: 'danger',
+        icon: 'danger',
+        message: 'Please enter the correct informations.',
+        backgroundColor: '#E9691D',
+      });
+      setreviewLoading(false);
+    }
+  };
+
+  const getAllReviews = () => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    fetch(`${REVIEWS}/${product_id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setallreviewsLoading(false);
+        setallReviews(result.data);
+      })
+      .catch(error => {
+        setallreviewsLoading(false);
+
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Some thing is wrong.',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
+
+  const validateCartAdd = () => {
+    var gotUndefined = false;
+    const apiDataArrayLength = item?.get_attribute_values?.length;
+    if (attributeArray?.length == apiDataArrayLength) {
+      for (let index = 0; index < apiDataArrayLength; index++) {
+        if (attributeArray[index] == undefined) {
+          gotUndefined = true;
+        }
+      }
+      if (gotUndefined) {
+        returnTopAlert(
+          'danger',
+          'Kindly select the product attributes before adding to cart.',
+        );
+      } else if (!gotUndefined) {
+        isLoggedIn == true ? cartadd() : routeToLogin();
+      }
+    } else {
+      returnTopAlert(
+        'danger',
+        'Kindly select the product attributes before adding to cart.',
+      );
+    }
+  };
+
+  const cartadd = () => {
+    setLoading(true);
+    fetch(ADDTOCART, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: JSON?.stringify({
         product_id,
-        user_id
-      }) 
+        user_id,
+        attribute: attributeArray,
+      }),
     })
-    .then((response) => response.json())
-    .then((json) => {
-       console.log(json)
-       ,showMessage({
-           type:"success",
-           icon:"auto",
-           message:"Your Product Has Been Add To Cart",
-           backgroundColor:"#E9691D"
-         }),
-         setLoading(false)
-
-       })
-       .done();
-  }  
-     
-
-    console.log("tyuu======>>>>>>>>>>",item)
-    return(
-        <View style={styles.main} >
-             <View  style={styles.header} >
-                <TouchableOpacity onPress={()=>navigation.goBack()} >
-                    <Ionicons name="arrow-back-sharp"  size={30} color="#512500" style={styles.icon} />
-                </TouchableOpacity>
-                <Text style={styles.te} >Details</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate("Cart")} >
-                    <Ionicons name="cart" size={30} color="#512500" style={styles.icon}  />
-                </TouchableOpacity>
-            </View>
-            <ScrollView > 
- <View style={{margin:20}}>
-
-   <FlatList
-      data={imm}
-      keyExtractor={(item) => item.key}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => {
-          return(
-
-              <Image source={{uri:`${Images_API}/${item.name}`}} style={styles.imm} />
-          )
-      }}
-   />
-<View style={styles.box}>
-    <Text style={[styles.tep,{fontWeight:"bold"}]} >{item.name}</Text>
-    <Text style={styles.tep}>Category : {item.getchildcategory.name}</Text>
-    {item.is_discounted == 2 ? (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                          <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: 18,
-                            fontWeight: 'bold'}}
-                            >
-                            Price :    
-                          </Text>
-                        <Text
-                          style={{
-                            color: '#512500',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            textDecorationLine: 'line-through',
-                          }}>
-                            $ {item.price}
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'red',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                          }}>
-                          {' '}
-                          $ {item.discounted_price}
-                        </Text>
-                      </View>
-                    ) : (
-                      <View
-                      style={{
-                        flexDirection: 'row',
-                      }}>
-                        <Text
-                         style={{
-                          color: '#512500',
-                          fontSize: 18,
-                          fontWeight: 'bold'}}
-                        > 
-                          Prices : 
-                           </Text>
-
-                      <Text
-                        style={{
-                          color: '#512500',
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                        }}>
-                        $ {item.price}
-                      </Text>
-                      </View>
-                    )}
-    {/* <Text style={[styles.tep,{fontWeight:"bold"}]}>Rs : {item.price}</Text> */}
-    <Text style={styles.tep}>SKU : {item.sku}</Text>
-    <Text style={[styles.tep,{fontWeight:"bold"}]}>Description :</Text>
-    <Text style={{marginLeft:"auto",textAlign:"justify",color:"gray"}} > {item.description} </Text> 
-    
-
-
-</View>
-<Text style={styles.delvery}> Delivery & Returns</Text>
-        <View style={[styles.box,{marginBottom:hp("25%")}]} >
-        <Text style={[styles.tep,{fontWeight:"bold"}]} >Choose Your Location</Text>
-        </View>
-        
-        </View>
-        </ScrollView>
-        <View style={{ position: "absolute", bottom: 80, alignSelf: "center"}} >
-          {item.stock < 1 ? <Text style={styles.stock}>Out Of Stock</Text>:
-          
-        <View style={{ flexDirection: "row", bottom: 0, alignSelf: "center" }} >
-              {loading? 
-              <DotsLoader color="#E9691D" size={20}/>
-              :
-          <TouchableOpacity style={styles.carttouch} onPress={cartadd}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              {/* // <ActivityIndicator size="large" color="white" /> */}
-              <Text style={{ color: "white", fontSize: 20,  fontWeight: "bold" }} >Add To Cart</Text>
-            </View>
-          </TouchableOpacity>
-              }
-        </View>
-          }
-
-      </View> 
- </View>
-    )
-}
-
-
-
-
-
-
-
-// {"child_category_id": 50, "created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "description": "Test Description", "discounted_percentage": 10, "discounted_price": 585, "featured": 1, "get_attribute_values": [{"attribute": [Object], "attribute_id": 1, "created_at": "2021-08-20T10:03:01.000000Z", "id": 73, "product_id": 105, "updated_at": "2021-08-23T13:08:28.000000Z", "value": [Array]}, {"attribute": [Object], "attribute_id": 7, "created_at": "2021-08-20T13:07:00.000000Z", "id": 88, "product_id": 105, "updated_at": "2021-08-23T10:02:06.000000Z", "value": [Array]}], "get_shop": {"created_at": "2021-08-18T22:39:02.000000Z", "deleted_at": null, "description": "test", "get_vendor": {"address_one": "Nesciunt rerum temp", "address_two": "Nesciunt rerum temp", "city": "Incididunt eos accus", "country": "US", "created_at": "2021-08-18T22:39:02.000000Z", "email": "testvendor@gmail.com", "id": 40, "image": "1629326342-254890.jfif", "password": "$2y$10$fiGodS6VNYikSsLDGOush.4wgAixx51byY6u6ygkA2J81JhtWGxU2", "phone_number": "+1 24265 8979", "status": 1, "updated_at": "2021-08-30T12:45:08.000000Z", "user_role": 2, "username": "test vendor", "zipcode": 123456}, "id": 16, "image": "162984592417.jpg", "name": "TestShop", "status": 1, "updated_at": "2021-08-30T13:20:27.000000Z", "vendor_id": 40}, "getchildcategory": {"created_at": "2021-08-17T15:34:44.000000Z", "id": 50, "name": "Mirrors", "status": 1, "sub_category": {"category": [Object], "category_id": 8, "created_at": "2021-08-17T15:20:48.000000Z", "id": 14, "name": "Home Accessories", "status": 1, "updated_at": "2021-08-17T15:20:48.000000Z"}, "sub_category_id": 14, "updated_at": "2021-08-17T15:34:44.000000Z"}, "has_variations": 1, "id": 105, "images": [{"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 134, "name": "162947930220.jpg", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 135, "name": "16294793028.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}, {"created_at": "2021-08-20T08:08:22.000000Z", "deleted_at": null, "id": 136, "name": "162947930221.jfif", "product_id": 105, "updated_at": "2021-08-20T08:08:22.000000Z"}], "is_discounted": 2, "name": "Orla Gay", "price": 650, "shop_id": 16, "sku": "1688775486", "slug": "orla-gay-16-1629497220-50-209", "status": 1, "stock": 46, "updated_at": "2021-08-27T15:01:06.000000Z"}
-
-
-
-// const [itemcolor,setItemcolor] = useState()
-
-
-// for (let x = 0; x < atttri.length; x++) {
-//     // const element = array[x];
-//     setAttr[x](atttri[x].value[0])        
-// }
-
-
-// const [attr, setAttr] = useState([item.get_attribute_values[0].value[0]]);
-
-// const [itemcolor,setItemcolor]=useState([].length)
-// const [itematt,setItematt] = useState([
-//     "k","u","t"
-// ])
-
-// all:['a','b','c']
-// attribute:{'b':1,'c':2},
-{/* <FlatList
-        data={atttri}
-        keyExtractor={(item) => item.key}
-        vertical
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-            setAttr[0]("kjs")
-                  return(
-                      <View     style={styles.container}>
-    <Picker
-    // selectedValue={itemcolor}                            color
-    selectedValue={attr}
-    
-    onValueChange={(itemValue, itemIndex) =>{
-        // setItemcolor[itemIndex](itemValue)
-        for(let i =0; i<all.lenght;i++)
-        {
-          if(data-att== all[i])
-          {
-          attribute[''+all[i]+''] = itemValue;
-          }
+      .then(response => response.json())
+      .then(json => {
+        if (json[0]?.message == 'Successfully added to cart') {
+          setUpdateCart(true);
+          showMessage({
+            type: 'success',
+            icon: 'auto',
+            message: 'Your Product Has Been Add To Cart',
+            backgroundColor: '#E9691D',
+          });
+          setLoading(false);
+        } else {
+          showMessage({
+            type: 'danger',
+            icon: 'auto',
+            message: 'Something went wrong.',
+            backgroundColor: '#E9691D',
+          });
+          setLoading(false);
         }
-        
-        setItemcolor(attribute:{'b':1,'c':2})
-    }}
-    
-    >
-        <Picker.Item label={item.attribute.name} value={null} />
-        {item.value.map(items => (
-          <Picker.Item key={items}  label={items} value={items} />
-        ))}
-    </Picker>
+      })
+      .done();
+  };
+
+  const addToAttributeArray = (e, i) => {
+    attributeArray[i] = e;
+  };
+  function useForceUpdate() {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+  }
+  const forceUpdate = useForceUpdate();
+
+  const renderSlider = () => {
+    return (
+      <View
+        style={{
+          // backgroundColor: 'green',
+          marginBottom: hp('20'),
+          marginTop: hp('2'),
+        }}>
+        <View style={styles.bottomImageScroller}>
+          {subCatLoading ? (
+            <SkeletonPlaceholder>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+                <View style={{...styles.imagss, marginRight: wp('5')}}></View>
+              </View>
+            </SkeletonPlaceholder>
+          ) : (
+            subCatdata?.length > 0 && (
+              <View>
+                <View style={{...styles.recentTextContainer}}>
+                  {/* <TouchableOpacity> */}
+                  <Text style={{...styles.sliderText, color: 'grey'}}>
+                    Related Products
+                  </Text>
+                  {/* </TouchableOpacity> */}
+                  {/* <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('subcatdetails', {
+                    item: item?.child_category_id,
+                    screenData: 'subCat',
+                  })
+                }>
+                <Text style={styles.sliderText}>See All</Text>
+              </TouchableOpacity> */}
+                </View>
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  nestedScrollEnabled
+                  horizontal={true}>
+                  {subCatdata?.map(res => {
+                    return (
+                      <View style={styles.bottomimages}>
+                        <Image
+                          style={styles.imagss}
+                          // source={{
+                          //   uri: `${Images_API}/${res.get_products.images[0].name}`,
+                          // }}
+                          source={{
+                            uri: `${Images_API}/${res?.images[0]?.name}`,
+                          }}
+                          // source={{
+                          //   uri: 'https://picsum.photos/200',
+                          // }}
+                        />
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )
+          )}
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.main}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="arrow-back-sharp"
+            size={35}
+            color="#512500"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.te}>Details</Text>
+
+        <View
+          style={{
+            ...styles.icon,
+            marginLeft: wp('0'),
+            marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+          }}>
+          <HomeCartIcon
+            isLoggedIn={isLoggedIn}
+            updateCart={updateCart}
+            navigations={navigationProps}
+          />
+        </View>
+      </View>
+      {/* {Viewpager()} */}
+      <ScrollView
+        contentContainerStyle={
+          {
+            // alignSelf: 'center',
+          }
+        }>
+        <View style={{margin: 20}}>
+          {/* <FlatList
+            data={imm}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignSelf: 'center',
+              // backgroundColor: 'red',
+            }}
+            renderItem={({item}) => {
+              // console.log(490, item?.name);
+              return (
+                <Image
+                  resizeMode="cover"
+                  source={{uri: `${Images_API}/${item?.name}`}}
+                  style={styles.imm}
+                />
+              );
+            }}
+          /> */}
+          <View style={{height: hp('45')}}>
+            <Carousel
+              data={imm}
+              layout={'stack'}
+              useScrollView={true}
+              ref={isCarousel}
+              layoutCardOffset={'8'}
+              contentContainerStyle={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+              sliderWidth={wp('100')}
+              itemWidth={wp('100')}
+              itemHeight={hp('100')}
+              renderItem={({item}) => {
+                return (
+                  <Image
+                    resizeMode="cover"
+                    // source={{uri: item?.imgUrl}}
+                    source={{uri: `${Images_API}/${item?.name}`}}
+                    style={styles.imm}
+                  />
+                );
+              }}
+            />
+          </View>
+
+          <View style={styles.box}>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
+            <Text style={styles.tep}>
+              Category : {item?.getchildcategory?.name}
+            </Text>
+            {item?.is_discounted == 2 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginTop: hp('0.5%'),
+                  }}>
+                  Price :
+                </Text>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    textDecorationLine: 'line-through',
+                    marginTop: hp('0.5%'),
+                  }}>
+                  $ {item?.price}
+                </Text>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginTop: hp('0.5%'),
+                  }}>
+                  {' '}
+                  $ {item?.discounted_price}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                  }}>
+                  Prices :
+                </Text>
+
+                <Text
+                  style={{
+                    color: '#512500',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                  }}>
+                  $ {item?.price}
+                </Text>
+              </View>
+            )}
+            <Text style={styles.tep}>SKU : {item?.sku}</Text>
+            <Text style={[styles.tep, {fontWeight: 'bold'}]}>
+              Description :
+            </Text>
+            <Text
+              style={{
+                color: 'gray',
+                textAlign: 'justify',
+                marginTop: hp('0.5%'),
+              }}>
+              {item?.description}
+            </Text>
+          </View>
+          {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
+          {item?.get_attribute_values?.length == 0 ? null : (
+            <View style={styles.optionsContainer}>
+              {item?.get_attribute_values &&
+                item?.get_attribute_values?.map((res, i) => {
+                  const itemName = res?.attribute?.name;
+                  return (
+                    <View>
+                      <Text style={styles.attributeText}>
+                        {/* {res?.attribute?.name} */}
+                        {itemName}
+                      </Text>
+                      <View style={styles.pickerParentStyle}>
+                        <Picker
+                          mode="dialog"
+                          selectedValue={attributeArray[i]}
+                          onValueChange={e => {
+                            addToAttributeArray(e, i);
+                            forceUpdate();
+                          }}
+                          collapsable={false}
+                          style={styles.pickerStyle}>
+                          <Picker.Item
+                            key={i}
+                            value={null}
+                            label={'Select Attribute'}
+                          />
+                          {res?.value?.map(res => {
+                            return (
+                              <Picker.Item
+                                key={res?.attribute_id}
+                                value={res}
+                                label={res}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                    </View>
+                  );
+                })}
+            </View>
+          )}
+
+          {/* //ljsadklfj */}
+
+          {isLoggedIn == true && (
+            <View style={styles.box}>
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  numberOfLines={2}
+                  style={{
+                    color: color.defaultcolor,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    fontSize: hp('2.5'),
+                    width: wp('51'),
+                  }}>
+                  Vendor: {item['get_shop']['get_vendor']['username']}
+                </Text>
+                <TouchableOpacity
+                  style={styles.followButton}
+                  onPress={() => pFollowApi()}>
+                  <View style={styles.followViewContainer}>
+                    <Text style={styles.followText}>
+                      {followLoader == true ? (
+                        <ActivityIndicator
+                          style={{alignSelf: 'center', marginTop: hp('2')}}
+                          // style={{marginTop: hp('5')}}
+                          size={'small'}
+                          color={'white'}
+                        />
+                      ) : getFollow.status == 1 ? (
+                        'Unfollow'
+                      ) : (
+                        'Follow'
+                      )}
+                    </Text>
+                    {followLoader == false && getFollow.status == 1 ? (
+                      <AntDesign
+                        name="minus"
+                        size={15}
+                        color="white"
+                        style={styles.followIcon}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="ios-add"
+                        size={15}
+                        color="white"
+                        style={styles.followIcon}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <Text></Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.vendorLeftTextStyle}>Store Name:</Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['name']}
+                </Text>
+              </View>
+              <Text></Text>
+              <View style={{flexDirection: 'row', width: wp('70')}}>
+                <Text style={styles.vendorLeftTextStyle}>Address: </Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['get_vendor']['address_one'] +
+                    item['get_shop']['get_vendor']['address_two']}
+                </Text>
+              </View>
+              <Text></Text>
+              <View style={{flexDirection: 'row', width: wp('70')}}>
+                <Text style={styles.vendorLeftTextStyle}>Phone: </Text>
+                <Text style={styles.vendorRightText}>
+                  {item['get_shop']['get_vendor']['phone_number']}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.box}>
+            <Text style={{color: color.defaultcolor}}>Submit Your Review</Text>
+            <Text></Text>
+            <Text style={{color: 'gray'}}>
+              Your email address will not be published. Required fields are
+              marked *
+            </Text>
+            <Text></Text>
+            <StarRating
+              containerStyle={{width: wp('10')}}
+              starSize={20}
+              fullStarColor="#E9691D"
+              starStyle={{marginBottom: hp('0.5'), marginTop: hp('0.5')}}
+              maxStars={5}
+              rating={starCount}
+              selectedStar={rating => onStarRatingPress(rating)}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+                color: 'black',
+                height: hp('8'),
+                width: wp('85'),
+                alignSelf: 'center',
+                paddingTop: hp('1.1'),
+              }}
+              multiline
+              value={reviews}
+              onChangeText={text => setreview(text)}
+              placeholder="Write Your Reviews Here.."
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+                color: 'black',
+                height: hp('6'),
+                width: wp('85'),
+                alignSelf: 'center',
+              }}
+              value={reviewsName}
+              placeholder="Enter Your Name*"
+              onChangeText={text => setreviewName(text)}
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 5,
+                paddingLeft: wp('5'),
+                color: 'black',
+                height: hp('6'),
+                width: wp('85'),
+                alignSelf: 'center',
+              }}
+              placeholder="Enter Your Email*"
+              value={reviewsEmail}
+              autoCapitalize="none"
+              onChangeText={text => setreviewEmail(text)}
+              placeholderTextColor={'gray'}
+            />
+            <Text></Text>
+            <TouchableOpacity
+              style={styles.submitreviews}
+              onPress={() =>
+                isLoggedIn == true
+                  ? submitReviews()
+                  : showMessage({
+                      type: 'warning',
+                      icon: 'auto',
+                      message: 'Kindly login to give a review.',
+                      backgroundColor: '#E9691D',
+                    })
+              }>
+              {reviewLoading ? (
+                <ActivityIndicator size={'small'} color={'white'} />
+              ) : (
+                <Text style={{color: 'white', fontSize: hp('2')}}>Submit</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          {allreviewsLoading ? (
+            <ActivityIndicator
+              style={{marginTop: hp('5')}}
+              size={'large'}
+              color={color.themColorPrimary}
+            />
+          ) : allReviews?.length > 0 ? (
+            <ScrollView
+              nestedScrollEnabled={true}
+              showsVerticalScrollIndicator={false}
+              style={{
+                ...styles.box,
+                height: 'auto',
+                maxHeight: hp('50'),
+              }}>
+              {/* <View> */}
+              {allReviews.map(res => {
+                return (
+                  <View style={{flexDirection: 'row'}}>
+                    {/* <Avatar
+                      // rounded
+                      size={50}
+                      source={require('../../images/avata.png')}
+                    /> */}
+                    <Image
+                      source={require('../../images/avata.png')}
+                      // width={wp('5')}
+                      // height={hp('5')}
+                      resizeMode="contain"
+                      style={{
+                        // borderRadius: hp('20'),
+                        width: wp('15'),
+                        height: hp('9'),
+                        marginRight: wp('5'),
+                      }}
+                    />
+                    <View>
+                      <Text style={{color: 'gray'}}>{res?.name}</Text>
+                      <StarRating
+                        containerStyle={{width: wp('10')}}
+                        starSize={15}
+                        fullStarColor="#E9691D"
+                        starStyle={{
+                          marginBottom: hp('0.5'),
+                          marginTop: hp('0.5'),
+                        }}
+                        maxStars={5}
+                        rating={res?.stars}
+                        disabled={true}
+                        // selectedStar={rating => onStarRatingPress(rating)}
+                      />
+                      <Text numberOfLines={10} style={{color: 'gray'}}>
+                        {res?.review}
+                      </Text>
+                      <View
+                        style={{
+                          ...styles.devider,
+                          width: wp('60'),
+                          alignSelf: 'center',
+                          backgroundColor: '#C8C8C8',
+                        }}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+              {/* </View> */}
+            </ScrollView>
+          ) : (
+            <>
+              <Image
+                resizeMode="contain"
+                style={{
+                  // borderRadius: hp('20'),
+                  width: wp('30'),
+                  height: hp('20'),
+                  alignSelf: 'center',
+                  // marginRight: wp('10'),
+                  marginTop: hp('5'),
+                }}
+                source={require('../../images/newVec.png')}
+              />
+              <Text
+                style={{color: color.textColorRedCart, textAlign: 'center'}}>
+                No reviews yet.
+              </Text>
+            </>
+          )}
+
+          {renderSlider()}
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: Platform?.OS == 'ios' ? 110 : 80,
+          alignSelf: 'center',
+        }}>
+        {item?.stock < 1 ? (
+          <View style={{...styles.carttouch, height: hp('6')}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              {/* // <ActivityIndicator size="large" color="white" /> */}
+              <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+                Out of stock
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <View style={{flexDirection: 'row', bottom: 0, alignSelf: 'center'}}>
+            {loading ? (
+              <DotsLoader color="#E9691D" size={20} />
+            ) : (
+              <View style={styles.buttonParent}>
+                {item?.is_wishlisted == true ? (
+                  <View style={styles.favButton}>
+                    <Ionicons
+                      style={{color: 'white'}}
+                      name="heart"
+                      color="#B64400"
+                      size={35}
+                    />
+                  </View>
+                ) : (
+                  <View style={styles.favButton}>
+                    <Ionicons
+                      style={{color: 'white'}}
+                      name="heart-outline"
+                      color="#B64400"
+                      size={35}
+                    />
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={styles.carttouch}
+                  onPress={() => {
+                    validateCartAdd();
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    {/* // <ActivityIndicator size="large" color="white" /> */}
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                      }}>
+                      Add To Cart
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+      {/* {renderSlider()} */}
     </View>
-
-);
-      }}
-    /> */}
-
-
-
-
-
-
-
-
-// <TouchableOpacity onPress={() => {
-//           FlatListPicker.showPickerList()
-//           // this.FlatListPicker.hidePickerList()
-//         }}
-//         >
-//         </TouchableOpacity>
-//         <FlatListPicker
-//         //   ref={ref => { FlatListPicker = ref }}
-//           data={ele}
-//           containerStyle={styles.container}
-//           dropdownStyle={{ width: 180 }}
-//           dropdownTextStyle={{ fontSize: 15}}
-//           pickedTextStyle={{ color: 'black', fontWeight: 'bold' }}
-//           animated="slide"
-//           defaultValue={item.get_attribute_values[0].attribute.name}
-          
-//         //   renderDropdownIcon={() =>
-//         // <Picker.Item value={} />
-//         // }
-//           onValueChange={(value, index) => alert(`Selected ${value}`)}
-//         />
+  );
+}

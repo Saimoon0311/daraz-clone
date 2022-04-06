@@ -1,34 +1,41 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {color} from "../../config/color"
+import {alignItems} from 'styled-system';
+import {color} from '../../config/color';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor,
-flex:1
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFDDC9',
+    // backgroundColor: 'red',
     shadowColor: '#000',
-    shadowOffset: {width: 1, height: 1},
-    shadowOpacity: 10,
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 5,
+    height: hp(Platform?.OS == 'ios' ? '11' : '9'),
+    // height: hp('9'),
   },
   icon: {
-    margin: 20,
+    // margin: 20,
+
+    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2.7'),
   },
   te: {
     textAlign: 'center',
     fontSize: 18,
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: 25,
+    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.7'),
+    width: wp('70'),
   },
   loader: {
     justifyContent: 'center',
@@ -39,25 +46,27 @@ flex:1
     marginTop: 100,
   },
   body: {
-    margin: 20,
+    marginTop: hp('3%'),
+    marginLeft: wp('1%'),
   },
   box: {
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 18,
     backgroundColor: '#F3F5F7',
-    marginRight: 10,
+    // marginRight: wp('3%'),
     shadowColor: '#000',
     // width:354,
-    // shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
     elevation: 5,
     marginBottom: 10,
+    marginTop: hp('2'),
   },
   im: {
-    width: wp('43'),
-    height: hp('20'),
+    width: wp('41'),
+    height: hp('15'),
     borderRadius: 30,
     // shadowColor: '#000',
     // width:354,
@@ -73,9 +82,9 @@ flex:1
   },
   text: {
     color: '#512500',
-    marginLeft: 5,
     fontSize: 16,
-    marginTop: 5,
+    paddingTop: hp('2%'),
+    paddingLeft: wp('2%'),
   },
   cart: {
     backgroundColor: '#EEB08B',
@@ -101,5 +110,60 @@ flex:1
     textAlign: 'center',
     fontSize: 14,
     bottom: 10,
+    marginTop: hp('5%'),
   },
+  fea: {
+    marginLeft: 10,
+    marginTop: 10,
+    backgroundColor: '#b64400',
+    color: 'white',
+    width: wp('15%'),
+    borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 10,
+  },
+
+  imm: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('20%'),
+  },
+  tee: {
+    color: '#512500',
+    fontSize: 20,
+    marginBottom: 10,
+  },
+
+  maior: {
+    width: wp('70%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignItems: 'center',
+    marginTop: 42,
+    borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+
+  or: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  filterView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: wp('90'),
+    alignSelf: 'center',
+    marginTop: hp('2'),
+    marginBottom: hp('-2'),
+  },
+  filterText: {color: '#512500', fontSize: hp('2.5'), fontWeight: 'bold'},
 });

@@ -1,21 +1,29 @@
-import {StyleSheet} from "react-native"
-import {color} from "../../config/color"
+import {StyleSheet} from 'react-native';
+import {color} from '../../config/color';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
 export const styles = StyleSheet.create({
-  main:{
-backgroundColor:color.defaultBackgroundColor
+  main: {
+    backgroundColor: color.defaultBackgroundColor,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: wp('36%'),
+    // paddingLeft: wp('36%'),
     borderBottomWidth: 0.5,
+    // height:hp(''),
     paddingBottom: 10,
-    
+    paddingTop: 10,
+    // backgroundColor: 'yellow',
+
+    // shadowColor: '#000',
+    // shadowOffset: {width: 1, height: 3},
+    // shadowOpacity: 0.4,
+    // // shadowRadius: 2,
+    // elevation: 5,
   },
   ic: {
     marginLeft: 'auto',
@@ -28,16 +36,16 @@ backgroundColor:color.defaultBackgroundColor
     marginBottom: 12,
   },
   see: {
-    marginTop: 13,
+    marginTop: hp('2'),
     backgroundColor: '#F3F5F7',
     marginLeft: 'auto',
     marginRight: 22,
-    width: 63,
-    height: 23,
+    width: wp('20'),
+    height: hp('4.5'),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
-    borderWidth: 0.1,
+    borderWidth: 0.2,
   },
   searchBarWrap: {
     justifyContent: 'space-around',
@@ -46,6 +54,8 @@ backgroundColor:color.defaultBackgroundColor
     alignItems: 'center',
     alignSelf: 'center',
     width: wp('80%'),
+    marginBottom: hp('1'),
+    marginTop: hp('1'),
   },
   item: {
     backgroundColor: '#716f25',
@@ -68,7 +78,12 @@ backgroundColor:color.defaultBackgroundColor
     width: wp('63%'),
     borderColor: color.defaultcolor,
     borderWidth: 1,
-    height: hp('6%'),
+    height: hp('5%'),
     paddingLeft: 10,
+    color: color.defaultcolor,
+    fontSize: hp('2'),
+    // top: 0,
+    paddingBottom: hp('1'),
+    // color:"red"
   },
 });
