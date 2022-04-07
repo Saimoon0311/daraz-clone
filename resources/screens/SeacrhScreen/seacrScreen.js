@@ -22,6 +22,7 @@ import {
   ADDTOWISHLIST,
   API_BASED_URL,
   CATEGORY,
+  filterProductUrl,
   Images_API,
   SEARCH,
   searchDataWithOutUserID,
@@ -45,6 +46,8 @@ import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 import {getUserData} from '../../utils/utils';
+import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
+import Foundation from 'react-native-vector-icons/Foundation';
 
 export default function seacrhScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -54,6 +57,12 @@ export default function seacrhScreen({navigation}) {
   const [allData, setAllData] = useState();
   const [loading, setLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [filterModal, setFilterModal] = useState(false);
+  const [filter, setFilter] = useState(false);
+  const [catergory, setCategory] = useState(null);
+  const [end, setEnd] = useState('2500000');
+  const [start, setStart] = useState('0');
+  const [checksubcat, setChecksubcat] = useState(false);
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -85,7 +94,6 @@ export default function seacrhScreen({navigation}) {
     navigation.navigate('Cart');
   };
   const onSubmitSeacrhItem = async confirm => {
-    // console.log(72, confirm);
     setLoading(true);
     if (seacrhData !== '' && seacrhData !== null) {
       fetch(
@@ -95,12 +103,9 @@ export default function seacrhScreen({navigation}) {
       )
         .then(response => response.json())
         .then(json => {
-          // console.log(86, json);
           setAllData(json[0]), setLoading(false);
         })
-        .catch(error => {
-          // console.log(90, error);
-        });
+        .catch(error => {});
     } else {
       setLoading(false);
       showMessage({
@@ -113,8 +118,6 @@ export default function seacrhScreen({navigation}) {
   };
 
   const addtowishlist = id => {
-    // console.log(126, id);
-    // console.log(127, userId);
     fetch(`${ADDTOWISHLIST}/${id}/${userId}`)
       .then(async response => await response.json())
       .then(json => {
@@ -149,12 +152,7 @@ export default function seacrhScreen({navigation}) {
       });
   };
   const routeToLogin = () => {
-    // console.log(22222);
     navigation.navigate('MyTabs');
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{name: 'MyTabs'}],
-    // });
   };
   const renderCards = item => {
     // console.log(207, item);
@@ -276,23 +274,37 @@ export default function seacrhScreen({navigation}) {
       </View>
     );
   };
+  const applyFilter = async (category, start, end) => {
+    setLoading(true);
+    categoryDataCall(category, start, end);
+  };
+  const categoryDataCall = async (category, start, end) => {
+    setCategory(category), setStart(start);
+    setEnd(end);
+    var userID = isLoggedIn == true ? userId : '0';
+    var price = start + ',' + end;
 
-  // useEffect(() => {
-  //   async () => {
-  //     const user = await getUserData();
-  //     setUserId(user.id);
-  //     console.log(48, user);
-  //   };
-  // }, []);
+    var checkUrlType = `${
+      filterProductUrl + userID
+    }/search?filter[pricebetween]=${price}&filter[name]=${seacrhData}`;
+
+    fetch(checkUrlType)
+      .then(response => response.json())
+      .then(json => {
+        setAllData(json[0]);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log(554, error);
+      });
+  };
   useEffect(() => {
     (async () => {
-      // await checkStatus();
       if (isFocused) {
         await checkStatusForCartUpdate();
       } else {
         console.log('Screen is not focused');
       }
-      // await datacallss();
     })();
   }, [isFocused]);
   return (
@@ -300,9 +312,6 @@ export default function seacrhScreen({navigation}) {
       <View style={styles.appbarStyle}>
         <Text style={styles.head}>Search</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-          {/* <TouchableOpacity>
-            <Ionicons size={37.5} color="#512500" name="chevron-back-outline" />
-          </TouchableOpacity> */}
           <View style={styles.search}>
             <TextInput
               placeholder="Search..."
@@ -312,26 +321,13 @@ export default function seacrhScreen({navigation}) {
               value={seacrhData}
               autoFocus={false}
               focusable={true}
-              // onPressIn={() => console.log(111)}
+              autoCorrect={false}
               onChangeText={text => setSearchData(text)}
-              //               autoFocus={ena}
-              // onTouchCancel={}
-              // keyboardAppearance={true}
             />
             <TouchableOpacity onPress={() => checkStatus()}>
               <Ionicons name="search" color="#512500" size={20} />
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-            <Ionicons
-              size={37.5}
-              color="#512500"
-              name="cart"
-              style={{
-                marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.5'),
-              }}
-            />
-          </TouchableOpacity> */}
           <View
             style={{
               marginTop: hp(Platform?.OS == 'ios' ? '3' : '0.7'),
@@ -343,6 +339,23 @@ export default function seacrhScreen({navigation}) {
           </View>
         </View>
       </View>
+      {allData != null && (
+        <TouchableOpacity
+          onPress={() => setFilterModal(true)}
+          style={styles.filterView}>
+          <Text style={styles.filterText}>Filter</Text>
+          <Foundation size={35} color="#512500" name="filter" />
+        </TouchableOpacity>
+      )}
+      <FilterModal
+        subCatCheck={checksubcat}
+        filterModal={filterModal}
+        onPress={() => setFilterModal(false)}
+        applyFilter={applyFilter}
+        filterValue={filter}
+        setFilter={confirm => setFilter(confirm)}
+      />
+
       {loading ? (
         <View style={{margin: hp('22%'), alignSelf: 'center'}}>
           <BubblesLoader size={50} dotRadius={10} color="#512500" />
@@ -371,22 +384,22 @@ export default function seacrhScreen({navigation}) {
           </Text>
         </View>
       ) : (
-        <FlatList
-          // data={subcatdata}
-          data={allData}
-          // keyExtractor={item => item.key}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          contentContainerStyle={{
-            paddingBottom: hp('20%'),
-            width: wp('100%'),
-            alignSelf: 'flex-start',
-          }}
-          renderItem={({item, index}) => {
-            return renderCards(item);
-          }}
-        />
+        <>
+          <FlatList
+            data={allData}
+            keyExtractor={(item, index) => index.toString()}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            contentContainerStyle={{
+              paddingBottom: hp('20%'),
+              width: wp('100%'),
+              alignSelf: 'flex-start',
+            }}
+            renderItem={({item, index}) => {
+              return renderCards(item);
+            }}
+          />
+        </>
       )}
     </View>
   );

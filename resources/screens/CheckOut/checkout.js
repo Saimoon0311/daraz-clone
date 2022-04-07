@@ -11,6 +11,7 @@ import {
   ImageBackground,
   Platform,
   Modal,
+  Linking,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -25,10 +26,11 @@ import {
   Images_API,
   ORDERPLACE,
   SUBCATPRODUCTDATA,
-  StripePKey,
   GETCLIENTSECRET,
   SENDINTENTANDORDERDATA,
   shippingDetailsApi,
+  StripePKeyUrl,
+  // StripePKey,
 } from '../../config/url';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
@@ -81,6 +83,7 @@ export default function checkOut({navigation, route}) {
   const [clientSecret, setClientSecret] = useState('');
   const [stripeData, setStripeData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showWhatsApp, setWhatsApp] = useState(false);
 
   const [accessToken, setAccessToken] = useState(null);
   const [approvalUrl, setApprovalUrl] = useState(null);
@@ -102,13 +105,34 @@ export default function checkOut({navigation, route}) {
   const [billingState, setBillingState] = useState('');
   const [billingZipCode, setBillingZipCode] = useState('');
   const [billingPhone, setBillingPhone] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('+14707758326');
+  const [orderDetails, setOrderDetails] = useState();
+
+  const whatAppPhone = () => {
+    // Linking.openURL(`whatsapp://send?text=hello&phone=${mobileNumber}`);
+    var orderNumber = 'Order Number :' + ' ' + orderDetails.order_number;
+    var grandTotal = 'Grand Total :' + ' ' + orderDetails.grandTotal;
+    var order = orderNumber + '\n' + grandTotal;
+    Linking.openURL(`whatsapp://send?phone=${mobileNumber}&text=${order}`);
+  };
+
+  var StripePKey =
+    'pk_live_51K5P49EoiJYB55N4fClLpBw782KOcOakMNZGmbx2KSVJ59cBhoyIAY4WIF4bINlTF1g0h9rImBDCHEJj9KF2UymM00CL5YnH4E';
   const showAlert = () => {
     setTimeout(() => {
       setAlert(true);
     }, 1000);
   };
   const [checkBox, setCheckBox] = useState('unchecked');
-
+  const getStriperKey = () => {
+    fetch(StripePKeyUrl)
+      .then(res => res.json())
+      .then(json => {
+        StripePKey = json.pk_key;
+        console.log(117, json);
+      })
+      .catch(err => console.log(err));
+  };
   //ADD localhost address of your server
   const API_URL =
     Platform?.OS == 'ios' ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
@@ -123,6 +147,7 @@ export default function checkOut({navigation, route}) {
 
   useEffect(() => {
     (async () => {
+      getStriperKey();
       showAlert();
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
@@ -165,6 +190,7 @@ export default function checkOut({navigation, route}) {
           type: 'danger',
           icon: 'danger',
           message: 'Something is wrong',
+          backgroundColor: '#E9691D',
         });
       });
   };
@@ -328,7 +354,7 @@ export default function checkOut({navigation, route}) {
           message: 'Error while fetching client data.',
           backgroundColor: '#E9691D',
         });
-        // console.log(122, err);
+        console.log(122, err);
       });
   };
 
@@ -347,7 +373,7 @@ export default function checkOut({navigation, route}) {
         message: 'Error while fetching client data.',
         backgroundColor: '#E9691D',
       });
-      // console.log(119, error);
+      console.log(119, error);
     } else {
       validateHitOrderPlaceApi('stripe', data);
     }
@@ -359,7 +385,7 @@ export default function checkOut({navigation, route}) {
     });
 
     if (error) {
-      // console.log(156, error);
+      console.log(156, error);
       setIsLoading(false);
     } else {
       const {paymentIntent, error} = await retrievePaymentIntent(data);
@@ -852,13 +878,7 @@ export default function checkOut({navigation, route}) {
     if (buttonState == 1) {
       return (
         <View>
-          {/* {topButton()} */}
           {shippingAddress()}
-          {/* <NativeBaseProvider>
-            <View style={styles.checkBoxButtonContainer}>
-              <CheckBoxButton />
-            </View>
-          </NativeBaseProvider> */}
           <CheckBox
             label={'Same as Shipping Address '}
             status={checkBox}
@@ -868,7 +888,6 @@ export default function checkOut({navigation, route}) {
           />
           {checkBox == 'unchecked' && billingAddress()}
 
-          {/* {deliveryMethod()} */}
           {orderDetailsRenderdata()}
           {bottomButton()}
         </View>
@@ -885,18 +904,8 @@ export default function checkOut({navigation, route}) {
     } else if (buttonState == 3) {
       return (
         <View>
-          {/* {topButton()} */}
           {paymentMethod()}
           {orderDetailsRenderdata()}
-          {/* {paymentMethodValue == 'Stripe Payment' && (
-            <TouchableOpacity
-              style={styles.payButton}
-              onPress={() => startPaymentProcess()}>
-              <Text style={styles.or}>Continue Stripe</Text>
-
-            </TouchableOpacity>
-          )} */}
-
           {bottomButton()}
         </View>
       );
@@ -1053,7 +1062,7 @@ export default function checkOut({navigation, route}) {
   };
   const quantityCalculate = (quantity, prices) => {
     var totlaPrice = quantity * prices;
-    return totlaPrice;
+    return totlaPrice.toFixed(2);
   };
 
   const orderDetailsAlldata = () => {
@@ -1070,13 +1079,11 @@ export default function checkOut({navigation, route}) {
               width: wp('79.5'),
             }}>
             <Text
-              // numberOfLines={1}
               style={{
                 ...styles.subtotalText,
                 fontWeight: 'normal',
                 width: wp('45'),
                 fontSize: hp('2'),
-                // backgroundColor: 'yellow',
               }}>
               {res?.get_products?.name} x {res?.quantity}{' '}
             </Text>
@@ -1235,7 +1242,7 @@ export default function checkOut({navigation, route}) {
   };
 
   const hitOrderPlaceApi = async paymentIntentdata => {
-    // console.log(753, paymentIntentdata);
+    console.log(753, paymentIntentdata);
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
@@ -1266,8 +1273,6 @@ export default function checkOut({navigation, route}) {
       payment_method: paymentMethodValue,
     });
 
-    // console.log(773, raw);
-
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -1287,7 +1292,6 @@ export default function checkOut({navigation, route}) {
           sendPaymentIntentData(result, paymentIntentdata);
         } else {
           setIsLoading(false);
-
           showMessage({
             type: 'success',
             icon: 'success',
@@ -1295,6 +1299,13 @@ export default function checkOut({navigation, route}) {
             backgroundColor: '#E9691D',
           });
           setButtonState(4);
+          setOrderDetails({
+            order_number: result.order_number,
+            grandTotal: result.order.grand_total,
+          });
+          paymentMethodValue == 'Orange Pay'
+            ? setWhatsApp(true)
+            : setWhatsApp(false);
         }
       })
       .catch(error => {
@@ -1334,10 +1345,8 @@ export default function checkOut({navigation, route}) {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
         if (result?.success == true) {
           setIsLoading(false);
-
           showMessage({
             type: 'success',
             icon: 'success',
@@ -1365,7 +1374,7 @@ export default function checkOut({navigation, route}) {
           message: 'Something went wrong.',
           backgroundColor: '#E9691D',
         });
-        // console.log('841', error);
+        console.log('841', error);
       });
   };
   const orderCompleteScreen = () => {
@@ -1373,11 +1382,6 @@ export default function checkOut({navigation, route}) {
       <>
         <ScrollView>
           <View style={{alignItems: 'center', marginTop: hp('5')}}>
-            {/* <Ionicons
-              name="checkmark-circle-outline"
-              size={hp('30')}
-              color={color.themColorPrimary}
-            /> */}
             <Image
               source={require('../../images/9812.png')}
               style={{width: wp('60'), height: hp('30'), marginBottom: hp('2')}}
@@ -1385,84 +1389,6 @@ export default function checkOut({navigation, route}) {
             <Text style={{color: color.themColorPrimary, fontSize: hp('3')}}>
               Success
             </Text>
-            {/* <View style={styles.box}>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>Order ID:</Text>
-                  <Text style={styles.parentCarddTextStyle}>444455545</Text>
-                </View>
-              </View>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>Order ID:</Text>
-                  <Text style={styles.parentCarddTextStyle}>444455545</Text>
-                </View>
-              </View>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>Status:</Text>
-                  <Text style={styles.parentCarddTextStyle}>pending</Text>
-                </View>
-              </View>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>Date:</Text>
-                  <Text style={styles.parentCarddTextStyle}>11-2-2021</Text>
-                </View>
-              </View>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>Total:</Text>
-                  <Text style={styles.parentCarddTextStyle}>$1254</Text>
-                </View>
-              </View>
-              <View style={styles.parentCardIconHolder}>
-                <AntDesign
-                  name="shoppingcart"
-                  color={color.themColorPrimary}
-                  size={hp('3')}
-                  style={styles.iconStyle}
-                />
-                <View style={styles.parentCardRow}>
-                  <Text style={styles.parentCarddTextStyle}>
-                    Payment method:
-                  </Text>
-                  <Text style={styles.parentCarddTextStyle}>
-                    Cash on delivery
-                  </Text>
-                </View>
-              </View>
-            </View> */}
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.navigate('Home')}>
@@ -1482,10 +1408,7 @@ export default function checkOut({navigation, route}) {
         {header('Check Out')}
         {buttonState == 4 ? null : topButton()}
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* {cardDetails()} */}
           {renderScreen()}
-          {/* {bottomButton()} */}
-          {/* {orderCompleteScreen()} */}
         </ScrollView>
       </View>
       {approvalUrl && (
@@ -1531,6 +1454,33 @@ export default function checkOut({navigation, route}) {
         }}
         onCancelPressed={() => {
           setAlert(false);
+        }}
+      />
+      <AwesomeAlert
+        show={showWhatsApp}
+        showProgress={false}
+        title="Contact With Owner"
+        titleStyle={{color: 'black', fontWeight: 'bold'}}
+        message="For complete your order please contact the owner!"
+        contentContainerStyle={{width: wp('80%')}}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Whatsapp"
+        cancelText="No"
+        messageStyle={{textAlign: 'center', color: 'gray'}}
+        cancelButtonStyle={styles.buttonstyleCancelWhatapp}
+        cancelButtonTextStyle={{fontSize: hp('1.9')}}
+        confirmButtonTextStyle={{fontSize: hp('1.9')}}
+        confirmButtonStyle={styles.buttonstyleWhatapp}
+        onConfirmPressed={() => {
+          setWhatsApp(false);
+          whatAppPhone();
+        }}
+        onCancelPressed={() => {
+          setWhatsApp(false);
+          // whatAppPhone();
         }}
       />
     </StripeProvider>

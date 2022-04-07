@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFDDC9',
-    // backgroundColor: 'red',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
@@ -23,10 +22,8 @@ export const styles = StyleSheet.create({
     height: hp(Platform?.OS == 'ios' ? '10' : '9'),
   },
   icon: {
-    // margin: 20,
     marginTop: hp(Platform?.OS == 'ios' ? '5' : '2'),
     marginLeft: wp('3'),
-    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
   },
   box: {
     padding: 13,
@@ -45,15 +42,7 @@ export const styles = StyleSheet.create({
   imm: {
     width: wp('88%'),
     height: hp('40'),
-    // marginRight: 20,
-    // marginLeft: 3,
-    borderRadius: 20,
-    // shadowColor: '#000',
-    // shadowOffset: {width: 1, height: 3},
-    // shadowOpacity: 0.4,
-    // shadowRadius: 3,
-    // borderWidth: 0.1,
-    // borderColor: 'gray',
+    borderRadius: Platform.OS == 'android' ? 5 : 20,
   },
   te: {
     textAlign: 'center',
@@ -78,7 +67,6 @@ export const styles = StyleSheet.create({
   buttonParent: {
     width: wp('75%'),
     height: hp('7%'),
-    // backgroundColor: 'red',
     alignSelf: 'center',
     backgroundColor: '#E0998A',
     flexDirection: 'row',
@@ -100,14 +88,11 @@ export const styles = StyleSheet.create({
   },
   optionsContainer: {
     width: wp('90%'),
-    // height: hp('30%'),
     height: 'auto',
     paddingBottom: hp('5'),
     backgroundColor: '#F3F5F7',
-    // backgroundColor: 'red',
     borderRadius: 10,
     alignSelf: 'center',
-    // marginBottom: hp('20'),
     marginTop: hp('2'),
     alignItems: 'center',
     shadowColor: '#000',
@@ -119,13 +104,9 @@ export const styles = StyleSheet.create({
   pickerStyle: {
     width: wp('80'),
     height: hp(Platform?.OS == 'ios' ? '20' : '7'),
-    // height: hp('2'),
     color: '#512500',
     backgroundColor: Platform?.OS == 'ios' ? 'transparent' : '#FFDDC9',
-    // alignItems: 'center',
-    // padding: 0,
     alignSelf: 'center',
-    // opacity: 0.5,
     overflow: 'hidden',
   },
   pickerParentStyle: {
@@ -134,7 +115,6 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: hp(Platform?.OS == 'ios' ? '-5' : '2'),
-    // backgroundColor: '#FFDDC9',
     alignItems: 'center',
     justifyContent: 'center',
     color: '#512500',
@@ -148,7 +128,6 @@ export const styles = StyleSheet.create({
   favButton: {
     width: wp('15'),
     height: hp('7'),
-    // backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -156,7 +135,6 @@ export const styles = StyleSheet.create({
     width: wp('88%'),
     height: hp('5%'),
     alignSelf: 'center',
-    // backgroundColor: 'green',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -166,7 +144,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: wp('2'),
     marginTop: hp('3%'),
-    // backgroundColor: 'red',
   },
   sliderText: {
     fontSize: hp('2%'),
@@ -205,7 +182,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: wp('20.5'),
     fontSize: hp('1.5'),
-    // backgroundColor: 'yellow',
   },
   followViewContainer: {
     flexDirection: 'row',
@@ -231,8 +207,6 @@ export const styles = StyleSheet.create({
   },
   followIcon: {
     marginLeft: wp('1'),
-    // marginTop: hp('1'),
-    // marginTop: wp(Platform?.OS == 'ios' ? '3' : '1'),
   },
   vendorRightText: {
     color: 'black',

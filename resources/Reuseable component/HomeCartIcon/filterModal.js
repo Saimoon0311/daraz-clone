@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#512500',
     borderWidth: 0.2,
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   headings: {fontSize: hp('2.5'), color: '#512500'},
   priceInput: {

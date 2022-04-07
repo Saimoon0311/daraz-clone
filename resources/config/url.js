@@ -56,9 +56,14 @@ export const shippingDetailsApi = getApi(
 );
 export const checkVersionUrl = getApi('version_controls_api');
 export const deleteAllCartData = getApi('delete-an-order/');
-
+export const StripePKeyUrl = getApi('get-stripe-pk_key');
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 
-export const StripePKey =
-  'pk_live_51K5P49EoiJYB55N4fClLpBw782KOcOakMNZGmbx2KSVJ59cBhoyIAY4WIF4bINlTF1g0h9rImBDCHEJj9KF2UymM00CL5YnH4E';
+// export const StripePKey =
+//   'pk_live_51K5P49EoiJYB55N4fClLpBw782KOcOakMNZGmbx2KSVJ59cBhoyIAY4WIF4bINlTF1g0h9rImBDCHEJj9KF2UymM00CL5YnH4E';
+
+//  ********  MUQTADA  ************
+
+// export const StripePKey =
+//   'pk_test_51Iv4IMCmaCeXAIYUO9XFVzNRWLQgfnXgZCvHPYY68TJBtrkp94fFqMtlBSZdEQBH7uRTOwvDloNaOrBwUtaBglFs00BteHuRpV';

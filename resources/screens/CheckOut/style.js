@@ -235,4 +235,18 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: color.textColorRedCart,
   },
+  buttonstyleCancelWhatapp: {
+    width: wp('15'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
+  },
+  buttonstyleWhatapp: {
+    width: wp('30'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
+  },
 });

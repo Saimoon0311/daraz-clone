@@ -87,7 +87,7 @@ function AppTwo({navigation}) {
 
   useEffect(async () => {
     (async () => {
-      initializeStripe();
+      // initializeStripe();
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
       LogBox.ignoreAllLogs(true);
       const userData = await getUserData();

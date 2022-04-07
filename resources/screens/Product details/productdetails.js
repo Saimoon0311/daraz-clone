@@ -543,7 +543,7 @@ export default function Details({route, navigation}) {
               renderItem={({item}) => {
                 return (
                   <Image
-                    resizeMode="cover"
+                    resizeMode="contain"
                     // source={{uri: item?.imgUrl}}
                     source={{uri: `${Images_API}/${item?.name}`}}
                     style={styles.imm}
