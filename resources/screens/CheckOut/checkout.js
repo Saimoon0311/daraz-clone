@@ -107,7 +107,7 @@ export default function checkOut({navigation, route}) {
       setAlert(true);
     }, 1000);
   };
-  const [checkBox, setCheckBox] = useState('checked');
+  const [checkBox, setCheckBox] = useState('unchecked');
 
   //ADD localhost address of your server
   const API_URL =
@@ -148,7 +148,7 @@ export default function checkOut({navigation, route}) {
           setShippingAddress(json.shipping.shipping_address);
           setShippingCity(json.shipping.shipping_city);
           setShippingState(json.shipping.shipping_state);
-          setShippingZipCode(json.shipping_zipcode);
+          setShippingZipCode(json.shipping.shipping_zipcode);
           setShippingPhone(json.shipping.shipping_phone);
           if (json.billing.billing_fullname != null) {
             setBillingFullName(json.billing.billing_fullname);
@@ -818,13 +818,35 @@ export default function checkOut({navigation, route}) {
     );
   };
   const setdetails = () => {
-    setCheckBox('checked');
-    setBillingFullName(shippingFullName);
-    setBillingPhone(shippingPhone);
-    setBillingState(shippingState);
-    setBillingZipCode(shippingZipCode);
-    setBillingCity(shippingCity);
-    setBillingAddress(shippinggAddress);
+    if (
+      shippingFullName !== '' &&
+      shippingFullName !== null &&
+      shippingPhone !== '' &&
+      shippingPhone !== null &&
+      shippingCity !== '' &&
+      shippingCity !== null &&
+      shippinggAddress !== '' &&
+      shippinggAddress !== null &&
+      shippingZipCode !== '' &&
+      shippingZipCode !== null &&
+      shippingState !== '' &&
+      shippingState !== null
+    ) {
+      setCheckBox('checked');
+      setBillingFullName(shippingFullName);
+      setBillingPhone(shippingPhone);
+      setBillingState(shippingState);
+      setBillingZipCode(shippingZipCode);
+      setBillingCity(shippingCity);
+      setBillingAddress(shippinggAddress);
+    } else {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please first complete all shipping details',
+        backgroundColor: '#E9691D',
+      });
+    }
   };
   const renderScreen = () => {
     if (buttonState == 1) {
@@ -854,14 +876,9 @@ export default function checkOut({navigation, route}) {
     } else if (buttonState == 2) {
       return (
         <View>
-          {/* {topButton()} */}
-          {/* {accountDetailsSummy()} */}
           {shippingAddress()}
           {billingAddress()}
-          {/* {deliveryMethod()} */}
-          {/* {paymentMethod()} */}
           {orderDetailsRenderdata()}
-
           {bottomButton()}
         </View>
       );
@@ -870,6 +887,7 @@ export default function checkOut({navigation, route}) {
         <View>
           {/* {topButton()} */}
           {paymentMethod()}
+          {orderDetailsRenderdata()}
           {/* {paymentMethodValue == 'Stripe Payment' && (
             <TouchableOpacity
               style={styles.payButton}
@@ -913,17 +931,17 @@ export default function checkOut({navigation, route}) {
             cardDetails():
             null  
             } */}
-              {/* <Radio value="Cash on Delivery" my={1}>
-                <Text style={styles.radioText}>Cash on Delivery</Text>
-              </Radio> */}
-              {/* <View
+              <Radio value="Orange Pay" my={1}>
+                <Text style={styles.radioText}>Orange Pay</Text>
+              </Radio>
+              <View
                 style={{
                   ...styles.devider,
                   width: wp('75'),
                   alignSelf: 'center',
                   backgroundColor: '#C8C8C8',
                 }}
-              /> */}
+              />
               <Radio value="PayPal" my={1}>
                 <Text style={styles.radioText}>PayPal</Text>
               </Radio>
@@ -1052,27 +1070,33 @@ export default function checkOut({navigation, route}) {
               width: wp('79.5'),
             }}>
             <Text
-              numberOfLines={1}
+              // numberOfLines={1}
               style={{
                 ...styles.subtotalText,
                 fontWeight: 'normal',
-                width: wp('39'),
+                width: wp('45'),
                 fontSize: hp('2'),
+                // backgroundColor: 'yellow',
               }}>
               {res?.get_products?.name} x {res?.quantity}{' '}
             </Text>
-            <View style={{width: wp('10')}}></View>
+            <View style={{width: wp('5')}}></View>
             <View style={{...styles.subtotalPrice, width: wp('37')}}>
               <Text style={{...styles.subtotalPrice}} numberOfLines={1}>
                 {res?.get_products?.is_discounted == 2 ? (
                   <>
-                    <Text style={{textDecorationLine: 'line-through'}}>
+                    <Text
+                      style={{
+                        textDecorationLine: 'line-through',
+                      }}>
                       $ {itemPrice}{' '}
                     </Text>
                     $ {quantityCalculate(itemQuantity, discountedPrice)}
                   </>
                 ) : (
-                  <Text>$ {quantityCalculate(itemQuantity, itemPrice)}</Text>
+                  <Text style={{color: 'black'}}>
+                    $ {quantityCalculate(itemQuantity, itemPrice)}
+                  </Text>
                 )}
               </Text>
             </View>
@@ -1102,11 +1126,13 @@ export default function checkOut({navigation, route}) {
             flexDirection: 'row',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity
-            onPress={() => backProcessTopPayment()}
-            style={styles.bottomBackButtonContainer}>
-            <Text style={styles.or}>Back</Text>
-          </TouchableOpacity>
+          {buttonState != 1 && (
+            <TouchableOpacity
+              onPress={() => backProcessTopPayment()}
+              style={styles.bottomBackButtonContainer}>
+              <Text style={styles.or}>Back</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={styles.maior}
             onPress={() => {
@@ -1272,6 +1298,12 @@ export default function checkOut({navigation, route}) {
         }
       })
       .catch(error => {
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Some thing is wrong.',
+          backgroundColor: '#E9691D',
+        });
         setIsLoading(false);
 
         // console.log('780', error);

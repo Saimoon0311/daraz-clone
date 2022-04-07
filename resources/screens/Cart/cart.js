@@ -24,6 +24,7 @@ import {
   API_BASED_URL,
   CART,
   CARTDELETE,
+  deleteAllCartData,
   Images_API,
   QUANTITYINCREASE,
   testCART,
@@ -37,6 +38,8 @@ import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
 import CheckBox from '@react-native-community/checkbox';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
@@ -151,7 +154,7 @@ export default function Cart({navigation}) {
             setLoading(false);
           } else {
             setCartdata(json[0]);
-            totalprice(json[0]);
+            // totalprice(json[0]);
             setLoading(false);
             // console.log(54, json[0]);
             // console.log(63, JSON?.parse(json[0][2]?.attributes));
@@ -198,6 +201,8 @@ export default function Cart({navigation}) {
       await checkStatus();
       if (isFocused) {
         await checkStatus();
+        setCheckBox(false);
+        setTotalPrice(0);
         console.log(58, 'screen is Focused');
       } else {
         console.log(58, 'screen is not Focused');
@@ -205,13 +210,30 @@ export default function Cart({navigation}) {
     })();
   }, [isFocused, saveProduct]);
 
+  const selectedTotalPrice = async data => {
+    if (data !== undefined && data !== []) {
+      var listSeleted = data.filter(item => item.seleted == true);
+      // console.log(211, listSeleted);
+      var selectedTotal = 0;
+      listSeleted.map(res => {
+        // console.log(213, res.product_total);
+        selectedTotal = selectedTotal + res.product_total;
+      });
+      setTotalPrice(selectedTotal);
+    } else {
+      totalprice();
+    }
+  };
+
   const showDeleteAlert = id => {
     return (
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Remove from Cart!"
-        message="Are you sure you want to remove this item from your cart."
+        titleStyle={{color: 'black'}}
+        message="Are you sure you want to remove item from your cart."
+        messageStyle={{color: 'gray', textAlign: 'center'}}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
@@ -252,23 +274,21 @@ export default function Cart({navigation}) {
       .then(res => res.json())
       .then(json => {
         setCartdata(json[0]);
-        totalprice(json[0]);
+        selectedTotalPrice(json[0]);
+
+        // totalprice(json[0]);
       });
   };
 
   const deleteCartItem = id => {
     setLoading(true);
-    // console.log(140, id);
-    // console.log('before ------->>>>>', cartdata);
     const api = CARTDELETE + '/' + id + '/' + user_id;
-    // console.log(api);
     fetch(api, {
       method: 'GET',
     })
       .then(async response => await response.json())
       .then(json => {
-        // getCartCall();
-        totalprice(json);
+        selectedTotalPrice(json);
         setCartdata(json),
           showMessage({
             type: 'success',
@@ -277,13 +297,10 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
         setLoading(false);
-        // console.log(68, cartdata);
       })
       .catch(e => {
-        // console.log(170, e);
         setLoading(false);
       });
-    // .finally(() => setLoading(false));
   };
   const addtowishlist = id => {
     // setLoading(true);
@@ -326,7 +343,7 @@ export default function Cart({navigation}) {
     }
   };
   var n = [];
-  const onChangeCheckValue = item => {
+  const onChangeCheckValue = async item => {
     const newData = cartdata.map(res => {
       if (res.id == item.id) {
         return {
@@ -339,17 +356,16 @@ export default function Cart({navigation}) {
         seleted: res.seleted,
       };
     });
-    var y = [...newData];
-    n.push(newData);
-    setCartdata(newData);
-    console.log(361, y);
+    await setCartdata(newData);
+    checkDataLength(newData);
+    selectedTotalPrice(newData);
   };
-  const totalprice = data => {
+  const totalprice = () => {
     // console.log(134);
-    if (data !== undefined) {
+    if (cartdata !== []) {
       // console.log(148, data);
       let sum = 0;
-      data?.forEach(obj => {
+      cartdata.forEach(obj => {
         for (let property in obj) {
           // console.log(152);
           if (property == 'product_total') {
@@ -358,30 +374,49 @@ export default function Cart({navigation}) {
           }
         }
       });
-      // console.log(161, sum);
+      console.log(161, sum);
       // return sum;
       setTotalPrice(sum);
     }
   };
   const checkStatusType = async () => {
     var listSeleted = cartdata.filter(item => item.seleted == true);
-
-    if (listSeleted.length > 0) {
+    if (checkBox == true) {
       navigation.navigate('checkOut', {
-        screenData: listSeleted,
-        totalPrice: totalPriceShow.toFixed(3),
+        screenData: cartdata,
+        totalPrice: totalPriceShow.toFixed(2),
       });
     } else {
-      showMessage({
-        type: 'danger',
-        icon: 'auto',
-        message: 'Kindly selete at least 1 item',
-        backgroundColor: '#E9691D',
-      });
+      if (listSeleted.length > 0) {
+        navigation.navigate('checkOut', {
+          screenData: listSeleted,
+          totalPrice: totalPriceShow.toFixed(2),
+        });
+      } else {
+        showMessage({
+          type: 'danger',
+          icon: 'auto',
+          message: 'Kindly select at least 1 item',
+          backgroundColor: '#E9691D',
+        });
+      }
     }
     // console.log(365, listSeleted);
   };
-
+  const checkDataLength = data => {
+    var listSeleted = data.filter(item => item.seleted == true);
+    if (cartdata.length == listSeleted.length) {
+      setCheckBox(true);
+    } else {
+      setCheckBox(false);
+      data.map(res => {
+        return {
+          ...res,
+          seleted: !res.seleted,
+        };
+      });
+    }
+  };
   const loginData = (item, att, index) => {
     return (
       <View style={styles.box}>
@@ -578,10 +613,8 @@ export default function Cart({navigation}) {
             style={{flexDirection: 'row'}}
             onPress={() => {
               setItemId(item?.id);
-              // setProduct_id(item?.product_id)
               showDeleteAlert(item?.id);
               setShowAlert(true);
-              // console.log(356,item.id)
             }}>
             <Ionicons
               style={{paddingTop: hp('2.5'), marginRight: 10}}
@@ -610,15 +643,18 @@ export default function Cart({navigation}) {
                   name="remove-circle-sharp"
                   size={25}
                   color={color.themColorPrimary}
-                  style={{paddingTop: hp('2'), marginRight: 10}}
+                  style={{
+                    paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
+                    marginRight: 10,
+                  }}
                 />
               </TouchableOpacity>
             )}
             <Text
               style={{
-                paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
+                paddingTop: hp(Platform?.OS == 'ios' ? '2.3' : '2'),
                 marginRight: 10,
-                fontSize: hp('3.2'),
+                fontSize: hp('2.5'),
                 color: '#EEB08B',
                 fontWeight: 'bold',
               }}>
@@ -637,7 +673,10 @@ export default function Cart({navigation}) {
                 name="add-circle-sharp"
                 size={25}
                 color={color.themColorPrimary}
-                style={{paddingTop: hp('2'), marginRight: 10}}
+                style={{
+                  paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
+                  marginRight: 10,
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -885,7 +924,50 @@ export default function Cart({navigation}) {
       </View>
     );
   };
-
+  const checkAllSelect = value => {
+    setCheckBox(value);
+    if (value == true) {
+      totalprice();
+    } else if (value == false) {
+      cartdata.map(res => {
+        return {
+          ...res,
+          seleted: !res.seleted,
+        };
+      });
+      setTotalPrice(0);
+    }
+  };
+  const deleteAllCart = () => {
+    if (isLoggedIn == true) {
+      var requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+      };
+      fetch(deleteAllCartData + user_id, requestOptions)
+        .then(res => res.json())
+        .then(json => {
+          showMessage({
+            type: 'success',
+            icon: 'success',
+            message: json.message,
+            backgroundColor: '#E9691D',
+          });
+          getCartCall(true);
+        })
+        .catch(err => console.log(err));
+    } else {
+      dispatch({
+        type: types.CLEAR_SAVE_PRODUCT,
+      });
+      showMessage({
+        type: 'success',
+        icon: 'success',
+        message: 'All data has been deleted!',
+        backgroundColor: '#E9691D',
+      });
+    }
+  };
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -898,15 +980,21 @@ export default function Cart({navigation}) {
           />
         </TouchableOpacity>
         <Text style={styles.te}>Carts</Text>
-        <Ionicons
-          name="cart"
-          size={30}
-          color="#FFDDC9"
-          style={{
-            ...styles.icon,
-            marginRight: wp('3'),
-          }}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            setNshowAlert(true);
+          }}>
+          <MaterialIcons
+            name="delete-outline"
+            size={30}
+            color="#512500"
+            color={cartdata.length > 0 ? '#512500' : '#FFDDC9'}
+            style={{
+              ...styles.icon,
+              marginRight: wp('3'),
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View>
         <ScrollView
@@ -935,21 +1023,32 @@ export default function Cart({navigation}) {
             </View>
           ) : (
             <View>
-              <CheckBox
-                tintColors={{true: 'yellow', false: 'red'}}
-                onTintColor={color.themColorPrimary}
-                onCheckColor={color.themColorPrimary}
-                disabled={false}
-                value={checkBox}
-                onAnimationType="bounce"
-                offAnimationType="stroke"
-                boxType="circle"
-                tintColors={'red'}
-                style={styles.checkBox}
-                onValueChange={value => {
-                  console.log(983, value), setCheckBox(value);
-                }}
-              />
+              {isLoggedIn == true && (
+                <View style={styles.insideContainer}>
+                  <CheckBox
+                    tintColors={{true: 'yellow', false: 'red'}}
+                    onTintColor={color.themColorPrimary}
+                    onCheckColor={color.themColorPrimary}
+                    disabled={false}
+                    value={checkBox}
+                    onAnimationType="bounce"
+                    offAnimationType="stroke"
+                    boxType="circle"
+                    tintColors={'red'}
+                    style={{...styles.checkBox, marginLeft: wp('0')}}
+                    onValueChange={value => {
+                      checkAllSelect(value);
+                    }}
+                  />
+                  <Text
+                    style={{
+                      ...styles.selectText,
+                      color: checkBox ? color.themColorPrimary : 'gray',
+                    }}>
+                    Select All
+                  </Text>
+                </View>
+              )}
               <FlatList
                 data={cartdata}
                 nestedScrollEnabled
@@ -958,7 +1057,6 @@ export default function Cart({navigation}) {
                 renderItem={({item, index}) => {
                   const att = item?.attributes;
                   const data = item;
-                  // return loginData(item, att);
                   return isLoggedIn == true
                     ? loginData(item, att, index)
                     : logoutData(item, att);
@@ -972,7 +1070,7 @@ export default function Cart({navigation}) {
                         Subtotal
                       </Text>
                       <Text style={styles.ty}>
-                        $ {totalPriceShow.toFixed(3)}
+                        $ {totalPriceShow.toFixed(2)}
                       </Text>
                     </View>
                     <Text></Text>
@@ -994,7 +1092,7 @@ export default function Cart({navigation}) {
                           styles.ty,
                           {color: color.textColorRedCart, fontWeight: 'bold'},
                         ]}>
-                        $ {totalPriceShow.toFixed(3)}
+                        $ {totalPriceShow.toFixed(2)}
                       </Text>
                     </View>
                     <TouchableOpacity
@@ -1053,15 +1151,26 @@ export default function Cart({navigation}) {
         show={nshowAlert}
         showProgress={false}
         title="Warning!"
-        message="You are not connect to the internet."
+        message="Are you sure you want to delete all product ?"
+        messageStyle={{color: 'gray', textAlign: 'center'}}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
+        closeOnHardwareBackPress={true}
+        showCancelButton={true}
         showConfirmButton={true}
-        confirmText="Close"
-        confirmButtonColor="#DD6B55"
+        confirmText="Yes"
+        cancelText="No"
+        confirmButtonStyle={styles.buttonstyle}
+        cancelButtonStyle={styles.buttonstyle}
+        cancelButtonTextStyle={{fontSize: hp('2.2%')}}
+        confirmButtonTextStyle={{fontSize: hp('2.2%')}}
+        confirmButtonColor={color.textColorRedCart}
+        cancelButtonColor={color.textColorRedCart}
         onConfirmPressed={() => {
+          setNshowAlert(false);
+          deleteAllCart();
+        }}
+        onCancelPressed={() => {
           setNshowAlert(false);
         }}
       />

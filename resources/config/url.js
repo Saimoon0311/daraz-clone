@@ -55,6 +55,7 @@ export const shippingDetailsApi = getApi(
   'get-order-details-with-shipping-billing/',
 );
 export const checkVersionUrl = getApi('version_controls_api');
+export const deleteAllCartData = getApi('delete-an-order/');
 
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';

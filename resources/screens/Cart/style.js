@@ -148,4 +148,16 @@ export const styles = StyleSheet.create({
     marginLeft: wp('-4'),
     height: hp('3.8'),
   },
+  insideContainer: {
+    flexDirection: 'row',
+    width: wp('95'),
+    marginTop: hp('2'),
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  selectText: {
+    marginLeft: Platform.OS == 'ios' ? wp('3') : wp('0'),
+    fontSize: hp('1.8'),
+    fontWeight: 'bold',
+  },
 });

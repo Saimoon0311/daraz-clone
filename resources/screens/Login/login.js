@@ -17,6 +17,7 @@ import {
   StatusBar,
   Linking,
   Image,
+  Platform,
 } from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -294,9 +295,9 @@ export default function Login({navigation}) {
         </TouchableOpacity>
         <View
           style={{
-            position: 'absolute',
+            // position: 'absolute',
             width: wp('100'),
-            bottom: hp('5'),
+            top: hp(Platform.OS == 'ios' ? '25' : '23'),
             // backgroundColor: 'yellow',
             flexDirection: 'row',
             justifyContent: 'center',
