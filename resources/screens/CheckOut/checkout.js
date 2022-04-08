@@ -455,7 +455,6 @@ export default function checkOut({navigation, route}) {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            // backgroundColor: 'yellow',
           }}>
           <View style={Platform.OS == 'ios' && styles.checkStyle}>
             <Checkbox
