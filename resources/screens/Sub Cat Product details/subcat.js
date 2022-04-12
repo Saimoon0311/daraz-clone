@@ -562,6 +562,7 @@ export default function subcatdetails({route, navigation}) {
     }
   };
   var checkApiType;
+  var searchName = '';
   const checkFilterFunction = async () => {
     if (paramData?.screenData == 'subCat') {
       checkApiType = `child_category_id/${productData?.id}`;
@@ -571,6 +572,9 @@ export default function subcatdetails({route, navigation}) {
       checkApiType = `newarrivals/0`;
     } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
       checkApiType = `alldata/0`;
+    } else if (paramData?.screenData == 'search-products') {
+      checkApiType = `search`;
+      searchName = `&filter[name]=${getSearchData}`;
     }
   };
   const categoryDataCall = async (category, start, end) => {
@@ -580,6 +584,7 @@ export default function subcatdetails({route, navigation}) {
     console.log(577, userID);
     await checkFilterFunction();
     var price = start + ',' + end;
+
     var checkUrlType =
       category !== null
         ? `${filterProductUrl + userID}/cat_id/${
@@ -602,7 +607,6 @@ export default function subcatdetails({route, navigation}) {
   var data = [];
 
   const applyFilter = async (category, start, end) => {
-    console.log(613);
     setLoading(true);
     categoryDataCall(category, start, end);
   };

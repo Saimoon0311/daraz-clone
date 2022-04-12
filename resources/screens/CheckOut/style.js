@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet, Platform, Dimensions} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -222,7 +222,12 @@ export const styles = StyleSheet.create({
   checkStyle: {
     borderWidth: 0.5,
     borderColor: color.themColorPrimary,
-    borderRadius: 60,
+    // borderRadius: 60,
+    borderRadius: Math.round(
+      Dimensions.get('window').width + Dimensions.get('window').height,
+    ),
+    width: Dimensions.get('window').width * 0.08,
+    height: Dimensions.get('window').width * 0.08,
     width: wp('8.5'),
     height: hp('4.1'),
     justifyContent: 'center',
@@ -234,5 +239,24 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: color.textColorRedCart,
+  },
+  buttonstyleCancelWhatapp: {
+    width: wp('15'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
+  },
+  buttonstyleWhatapp: {
+    width: wp('30'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: color.whatAppColor,
+    // backgroundColor: color.defaultcolor,
+  },
+  checkBox: {
+    width: wp('8'),
+    // marginLeft: wp('-4'),
+    height: hp('3.8'),
   },
 });

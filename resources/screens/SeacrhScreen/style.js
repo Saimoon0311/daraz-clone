@@ -122,4 +122,14 @@ export const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
+  filterView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: wp('90'),
+    alignSelf: 'center',
+    marginTop: hp('2'),
+    // marginBottom: hp('1'),
+  },
+  filterText: {color: '#512500', fontSize: hp('2.5'), fontWeight: 'bold'},
 });

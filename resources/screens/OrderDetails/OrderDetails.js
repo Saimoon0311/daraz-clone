@@ -677,7 +677,7 @@ export default function OrderDetails({navigation}) {
           titleStyle={{color: 'black'}}
           // showConfirmButton={true}
           // confirmText="Yes"
-          cancelText="OK"
+          cancelText="Close"
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}
