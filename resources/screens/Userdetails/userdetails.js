@@ -33,9 +33,42 @@ import {HelperText, TextInput} from 'react-native-paper';
 import {FormControl} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Picker, PickerIOS} from '@react-native-picker/picker';
 import Setting from '../Setting/setting';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Userdeatils({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   const [userdataemail, setUserdataemail] = useState();
   // const [isLoading,setLoading] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -46,18 +79,9 @@ export default function Userdeatils({navigation}) {
   const getUserAllData = async () => {
     const userDatas = await getUserData();
     const users = userId.id;
-    // console.log(31, userDatas);
-    // console.log(286,users)
-    //  fetch(`${USERDATA}/${users}`)
-    //     .then((response) => response.json())
-    //     .then( (json) =>  setUserdata(json),
-    //      )
-    //     .catch((error) => console.error(33,error))
-    //       .finally(() => setLoading(false));
   };
   const ff = async () => {
     const userDatas = await getUserData();
-    // console.log(99, userDatas);
   };
   const updatValue = (value, attribute) => {
     setDummyState(value);
@@ -86,42 +110,19 @@ export default function Userdeatils({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: 'Profile Updated Successfully',
+            message: translate('Profile Updated Successfully'),
             backgroundColor: '#E9691D',
           });
-          // console.log(106, result?.data);
           setLoadingButton(false);
           setUserData(result?.data);
-
-          //  ff()
         } else {
-          console.log(99, result);
           setShowAlert(true);
           setLoadingButton(false);
-          // console.log(result);
         }
       })
       .catch(error => {
-        console.log(106, error);
-
         setShowAlert(false);
-        // console.log('111', error)
       });
-
-    // fetch(USERPROFILEUPDATE,{
-    //   method: 'PUT',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     userData
-    //   }),
-    //  })
-    //  .then((res)=>res.json())
-    //  .then(json => {
-    //    console.log(json)
-    //  })
   };
   const ValidateProfileUpdate = () => {
     setLoadingButton(true);
@@ -148,7 +149,7 @@ export default function Userdeatils({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'This field can not be empty',
+        message: translate('This field can not be empty'),
         backgroundColor: '#E9691D',
       }),
         setLoadingButton(false);
@@ -156,10 +157,14 @@ export default function Userdeatils({navigation}) {
   };
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
       const userDatas = await getUserData();
       console.log(161, userDatas);
       setUserDataLocal(userDatas);
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
 
   return (
@@ -192,27 +197,28 @@ export default function Userdeatils({navigation}) {
             fontWeight: 'bold',
             marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
           }}>
-          User Profile
+          {translate('User Profile')}
         </Text>
         <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
       </View>
 
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: hp('20')}}>
         <View style={styles.mainpage}>
           <View style={styles.page}>
             <Text
               style={{
-                // textAlign: 'Left',
                 fontSize: wp('6%'),
                 color: color.defaultcolor,
                 fontWeight: 'bold',
               }}>
-              Account Details
+              {translate('Account Details')}
             </Text>
           </View>
           <View style={styles.inputContainers}>
             <TextInput
-              label="Username *"
+              label={translate('Username *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -224,7 +230,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="Phone Number *"
+              label={translate('Phone Number *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -236,7 +242,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="City *"
+              label={translate('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -248,7 +254,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="Address One *"
+              label={translate('Address One *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -260,7 +266,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="Address Two *"
+              label={translate('Address Two *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -272,7 +278,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="Email address *"
+              label={translate('Email address *')}
               underlineColor="gray"
               editable={false}
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -285,7 +291,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label="Zip Code *"
+              label={translate('Zip Code *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -298,7 +304,7 @@ export default function Userdeatils({navigation}) {
             />
 
             <TextInput
-              label="Country *"
+              label={translate('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -311,22 +317,8 @@ export default function Userdeatils({navigation}) {
 
             <TouchableOpacity
               onPress={() => ValidateProfileUpdate()}
-              style={{
-                width: wp('50%'),
-                height: hp('6%'),
-                backgroundColor: '#FF7E33',
-                alignSelf: 'center',
-                marginTop: 30,
-                borderRadius: 7,
-                flexDirection: 'row',
-              }}>
-              <View
-                style={{
-                  width: wp('10%'),
-                  height: hp('6%'),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+              style={styles.updateContainer}>
+              <View style={styles.updateInnerView}>
                 <Ionicons
                   style={{marginLeft: wp('3%')}}
                   name="checkmark-circle-sharp"
@@ -334,26 +326,12 @@ export default function Userdeatils({navigation}) {
                   color={'white'}
                 />
               </View>
-              <View
-                style={{
-                  width: wp('30%'),
-                  height: hp('6%'),
-                  paddingLeft: wp('4'),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  // backgroundColor:'red'
-                }}>
+              <View style={styles.touchCenterView}>
                 {loadingButton ? (
                   <ActivityIndicator color="white" size="small" />
                 ) : (
-                  <Text
-                    style={{
-                      fontSize: hp('1.7%'),
-                      color: 'white',
-                      fontWeight: 'bold',
-                      alignSelf: 'center',
-                    }}>
-                    Update Profile
+                  <Text style={styles.updateText}>
+                    {translate('Update Profile')}
                   </Text>
                 )}
               </View>
@@ -363,12 +341,6 @@ export default function Userdeatils({navigation}) {
                   height: hp('6%'),
                 }}></View>
             </TouchableOpacity>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
           </View>
         </View>
       </ScrollView>

@@ -204,6 +204,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.android.support:multidex:2.0.1'
+      implementation project(':react-native-localize')
     // implementation 'com.facebook.android:facebook-login:[8.1)'
     // implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     // implementation 'com.android.support:multidex:1.0.3' 

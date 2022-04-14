@@ -26,13 +26,42 @@ import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function setting({navigation}) {
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [showWhatsApp, setWhatsApp] = useState(false);
-  const [dummy, setDummy] = useState('');
+  const [dummy, setDummy] = useState(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [islogout, setIslogout] = useState();
 
@@ -51,29 +80,22 @@ export default function setting({navigation}) {
 
   const user = async () => {
     const userId = await getUserData();
-    // const name = 'bdfndbf';
     const name = JSON.stringify(userId.username);
-
     setNames(name);
     setUsers(userId);
   };
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(240);
       setIsLoggedIn(false);
-      // await datacallss(false);
     } else if (user !== null) {
-      // console.log(244);
       setIsLoggedIn(true);
-
-      // await datacallss(true);
     }
   };
 
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
       await checkStatus();
       if (isFocused) {
         await checkStatus();
@@ -83,6 +105,9 @@ export default function setting({navigation}) {
       }
       // await datacallss();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [isFocused]);
   const onLogoutAlert = () => {
     setShowAlert(true);
@@ -108,12 +133,11 @@ export default function setting({navigation}) {
   const welcomeContainer = () => {
     return (
       <View style={styles.well}>
-        <Text style={{...styles.we}}>Welcome</Text>
+        <Text style={{...styles.we}}>{translate('Welcome')}</Text>
         <Text
           style={{
             ...styles.we,
             color: 'white',
-            // marginLeft: wp('4%'),
             marginTop: hp('1%'),
           }}>
           {stringName}
@@ -149,10 +173,8 @@ export default function setting({navigation}) {
             name="ios-logo-whatsapp"
             size={30}
             style={{
-              // margin: 20,
               marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
               marginLeft: wp('3'),
-              // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
             }}
             color={color.bottomNavColor}
           />
@@ -163,48 +185,31 @@ export default function setting({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '5.5%' : '3.5%'),
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.5%'),
           }}>
-          My Account
+          {translate('My Account')}
         </Text>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Ionicons
-            name="cart"
-            size={35}
-            color="#512500"
-            style={{
-              ...styles.icon,
-              marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
-            }}
-          />
-        </TouchableOpacity> */}
         <View
           style={{
-            marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3'),
           }}>
-          <HomeCartIcon
-            // islogout={islogout == true ? true : false}
-            isLoggedIn={isLoggedIn}
-            navigations={navigationProps}
-          />
+          <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
       </View>
       {isLoggedIn ? welcomeContainer() : loginContainer()}
-      {/* {loginContainer()} */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           alignItems: 'center',
           paddingBottom: hp('30%'),
         }}>
-        {/* <View style={styles.vacc}> */}
         <Text
           style={{
             ...styles.acc,
             marginTop: hp('3'),
-            marginLeft: wp(Platform?.OS == 'ios' ? '-36' : '-36'),
+            marginLeft: wp(Platform?.OS == 'ios' ? '-32' : '-36'),
           }}>
-          My Moyen Account
+          {translate('My Moyen Account')}
         </Text>
         <TouchableOpacity
           style={styles.shadow}
@@ -214,7 +219,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: 'Kindly login first',
+                  message: translate('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}>
@@ -224,7 +229,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>My Profile</Text>
+          <Text style={styles.orte}>{translate('My Profile')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -233,7 +238,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: 'Kindly login first',
+                  message: translate('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}
@@ -244,17 +249,8 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>Orders</Text>
+          <Text style={styles.orte}>{translate('Orders')}</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.shadow}>
-          <Ionicons
-            name="document-text-outline"
-            size={20}
-            style={{marginRight: 20}}
-            color="gray"
-          />
-          <Text style={styles.orte}>Ratings & Reviews</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             isLoggedIn
@@ -265,7 +261,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: 'Kindly login first',
+                  message: translate('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}
@@ -276,40 +272,17 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>Saved Items</Text>
+          <Text style={styles.orte}>{translate('Saved Items')}</Text>
         </TouchableOpacity>
-        {/* </View> */}
-        {/* <TouchableOpacity style={styles.shadow}>
-          <Ionicons
-            name="eye-outline"
-            size={20}
-            style={{marginRight: 20}}
-            color="gray"
-          />
-          <Text style={styles.orte}>Recently Viewed</Text>
-        </TouchableOpacity> */}
-
         <Text
           style={{
             ...styles.acc,
             marginTop: hp('3'),
             marginBottom: hp('1'),
-            // marginRight: wp('60'),
-            // marginRight: wp(Platform?.OS == 'ios' ? '0' : '0'),
-            marginLeft: wp(Platform?.OS == 'ios' ? '-43' : '-53'),
+            marginLeft: wp(Platform?.OS == 'ios' ? '-48' : '-53'),
           }}>
-          My Settings
+          {translate('My Settings')}
         </Text>
-
-        {/* <TouchableOpacity style={styles.shadow}>
-          <Ionicons
-            name="book-outline"
-            size={20}
-            style={{marginRight: 20}}
-            color="gray"
-          />
-          <Text style={styles.orte}>Address Book</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.shadow}
           onPress={() => {
@@ -318,7 +291,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: 'Kindly login first',
+                  message: translate('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}>
@@ -328,7 +301,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>Change Password</Text>
+          <Text style={styles.orte}>{translate('Change Password')}</Text>
         </TouchableOpacity>
         {isLoggedIn && (
           <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
@@ -338,7 +311,7 @@ export default function setting({navigation}) {
               style={{marginRight: 20}}
               color="gray"
             />
-            <Text style={styles.orte}>Logout</Text>
+            <Text style={styles.orte}>{translate('Logout')}</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -346,15 +319,19 @@ export default function setting({navigation}) {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        title="Warning!"
-        message="Are you sure, yout want to logout from this device."
+        title={translate('Warning!')}
+        message={translate(
+          'Are you sure, yout want to logout from this device',
+        )}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
+        titleStyle={{color: 'black'}}
+        messageStyle={{textAlign: 'center'}}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText="Yes"
-        cancelText="No"
+        confirmText={translate('Yes')}
+        cancelText={translate('No')}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
         cancelButtonTextStyle={{fontSize: hp('2.2%')}}
@@ -374,16 +351,17 @@ export default function setting({navigation}) {
       <AwesomeAlert
         show={showWhatsApp}
         showProgress={false}
-        title="Contact With Admin"
+        title={translate('Contact With Admin')}
         titleStyle={{color: 'black', fontWeight: 'bold'}}
-        message="Help For user To Contact Super Admin"
+        message={translate('Help For user To Contact Super Admin')}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
+        messageStyle={{textAlign: 'center'}}
         closeOnHardwareBackPress={false}
         showCancelButton={true}
         showConfirmButton={true}
         confirmText="Whatsapp"
-        cancelText="No"
+        cancelText={translate('No')}
         cancelButtonStyle={styles.buttonstyleCancelWhatapp}
         cancelButtonTextStyle={{fontSize: hp('1.9')}}
         confirmButtonTextStyle={{fontSize: hp('1.9')}}
@@ -394,7 +372,6 @@ export default function setting({navigation}) {
         }}
         onCancelPressed={() => {
           setWhatsApp(false);
-          // whatAppPhone();
         }}
       />
     </View>
