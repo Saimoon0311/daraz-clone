@@ -33,8 +33,39 @@ import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput} from 'react-native-paper';
 import NetInfo from '@react-native-community/netinfo';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function changepassword({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [current_password, setCurrent_password] = useState('');
   const [password, setPassword] = useState('');
   const [password_confirmation, setPassword_confirmation] = useState('');
@@ -103,9 +134,6 @@ export default function changepassword({navigation}) {
     myHeaders.append('Accept', 'application/json');
 
     var formdata = new FormData();
-    //     formdata.append('current_password', current_password);
-    //     formdata.append('password', password);
-    //     formdata.append('password_confirmation', password_confirmation);
     formdata.append('current_password', current_password);
     formdata.append('password', password);
     formdata.append('password_confirmation', password_confirmation);
@@ -115,11 +143,6 @@ export default function changepassword({navigation}) {
       body: formdata,
       redirect: 'follow',
     };
-
-    // console.log('108', API_BASED_URL + PASSWORDCHNAGE + '/' + userId);
-    // console.log('108', API_BASED_URL);
-    // console.log('110', PASSWORDCHNAGE);
-
     fetch(`${PASSWORDCHNAGE}/${userId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
@@ -168,10 +191,14 @@ export default function changepassword({navigation}) {
 
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
       const userId = await getUserData();
       const users = userId.id;
       setUser_ID(users);
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
 
   return (
@@ -194,15 +221,14 @@ export default function changepassword({navigation}) {
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
             marginLeft: wp('3'),
           }}>
-          Carts
+          {translate('Change Your Password')}
         </Text>
         <Ionicons
           name="cart"
           size={30}
-          color="#512500"
+          color="#FFDDC9"
           style={{
             ...styles.icon,
-
             marginRight: wp('3'),
           }}
         />
@@ -216,40 +242,38 @@ export default function changepassword({navigation}) {
               color: color.defaultcolor,
               fontWeight: 'bold',
             }}>
-            Notice
+            {translate('Notice')}
           </Text>
           <Text style={styles.noticstext}>
-            It's a good idea to use a strong password that you're not using
-            elsewhere.
+            {translate(
+              "It's a good idea to use a strong password that you're not using elsewhere.",
+            )}
           </Text>
         </View>
         <View style={styles.textinputview}>
           <TextInput
-            label="Current Password *"
+            label={translate('Current Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            // keyboardType="visible-password"
             value={current_password}
             selectionColor="#FF7E33"
             onChangeText={text => setCurrent_password(text)}
           />
           <TextInput
-            label="New Password *"
+            label={translate('New Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            // keyboardType="visible-password"
             value={password}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword(text)}
           />
           <TextInput
-            label="Confirm New Password *"
+            label={translate('Confirm New Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
-            // keyboardType="visible-password"
             value={password_confirmation}
             selectionColor="#FF7E33"
             onChangeText={text => setPassword_confirmation(text)}
@@ -265,8 +289,6 @@ export default function changepassword({navigation}) {
             marginTop: 30,
             borderRadius: 7,
             flexDirection: 'row',
-            // alignItems:'center',
-            // justifyContent:'center'
           }}>
           <View
             style={{
@@ -288,7 +310,6 @@ export default function changepassword({navigation}) {
               height: hp('6%'),
               alignItems: 'center',
               justifyContent: 'center',
-              // backgroundColor: 'red',
             }}>
             {loadingButton ? (
               <ActivityIndicator color="white" size="small" />
@@ -299,8 +320,9 @@ export default function changepassword({navigation}) {
                   color: 'white',
                   fontWeight: 'bold',
                   alignSelf: 'center',
+                  textAlign: 'center',
                 }}>
-                Change Your Password
+                {translate('Change Your Password')}
               </Text>
             )}
           </View>

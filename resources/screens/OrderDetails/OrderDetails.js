@@ -625,7 +625,7 @@ export default function OrderDetails({navigation}) {
               onPress={() => returnOrder(item)}
               style={{
                 ...styles.returnViewContainer,
-                alignSelf: 'flex-start',
+                alignSelf: `flex-start`,
                 marginRight: 'auto',
               }}>
               <Text style={styles.cancelText}>Return Order</Text>
@@ -669,14 +669,13 @@ export default function OrderDetails({navigation}) {
           show={returnAlter}
           showProgress={false}
           title="Warning!"
-          message="Return policy are not available."
+          message={`Return policy are not available. \n For more information please contact to super admin.`}
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           titleStyle={{color: 'black'}}
-          // showConfirmButton={true}
-          // confirmText="Yes"
+          messageStyle={{textAlign: 'center'}}
           cancelText="Close"
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
@@ -684,9 +683,6 @@ export default function OrderDetails({navigation}) {
           confirmButtonTextStyle={{fontSize: hp('2.2%')}}
           confirmButtonColor={color.textColorRedCart}
           cancelButtonColor={color.textColorRedCart}
-          // onConfirmPressed={() => {
-          //   setReturnAlert(false);
-          // }}
           onCancelPressed={() => {
             setReturnAlert(false);
           }}

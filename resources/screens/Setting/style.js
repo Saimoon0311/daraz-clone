@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
   },
   acc: {
     color: '#512500',
-    fontSize: hp('3'),
+    fontSize: hp('2.5'),
     fontWeight: 'bold',
     // backgroundColor: 'red',
   },
