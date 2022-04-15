@@ -50,23 +50,51 @@ import types from '../../redux/type';
 import {flexDirection, get, width} from 'styled-system';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Carousel from 'react-native-snap-carousel';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Details({route, navigation}) {
+  const [dummy, setDummy] = useState(1);
+
   const isCarousel = React.useRef(null);
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   const child_id = route?.child_category_id;
   const item = route?.params;
   const imm = item?.images;
-  // console.log(55, imm);
   const {saveProduct} = useSelector(state => state.savePosts);
   const {userData} = useSelector(state => state.auth);
-  // console.log(50, userData);
   const dispatch = useDispatch();
   const [updateCart, setUpdateCart] = useState(false);
   const [user_id, setUser_id] = useState();
   const [loading, setLoading] = useState(false);
   const [favValue, setFavValue] = useState(false);
-  // const [pickerValue, setPickerValue] = useState({});
   const [attributeArray, setAttributeArray] = useState([]);
   const [starCount, setstarCount] = useState(0);
   const [reviewsName, setreviewName] = useState('');
@@ -128,13 +156,11 @@ export default function Details({route, navigation}) {
   const followApi = user => {
     const id = user.id;
     var url = getFollowApi + '/' + id + '/' + item.get_shop.get_vendor.id;
-    // console.log(107, url);
     fetch(url)
       .then(res => res.json())
       .then(json => {
         setGetFollow(json);
         setFollowLoader(false);
-        // console.log(110, getFollow, json);
       })
       .catch(e => {
         console.log(113, e);
@@ -144,7 +170,6 @@ export default function Details({route, navigation}) {
   const pFollowApi = () => {
     setFollowLoader(true);
     var url = postFollowApi + '/' + user_id + '/' + item.get_shop.get_vendor.id;
-    // console.log(106, url);
     var requestOptions = {
       method: 'POST',
       redirect: 'follow',
@@ -160,11 +185,16 @@ export default function Details({route, navigation}) {
 
   var items = subCatdata;
   useEffect(() => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
+
     (async () => {
       await checkStatus();
       getAllReviews();
       get_child_product();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
 
   const checkStatus = async () => {
@@ -187,7 +217,7 @@ export default function Details({route, navigation}) {
     showMessage({
       type: 'success',
       icon: 'auto',
-      message: 'Your Product Has Been Add To Cart',
+      message: translate('Your Product Has Been Add To Cart'),
       backgroundColor: '#E9691D',
     });
     // console.log(128, saveProduct);
@@ -317,7 +347,7 @@ export default function Details({route, navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: 'Some thing is wrong.',
+          message: translate('Some thing is wrong'),
           backgroundColor: '#E9691D',
         });
       });
@@ -335,7 +365,9 @@ export default function Details({route, navigation}) {
       if (gotUndefined) {
         returnTopAlert(
           'danger',
-          'Kindly select the product attributes before adding to cart.',
+          translate(
+            'Kindly select the product attributes before adding to cart',
+          ),
         );
       } else if (!gotUndefined) {
         isLoggedIn == true ? cartadd() : routeToLogin();
@@ -343,7 +375,7 @@ export default function Details({route, navigation}) {
     } else {
       returnTopAlert(
         'danger',
-        'Kindly select the product attributes before adding to cart.',
+        translate('Kindly select the product attributes before adding to cart'),
       );
     }
   };
@@ -369,7 +401,7 @@ export default function Details({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: 'Your Product Has Been Add To Cart',
+            message: translate('Your Product Has Been Add To Cart'),
             backgroundColor: '#E9691D',
           });
           setLoading(false);
@@ -399,7 +431,6 @@ export default function Details({route, navigation}) {
     return (
       <View
         style={{
-          // backgroundColor: 'green',
           marginBottom: hp('20'),
           marginTop: hp('2'),
         }}>
@@ -424,7 +455,7 @@ export default function Details({route, navigation}) {
                 <View style={{...styles.recentTextContainer}}>
                   {/* <TouchableOpacity> */}
                   <Text style={{...styles.sliderText, color: 'grey'}}>
-                    Related Products
+                    {translate('Related Products')}
                   </Text>
                   {/* </TouchableOpacity> */}
                   {/* <TouchableOpacity
@@ -446,15 +477,9 @@ export default function Details({route, navigation}) {
                       <View style={styles.bottomimages}>
                         <Image
                           style={styles.imagss}
-                          // source={{
-                          //   uri: `${Images_API}/${res.get_products.images[0].name}`,
-                          // }}
                           source={{
                             uri: `${Images_API}/${res?.images[0]?.name}`,
                           }}
-                          // source={{
-                          //   uri: 'https://picsum.photos/200',
-                          // }}
                         />
                       </View>
                     );
@@ -479,7 +504,7 @@ export default function Details({route, navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>Details</Text>
+        <Text style={styles.te}>{translate('Details')}</Text>
 
         <View
           style={{
@@ -494,34 +519,8 @@ export default function Details({route, navigation}) {
           />
         </View>
       </View>
-      {/* {Viewpager()} */}
-      <ScrollView
-        contentContainerStyle={
-          {
-            // alignSelf: 'center',
-          }
-        }>
+      <ScrollView>
         <View style={{margin: 20}}>
-          {/* <FlatList
-            data={imm}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              alignSelf: 'center',
-              // backgroundColor: 'red',
-            }}
-            renderItem={({item}) => {
-              // console.log(490, item?.name);
-              return (
-                <Image
-                  resizeMode="cover"
-                  source={{uri: `${Images_API}/${item?.name}`}}
-                  style={styles.imm}
-                />
-              );
-            }}
-          /> */}
           <View style={{height: hp('45')}}>
             <Carousel
               data={imm}
@@ -544,7 +543,6 @@ export default function Details({route, navigation}) {
                 return (
                   <Image
                     resizeMode="contain"
-                    // source={{uri: item?.imgUrl}}
                     source={{uri: `${Images_API}/${item?.name}`}}
                     style={styles.imm}
                   />
@@ -556,7 +554,7 @@ export default function Details({route, navigation}) {
           <View style={styles.box}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
             <Text style={styles.tep}>
-              Category : {item?.getchildcategory?.name}
+              {translate('Category :')} {item?.getchildcategory?.name}
             </Text>
             {item?.is_discounted == 2 ? (
               <View
@@ -570,7 +568,7 @@ export default function Details({route, navigation}) {
                     fontWeight: 'bold',
                     marginTop: hp('0.5%'),
                   }}>
-                  Price :
+                  {translate('Price :')}
                 </Text>
                 <Text
                   style={{
@@ -604,7 +602,7 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  Prices :
+                  {translate('Prices :')}
                 </Text>
 
                 <Text
@@ -619,7 +617,7 @@ export default function Details({route, navigation}) {
             )}
             <Text style={styles.tep}>SKU : {item?.sku}</Text>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-              Description :
+              {translate('Description :')}
             </Text>
             <Text
               style={{
@@ -630,7 +628,6 @@ export default function Details({route, navigation}) {
               {item?.description}
             </Text>
           </View>
-          {/* <Text style={styles.delvery}> Delivery & Returns</Text> */}
           {item?.get_attribute_values?.length == 0 ? null : (
             <View style={styles.optionsContainer}>
               {item?.get_attribute_values &&
@@ -638,10 +635,7 @@ export default function Details({route, navigation}) {
                   const itemName = res?.attribute?.name;
                   return (
                     <View>
-                      <Text style={styles.attributeText}>
-                        {/* {res?.attribute?.name} */}
-                        {itemName}
-                      </Text>
+                      <Text style={styles.attributeText}>{itemName}</Text>
                       <View style={styles.pickerParentStyle}>
                         <Picker
                           mode="dialog"
@@ -673,23 +667,12 @@ export default function Details({route, navigation}) {
                 })}
             </View>
           )}
-
-          {/* //ljsadklfj */}
-
           {isLoggedIn == true && (
             <View style={styles.box}>
               <View style={{flexDirection: 'row'}}>
-                <Text
-                  numberOfLines={2}
-                  style={{
-                    color: color.defaultcolor,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    fontSize: hp('2.5'),
-                    width: wp('51'),
-                  }}>
-                  Vendor: {item['get_shop']['get_vendor']['username']}
+                <Text numberOfLines={2} style={styles.vendorName}>
+                  {translate('Vendor:')}{' '}
+                  {item['get_shop']['get_vendor']['username']}
                 </Text>
                 <TouchableOpacity
                   style={styles.followButton}
@@ -699,14 +682,13 @@ export default function Details({route, navigation}) {
                       {followLoader == true ? (
                         <ActivityIndicator
                           style={{alignSelf: 'center', marginTop: hp('2')}}
-                          // style={{marginTop: hp('5')}}
                           size={'small'}
                           color={'white'}
                         />
                       ) : getFollow.status == 1 ? (
-                        'Unfollow'
+                        translate('Unfollow')
                       ) : (
-                        'Follow'
+                        translate('Follow')
                       )}
                     </Text>
                     {followLoader == false && getFollow.status == 1 ? (
@@ -730,14 +712,18 @@ export default function Details({route, navigation}) {
 
               <Text></Text>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.vendorLeftTextStyle}>Store Name:</Text>
+                <Text style={styles.vendorLeftTextStyle}>
+                  {translate('Store Name:')}
+                </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['name']}
                 </Text>
               </View>
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
-                <Text style={styles.vendorLeftTextStyle}>Address: </Text>
+                <Text style={styles.vendorLeftTextStyle}>
+                  {translate('Address:')}{' '}
+                </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['get_vendor']['address_one'] +
                     item['get_shop']['get_vendor']['address_two']}
@@ -745,7 +731,9 @@ export default function Details({route, navigation}) {
               </View>
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
-                <Text style={styles.vendorLeftTextStyle}>Phone: </Text>
+                <Text style={styles.vendorLeftTextStyle}>
+                  {translate('Phone:')}{' '}
+                </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['get_vendor']['phone_number']}
                 </Text>
@@ -754,11 +742,14 @@ export default function Details({route, navigation}) {
           )}
 
           <View style={styles.box}>
-            <Text style={{color: color.defaultcolor}}>Submit Your Review</Text>
+            <Text style={{color: color.defaultcolor}}>
+              {translate('Submit Your Review')}
+            </Text>
             <Text></Text>
             <Text style={{color: 'gray'}}>
-              Your email address will not be published. Required fields are
-              marked *
+              {translate(
+                'Your email address will not be published Required fields are marked',
+              )}
             </Text>
             <Text></Text>
             <StarRating
@@ -772,50 +763,25 @@ export default function Details({route, navigation}) {
             />
             <Text></Text>
             <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderRadius: 5,
-                paddingLeft: wp('5'),
-                color: 'black',
-                height: hp('8'),
-                width: wp('85'),
-                alignSelf: 'center',
-                paddingTop: hp('1.1'),
-              }}
+              style={styles.reviewDescriptionInput}
               multiline
               value={reviews}
               onChangeText={text => setreview(text)}
-              placeholder="Write Your Reviews Here.."
+              placeholder={translate('Write Your Reviews Here')}
               placeholderTextColor={'gray'}
             />
             <Text></Text>
             <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderRadius: 5,
-                paddingLeft: wp('5'),
-                color: 'black',
-                height: hp('6'),
-                width: wp('85'),
-                alignSelf: 'center',
-              }}
+              style={styles.reviewInput}
               value={reviewsName}
-              placeholder="Enter Your Name*"
+              placeholder={translate('Enter Your Name*')}
               onChangeText={text => setreviewName(text)}
               placeholderTextColor={'gray'}
             />
             <Text></Text>
             <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderRadius: 5,
-                paddingLeft: wp('5'),
-                color: 'black',
-                height: hp('6'),
-                width: wp('85'),
-                alignSelf: 'center',
-              }}
-              placeholder="Enter Your Email*"
+              style={styles.reviewInput}
+              placeholder={translate('Enter Your Email*')}
               value={reviewsEmail}
               autoCapitalize="none"
               onChangeText={text => setreviewEmail(text)}
@@ -830,14 +796,16 @@ export default function Details({route, navigation}) {
                   : showMessage({
                       type: 'warning',
                       icon: 'auto',
-                      message: 'Kindly login to give a review.',
+                      message: translate('Kindly login to give a review.'),
                       backgroundColor: '#E9691D',
                     })
               }>
               {reviewLoading ? (
                 <ActivityIndicator size={'small'} color={'white'} />
               ) : (
-                <Text style={{color: 'white', fontSize: hp('2')}}>Submit</Text>
+                <Text style={{color: 'white', fontSize: hp('2')}}>
+                  {translate('Submit')}
+                </Text>
               )}
             </TouchableOpacity>
           </View>
@@ -856,7 +824,6 @@ export default function Details({route, navigation}) {
                 height: 'auto',
                 maxHeight: hp('50'),
               }}>
-              {/* <View> */}
               {allReviews.map(res => {
                 return (
                   <View style={{flexDirection: 'row'}}>
@@ -867,11 +834,8 @@ export default function Details({route, navigation}) {
                     /> */}
                     <Image
                       source={require('../../images/avata.png')}
-                      // width={wp('5')}
-                      // height={hp('5')}
                       resizeMode="contain"
                       style={{
-                        // borderRadius: hp('20'),
                         width: wp('15'),
                         height: hp('9'),
                         marginRight: wp('5'),
@@ -890,7 +854,6 @@ export default function Details({route, navigation}) {
                         maxStars={5}
                         rating={res?.stars}
                         disabled={true}
-                        // selectedStar={rating => onStarRatingPress(rating)}
                       />
                       <Text numberOfLines={10} style={{color: 'gray'}}>
                         {res?.review}
@@ -907,25 +870,22 @@ export default function Details({route, navigation}) {
                   </View>
                 );
               })}
-              {/* </View> */}
             </ScrollView>
           ) : (
             <>
               <Image
                 resizeMode="contain"
                 style={{
-                  // borderRadius: hp('20'),
                   width: wp('30'),
                   height: hp('20'),
                   alignSelf: 'center',
-                  // marginRight: wp('10'),
                   marginTop: hp('5'),
                 }}
                 source={require('../../images/newVec.png')}
               />
               <Text
                 style={{color: color.textColorRedCart, textAlign: 'center'}}>
-                No reviews yet.
+                {translate('No reviews yet')}
               </Text>
             </>
           )}
@@ -943,9 +903,8 @@ export default function Details({route, navigation}) {
           <View style={{...styles.carttouch, height: hp('6')}}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              {/* // <ActivityIndicator size="large" color="white" /> */}
               <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
-                Out of stock
+                {translate('Out of stock')}
               </Text>
             </View>
           </View>
@@ -984,14 +943,13 @@ export default function Details({route, navigation}) {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    {/* // <ActivityIndicator size="large" color="white" /> */}
                     <Text
                       style={{
                         color: 'white',
                         fontSize: 20,
                         fontWeight: 'bold',
                       }}>
-                      Add To Cart
+                      {translate('Add To Cart')}
                     </Text>
                   </View>
                 </TouchableOpacity>

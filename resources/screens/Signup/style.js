@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -46,5 +46,41 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#E9691D',
     textDecorationLine: 'underline',
+  },
+  bottomView: {
+    position: 'absolute',
+    width: wp('100'),
+    bottom: Platform.OS == 'ios' ? hp('-3') : hp('0'),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  createAccountButton: {
+    width: wp('60%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignSelf: 'center',
+    marginTop: 30,
+    borderRadius: 7,
+    flexDirection: 'row',
+  },
+  innerView: {
+    width: wp('15%'),
+    height: hp('6%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  createAccountView: {
+    width: wp('35%'),
+    height: hp('6%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  createAccountText: {
+    fontSize: hp('2%'),
+    color: 'white',
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });

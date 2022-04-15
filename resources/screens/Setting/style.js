@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
   well: {
     padding: hp('1'),
     backgroundColor: '#CFA891',
-    // alignItems: 'flex-start',
   },
   we: {
     // color:"#E9691D",
@@ -96,14 +95,14 @@ export const styles = StyleSheet.create({
   },
   loginContainer: {
     alignSelf: 'center',
-    width: wp('30'),
+    width: wp('40'),
     height: hp('5'),
     backgroundColor: '#512500',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
   },
-  loginText: {color: 'white', fontSize: hp('2')},
+  loginText: {color: 'white', fontSize: hp('2'), textAlign: 'center'},
   questionMarkContainer: {
     justifyContent: 'center',
     marginLeft: wp('3'),

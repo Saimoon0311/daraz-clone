@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -26,10 +26,47 @@ import setting from '../screens/Setting/setting';
 import {color} from '../config/color';
 import seacrhScreen from '../screens/SeacrhScreen/seacrScreen';
 import Cart from '../screens/Cart/cart';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 const Tab = createBottomTabNavigator();
 
 function MybottomTabs() {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../config/Translate/en.json'),
+    fr: () => require('../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -54,9 +91,9 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="home" color={color} size={hp('3')} />
           ),
-          title: 'Home',
+          title: translate('Home'),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: hp('1.8'),
             fontWeight: 'bold',
             marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
@@ -70,22 +107,18 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="list" color={color} size={hp('3')} />
           ),
-          // tabBarActiveTintColor:"yellow",
-          // tabBarInactiveTintColor:"green",
-          // tabBarActiveIconColor:"blue",
           tabBarIconStyle: {
             color: 'red',
           },
-          title: 'Shop',
+          title: translate('Shop'),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: hp('1.8'),
             fontWeight: 'bold',
             marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
         }}
         component={cate}
       />
-      {/* <BlurView   blurRadius={1} downsampleFactor={10} overlayColor={'rgba(0, 0, 255, .6)'}> */}
       {/* <Tab.Screen
         name="Deal"
         options={{
@@ -107,9 +140,9 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="person" color={color} size={hp('3')} />
           ),
-          title: 'Account',
+          title: translate('Account'),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: hp('1.8'),
             fontWeight: 'bold',
             marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
@@ -122,9 +155,9 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="cart" color={color} size={hp('3')} />
           ),
-          title: 'Cart',
+          title: translate('Cart'),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: hp('1.8'),
             fontWeight: 'bold',
             marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },
@@ -137,9 +170,9 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="search" color={color} size={hp('3')} />
           ),
-          title: 'Search',
+          title: translate('Search'),
           tabBarLabelStyle: {
-            fontSize: 15,
+            fontSize: hp('1.8'),
             fontWeight: 'bold',
             marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
           },

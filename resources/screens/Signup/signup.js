@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -27,14 +27,45 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {color} from '../../config/color';
 import {useDispatch} from 'react-redux';
 import {Platform} from 'react-native';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Signup({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [loadingButton, setLoadingButton] = useState(false);
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
-  const [phone_number, setPhone_number] = useState();
-  const [password, setPassword] = useState();
-  const [confirm, setConfirm] = useState();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone_number, setPhone_number] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -51,11 +82,18 @@ export default function Signup({navigation}) {
       if (state.isConnected) {
         netFlag = 1;
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (username === null) {
+        if (
+          username == null &&
+          username == '' &&
+          password == null &&
+          password == '' &&
+          phone_number == null &&
+          phone_number == ''
+        ) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: 'Please Enter Your Name',
+            message: 'Please Complete all feilds',
             backgroundColor: '#E9691D',
           });
           setLoadingButton(false);
@@ -63,31 +101,7 @@ export default function Signup({navigation}) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: 'Please Enter The correct Email',
-            backgroundColor: '#E9691D',
-          });
-          setLoadingButton(false);
-        } else if (email === null) {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Email',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (password === null) {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (phone_number === null) {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Youe Number',
+            message: 'Please Enter The Correct Email',
             backgroundColor: '#E9691D',
           }),
             setLoadingButton(false);
@@ -166,7 +180,7 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: 'Something went wrong.',
+                  message: translate('Something went wrong.'),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
@@ -177,7 +191,7 @@ export default function Signup({navigation}) {
               showMessage({
                 type: 'warning',
                 icon: 'auto',
-                message: 'Something went wrong.',
+                message: translate('Something went wrong.'),
                 backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
@@ -189,6 +203,13 @@ export default function Signup({navigation}) {
       }
     });
   };
+  useEffect(() => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
+
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, []);
   // const appViewPage = () => {
   //   {
   //     appUrl && (
@@ -226,12 +247,9 @@ export default function Signup({navigation}) {
         <View
           style={{
             backgroundColor: color.primaryBackground,
-            // width: wp('100'),
-            // height: hp('100'),
           }}>
-          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
-            label="Enter Your Name *"
+            label={translate('Enter Your Name*')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%'), marginTop: hp('5')}]}
@@ -239,9 +257,8 @@ export default function Signup({navigation}) {
             selectionColor="#FF7E33"
             onChangeText={text => setUsername(text)}
           />
-          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
-            label="Email *"
+            label={translate('Email *')}
             style={[styles.te, {width: wp('75%')}]}
             underlineColor="gray"
             autoCapitalize="none"
@@ -250,9 +267,8 @@ export default function Signup({navigation}) {
             value={email}
             onChangeText={text => setEmail(text)}
           />
-          {/* <Text style={{marginBottom: 5}}></Text> */}
           <TextInput
-            label="Number *"
+            label={translate('Number')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
@@ -261,10 +277,9 @@ export default function Signup({navigation}) {
             selectionColor="#FF7E33"
             onChangeText={text => setPhone_number(text)}
           />
-          {/* <Text style={{marginBottom: 5}}></Text> */}
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label="Password *"
+              label={translate('Password *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
@@ -281,10 +296,9 @@ export default function Signup({navigation}) {
               name={show ? 'eye-outline' : 'eye-off-outline'}
             />
           </View>
-          {/* <Text style={{marginBottom: 5}}></Text> */}
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label="Confirm Password *"
+              label={translate('Confirm Password *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
@@ -301,38 +315,12 @@ export default function Signup({navigation}) {
               name={cshow ? 'eye-outline' : 'eye-off-outline'}
             />
           </View>
-          {/* <Text style={{marginBottom: 20.4}}></Text> */}
         </View>
         <View>
-          {/* {loadingButton ? (
-            <OrientationLoadingOverlay
-              visible={true}
-              color="white"
-              indicatorSize="large"
-              messageFontSize={24}
-              message="Loading..."
-            />
-          ) : ( */}
           <TouchableOpacity
             onPress={() => savedata()}
-            style={{
-              width: wp('60%'),
-              height: hp('6%'),
-              backgroundColor: '#FF7E33',
-              alignSelf: 'center',
-              marginTop: 30,
-              borderRadius: 7,
-              flexDirection: 'row',
-              // alignItems:'center',
-              // justifyContent:'center'
-            }}>
-            <View
-              style={{
-                width: wp('15%'),
-                height: hp('6%'),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            style={styles.createAccountButton}>
+            <View style={styles.innerView}>
               <Ionicons
                 style={{marginLeft: wp('3%')}}
                 name="create"
@@ -340,25 +328,12 @@ export default function Signup({navigation}) {
                 color={'white'}
               />
             </View>
-            <View
-              style={{
-                width: wp('35%'),
-                height: hp('6%'),
-                alignItems: 'center',
-                justifyContent: 'center',
-                // backgroundColor:'red'
-              }}>
+            <View style={styles.createAccountView}>
               {loadingButton ? (
                 <ActivityIndicator color="white" size="small" />
               ) : (
-                <Text
-                  style={{
-                    fontSize: hp('2%'),
-                    color: 'white',
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                  }}>
-                  Create Account
+                <Text style={styles.createAccountText}>
+                  {translate('Create Account')}
                 </Text>
               )}
             </View>
@@ -389,29 +364,19 @@ export default function Signup({navigation}) {
         <View style={{...styles.ty, marginTop: hp('3')}}>
           <View style={styles.ty}>
             <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
-              Already Have An Account ?
+              {translate('Already Have An Account ?')}
             </Text>
           </View>
 
           <TouchableOpacity
-            // style={styles.ty}
             style={{...styles.ty, marginTop: hp('0')}}
             onPress={() => navigation.navigate('Login')}>
             <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-              Login
+              {translate('Login')}
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            width: wp('100'),
-            bottom: Platform.OS == 'ios' ? hp('-3') : hp('0'),
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.bottomView}>
           <TouchableOpacity
             style={styles.faqContainer}
             onPress={() => navigation.navigate('FaqScreen')}>
@@ -424,7 +389,7 @@ export default function Signup({navigation}) {
           <TouchableOpacity
             style={styles.privacyContainer}
             onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
-            <Text style={styles.bottomText}>PrivacyPolicy</Text>
+            <Text style={styles.bottomText}>{translate('PrivacyPolicy')}</Text>
           </TouchableOpacity>
         </View>
       </View>

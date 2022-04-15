@@ -57,7 +57,6 @@ export const FilterModal = props => {
   const [endingPrice, setEndingPrice] = useState('2500000');
   const [startingPrice, setStartingPrice] = useState('0');
   const [seletedIndex, setSeletedIndex] = useState();
-  //   var seletedIndex;
   const getCategoryData = () => {
     fetch(CATEGORY)
       .then(res => res.json())

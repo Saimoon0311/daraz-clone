@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -49,5 +49,47 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#E9691D',
     textDecorationLine: 'underline',
+  },
+  loginContainer: {
+    width: wp('65%'),
+    height: hp('6%'),
+    backgroundColor: '#FF7E33',
+    alignSelf: 'center',
+    marginTop: 30,
+    borderRadius: 10,
+    flexDirection: 'row',
+  },
+  loginIconView: {
+    width: wp('15%'),
+    height: hp('6%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginTextView: {
+    width: wp('35%'),
+    height: hp('6%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginButtonText: {
+    fontSize: hp('2.8%'),
+    color: 'white',
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  forgotPasswordText: {
+    paddingTop: hp('2'),
+    color: '#B64400',
+    fontSize: hp('2'),
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+  bottomView: {
+    width: wp('100'),
+    top: hp(Platform.OS == 'ios' ? '25' : '23'),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });

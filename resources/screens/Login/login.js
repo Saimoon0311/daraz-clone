@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AnimateLoadingButton from 'react-native-animate-loading-button';
 import NetInfo from '@react-native-community/netinfo';
 import {
@@ -29,11 +29,43 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useDispatch} from 'react-redux';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Login({navigation}) {
   const dispatch = useDispatch();
   const [loadingButton, setLoadingButton] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [dummy, setDummy] = useState(1);
+
+  const isCarousel = React.useRef(null);
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   const [show, setShow] = useState(false);
 
@@ -80,7 +112,6 @@ export default function Login({navigation}) {
               navigation,
               dispatch,
             );
-            // console.log('res=== 83', res);
             if (res[0].message == 'Email not found') {
               showMessage({
                 type: 'danger',
@@ -89,7 +120,6 @@ export default function Login({navigation}) {
                 backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
-              // console.log('res=== 86 ', res);
             } else if (res[0].message == 'Password is incorrect') {
               showMessage({
                 type: 'danger',
@@ -98,18 +128,10 @@ export default function Login({navigation}) {
                 backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
-              // console.log('res=== 86 ', res);
             } else {
-              // showMessage({
-              //   type: 'success',
-              //   icon: 'success',
-              //   message: 'User Login Success',
-              // });
-              // console.log(res);
               setLoadingButton(false);
             }
           } catch (error) {
-            // console.log('errot', error);
             setLoadingButton(false);
             showMessage({
               type: 'danger',
@@ -124,16 +146,16 @@ export default function Login({navigation}) {
         setLoadingButton(false);
       }
     });
-
-    // }
   };
+  useEffect(() => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, []);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      // style={{
-      //   width: wp('100'),
-      //   height: hp('100'),
-      // }}
       contentContainerStyle={{flex: 1}}>
       <StatusBar backgroundColor="#FFDDC9" barStyle="dark-content" />
       <View
@@ -148,27 +170,22 @@ export default function Login({navigation}) {
           style={{
             flexDirection: 'row',
             alignSelf: 'center',
-            // backgroundColor: 'yellow',
           }}>
           <Image
             source={require('../../images/logo.png')}
             style={{
-              // alignSelf: 'center',
               width: wp('20'),
               height: hp('8'),
               marginTop: hp('4'),
-              // backgroundColor: 'red',
             }}
             resizeMode="contain"
           />
           <Image
             source={require('../../images/Group66.png')}
             style={{
-              // alignSelf: 'center',
               width: wp('20'),
               height: hp('8'),
               marginTop: hp('4'),
-              // backgroundColor: 'green',
             }}
             resizeMode="contain"
           />
@@ -176,7 +193,7 @@ export default function Login({navigation}) {
 
         <View style={{backgroundColor: color.primaryBackground}}>
           <TextInput
-            label="Email *"
+            label={translate('Email *')}
             underlineColor="gray"
             value={email}
             autoCapitalize="none"
@@ -187,7 +204,7 @@ export default function Login({navigation}) {
           <Text style={{marginBottom: 13}}></Text>
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label="Password *"
+              label={translate('Password *')}
               underlineColor="gray"
               value={password}
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -206,45 +223,13 @@ export default function Login({navigation}) {
           </View>
         </View>
         <TouchableOpacity onPress={() => Linking.openURL(FORGETPASSWORD)}>
-          <Text
-            style={{
-              paddingTop: hp('2'),
-              color: '#B64400',
-              fontSize: hp('2'),
-              fontWeight: 'bold',
-              textAlign: 'right',
-            }}>
-            Forgot password?
+          <Text style={styles.forgotPasswordText}>
+            {translate('Forgot password?')}
           </Text>
         </TouchableOpacity>
         <View>
-          {/* {loadingButton ? (
-            <OrientationLoadingOverlay
-              visible={true}
-              color="white"
-              indicatorSize="large"
-              messageFontSize={24}
-              message="Loading..."
-            />
-          ) : ( */}
-          <TouchableOpacity
-            onPress={loginss}
-            style={{
-              width: wp('65%'),
-              height: hp('6%'),
-              backgroundColor: '#FF7E33',
-              alignSelf: 'center',
-              marginTop: 30,
-              borderRadius: 10,
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                width: wp('15%'),
-                height: hp('6%'),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+          <TouchableOpacity onPress={loginss} style={styles.loginContainer}>
+            <View style={styles.loginIconView}>
               <Ionicons
                 style={{marginLeft: wp('3%')}}
                 name="log-in"
@@ -252,26 +237,11 @@ export default function Login({navigation}) {
                 color={'white'}
               />
             </View>
-            <View
-              style={{
-                width: wp('35%'),
-                height: hp('6%'),
-                alignItems: 'center',
-                justifyContent: 'center',
-                // backgroundColor: 'red',
-              }}>
+            <View style={styles.loginTextView}>
               {loadingButton ? (
                 <ActivityIndicator color="white" size="small" />
               ) : (
-                <Text
-                  style={{
-                    fontSize: hp('2.8%'),
-                    color: 'white',
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                  }}>
-                  Login
-                </Text>
+                <Text style={styles.loginButtonText}>{translate('Login')}</Text>
               )}
             </View>
             <View
@@ -282,28 +252,23 @@ export default function Login({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={{...styles.ty, marginTop: hp('5')}}>
-          <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
-            New on Moyen?
+          <Text
+            style={{
+              fontSize: hp('1.6'),
+              textAlign: 'center',
+              color: '#512500',
+            }}>
+            {translate('New on Moyen?')}
           </Text>
         </View>
         <TouchableOpacity
           style={{...styles.ty, marginTop: hp('0')}}
           onPress={() => navigation.navigate('Signup')}>
           <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            Create Account
+            {translate('Create Account')}
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            // position: 'absolute',
-            width: wp('100'),
-            top: hp(Platform.OS == 'ios' ? '25' : '23'),
-            // backgroundColor: 'yellow',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.bottomView}>
           <TouchableOpacity
             style={styles.faqContainer}
             onPress={() => navigation.navigate('FaqScreen')}>
@@ -316,7 +281,7 @@ export default function Login({navigation}) {
           <TouchableOpacity
             style={styles.privacyContainer}
             onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
-            <Text style={styles.bottomText}>PrivacyPolicy</Text>
+            <Text style={styles.bottomText}>{translate('PrivacyPolicy')}</Text>
           </TouchableOpacity>
         </View>
       </View>

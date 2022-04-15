@@ -151,7 +151,9 @@ export default function setting({navigation}) {
         <TouchableOpacity
           onPress={() => navigation.navigate('MyTabs')}
           style={styles.loginContainer}>
-          <Text style={styles.loginText}>Login/Signup</Text>
+          <Text style={styles.loginText}>
+            {translate('Login')}/{translate('Signup')}
+          </Text>
         </TouchableOpacity>
       </View>
     );

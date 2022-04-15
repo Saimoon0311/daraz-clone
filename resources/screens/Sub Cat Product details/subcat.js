@@ -279,7 +279,7 @@ export default function subcatdetails({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         } else if (
@@ -293,17 +293,16 @@ export default function subcatdetails({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         }
       })
       .catch(error => {
-        // console.error(109, error);
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: 'Something went wrong.',
+          message: translate('Something went wrong.'),
           backgroundColor: '#E9691D',
         });
       });
@@ -332,20 +331,15 @@ export default function subcatdetails({route, navigation}) {
     // });
   };
   const renderCards = item => {
-    // console.log(207, item);
     return (
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
-            // source={{
-            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-            // }}
-          >
+            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}>
             {item.featured == 1 ? (
-              <Text style={styles.fea}>Featured</Text>
+              <Text style={styles.fea}>{translate('Featured')}</Text>
             ) : null}
             {item.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
@@ -473,7 +467,7 @@ export default function subcatdetails({route, navigation}) {
             // }}
           >
             {item?.get_products?.featured == 1 ? (
-              <Text style={styles.fea}>Featured</Text>
+              <Text style={styles.fea}>{translate('Featured')}</Text>
             ) : null}
             {item?.get_products?.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
@@ -680,7 +674,7 @@ export default function subcatdetails({route, navigation}) {
           <TouchableOpacity
             onPress={() => setFilterModal(true)}
             style={styles.filterView}>
-            <Text style={styles.filterText}>Filter</Text>
+            <Text style={styles.filterText}>{translate('Filter')}</Text>
             <Foundation size={35} color="#512500" name="filter" />
           </TouchableOpacity>
         )}
