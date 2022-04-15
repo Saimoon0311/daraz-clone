@@ -33,5 +33,30 @@
     "Confirm New Password *" :"Confirm New Password *",
     "Yes" :"Yes",
     "No" :"No",
-    "Help For user To Contact Super Admin":"Help For user To Contact Super Admin"
-   }
+    "Help For user To Contact Super Admin":"Help For user To Contact Super Admin",
+    
+    "Carts":"Carts",
+    "Select All":"Select All",
+    "Remove":"Remove",
+    "Subtotal":"Subtotal",
+    "Total":"Total",
+    "Your Cart Has been deleted":"Your Cart Has been deleted",
+    "Complete your order":"Complete your order",
+    "Kindly select at least 1 item":"Kindly select at least 1 item",
+    "Are you sure you want to delete all product ?":"Are you sure you want to delete all product ?",
+    "You have no items in the cart":"You have no items in the cart",
+    "Add items you want to shop":"Add items you want to shop",
+    "Continue Shopping":"Continue Shopping",
+    "Filter":"Filter",
+
+    "Please Enter correct Search":"Please Enter correct Search",
+    "Search":"Search",
+    "Added to wishlist":"Added to wishlist",
+    "This item has been removed from your wishlist":"This item has been removed from your wishlist",
+    "No product found":"No product found",
+    "Kindly search to see products listings":"Kindly search to see products listings"
+
+
+   
+
+}

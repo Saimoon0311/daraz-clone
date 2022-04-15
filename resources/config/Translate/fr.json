@@ -33,5 +33,41 @@
     "Confirm New Password *" :"Confirmer le nouveau mot de passe *",
     "Yes":"Oui",
     "No" : "Non",
-    "Help For user To Contact Super Admin" :"Aide Pour l'utilisateur Pour contacter le super administrateur"
+    "Help For user To Contact Super Admin" :"Aide Pour l'utilisateur Pour contacter le super administrateur",
+
+    "Carts":"Chariots",
+    "Select All":"Tout sélectionner",
+    "Remove":"Éliminer",
+    "Subtotal":"Total",
+    "Total":"Totale",
+    "Your Cart Has been deleted":"Votre panier a été supprimé",
+    "Complete your order":"Complétez votre commande",
+    "Kindly select at least 1 item":"Veuillez sélectionner au moins 1 élément",
+    "Are you sure you want to delete all product ?":"Êtes-vous sûr de vouloir supprimer tous les produits ?",
+    "You have no items in the cart":"Vous n'avez aucun article dans le panier",
+    "Add items you want to shop":"Ajoutez les articles que vous souhaitez acheter",
+    "Continue Shopping":"Continuer vos achats",
+    "Filter":"Filtre",
+
+    "Please Enter correct Search":"Veuillez entrer la recherche correcte",
+    "Search":"Recherche",
+    "Added to wishlist":"Ajouté à la liste de souhaits",
+    "This item has been removed from your wishlist":"Cet article a été supprimé de votre liste de souhaits",
+    "No product found":"Aucun produit trouvé",
+    "Kindly search to see products listings":"Veuillez rechercher pour voir les listes de produits"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

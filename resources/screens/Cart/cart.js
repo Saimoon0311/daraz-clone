@@ -40,6 +40,9 @@ import types from '../../redux/type';
 import CheckBox from '@react-native-community/checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
@@ -61,6 +64,33 @@ export default function Cart({navigation}) {
   const [dummy, setDummy] = useState(1);
   const [isSelected, setSelection] = useState(false);
   const [checkBox, setCheckBox] = useState(false);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -199,6 +229,7 @@ export default function Cart({navigation}) {
   useEffect(() => {
     (async () => {
       await checkStatus();
+      RNLocalize.addEventListener('change', handleLocalizationChange());
       if (isFocused) {
         await checkStatus();
         setCheckBox(false);
@@ -208,6 +239,9 @@ export default function Cart({navigation}) {
         console.log(58, 'screen is not Focused');
       }
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [isFocused, saveProduct]);
 
   const selectedTotalPrice = async data => {
@@ -315,7 +349,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json[0].message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -324,7 +358,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: json[0].message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -396,7 +430,7 @@ export default function Cart({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'auto',
-          message: 'Kindly select at least 1 item',
+          message: translate('Kindly select at least 1 item'),
           backgroundColor: '#E9691D',
         });
       }
@@ -622,7 +656,7 @@ export default function Cart({navigation}) {
               size={20}
               color="#B64400"
             />
-            <Text style={styles.remov}>Remove</Text>
+            <Text style={styles.remov}>{translate('Remove')}</Text>
           </TouchableOpacity>
           <View
             style={{
@@ -950,7 +984,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json.message,
+            message: translate(json.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -979,7 +1013,7 @@ export default function Cart({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>Carts</Text>
+        <Text style={styles.te}>{translate('Carts')}</Text>
         <TouchableOpacity
           onPress={() => {
             setNshowAlert(true);
@@ -987,7 +1021,7 @@ export default function Cart({navigation}) {
           <MaterialIcons
             name="delete-outline"
             size={30}
-            color="#512500"
+            // color="#512500"
             color={cartdata.length > 0 ? '#512500' : '#FFDDC9'}
             style={{
               ...styles.icon,
@@ -1009,16 +1043,18 @@ export default function Cart({navigation}) {
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />
               <Text numberOfLines={1} style={styles.tee}>
-                You have no items in the cart.
+                {translate('You have no items in the cart')}.
               </Text>
-              <Text style={{color: 'gray'}}>Add items you want to shop</Text>
+              <Text style={{color: 'gray'}}>
+                {translate('Add items you want to shop')}
+              </Text>
               <TouchableOpacity
                 style={styles.maior}
                 // onPress={() => navigation.navigate('checkOut')}
                 onPress={() => {
                   navigation.goBack();
                 }}>
-                <Text style={styles.or}>Continue Shopping</Text>
+                <Text style={styles.or}>{translate('Continue Shopping')}</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -1045,7 +1081,7 @@ export default function Cart({navigation}) {
                       ...styles.selectText,
                       color: checkBox ? color.themColorPrimary : 'gray',
                     }}>
-                    Select All
+                    {translate('Select All')}
                   </Text>
                 </View>
               )}
@@ -1067,7 +1103,7 @@ export default function Cart({navigation}) {
                   <View style={styles.box}>
                     <View style={{flexDirection: 'row'}}>
                       <Text style={{color: 'gray', fontSize: hp('2%')}}>
-                        Subtotal
+                        {translate('Subtotal')}
                       </Text>
                       <Text style={styles.ty}>
                         $ {totalPriceShow.toFixed(2)}
@@ -1085,7 +1121,7 @@ export default function Cart({navigation}) {
                           fontWeight: 'bold',
                           fontSize: hp('2%'),
                         }}>
-                        Total
+                        {translate('Total')}
                       </Text>
                       <Text
                         style={[
@@ -1102,7 +1138,9 @@ export default function Cart({navigation}) {
                           ? checkStatusType()
                           : navigation.navigate('MyTabs');
                       }}>
-                      <Text style={styles.or}>Complete your order</Text>
+                      <Text style={styles.or}>
+                        {translate('Complete your order')}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   {/* <View style={styles.recentTextContainer}>
@@ -1150,16 +1188,16 @@ export default function Cart({navigation}) {
       <AwesomeAlert
         show={nshowAlert}
         showProgress={false}
-        title="Warning!"
-        message="Are you sure you want to delete all product ?"
+        title={translate('Warning!')}
+        message={translate('Are you sure you want to delete all product ?')}
         messageStyle={{color: 'gray', textAlign: 'center'}}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={true}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText="Yes"
-        cancelText="No"
+        confirmText={translate('Yes')}
+        cancelText={translate('No')}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
         cancelButtonTextStyle={{fontSize: hp('2.2%')}}

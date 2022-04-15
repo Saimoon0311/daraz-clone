@@ -48,6 +48,9 @@ import {useIsFocused} from '@react-navigation/native';
 import {getUserData} from '../../utils/utils';
 import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
 import Foundation from 'react-native-vector-icons/Foundation';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function seacrhScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -63,6 +66,44 @@ export default function seacrhScreen({navigation}) {
   const [end, setEnd] = useState('2500000');
   const [start, setStart] = useState('0');
   const [checksubcat, setChecksubcat] = useState(false);
+
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+    })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, [isFocused]);
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -111,7 +152,7 @@ export default function seacrhScreen({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'Please Enter correct Seacrh.',
+        message: translate('Please Enter correct Search'),
         backgroundColor: '#E9691D',
       });
     }
@@ -126,7 +167,7 @@ export default function seacrhScreen({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         } else if (
@@ -136,7 +177,7 @@ export default function seacrhScreen({navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         }
@@ -310,11 +351,11 @@ export default function seacrhScreen({navigation}) {
   return (
     <View>
       <View style={styles.appbarStyle}>
-        <Text style={styles.head}>Search</Text>
+        <Text style={styles.head}>{translate('Search')}</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
           <View style={styles.search}>
             <TextInput
-              placeholder="Search..."
+              placeholder={translate('Search')}
               placeholderTextColor="#512500"
               style={styles.searchbar}
               onSubmitEditing={() => checkStatus()}
@@ -343,7 +384,7 @@ export default function seacrhScreen({navigation}) {
         <TouchableOpacity
           onPress={() => setFilterModal(true)}
           style={styles.filterView}>
-          <Text style={styles.filterText}>Filter</Text>
+          <Text style={styles.filterText}>{translate('Filter')}</Text>
           <Foundation size={35} color="#512500" name="filter" />
         </TouchableOpacity>
       )}
@@ -363,7 +404,7 @@ export default function seacrhScreen({navigation}) {
       ) : allData?.length == 0 ? (
         <View style={styles.imm}>
           <MaterialIcons name="search-off" color="#E9691D" size={80} />
-          <Text style={styles.tee}>No product found.</Text>
+          <Text style={styles.tee}>{translate('No product found')}</Text>
           {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
           {/* <TouchableOpacity
             style={styles.maior}
@@ -380,7 +421,7 @@ export default function seacrhScreen({navigation}) {
           />
           <Text
             style={{...styles.tee, fontSize: hp('2.5'), textAlign: 'center'}}>
-            Kindly search to see products listings.
+            {translate('Kindly search to see products listings')}
           </Text>
         </View>
       ) : (
