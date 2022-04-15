@@ -111,4 +111,38 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     paddingTop: Platform.OS == 'ios' ? hp('2.3') : hp('0'),
   },
+  contentStyleContainer: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  priceStyleContainerLeft: {
+    color: color.bottomNavColor,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: hp('0.5%'),
+  },
+  priceStyleContainerRight: {
+    color: color.bottomNavColor,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textDecorationLine: 'line-through',
+    marginTop: hp('0.5%'),
+  },
+  discountStyleContainer: {
+    color: color.redColor,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: hp('0.5%'),
+  },
+  withoutDiscountStyle: {
+    color: color.bottomNavColor,
+    fontSize: hp('2.7'),
+    fontWeight: 'bold',
+  },
+  descriptionStyleContainer: {
+    color: 'gray',
+    textAlign: 'justify',
+    marginTop: hp('0.5%'),
+  },
 });
