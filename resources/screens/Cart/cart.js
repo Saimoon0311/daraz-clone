@@ -202,30 +202,6 @@ export default function Cart({navigation}) {
       setCartdata([]);
     }
   };
-  // const getRecentData = async () => {
-  //   const userId = await getUserData();
-  //   const users = userId.id;
-  //   setUser_id(users);
-  //   fetch(`${testCART}/${users}`, {
-  //     method: 'GET',
-  //   })
-  //     .then(async response => await response.json())
-  //     .then(async json => {
-  //       setSliderData(json[0]);
-  //       // console.log(800, json[0]);
-  //       // console.log(80, JSON?.parse(silderData[0]?.attributes));
-  //       // console.log(78, json);
-  //     })
-  //     .catch(e => {
-  //       // showMessage({
-  //       //   type: 'danger',
-  //       //   icon: 'danger',
-  //       //   message: 'Something want wrong',
-  //       // });
-  //       // console.log(94, e);
-  //     });
-  // };
-
   useEffect(() => {
     (async () => {
       await checkStatus();
@@ -295,13 +271,6 @@ export default function Cart({navigation}) {
     const userId = await getUserData();
     const users = userId.id;
     const a = `${API_BASED_URL}${type}/${users}/${id}`;
-    // console.log(163, a);
-    // if (quantity >= 0) {
-
-    // } else{
-
-    //   console.log(183,quantity)
-    // }
     fetch(a, {
       method: 'POST',
     })
@@ -309,8 +278,6 @@ export default function Cart({navigation}) {
       .then(json => {
         setCartdata(json[0]);
         selectedTotalPrice(json[0]);
-
-        // totalprice(json[0]);
       });
   };
 
@@ -337,11 +304,7 @@ export default function Cart({navigation}) {
       });
   };
   const addtowishlist = id => {
-    // setLoading(true);
     var product_id = id;
-    //  setCartloading(true)
-    //  await ff()
-    // console.log('id', id, 'userid', user_id);
     fetch(`${ADDTOWISHLIST}/${id}/${user_id}`)
       .then(async response => await response.json())
       .then(json => {
@@ -353,7 +316,6 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
-          // setLoading(false);
         } else {
           showMessage({
             type: 'warning',
@@ -362,7 +324,6 @@ export default function Cart({navigation}) {
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
-          // setLoading(false)
         }
       });
   };
@@ -395,21 +356,16 @@ export default function Cart({navigation}) {
     selectedTotalPrice(newData);
   };
   const totalprice = () => {
-    // console.log(134);
     if (cartdata !== []) {
-      // console.log(148, data);
       let sum = 0;
       cartdata.forEach(obj => {
         for (let property in obj) {
-          // console.log(152);
           if (property == 'product_total') {
-            // console.log(154);
             sum += obj[property];
           }
         }
       });
       console.log(161, sum);
-      // return sum;
       setTotalPrice(sum);
     }
   };
@@ -435,7 +391,6 @@ export default function Cart({navigation}) {
         });
       }
     }
-    // console.log(365, listSeleted);
   };
   const checkDataLength = data => {
     var listSeleted = data.filter(item => item.seleted == true);
@@ -461,24 +416,11 @@ export default function Cart({navigation}) {
               source={{
                 uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
               }}
-              style={{
-                width: wp('30%'),
-                height: hp('15%'),
-                borderRadius: 10,
-              }}
+              style={styles.imageStyle}
             />
 
             <View style={{marginTop: hp('2')}}>
-              <Text
-                numberOfLines={1}
-                style={{
-                  width: wp('40%'),
-                  fontSize: hp('1.8'),
-                  color: color.textColorRedCart,
-                  marginLeft: 10,
-                  marginBottom: hp('1'),
-                  fontWeight: 'bold',
-                }}>
+              <Text numberOfLines={1} style={styles.productNameStyle}>
                 {item?.get_products?.name}
               </Text>
 
@@ -491,14 +433,11 @@ export default function Cart({navigation}) {
                   numberOfLines={1}
                   style={{
                     fontSize: hp('2'),
-                    // color: color.textColorRedCart,
                     color: '#512500',
-
-                    // fontWeight: 'bold',
                     marginLeft: 10,
                     marginBottom: hp('1'),
                   }}>
-                  Price : ${/* Price : ${item?.get_products?.price} */}
+                  Price :
                 </Text>
                 {item?.get_products?.is_discounted == 2 ? (
                   <View
@@ -508,34 +447,17 @@ export default function Cart({navigation}) {
                     <Text
                       style={{
                         fontSize: hp('2'),
-                        // color: color.textColorRedCart,
                         color: '#512500',
-
-                        // fontWeight: 'bold',
                         textDecorationLine: 'line-through',
                       }}>
                       {item?.get_products?.price}
                     </Text>
-                    <Text
-                      style={{
-                        fontSize: hp('2'),
-                        color: 'red',
-                        // fontWeight: 'bold',
-                        marginLeft: wp('2'),
-                      }}>
+                    <Text style={styles.productDiscountPriceStyle}>
                       {item?.get_products?.discounted_price}
                     </Text>
                   </View>
                 ) : (
-                  <Text
-                    style={{
-                      fontSize: hp('2'),
-                      // color: '#512500',
-
-                      color: color.textColorRedCart,
-                      // fontWeight: 'bold',
-                      marginBottom: hp('1'),
-                    }}>
+                  <Text style={styles.productPriceStyle}>
                     {item?.get_products?.price}
                   </Text>
                 )}
@@ -546,40 +468,15 @@ export default function Cart({navigation}) {
                   style={{
                     flexDirection: 'row',
                     width: wp('55%'),
-                    // flexWrap: 'wrap',
                   }}>
-                  <Text
-                    style={{
-                      fontSize: hp('2'),
-                      color: '#512500',
-
-                      // color: color.textColorRedCart,
-                      // fontWeight: 'bold',
-                      marginLeft: 10,
-                    }}>
-                    Attribute :
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      // backgroundColor: 'green',
-                      width: wp('35'),
-                    }}>
+                  <Text style={styles.attributeStyle}>Attribute :</Text>
+                  <View style={styles.attributeViewStyleValue}>
                     {att &&
                       att?.map(res => {
                         return (
                           <Text
                             numberOfLines={1}
-                            style={{
-                              fontSize: hp('1.9'),
-                              // color: color.textColorRedCart,
-                              // fontWeight: 'bold',
-                              color: '#512500',
-                              marginLeft: wp('1'),
-                              alignItems: 'center',
-                              // width: wp('34'),
-                            }}>
+                            style={styles.attributeStyleValue}>
                             {res}
                           </Text>
                         );
@@ -605,14 +502,7 @@ export default function Cart({navigation}) {
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
-        <View
-          style={{
-            flex: 1,
-            height: 2,
-            backgroundColor: '#C8C8C8',
-            marginTop: hp('1'),
-          }}
-        />
+        <View style={styles.heartIconicContainer} />
         <View style={{flexDirection: 'row'}}>
           {item?.is_wishlisted == true ? (
             <TouchableOpacity onPress={() => addtowishlist(item?.product_id)}>
@@ -633,15 +523,6 @@ export default function Cart({navigation}) {
               />
             </TouchableOpacity>
           )}
-          {/* <TouchableOpacity
-      onPress={() => addtowishlist(item?.product_id)}>
-      <Ionicons
-        style={{paddingTop: hp('2.5')}}
-        name="heart-outline"
-        color="#B64400"
-        size={20}
-      />
-    </TouchableOpacity> */}
           <View style={styles.verticleLine}></View>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
@@ -658,12 +539,7 @@ export default function Cart({navigation}) {
             />
             <Text style={styles.remov}>{translate('Remove')}</Text>
           </TouchableOpacity>
-          <View
-            style={{
-              marginLeft: 'auto',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-            }}>
+          <View style={styles.decrementViewButton}>
             {item?.quantity > 1 && (
               <TouchableOpacity
                 onPress={() =>
@@ -684,17 +560,7 @@ export default function Cart({navigation}) {
                 />
               </TouchableOpacity>
             )}
-            <Text
-              style={{
-                paddingTop: hp(Platform?.OS == 'ios' ? '2.3' : '2'),
-                marginRight: 10,
-                fontSize: hp('2.5'),
-                color: '#EEB08B',
-                fontWeight: 'bold',
-              }}>
-              {' '}
-              {item?.quantity}{' '}
-            </Text>
+            <Text style={styles.incrementViewButton}> {item?.quantity} </Text>
             <TouchableOpacity
               onPress={() =>
                 quantityIncrease(
@@ -729,23 +595,10 @@ export default function Cart({navigation}) {
               source={{
                 uri: `${Images_API}/${item?.images[0]?.name}`,
               }}
-              style={{
-                width: wp('30%'),
-                height: hp('15%'),
-                borderRadius: 10,
-              }}
+              style={styles.logoutImageContainer}
             />
             <View style={{marginTop: 20}}>
-              <Text
-                numberOfLines={1}
-                style={{
-                  width: wp('40%'),
-                  fontSize: hp('1.8'),
-                  color: color.textColorRedCart,
-                  marginLeft: 10,
-                  marginBottom: hp('1'),
-                  fontWeight: 'bold',
-                }}>
+              <Text numberOfLines={1} style={styles.logoutNameContainer}>
                 {item?.name}
               </Text>
               <View
@@ -753,27 +606,15 @@ export default function Cart({navigation}) {
                   width: wp('50%'),
                   flexDirection: 'row',
                 }}>
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    fontSize: hp('2'),
-                    color: '#512500',
-                    marginLeft: 10,
-                    marginBottom: hp('1'),
-                  }}>
-                  Price : ${/* Price : ${item?.get_products?.price} */}
+                <Text numberOfLines={1} style={styles.logoutPriceContainer}>
+                  Price :
                 </Text>
                 {item?.is_discounted == 2 ? (
                   <View
                     style={{
                       flexDirection: 'row',
                     }}>
-                    <Text
-                      style={{
-                        fontSize: hp('2'),
-                        color: '#512500',
-                        textDecorationLine: 'line-through',
-                      }}>
+                    <Text style={styles.logoutPriceValueContainer}>
                       {item?.price}
                     </Text>
                     <Text
