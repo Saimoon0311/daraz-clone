@@ -33,5 +33,22 @@
     "Confirm New Password *" :"Confirm New Password *",
     "Yes" :"Yes",
     "No" :"No",
-    "Help For user To Contact Super Admin":"Help For user To Contact Super Admin"
+    "Help For user To Contact Super Admin":"Help For user To Contact Super Admin",
+    "Top sellers" :"Top sellers",
+    "See All":"See All",
+    "New Arrivals":"New Arrivals",
+    "Brands" :"Brands",
+    "Categories :" :"Categories :",
+    "Price :" :"Price :",
+    "Apply Filter" :"Apply Filter",
+    "Clear Filter" :"Clear Filter",
+    "Please type something to search" :"Please type something to search...",
+    "Issue while fetching categories." :"Issue while fetching categories.",
+    "Category" :"Category",
+    "See All Product" :"See All Product",
+    "You have no items in this list" :"You have no items in this list",
+    "Featured" :"Featured",
+    "Wishlist" :"Wishlist",
+    "Search Items" :"Search Items",
+    "All Products" :"All Products"
    }

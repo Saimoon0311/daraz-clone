@@ -34,8 +34,39 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {getUserData} from '../../utils/utils';
 import {useIsFocused} from '@react-navigation/native';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function cate({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [isLoading, setLoading] = useState(true);
   const [subloading, setSubloading] = useState(true);
   const [catdata, setCatdata] = useState();
@@ -52,23 +83,11 @@ export default function cate({navigation}) {
       .then(response => response.json())
       .then(async json => {
         setCatdata(json), setLoading(false);
-        // console.log(55, json[0]);
         getData(json[0].id, click);
-        // firstParentCat == 1 && setFirstParentCat(firstParentCat + 1);
-        // await setFirstParentCat(json[0]?.id);
       })
       .catch(error => {
         console.log(error);
       });
-
-    // const api = SUBCAT + catdata[0]?.id;
-    // fetch(api)
-    //   .then(async response => await response.json())
-    //   .then(json => {
-    //     setSubcatdata(json), setClick(0), setSubloading(false);
-    //   });
-    // .catch(error => setNshowAlert(true))
-    // .finally(() => setSubloading(false),setClick(0));
   };
   const navigationProps = () => {
     navigation.navigate('Cart');
@@ -78,7 +97,7 @@ export default function cate({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'Please type something to search...',
+        message: translate('Please type something to search'),
         backgroundColor: '#E9691D',
       });
     } else {
@@ -86,36 +105,31 @@ export default function cate({navigation}) {
         seacrhDatas: seacrhData,
         screenData: 'search-products',
       });
-      // setToggleSearchBar(false);
       setSearchData('');
     }
   };
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(240);
-
       setIsLoggedIn(false);
-      // await datacallss(false);
     } else if (user !== null) {
-      // console.log(244);
       setIsLoggedIn(true);
-
-      // await datacallss(true);
     }
   };
   useEffect(() => {
     if (isFocused) {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       (async () => {
         await checkStatus();
         await apicall();
-        // await apicallChildCat(firstParentCat, 0);
       })();
+      return () => {
+        RNLocalize.removeEventListener('change', handleLocalizationChange());
+      };
     }
   }, [isFocused]);
   const getData = async (id, index) => {
-    // setStyless(true)
     setClick(index);
     setSubloading(true);
     const api = SUBCAT + id;
@@ -128,7 +142,7 @@ export default function cate({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'auto',
-          message: 'Issue while fetching categories.',
+          message: translate('Issue while fetching categories.'),
           backgroundColor: '#E9691D',
         });
       });
@@ -136,11 +150,8 @@ export default function cate({navigation}) {
   return (
     <View style={styles.mains}>
       <View style={styles.appbarStyle}>
-        <Text style={styles.head}>Category</Text>
+        <Text style={styles.head}>{translate('Category')}</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
-          {/* <TouchableOpacity>
-            <Ionicons size={37.5} color="#512500" name="chevron-back-outline" />
-          </TouchableOpacity> */}
           <View style={styles.search}>
             <TextInput
               placeholder="Search..."
@@ -148,11 +159,8 @@ export default function cate({navigation}) {
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}
               value={seacrhData}
-              // autoFocus={true}
               onPressIn={() => console.log(111)}
               onChangeText={text => setSearchData(text)}
-              // onTouchCancel={}
-              // keyboardAppearance={true}
             />
             <TouchableOpacity onPress={() => onSubmitSeacrhItem()}>
               <Ionicons name="search" color="#512500" size={20} />
@@ -233,7 +241,7 @@ export default function cate({navigation}) {
               style={styles.but}>
               <Text
                 style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
-                See All Product
+                {translate('See All Product')}
               </Text>
               <Ionicons
                 name="chevron-forward-outline"

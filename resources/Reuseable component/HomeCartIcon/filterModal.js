@@ -18,8 +18,39 @@ import {
 import {CATEGORY} from '../../config/url';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {color} from '../../config/color';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export const FilterModal = props => {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [categories, setCategories] = useState([]);
   const [catLoading, setCatLoading] = useState(true);
   const [seletedCategory, setSeletedCategory] = useState(null);
@@ -51,8 +82,13 @@ export const FilterModal = props => {
   };
   var filter = props?.filterModal;
   useEffect(() => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
+
     setCatLoading(true);
     getCategoryData();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [filter]);
 
   return (
@@ -69,9 +105,9 @@ export const FilterModal = props => {
               style={{
                 marginTop: Platform.OS == 'ios' ? hp('6') : hp('10'),
                 marginLeft: wp('4'),
-                marginBottom: hp('-6'),
+                marginBottom: Platform.OS == 'ios' ? hp('-6') : hp('-15'),
               }}>
-              <Text style={styles.headings}>Categories :</Text>
+              <Text style={styles.headings}>{translate('Categories :')}</Text>
               <View style={styles.innerView}>
                 {catLoading == true ? (
                   <SkeletonPlaceholder>
@@ -118,10 +154,10 @@ export const FilterModal = props => {
           ) : null}
           <View
             style={{
-              marginTop: Platform.OS == 'ios' ? hp('6') : hp('10'),
+              marginTop: Platform.OS == 'ios' ? hp('6') : hp('16'),
               marginLeft: wp('4'),
             }}>
-            <Text style={styles.headings}>Price :</Text>
+            <Text style={styles.headings}>{translate('Price :')}</Text>
             <View style={{...styles.innerView, alignItems: 'center'}}>
               <TextInput
                 value={startingPrice}
@@ -144,19 +180,12 @@ export const FilterModal = props => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                props?.applyFilter(
-                  seletedCategory,
-                  startingPrice,
-                  endingPrice,
-                  // startingPrice,
-                  // endingPrice,
-                );
+                props?.applyFilter(seletedCategory, startingPrice, endingPrice);
                 props.onPress();
-                // setLoading(true);
                 props.setFilter(true);
               }}
               style={styles.bottomButton}>
-              <Text style={styles.buttonText}>Apply Filter</Text>
+              <Text style={styles.buttonText}>{translate('Apply Filter')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => clearFilter()}
@@ -164,7 +193,7 @@ export const FilterModal = props => {
                 ...styles.bottomButton,
                 backgroundColor: color.themColorPrimary,
               }}>
-              <Text style={styles.buttonText}>Clear Filter</Text>
+              <Text style={styles.buttonText}>{translate('Clear Filter')}</Text>
             </TouchableOpacity>
           </View>
         </View>

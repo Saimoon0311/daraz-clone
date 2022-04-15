@@ -43,12 +43,44 @@ import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {useIsFocused} from '@react-navigation/native';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 export default function Home({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   const isFocused = useIsFocused();
 
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
@@ -89,6 +121,8 @@ export default function Home({navigation}) {
 
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       await checkStatus();
       if (isFocused) {
         await checkStatus();
@@ -97,6 +131,9 @@ export default function Home({navigation}) {
       }
       // await datacallss();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [isFocused]);
   const routeToLogin = () => {
     // console.log(22222);
@@ -196,7 +233,7 @@ export default function Home({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'Please type something to search...',
+        message: translate('Please type something to search...'),
         backgroundColor: '#E9691D',
       });
     } else {
@@ -290,7 +327,7 @@ export default function Home({navigation}) {
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: hp('24'), marginLeft: 30}}>
-          <Text style={styles.te}>Top sellers</Text>
+          <Text style={styles.te}>{translate('Top sellers')}</Text>
           <NativeBaseProvider>
             <Alldata
               detailss={detailss}
@@ -307,10 +344,10 @@ export default function Home({navigation}) {
                   screenData: ALLFEATUREDPRODUCTS,
                 })
               }>
-              <Text style={{color: '#E9691D'}}>See All</Text>
+              <Text style={{color: '#E9691D'}}>{translate('See All')}</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.te}>New Arrivals</Text>
+          <Text style={styles.te}>{translate('New Arrivals')}</Text>
           <NativeBaseProvider>
             <Alldata
               detailss={detailss}
@@ -327,7 +364,7 @@ export default function Home({navigation}) {
                   screenData: ALLNEWARRIVALS,
                 })
               }>
-              <Text style={{color: '#E9691D'}}>See All</Text>
+              <Text style={{color: '#E9691D'}}>{translate('See All')}</Text>
             </TouchableOpacity>
           </View>
           {/* <Text style={styles.te}>Top sellers</Text>
@@ -350,7 +387,7 @@ export default function Home({navigation}) {
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View> */}
-          <Text style={styles.te}>Brands</Text>
+          <Text style={styles.te}>{translate('Brands')}</Text>
           <NativeBaseProvider>
             <Alldata
               detailss={detailss}

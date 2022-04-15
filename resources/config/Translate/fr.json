@@ -33,5 +33,22 @@
     "Confirm New Password *" :"Confirmer le nouveau mot de passe *",
     "Yes":"Oui",
     "No" : "Non",
-    "Help For user To Contact Super Admin" :"Aide Pour l'utilisateur Pour contacter le super administrateur"
+    "Help For user To Contact Super Admin" :"Aide Pour l'utilisateur Pour contacter le super administrateur",
+    "Top sellers" :"meilleures ventes",
+    "See All" :"Voir tout",
+    "New Arrivals":"Nouvelles Arrivées",
+    "Brands" :"Marques",
+    "Categories :" :"Catégories :",
+    "Price :" :"Prix ​​:",
+    "Apply Filter" :"Appliquer le filtre",
+    "Clear Filter" :"Effacer le filtre",
+    "Please type something to search" :"Veuillez taper quelque chose pour rechercher...",
+    "Issue while fetching categories." :"Problème lors de la récupération des catégories.",
+    "Category" :"Catégorie",
+    "See All Product":"Voir tous les produits",
+    "You have no items in this list":"Vous n'avez aucun élément dans cette liste",
+    "Featured" :"Mis en exergue",
+    "Wishlist" :"Liste de souhaits",
+    "Search Items":"Rechercher des éléments",
+    "All Products":"Tous les produits"
 }

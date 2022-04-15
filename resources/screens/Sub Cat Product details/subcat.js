@@ -52,8 +52,39 @@ import {useIsFocused} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function subcatdetails({route, navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const paramData = route?.params;
   const productData = route?.params?.item;
   const getSearchData = route?.params?.seacrhDatas;
@@ -70,7 +101,6 @@ export default function subcatdetails({route, navigation}) {
   const [checksubcat, setChecksubcat] = useState(true);
   const [filter, setFilter] = useState(false);
   const [price, setPrice] = useState([]);
-  const [dummy, setDummy] = useState(1);
   const [catergory, setCategory] = useState(null);
   const [end, setEnd] = useState('2500000');
   const [start, setStart] = useState('0');
@@ -278,20 +308,19 @@ export default function subcatdetails({route, navigation}) {
         });
       });
   };
-  console.log(200, wishlist);
   const renderHeaderText = () => {
     if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
-      return <Text>Featured</Text>;
+      return <Text>{translate('Featured')}</Text>;
     } else if (paramData?.screenData == ALLNEWARRIVALS) {
-      return <Text>New Arrivals</Text>;
+      return <Text>{translate('New Arrivals')}</Text>;
     } else if (paramData?.screenData == 'subCat') {
       return <Text>{productData?.name}</Text>;
     } else if (paramData?.screenData == 'wishlist') {
-      return <Text>Wishlist</Text>;
+      return <Text>{translate('Wishlist')}</Text>;
     } else if (paramData?.screenData == 'search-products') {
-      return <Text>Search Items</Text>;
+      return <Text>{translate('Search Items')}</Text>;
     } else if (paramData?.screenData == 'featured-data-all/') {
-      return <Text>All Products</Text>;
+      return <Text>{translate('All Products')}</Text>;
     }
   };
   const routeToLogin = () => {
@@ -613,10 +642,15 @@ export default function subcatdetails({route, navigation}) {
 
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       if (isFocused) {
         await checkStatus();
       }
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [isFocused]);
 
   return (
@@ -665,10 +699,10 @@ export default function subcatdetails({route, navigation}) {
           </View>
         ) : allData?.length == 0 ? (
           <View style={styles.imm}>
-            {/* {console.log(664, price)} */}
             <Ionicons name="cart" color="#E9691D" size={80} />
-            <Text style={styles.tee}>You have no items in this list</Text>
-            {/* <Text style={{color: 'gray'}}>Add items you want to shop</Text> */}
+            <Text style={styles.tee}>
+              {translate('You have no items in this list')}
+            </Text>
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.goBack()}>
@@ -685,26 +719,22 @@ export default function subcatdetails({route, navigation}) {
                   marginLeft: wp('4'),
                   marginBottom: hp('2'),
                 }}>
-                Catergory : {catergory.name}
+                {translate('Catergory :')} {catergory.name}
               </Text>
             )}
 
             <FlatList
               data={allData}
-              // data={filter == true ? data : allData}
-              // data={priceData != null ? priceData : allData}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               numColumns={2}
               extraData={allData}
-              // extraData={filter == true ? data : allData}
               contentContainerStyle={{
                 paddingBottom: hp('20%'),
                 width: wp('100%'),
                 alignSelf: 'flex-start',
               }}
               renderItem={({item}) => {
-                // console.log(6534353453445364563546, item.is_wishlisted);
                 return checkRender(item);
               }}
             />
