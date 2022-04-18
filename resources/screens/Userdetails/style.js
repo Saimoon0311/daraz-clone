@@ -61,5 +61,6 @@ export const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     alignSelf: 'center',
+    textAlign: 'center',
   },
 });

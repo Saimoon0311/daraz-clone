@@ -142,7 +142,7 @@ export default function cate({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'auto',
-          message: translate('Issue while fetching categories.'),
+          message: translate('Issue while fetching categories'),
           backgroundColor: '#E9691D',
         });
       });

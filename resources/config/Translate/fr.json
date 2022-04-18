@@ -43,7 +43,7 @@
     "Apply Filter" :"Appliquer le filtre",
     "Clear Filter" :"Effacer le filtre",
     "Please type something to search" :"Veuillez taper quelque chose pour rechercher...",
-    "Issue while fetching categories." :"Problème lors de la récupération des catégories.",
+    "Issue while fetching categories" :"Problème lors de la récupération des catégories.",
     "Category" :"Catégorie",
     "See All Product":"Voir tous les produits",
     "You have no items in this list":"Vous n'avez aucun élément dans cette liste",
@@ -64,7 +64,6 @@
     "Add items you want to shop":"Ajoutez les articles que vous souhaitez acheter",
     "Continue Shopping":"Continuer vos achats",
     "Filter":"Filtre",
-
     "Please Enter correct Search":"Veuillez entrer la recherche correcte",
     "Search":"Recherche",
     "Added to wishlist":"Ajouté à la liste de souhaits",
@@ -114,7 +113,6 @@
 "Delivery":"Livraison",
 "Summary":"Résumé",
 "Payment":"Paieent",
-"Shipping Details":"Les détails d'expédition",
 "Full Name":"Nom complet *",
 "ZipCode *":"Code postal *",
 "Note":"Noter",
@@ -140,5 +138,6 @@
 "You have no orders to display":"Vous n'avez aucune commande à afficher.",
 "You canceled your order":"Vous avez annulé votre commande",
 "You already cancelled your order":"Vous avez déjà annulé votre commande",
-"My Orders":"Mes commandes"
+"My Orders":"Mes commandes",
+"Check Out":"Vérifier"
 }

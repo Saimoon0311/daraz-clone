@@ -514,7 +514,7 @@ export default function checkOut({navigation, route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{t}</Text>
+        <Text style={styles.te}>{translate(t)}</Text>
         <Ionicons
           name="cart"
           size={30}
