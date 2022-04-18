@@ -46,7 +46,7 @@ export const HomeCartIcon = props => {
           setCartLength(0);
         }
       })
-      .catch(err => console.log(40, err));
+      .catch(err => console.log(4028374982364928, err));
   };
   useEffect(() => {
     if (isFocused) {

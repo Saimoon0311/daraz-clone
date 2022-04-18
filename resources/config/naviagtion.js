@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingScreen from '../screens/OnBoardScreen/OnboardingScreen';
 import Faq from '../screens/faq/Faq';
 import PrivacyPolicy from '../screens/privacyPolicy/PrivacyPolicy';
+import {StatusBar} from 'react-native';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
@@ -30,7 +31,6 @@ export default function Navigation() {
 
   const userData = useSelector(state => state.auth.userData);
   const [isLoggedIn, setIsLoggedIn] = useState();
-  // console.log('26', userData);
 
   useEffect(() => {
     (async () => {
@@ -47,24 +47,24 @@ export default function Navigation() {
 
   const checkStatus = async () => {
     if (Object.keys(userData).length === 0) {
-      // console.log(29);
       setIsLoggedIn(false);
     } else if (Object.keys(userData).length > 0) {
-      // console.log(29);
       setIsLoggedIn(true);
     }
   };
 
   return (
-    isAppFirstLaunched != null && (
-      <Stack.Navigator
-        initialRouteName={'Home'}
-        screenOptions={{
-          headerTitleAlign: 'center',
-          headerShown: false,
-          animation: 'slide_from_right',
-        }}>
-        {/* {!!userData && userData.id ? (
+    <>
+      <StatusBar hidden={false} />
+      {isAppFirstLaunched != null && (
+        <Stack.Navigator
+          initialRouteName={'Home'}
+          screenOptions={{
+            headerTitleAlign: 'center',
+            headerShown: false,
+            animation: 'slide_from_right',
+          }}>
+          {/* {!!userData && userData.id ? (
         <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
       ) : (
         <>
@@ -87,8 +87,8 @@ export default function Navigation() {
         </>
       )} */}
 
-        {/* <Stack.Screen name="Home" component={Home} /> */}
-        {/* <Stack.Screen
+          {/* <Stack.Screen name="Home" component={Home} /> */}
+          {/* <Stack.Screen
         options={{
           title: 'Sign In',
           headerShown: true,
@@ -103,37 +103,41 @@ export default function Navigation() {
         name="MyTabs"
         component={MyTabs}
       /> */}
-        {isAppFirstLaunched && (
-          <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-        )}
-        <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
-        <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicy} />
-        <Stack.Screen name="FaqScreen" component={Faq} />
-        <Stack.Screen name="Details" component={Details} />
-        <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen name="Cartdetails" component={Cartdetails} />
-        <Stack.Screen name="Userdeatils" component={Userdeatils} />
-        <Stack.Screen name="subcatdetails" component={subcatdetails} />
-        <Stack.Screen name="changepassword" component={changepassword} />
-        <Stack.Screen name="checkOut" component={checkOut} />
-        <Stack.Screen name="OrderDetails" component={OrderDetails} />
-        <Stack.Screen
-          options={{
-            title: 'Login / Register',
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: '#FFDDC9',
-            },
-            headerTintColor: '#512500',
-            headerTitleStyle: {
-              fontSize: 18,
-            },
-          }}
-          name="MyTabs"
-          component={MyTabs}
-        />
-        {/* <Stack.Screen name="Home" component={Home} /> */}
-      </Stack.Navigator>
-    )
+          {isAppFirstLaunched && (
+            <Stack.Screen
+              name="OnboardingScreen"
+              component={OnboardingScreen}
+            />
+          )}
+          <Stack.Screen name="MybottomTabs" component={MybottomTabs} />
+          <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicy} />
+          <Stack.Screen name="FaqScreen" component={Faq} />
+          <Stack.Screen name="Details" component={Details} />
+          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="Cartdetails" component={Cartdetails} />
+          <Stack.Screen name="Userdeatils" component={Userdeatils} />
+          <Stack.Screen name="subcatdetails" component={subcatdetails} />
+          <Stack.Screen name="changepassword" component={changepassword} />
+          <Stack.Screen name="checkOut" component={checkOut} />
+          <Stack.Screen name="OrderDetails" component={OrderDetails} />
+          <Stack.Screen
+            options={{
+              title: 'Login / Register',
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#FFDDC9',
+              },
+              headerTintColor: '#512500',
+              headerTitleStyle: {
+                fontSize: 18,
+              },
+            }}
+            name="MyTabs"
+            component={MyTabs}
+          />
+          {/* <Stack.Screen name="Home" component={Home} /> */}
+        </Stack.Navigator>
+      )}
+    </>
   );
 }

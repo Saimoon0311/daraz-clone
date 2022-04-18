@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   Alert,
   LogBox,
+  StatusBar,
 } from 'react-native';
 import Navigation from './resources/config/naviagtion';
 import {NavigationContainer} from '@react-navigation/native';
@@ -113,6 +114,7 @@ function AppTwo({navigation}) {
 
     return (
       <>
+        <StatusBar hidden={true} />
         {isVisible === true ? (
           Splash_Screen
         ) : (
