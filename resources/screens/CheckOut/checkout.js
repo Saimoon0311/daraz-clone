@@ -769,7 +769,7 @@ export default function checkOut({navigation, route}) {
           animation={'bounceInLeft'}
           // animation={'tada'}
         >
-          <Text style={styles.centerText}>Billing Address</Text>
+          <Text style={styles.centerText}>{translate('Billing Address')}</Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
               label={translate('Full Name')}
@@ -948,7 +948,9 @@ export default function checkOut({navigation, route}) {
   const paymentMethod = () => {
     return (
       <>
-        <Text style={styles.centerText}>Select Payment Method</Text>
+        <Text style={styles.centerText}>
+          {translate('Select Payment Method')}
+        </Text>
         <View style={styles.box}>
           <NativeBaseProvider>
             <Radio.Group
