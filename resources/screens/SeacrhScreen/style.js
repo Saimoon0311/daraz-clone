@@ -8,7 +8,6 @@ import {
 export const styles = StyleSheet.create({
   appbarStyle: {
     backgroundColor: '#FFDDC9',
-    // paddingBottom: hp('5'),
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
@@ -18,7 +17,6 @@ export const styles = StyleSheet.create({
   },
   head: {
     textAlign: 'center',
-    // marginBottom: 10,
     marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
 
     fontWeight: '400',
@@ -48,9 +46,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 18,
     backgroundColor: '#F3F5F7',
-    // marginRight: wp('3%'),
     shadowColor: '#000',
-    // width:354,
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 5,
@@ -62,12 +58,6 @@ export const styles = StyleSheet.create({
     width: wp('41'),
     height: hp('15'),
     borderRadius: 30,
-    // shadowColor: '#000',
-    // width:354,
-    // shadowOffset: { width: 1, height: 1 },
-    // shadowOpacity: 0.6,
-    // shadowRadius: 18,
-    // elevation: 5,
   },
   fea: {
     marginLeft: 10,

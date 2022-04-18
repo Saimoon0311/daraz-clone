@@ -2,15 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
-  ScrollView,
-  Image,
   FlatList,
-  ActivityIndicator,
   ImageBackground,
-  Pressable,
   Platform,
 } from 'react-native';
 import {
@@ -19,7 +13,6 @@ import {
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-  ADDTOCART,
   ADDTOWISHLIST,
   AllDataWithOutUserId,
   ALLFEATUREDPRODUCTS,
@@ -27,8 +20,6 @@ import {
   ALLNEWARRIVALS,
   AllNewArrivalsDataSkipUser,
   API_BASED_URL,
-  CATEGORY,
-  CATEGORYALLDATA,
   filterProductUrl,
   Images_API,
   searchDataWithOutUserID,
@@ -39,17 +30,10 @@ import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import {color} from '../../config/color';
 import {styles} from './style';
-import {
-  CirclesLoader,
-  PulseLoader,
-  TextLoader,
-  DotsLoader,
-  BubblesLoader,
-} from 'react-native-indicator';
+import {BubblesLoader} from 'react-native-indicator';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {useIsFocused} from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
 import * as RNLocalize from 'react-native-localize';
@@ -700,7 +684,7 @@ export default function subcatdetails({route, navigation}) {
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.goBack()}>
-              <Text style={styles.or}>Continue Shopping</Text>
+              <Text style={styles.or}>{translate('Continue Shopping')}</Text>
             </TouchableOpacity>
           </View>
         ) : (

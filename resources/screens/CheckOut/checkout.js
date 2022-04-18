@@ -58,8 +58,40 @@ import {WebView} from 'react-native-webview';
 import {textAlign, textColor} from 'styled-system';
 import {set} from 'immer/dist/internal';
 import * as Animatable from 'react-native-animatable';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function checkOut({navigation, route}) {
+  const [dummy, setDummy] = useState(1);
+
+  const isCarousel = React.useRef(null);
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   var itemOrder = route?.params?.screenData;
   var itemTotalPrice = route?.params?.totalPrice;
   var total = itemTotalPrice;
@@ -147,12 +179,17 @@ export default function checkOut({navigation, route}) {
 
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       getStriperKey();
       showAlert();
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
       makeArrays();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
 
   const CheckShippingDetail = user => {
@@ -199,10 +236,6 @@ export default function checkOut({navigation, route}) {
   };
 
   const startPayPalProcedureOne = () => {
-    console.log(108);
-    // let currency = '100';
-    // currency.replace(' USD', '');
-
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
     myHeaders.append(
@@ -508,7 +541,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Delivery
+            {translate('Delivery')}
           </Text>
         </View>
         <View
@@ -521,7 +554,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Summary
+            {translate('Summary')}
           </Text>
         </View>
         <View
@@ -534,7 +567,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            Payment
+            {translate('Payment')}
           </Text>
         </View>
       </View>
@@ -588,7 +621,7 @@ export default function checkOut({navigation, route}) {
           <Text style={styles.subtotalPrice}>125</Text>
         </View> */}
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={styles.subtotalText}>Sub Total</Text>
+          <Text style={styles.subtotalText}>{translate('Subtotal')}</Text>
           <Text style={styles.subtotalPrice}>$ {itemTotalPrice}</Text>
         </View>
         <View
@@ -601,7 +634,7 @@ export default function checkOut({navigation, route}) {
         />
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
-            Total
+            {translate('Total')}
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
@@ -615,10 +648,10 @@ export default function checkOut({navigation, route}) {
     return (
       <>
         <ScrollView>
-          <Text style={styles.centerText}>Shipping Details</Text>
+          <Text style={styles.centerText}>{translate('Shipping Details')}</Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
-              label="Full Name *"
+              label={translate('Full Name')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -630,7 +663,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Address *"
+              label={translate('Address:')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -654,7 +687,7 @@ export default function checkOut({navigation, route}) {
               }}
             /> */}
             <TextInput
-              label="City *"
+              label={translate('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -668,7 +701,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Country *"
+              label={translate('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -681,7 +714,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Number *"
+              label={translate('Number')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -695,7 +728,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="ZipCode *"
+              label={translate('ZipCode *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -711,7 +744,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Note"
+              label={translate('Note')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -739,7 +772,7 @@ export default function checkOut({navigation, route}) {
           <Text style={styles.centerText}>Billing Address</Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
-              label="Full Name *"
+              label={translate('Full Name')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -750,7 +783,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Address *"
+              label="Address:"
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -773,7 +806,7 @@ export default function checkOut({navigation, route}) {
               }}
             /> */}
             <TextInput
-              label="City *"
+              label={translate('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -786,7 +819,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Country *"
+              label={translate('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -798,7 +831,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Number *"
+              label={translate('Number')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -811,7 +844,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="ZipCode *"
+              label={translate('ZipCode *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -826,7 +859,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label="Note"
+              label={translate('Note')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -868,7 +901,7 @@ export default function checkOut({navigation, route}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'Please first complete all shipping details',
+        message: translate('Please first complete all shipping details'),
         backgroundColor: '#E9691D',
       });
     }
@@ -879,7 +912,7 @@ export default function checkOut({navigation, route}) {
         <View>
           {shippingAddress()}
           <CheckBox
-            label={'Same as Shipping Address '}
+            label={translate('Same as Shipping Address')}
             status={checkBox}
             onPress={() => {
               checkBox == 'checked' ? setCheckBox('unchecked') : setdetails();
@@ -979,7 +1012,7 @@ export default function checkOut({navigation, route}) {
 
         <View style={{...styles.box, paddingBottom: 30}}>
           <TextInput
-            label="Full Name *"
+            label="Full Name"
             underlineColor="gray"
             editable={false}
             value={userDataLocal?.username}
@@ -1021,7 +1054,7 @@ export default function checkOut({navigation, route}) {
             style={styles.text}
           />
           <TextInput
-            label="Number *"
+            label={translate('Number')}
             editable={false}
             underlineColor="gray"
             keyboardType="number-pad"
@@ -1030,7 +1063,7 @@ export default function checkOut({navigation, route}) {
             value={userDataLocal?.phone_number}
           />
           <TextInput
-            label="ZipCode *"
+            label={translate('ZipCode *')}
             editable={false}
             keyboardType="number-pad"
             underlineColor="gray"
@@ -1039,7 +1072,7 @@ export default function checkOut({navigation, route}) {
             style={styles.text}
           />
           <TextInput
-            label="Note"
+            label={translate('Note')}
             underlineColor="gray"
             editable={false}
             theme={{colors: {primary: color.themColorPrimary}}}
@@ -1054,7 +1087,7 @@ export default function checkOut({navigation, route}) {
   const orderDetailsRenderdata = () => {
     return (
       <>
-        <Text style={styles.centerText}>Order Items</Text>
+        <Text style={styles.centerText}>{translate('Order Items')}</Text>
         <View style={{...styles.box}}>{orderDetailsAlldata()}</View>
       </>
     );
@@ -1136,7 +1169,7 @@ export default function checkOut({navigation, route}) {
             <TouchableOpacity
               onPress={() => backProcessTopPayment()}
               style={styles.bottomBackButtonContainer}>
-              <Text style={styles.or}>Back</Text>
+              <Text style={styles.or}>{translate('Back')}</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -1151,7 +1184,7 @@ export default function checkOut({navigation, route}) {
                 color={'white'}
               />
             ) : (
-              <Text style={styles.or}>Proceed</Text>
+              <Text style={styles.or}>{translate('Proceed')}</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -1234,7 +1267,7 @@ export default function checkOut({navigation, route}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: 'Please enter all delivery information',
+        message: translate('Please enter all delivery information'),
         backgroundColor: '#E9691D',
       });
     }
@@ -1386,12 +1419,12 @@ export default function checkOut({navigation, route}) {
               style={{width: wp('60'), height: hp('30'), marginBottom: hp('2')}}
             />
             <Text style={{color: color.themColorPrimary, fontSize: hp('3')}}>
-              Success
+              {translate('Success')}
             </Text>
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.or}>Back To Home</Text>
+              <Text style={styles.or}>{translate('Back To Home')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -1399,10 +1432,7 @@ export default function checkOut({navigation, route}) {
     );
   };
   return (
-    <StripeProvider
-      publishableKey={StripePKey}
-      // merchantIdentifier="merchant.identifier"
-    >
+    <StripeProvider publishableKey={StripePKey}>
       <View style={styles.main}>
         {header('Check Out')}
         {buttonState == 4 ? null : topButton()}
@@ -1432,14 +1462,14 @@ export default function checkOut({navigation, route}) {
         show={alert}
         showProgress={false}
         title="Alert!"
-        message="Would like to same address from your last one"
+        message={translate('Would like to same address from your last one')}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText="Yes"
-        cancelText="No"
+        confirmText={translate('Yes')}
+        cancelText={translate('No')}
         messageStyle={{textAlign: 'center'}}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
@@ -1458,9 +1488,9 @@ export default function checkOut({navigation, route}) {
       <AwesomeAlert
         show={showWhatsApp}
         showProgress={false}
-        title="Contact With Owner"
+        title={translate('Contact With Owner')}
         titleStyle={{color: 'black', fontWeight: 'bold'}}
-        message="For complete your order please contact the owner!"
+        message={translate('For complete your order please contact the owner!')}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}

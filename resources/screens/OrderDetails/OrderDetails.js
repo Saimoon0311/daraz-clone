@@ -43,9 +43,41 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {G} from 'react-native-svg';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 
 export default function OrderDetails({navigation}) {
+  const [dummy, setDummy] = useState(1);
+
+  const isCarousel = React.useRef(null);
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [activeSession, setActiveSession] = useState([]);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
@@ -70,11 +102,13 @@ export default function OrderDetails({navigation}) {
     })
       .then(res => res.json())
       .then(json => {
+        console.log(185, json);
+
         if (json.status == 1) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json.message,
+            message: translate(json.message),
             backgroundColor: '#E9691D',
           });
           getOrderDetails();
@@ -82,7 +116,7 @@ export default function OrderDetails({navigation}) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: json.message,
+            message: translate(json.message),
             backgroundColor: '#E9691D',
           });
         }
@@ -91,15 +125,20 @@ export default function OrderDetails({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: 'Some thing is wrong',
+          message: translate('Some thing is wrong'),
           backgroundColor: '#E9691D',
         });
       });
   };
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       getOrderDetails();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
   const navigationProps = () => {
     navigation.navigate('Cart');
@@ -146,7 +185,7 @@ export default function OrderDetails({navigation}) {
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
             marginLeft: wp('3'),
           }}>
-          My Orders
+          {translate('My Orders')}
         </Text>
         {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
@@ -194,7 +233,7 @@ export default function OrderDetails({navigation}) {
               // style={{...styles.iconStyle, marginLeft: wp('1')}}
             />
             <Text style={styles.noTextstyle}>
-              You have no orders to display.
+              {translate('You have no orders to display')}
             </Text>
           </View>
         )}
@@ -206,7 +245,9 @@ export default function OrderDetails({navigation}) {
     return (
       <View style={{...styles.parentCardStyle}}>
         <View style={styles.parentCardTopTag}>
-          <Text style={styles.parentCardTopTagText}>Order Details</Text>
+          <Text style={styles.parentCardTopTagText}>
+            {translate('Order Details')}
+          </Text>
         </View>
         <View style={styles.parentCardIconHolder}>
           <AntDesign
@@ -296,7 +337,9 @@ export default function OrderDetails({navigation}) {
           backgroundColor: '#FFEEE3',
         }}>
         <View style={styles.parentCardTopTag}>
-          <Text style={styles.parentCardTopTagText}>Product Details</Text>
+          <Text style={styles.parentCardTopTagText}>
+            {translate('Product Details')}
+          </Text>
         </View>
         {renderMultipleItems(item)?.map((res, i) => {
           return (
@@ -457,7 +500,9 @@ export default function OrderDetails({navigation}) {
           </View>
         </View>
         <View style={{...styles.parentCardTopTag}}>
-          <Text style={styles.parentCardTopTagText}>Shipping Details</Text>
+          <Text style={styles.parentCardTopTagText}>
+            {translate('Shipping Details')}
+          </Text>
         </View>
         <View style={styles.parentCardIconHolder}>
           <AntDesign
@@ -628,30 +673,31 @@ export default function OrderDetails({navigation}) {
                 alignSelf: `flex-start`,
                 marginRight: 'auto',
               }}>
-              <Text style={styles.cancelText}>Return Order</Text>
+              <Text style={styles.cancelText}>{translate('Return Order')}</Text>
             </TouchableOpacity>
           )}
           {item.status != 'completed' && (
             <TouchableOpacity
               onPress={() => cancelOrder(item)}
               style={styles.cancelViewContainer}>
-              <Text style={styles.cancelText}>Cancel Order</Text>
+              <Text style={styles.cancelText}>{translate('Cancel Order')}</Text>
             </TouchableOpacity>
           )}
         </View>
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
-          title="Warning!"
-          message="Are you sure want to cancel this order."
+          title={translate('Warning!')}
+          message={translate('Are you sure want to cancel this order')}
+          messageStyle={{textAlign: 'center'}}
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           titleStyle={{color: 'black'}}
           showConfirmButton={true}
-          confirmText="Yes"
-          cancelText="No"
+          confirmText={translate('Yes')}
+          cancelText={translate('No')}
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}
@@ -668,15 +714,16 @@ export default function OrderDetails({navigation}) {
         <AwesomeAlert
           show={returnAlter}
           showProgress={false}
-          title="Warning!"
-          message={`Return policy are not available. \n For more information please contact to super admin.`}
+          title={translate('Warning!')}
+          messageStyle={{textAlign: 'center'}}
+          message={translate(`Return policy are not available`)}
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           titleStyle={{color: 'black'}}
           messageStyle={{textAlign: 'center'}}
-          cancelText="Close"
+          cancelText={translate('Close')}
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}

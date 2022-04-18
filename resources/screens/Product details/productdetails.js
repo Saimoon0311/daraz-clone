@@ -554,7 +554,7 @@ export default function Details({route, navigation}) {
           <View style={styles.box}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
             <Text style={styles.tep}>
-              {translate('Category :')} {item?.getchildcategory?.name}
+              {translate('Category')} {item?.getchildcategory?.name}
             </Text>
             {item?.is_discounted == 2 ? (
               <View
@@ -602,7 +602,7 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  {translate('Prices :')}
+                  {translate('Price :')}
                 </Text>
 
                 <Text
@@ -796,7 +796,7 @@ export default function Details({route, navigation}) {
                   : showMessage({
                       type: 'warning',
                       icon: 'auto',
-                      message: translate('Kindly login to give a review.'),
+                      message: translate('Kindly login to give a review'),
                       backgroundColor: '#E9691D',
                     })
               }>

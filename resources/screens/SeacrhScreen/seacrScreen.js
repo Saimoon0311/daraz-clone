@@ -107,13 +107,10 @@ export default function seacrhScreen({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(240);
       setIsLoggedIn(false);
       await onSubmitSeacrhItem(false);
     } else if (user !== null) {
-      // console.log(244);
       setUserId(user.id);
       setIsLoggedIn(true);
       await onSubmitSeacrhItem(true, user.id);
@@ -121,12 +118,9 @@ export default function seacrhScreen({navigation}) {
   };
   const checkStatusForCartUpdate = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(240);
       setIsLoggedIn(false);
     } else if (user !== null) {
-      // console.log(244);
       setUserId(user.id);
       setIsLoggedIn(true);
     }
@@ -209,7 +203,7 @@ export default function seacrhScreen({navigation}) {
             // }}
           >
             {item.featured == 1 ? (
-              <Text style={styles.fea}>Featured</Text>
+              <Text style={styles.fea}>{translate('Featured')}</Text>
             ) : null}
             {item.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
