@@ -164,7 +164,7 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: responseData?.email[0],
+                  message: translate(responseData?.email[0]),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
@@ -172,11 +172,13 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: responseData?.phone_number[0],
+                  message: translate(responseData?.phone_number[0]),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
               } else {
+                console.log(180, responseData);
+
                 showMessage({
                   type: 'warning',
                   icon: 'auto',

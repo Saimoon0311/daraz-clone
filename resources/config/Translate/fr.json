@@ -139,5 +139,8 @@
 "You canceled your order":"Vous avez annulé votre commande",
 "You already cancelled your order":"Vous avez déjà annulé votre commande",
 "My Orders":"Mes commandes",
-"Check Out":"Vérifier"
+"Check Out":"Vérifier",
+"The email has already been taken.":"Le couriel a déja été pris en compte.",
+"The phone number has already been taken.":"Le numéro de téléphone a déjà été pris.",
+"Register":"S'inscrire"
 }

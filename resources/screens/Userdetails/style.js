@@ -63,4 +63,12 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
   },
+  pickerStyle: {
+    width: wp('80'),
+    height: hp(Platform?.OS == 'ios' ? '20' : '7'),
+    color: '#512500',
+    backgroundColor: Platform?.OS == 'ios' ? 'transparent' : '#FFDDC9',
+    alignSelf: 'center',
+    overflow: 'hidden',
+  },
 });

@@ -154,7 +154,7 @@ export default function Home({navigation}) {
     } else if (user !== null) {
       // console.log(244);
       setIsLoggedIn(true);
-      // console.log(118, user);
+      console.log(118, user);
       await datacallss(true);
     }
   };

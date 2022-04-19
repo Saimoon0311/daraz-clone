@@ -22,11 +22,42 @@ import OnboardingScreen from '../screens/OnBoardScreen/OnboardingScreen';
 import Faq from '../screens/faq/Faq';
 import PrivacyPolicy from '../screens/privacyPolicy/PrivacyPolicy';
 import {StatusBar} from 'react-native';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 // import Home from "../screens/"
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
+  const [dummy, setDummy] = useState(1);
+
+  const translationGetters = {
+    en: () => require('../config/Translate/en.json'),
+    fr: () => require('../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(null);
 
   const userData = useSelector(state => state.auth.userData);
@@ -35,6 +66,8 @@ export default function Navigation() {
   useEffect(() => {
     (async () => {
       const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       if (appData == null) {
         setIsAppFirstLaunched(true);
         AsyncStorage.setItem('isAppFirstLaunched', 'false');
@@ -43,6 +76,9 @@ export default function Navigation() {
       }
       await checkStatus();
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, []);
 
   const checkStatus = async () => {
@@ -122,7 +158,7 @@ export default function Navigation() {
           <Stack.Screen name="OrderDetails" component={OrderDetails} />
           <Stack.Screen
             options={{
-              title: 'Login / Register',
+              title: `${translate('Login')} / ${translate('Register')}`,
               headerShown: true,
               headerStyle: {
                 backgroundColor: '#FFDDC9',

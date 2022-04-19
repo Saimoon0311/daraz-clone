@@ -117,7 +117,9 @@ export default function checkOut({navigation, route}) {
   const [isLoading, setIsLoading] = useState(false);
   const [showWhatsApp, setWhatsApp] = useState(false);
 
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(
+    'A21AAKBmZiLik6FBLTkfSZO4V-MpBctwuippVrnH4iWO7hbw8fpwBgHFQzoUeEkfEFC41Rde9x7rHFImrFGdutJMfnJULklGw',
+  );
   const [approvalUrl, setApprovalUrl] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -256,7 +258,7 @@ export default function checkOut({navigation, route}) {
     fetch('https://api.sandbox.paypal.com/v1/oauth2/token', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(160, result);
+        console.log(160, result.access_token);
         setAccessToken(result.access_token);
 
         startPayPalProcedureTwo();
@@ -269,6 +271,12 @@ export default function checkOut({navigation, route}) {
 
   const startPayPalProcedureTwo = () => {
     var myHeaders = new Headers();
+    // myHeaders.append(
+    //   'Authorization',
+    //   'Bearer ' +
+    //     'A21AAKBmZiLik6FBLTkfSZO4V-MpBctwuippVrnH4iWO7hbw8fpwBgHFQzoUeEkfEFC41Rde9x7rHFImrFGdutJMfnJULklGw',
+    // );
+    console.log(277, accessToken);
     myHeaders.append('Authorization', 'Bearer ' + accessToken);
     myHeaders.append('Content-Type', 'application/json');
 
@@ -1448,7 +1456,11 @@ export default function checkOut({navigation, route}) {
           }}
           visible={isVisible}>
           <WebView
-            style={{height: hp('50'), width: wp('100')}}
+            style={{
+              height: hp('50'),
+              width: wp('100'),
+              marginTop: Platform.OS == 'ios' ? hp('5') : hp('2'),
+            }}
             source={{uri: approvalUrl}}
             onNavigationStateChange={_onNavigationStateChange}
             javaScriptEnabled={true}

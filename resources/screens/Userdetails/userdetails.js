@@ -20,7 +20,9 @@ import {showMessage} from 'react-native-flash-message';
 import {
   CART,
   CARTDELETE,
+  GETALLCURRENCY,
   Images_API,
+  SETCURRENCYVALUE,
   testCART,
   USERDATA,
   USERPROFILEUPDATE,
@@ -40,6 +42,11 @@ import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
 
 export default function Userdeatils({navigation}) {
+  function useForceUpdate() {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+  }
+  const forceUpdate = useForceUpdate();
   const [dummy, setDummy] = useState(1);
 
   const translationGetters = {
@@ -75,6 +82,8 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
+  const [currency, setCurrency] = useState([]);
+  const [currencyDefaultValue, setCurrencyDefaulValue] = useState({});
 
   const getUserAllData = async () => {
     const userDatas = await getUserData();
@@ -155,12 +164,42 @@ export default function Userdeatils({navigation}) {
         setLoadingButton(false);
     }
   };
+  const getAllCurrency = () => {
+    fetch(GETALLCURRENCY)
+      .then(res => res.json())
+      .then(json => {
+        setCurrency(json);
+      })
+      .catch(e => console.log(e));
+  };
+  const updateCurrencyValue = e => {
+    if (e.id != null) {
+      var url = SETCURRENCYVALUE + userDataLocal.id + '/' + e.id;
+      fetch(url, {
+        method: 'POST',
+        redirect: 'follow',
+      })
+        .then(res => res.json())
+        .then(async json => {
+          if (json.message == 'Updated Successfully') {
+            console.log(180, json);
+            setUserData(json?.data);
+            setCurrencyDefaulValue(json.data.currency);
+          } else {
+            console.log('kjabdjkabjfkadblkjb');
+          }
+        });
+    }
+  };
   useEffect(() => {
     (async () => {
       RNLocalize.addEventListener('change', handleLocalizationChange());
       const userDatas = await getUserData();
-      console.log(161, userDatas);
       setUserDataLocal(userDatas);
+      console.log(197, userDatas);
+      setCurrencyDefaulValue(userDatas.currency);
+      console.log(199, currencyDefaultValue);
+      getAllCurrency();
     })();
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange());
@@ -314,6 +353,35 @@ export default function Userdeatils({navigation}) {
                 updatValue(text, 'country');
               }}
             />
+            {currency.length > 0 && (
+              <Picker
+                mode="dialog"
+                // selectedValue={attributeArray[i]}
+                onValueChange={e => {
+                  updateCurrencyValue(e);
+                  // addToAttributeArray(e, i);
+                  // forceUpdate();
+                }}
+                collapsable={false}
+                style={styles.pickerStyle}>
+                <Picker.Item
+                  key={currencyDefaultValue?.id}
+                  value={null}
+                  label={currencyDefaultValue?.code}
+                />
+                {currency?.map(res => {
+                  return (
+                    currencyDefaultValue?.code != res.code && (
+                      <Picker.Item
+                        key={res?.id}
+                        value={res}
+                        label={res?.code}
+                      />
+                    )
+                  );
+                })}
+              </Picker>
+            )}
 
             <TouchableOpacity
               onPress={() => ValidateProfileUpdate()}

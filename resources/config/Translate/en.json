@@ -139,7 +139,10 @@
     "You canceled your order":"You canceled your order",
     "You already cancelled your order":"You already cancelled your order",
     "My Orders":"My Orders",
-    "Check Out":"Check Out"
+    "Check Out":"Check Out",
+    "The email has already been taken.":"The email has already been taken.",
+    "The phone number has already been taken.":"The phone number has already been taken.",
+    "Register":"Register"
 
    
 
