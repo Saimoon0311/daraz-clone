@@ -214,12 +214,14 @@ export default function cate({navigation}) {
                 return (
                   <View>
                     <TouchableOpacity
-                      style={
-                        index === click ? styles.sidebox : styles.sideboxactive
-                      }
+                      style={{
+                        ...styles.sidebox,
+                        backgroundColor: index === click ? 'white' : '#FFDDC9',
+                        borderColor: index === click ? '#512500' : '#FFDDC9',
+                      }}
                       onPress={() => getData(item.id, index)}>
                       <View>
-                        <Text style={{...styles.cattext, fontSize: hp('1.7')}}>
+                        <Text style={{...styles.cattext, fontSize: hp('1.6')}}>
                           {item?.name}
                         </Text>
                       </View>

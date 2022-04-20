@@ -8,6 +8,7 @@ import {
 export const styles = StyleSheet.create({
   main: {
     backgroundColor: color.defaultBackgroundColor,
+    flex: 1,
   },
 
   header: {

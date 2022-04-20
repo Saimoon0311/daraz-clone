@@ -20,7 +20,6 @@ import {showMessage} from 'react-native-flash-message';
 import {
   ADDTOWISHLIST,
   API_BASED_URL,
-  CART,
   CARTDELETE,
   Images_API,
   PASSWORDCHNAGE,

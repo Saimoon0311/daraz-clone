@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,15 +18,54 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import StarRating from 'react-native-star-rating';
 import Carousel from 'react-native-snap-carousel';
+import {getUserData} from '../../utils/utils';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
 export default function Cartdetails({route, navigation}) {
-  const isCarousel = React.useRef(null);
+  const [dummy, setDummy] = useState(1);
 
+  const translationGetters = {
+    en: () => require('../../config/Translate/en.json'),
+    fr: () => require('../../config/Translate/fr.json'),
+  };
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key),
+  );
+  const setI18nConfig = async () => {
+    const fallback = {languageTag: 'en'};
+    const {languageTag} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+
+    translate.cache.clear();
+
+    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+    i18n.locale = languageTag;
+  };
+  const handleLocalizationChange = () => {
+    setI18nConfig()
+      .then(() => setDummy(dummy + 1))
+      .catch(error => {
+        console.error(error);
+      });
+  };
+  const isCarousel = React.useRef(null);
+  const [user, setUser] = useState();
   const item = route.params;
-  // const imm = item.images;
   const imm = item.get_products.images;
   const [starCount, setstarCount] = useState(4);
+  useEffect(async () => {
+    RNLocalize.addEventListener('change', handleLocalizationChange());
 
+    const user = await getUserData();
+    setUser(user);
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, []);
   const onStarRatingPress = rating => {
     setstarCount(rating);
   };
@@ -41,7 +80,7 @@ export default function Cartdetails({route, navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>Details</Text>
+        <Text style={styles.te}>{translate('Details')}</Text>
         <Ionicons
           name="cart"
           size={30}
@@ -91,13 +130,16 @@ export default function Cartdetails({route, navigation}) {
                 style={{
                   flexDirection: 'row',
                 }}>
-                <Text style={styles.priceStyleContainerLeft}>Price :</Text>
+                <Text style={styles.priceStyleContainerLeft}>
+                  {translate('Price :')}
+                </Text>
                 <Text style={styles.priceStyleContainerRight}>
-                  $ {item?.get_products?.price}
+                  {user?.currency?.symbol} {item?.get_products?.price}
                 </Text>
                 <Text style={styles.discountStyleContainer}>
                   {' '}
-                  $ {item?.get_products?.discounted_price}
+                  {user?.currency?.symbol}{' '}
+                  {item?.get_products?.discounted_price}
                 </Text>
               </View>
             ) : (
@@ -105,17 +147,19 @@ export default function Cartdetails({route, navigation}) {
                 style={{
                   flexDirection: 'row',
                 }}>
-                <Text style={styles.withoutDiscountStyle}>Prices :</Text>
+                <Text style={styles.withoutDiscountStyle}>
+                  {translate('Price :')}
+                </Text>
 
                 <Text style={styles.withoutDiscountStyle}>
-                  $ {item?.get_products?.price}
+                  {user?.currency?.symbol} {item?.get_products?.price}
                 </Text>
               </View>
             )}
             <Text style={styles.tep}>SKU : {item?.get_products?.sku}</Text>
 
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-              Description :
+              {translate('Description :')}
             </Text>
             <Text style={styles.descriptionStyleContainer}>
               {item?.get_products?.description}
@@ -125,7 +169,7 @@ export default function Cartdetails({route, navigation}) {
             <View style={{...styles.box, marginTop: hp('3')}}>
               <View>
                 <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-                  Attributes :{' '}
+                  {translate('Attributes :')}{' '}
                 </Text>
                 {item?.attributes.map((res, i) => {
                   return (

@@ -89,6 +89,7 @@ export default function subcatdetails({route, navigation}) {
   const [end, setEnd] = useState('2500000');
   const [start, setStart] = useState('0');
   const [wishlist, setWishlist] = useState(false);
+  const [user, setUser] = useState();
   const getSubCatData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
@@ -243,8 +244,9 @@ export default function subcatdetails({route, navigation}) {
       setIsLoggedIn(false);
       await parentFunction(false);
     } else if (user !== null) {
-      const userId = await getUserData()?.then(res => res?.id);
-      setUser_id(userId);
+      const users = await getUserData();
+      setUser(users);
+      setUser_id(users?.id);
       setIsLoggedIn(true);
       await parentFunction(true);
     }
@@ -369,16 +371,16 @@ export default function subcatdetails({route, navigation}) {
           {item.is_discounted == 2 ? (
             <View
               style={{
-                flexDirection: 'row',
-                paddingTop: hp('2%'),
-                marginLeft: wp('2%'),
                 width: wp('35%'),
+                alignSelf: 'center',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                alignContent: 'center',
               }}>
               <View
                 style={{
                   flexDirection: 'row',
-                  // width:wp('10%'),
-                  maxWidth: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -388,13 +390,12 @@ export default function subcatdetails({route, navigation}) {
                     textDecorationLine: 'line-through',
                   }}
                   numberOfLines={1}>
-                  $ {item.price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
                 </Text>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  width: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -404,7 +405,8 @@ export default function subcatdetails({route, navigation}) {
                   }}
                   numberOfLines={1}>
                   {' '}
-                  $ {item.discounted_price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'}{' '}
+                  {item.discounted_price}
                 </Text>
               </View>
             </View>
@@ -414,10 +416,12 @@ export default function subcatdetails({route, navigation}) {
                 color: '#512500',
                 fontSize: hp('2%'),
                 fontWeight: 'bold',
-                paddingTop: hp('2%'),
-                paddingLeft: wp('2%'),
+                paddingTop: hp('1'),
+                // paddingLeft: wp('2%'),
+                textAlign: 'center',
               }}>
-              $ {item.price}
+              {/* $ {item.price} */}
+              {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
             </Text>
           )}
         </TouchableOpacity>
@@ -495,16 +499,16 @@ export default function subcatdetails({route, navigation}) {
           {item?.get_products?.is_discounted == 2 ? (
             <View
               style={{
-                flexDirection: 'row',
-                paddingTop: hp('2%'),
-                marginLeft: wp('2%'),
-                width: wp('35%'),
+                width: wp('35'),
+                alignSelf: 'center',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                alignContent: 'center',
               }}>
               <View
                 style={{
                   flexDirection: 'row',
-                  // width:wp('10%'),
-                  maxWidth: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -514,13 +518,12 @@ export default function subcatdetails({route, navigation}) {
                     textDecorationLine: 'line-through',
                   }}
                   numberOfLines={1}>
-                  $ {item?.get_products?.price}
+                  {user?.currency?.id} {item?.get_products?.price}
                 </Text>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  width: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -530,7 +533,7 @@ export default function subcatdetails({route, navigation}) {
                   }}
                   numberOfLines={1}>
                   {' '}
-                  $ {item?.get_products?.discounted_price}
+                  {user?.currency?.id} {item?.get_products?.discounted_price}
                 </Text>
               </View>
             </View>
@@ -540,10 +543,10 @@ export default function subcatdetails({route, navigation}) {
                 color: '#512500',
                 fontSize: hp('2%'),
                 fontWeight: 'bold',
-                paddingTop: hp('2%'),
-                paddingLeft: wp('1%'),
+                paddingTop: hp('2'),
+                textAlign: 'center',
               }}>
-              $ {item?.get_products?.price}
+              {user?.currency?.id} {item?.get_products?.price}
             </Text>
           )}
         </TouchableOpacity>

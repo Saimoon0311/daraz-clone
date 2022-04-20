@@ -27,6 +27,10 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FlashMessage from 'react-native-flash-message';
@@ -73,9 +77,9 @@ function AppTwo({navigation}) {
   };
   const time = () => {
     if (Platform?.OS == 'android') {
-      return 2000;
+      return 5000;
     } else {
-      return 2000;
+      return 5000;
     }
   };
 
@@ -105,8 +109,12 @@ function AppTwo({navigation}) {
       <View style={styles.SplashScreen_RootView}>
         <View style={styles.SplashScreen_ChildView}>
           <Image
-            source={require('./resources/images/Component2.png')}
-            style={{width: 150, height: '100%', resizeMode: 'contain'}}
+            source={require('./resources/images/logo.gif')}
+            style={{
+              width: wp('80'),
+              height: hp('80'),
+              resizeMode: 'contain',
+            }}
           />
         </View>
       </View>

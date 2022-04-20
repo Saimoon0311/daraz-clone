@@ -9,7 +9,6 @@ export const FORGETPASSWORD = API_BASED_URL_STOCK + 'forgot-password';
 export const LOGIN = getApi('login-api?');
 export const SIGNUP = getApi('sing-up-api');
 export const GETPRODUCT = getApi('get-product');
-export const CART = getApi('get-cart-api');
 export const testCART = getApi('get-cart-api-test');
 export const CARTDELETE = getApi('cart-delete');
 export const ADDTOCART = getApi('cart-data-api');
@@ -28,7 +27,6 @@ export const PASSWORDCHNAGE = getApi('changeUserPassword');
 export const USERPROFILEUPDATE = getApi('user-detail-update');
 export const ALLNEWARRIVALS = getApi('all-new-arrivals/');
 export const USERORDERDEATILS = getApi('shop/user-order-details/');
-export const QUANTITYINCREASE = getApi('cart-data');
 export const ORDERPLACE = getApi('place-an-order');
 export const GETCLIENTSECRET = getApi('stripe-form/submit');
 export const SENDINTENTANDORDERDATA = getApi('stripe-form/aftersubmit');
@@ -39,7 +37,6 @@ export const AllFeaturedProductWithOutUser = getApi(
   'products-featured-userskip',
 );
 export const CANCELORDER = getApi('cancel_order');
-export const CATEGORYALLDATA = getApi('shop/category-all-data');
 export const featuredDefault = getApi('featured-data-all-userskip/');
 export const newArrivalDefault = getApi('new-arrivals-userskip/');
 export const SubCategoryDataWithOutUserID = getApi(

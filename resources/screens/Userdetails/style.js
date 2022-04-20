@@ -64,11 +64,12 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   pickerStyle: {
-    width: wp('80'),
+    width: Platform.OS == 'ios' ? wp('85') : wp('80'),
     height: hp(Platform?.OS == 'ios' ? '20' : '7'),
     color: '#512500',
     backgroundColor: Platform?.OS == 'ios' ? 'transparent' : '#FFDDC9',
     alignSelf: 'center',
     overflow: 'hidden',
+    marginTop: Platform.OS == 'ios' ? hp('-5') : hp('2'),
   },
 });

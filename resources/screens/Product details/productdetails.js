@@ -87,6 +87,8 @@ export default function Details({route, navigation}) {
 
   const child_id = route?.child_category_id;
   const item = route?.params;
+  const currencySign = route?.params;
+  // console.log(91, currencySign);
   const imm = item?.images;
   const {saveProduct} = useSelector(state => state.savePosts);
   const {userData} = useSelector(state => state.auth);
@@ -105,6 +107,7 @@ export default function Details({route, navigation}) {
   const [allReviews, setallReviews] = useState();
   const [allreviewsLoading, setallreviewsLoading] = useState(true);
   const [productData, setProductData] = useState(item);
+  const [user, setUser] = useState();
   const data = [
     {
       title: 'Aenean leo',
@@ -224,6 +227,7 @@ export default function Details({route, navigation}) {
   };
   const setUserId = async () => {
     const userId = await getUserData();
+    setUser(userId);
     const users = userId?.id;
     setUser_id(users);
   };
@@ -578,7 +582,7 @@ export default function Details({route, navigation}) {
                     textDecorationLine: 'line-through',
                     marginTop: hp('0.5%'),
                   }}>
-                  $ {item?.price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'} {item?.price}
                 </Text>
                 <Text
                   style={{
@@ -588,7 +592,8 @@ export default function Details({route, navigation}) {
                     marginTop: hp('0.5%'),
                   }}>
                   {' '}
-                  $ {item?.discounted_price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'}{' '}
+                  {item?.discounted_price}
                 </Text>
               </View>
             ) : (
@@ -611,7 +616,7 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  $ {item?.price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'} {item?.price}
                 </Text>
               </View>
             )}
@@ -649,7 +654,7 @@ export default function Details({route, navigation}) {
                           <Picker.Item
                             key={i}
                             value={null}
-                            label={'Select Attribute'}
+                            label={translate('Select Attribute')}
                           />
                           {res?.value?.map(res => {
                             return (

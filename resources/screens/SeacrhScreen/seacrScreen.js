@@ -66,6 +66,7 @@ export default function seacrhScreen({navigation}) {
   const [end, setEnd] = useState('2500000');
   const [start, setStart] = useState('0');
   const [checksubcat, setChecksubcat] = useState(false);
+  const [user, setUser] = useState();
 
   const [dummy, setDummy] = useState(1);
 
@@ -100,6 +101,9 @@ export default function seacrhScreen({navigation}) {
     (async () => {
       RNLocalize.addEventListener('change', handleLocalizationChange());
     })();
+    if (isFocused) {
+      checkStatus();
+    }
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange());
     };
@@ -111,6 +115,7 @@ export default function seacrhScreen({navigation}) {
       setIsLoggedIn(false);
       await onSubmitSeacrhItem(false);
     } else if (user !== null) {
+      setUser(user);
       setUserId(user.id);
       setIsLoggedIn(true);
       await onSubmitSeacrhItem(true, user.id);
@@ -129,7 +134,6 @@ export default function seacrhScreen({navigation}) {
     navigation.navigate('Cart');
   };
   const onSubmitSeacrhItem = async confirm => {
-    setLoading(true);
     if (seacrhData !== '' && seacrhData !== null) {
       fetch(
         confirm == true
@@ -190,7 +194,6 @@ export default function seacrhScreen({navigation}) {
     navigation.navigate('MyTabs');
   };
   const renderCards = item => {
-    // console.log(207, item);
     return (
       <View style={{...styles.box, marginLeft: wp('6%')}}>
         <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
@@ -244,16 +247,17 @@ export default function seacrhScreen({navigation}) {
           {item.is_discounted == 2 ? (
             <View
               style={{
-                flexDirection: 'row',
                 paddingTop: hp('2%'),
-                marginLeft: wp('2%'),
                 width: wp('35%'),
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
               }}>
               <View
                 style={{
                   flexDirection: 'row',
-                  // width:wp('10%'),
-                  maxWidth: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -263,13 +267,13 @@ export default function seacrhScreen({navigation}) {
                     textDecorationLine: 'line-through',
                   }}
                   numberOfLines={1}>
-                  $ {item.price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
                 </Text>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  width: wp('17.5%'),
+                  // width: wp('17.5%'),
                 }}>
                 <Text
                   style={{
@@ -279,7 +283,8 @@ export default function seacrhScreen({navigation}) {
                   }}
                   numberOfLines={1}>
                   {' '}
-                  $ {item.discounted_price}
+                  {isLoggedIn ? user?.currency?.symbol : '$'}{' '}
+                  {item.discounted_price}
                 </Text>
               </View>
             </View>
@@ -290,9 +295,10 @@ export default function seacrhScreen({navigation}) {
                 fontSize: hp('2%'),
                 fontWeight: 'bold',
                 paddingTop: hp('2%'),
-                paddingLeft: wp('2%'),
+                textAlign: 'center',
+                // paddingLeft: wp('2%'),
               }}>
-              $ {item.price}
+              {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
             </Text>
           )}
         </TouchableOpacity>
@@ -352,14 +358,19 @@ export default function seacrhScreen({navigation}) {
               placeholder={translate('Search')}
               placeholderTextColor="#512500"
               style={styles.searchbar}
-              onSubmitEditing={() => checkStatus()}
+              onSubmitEditing={() => {
+                setLoading(true), checkStatus();
+              }}
               value={seacrhData}
               autoFocus={false}
               focusable={true}
               autoCorrect={false}
               onChangeText={text => setSearchData(text)}
             />
-            <TouchableOpacity onPress={() => checkStatus()}>
+            <TouchableOpacity
+              onPress={() => {
+                setLoading(true), checkStatus();
+              }}>
               <Ionicons name="search" color="#512500" size={20} />
             </TouchableOpacity>
           </View>

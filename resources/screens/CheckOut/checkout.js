@@ -630,7 +630,9 @@ export default function checkOut({navigation, route}) {
         </View> */}
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={styles.subtotalText}>{translate('Subtotal')}</Text>
-          <Text style={styles.subtotalPrice}>$ {itemTotalPrice}</Text>
+          <Text style={styles.subtotalPrice}>
+            {userDataLocal?.currency?.symbol} {itemTotalPrice}
+          </Text>
         </View>
         <View
           style={{
@@ -646,7 +648,7 @@ export default function checkOut({navigation, route}) {
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
-            $ {itemTotalPrice}
+            {userDataLocal?.currency?.symbol} {itemTotalPrice}
           </Text>
         </View>
       </View>
@@ -1138,13 +1140,15 @@ export default function checkOut({navigation, route}) {
                       style={{
                         textDecorationLine: 'line-through',
                       }}>
-                      $ {itemPrice}{' '}
+                      {userDataLocal?.currency?.symbol} {itemPrice}{' '}
                     </Text>
-                    $ {quantityCalculate(itemQuantity, discountedPrice)}
+                    {userDataLocal?.currency?.symbol}{' '}
+                    {quantityCalculate(itemQuantity, discountedPrice)}
                   </>
                 ) : (
                   <Text style={{color: 'black'}}>
-                    $ {quantityCalculate(itemQuantity, itemPrice)}
+                    {userDataLocal?.currency?.symbol}{' '}
+                    {quantityCalculate(itemQuantity, itemPrice)}
                   </Text>
                 )}
               </Text>
@@ -1313,6 +1317,7 @@ export default function checkOut({navigation, route}) {
       notes: note,
       attributes: attributesArray,
       payment_method: paymentMethodValue,
+      currency_id: userDataLocal.currency.id,
     });
 
     var requestOptions = {
@@ -1359,7 +1364,7 @@ export default function checkOut({navigation, route}) {
         });
         setIsLoading(false);
 
-        // console.log('780', error);
+        console.log('780', error);
       });
   };
   const sendPaymentIntentData = async (result, paymentIntentdata) => {

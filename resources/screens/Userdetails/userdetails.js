@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {
-  CART,
   CARTDELETE,
   GETALLCURRENCY,
   Images_API,
@@ -42,6 +41,7 @@ import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
 
 export default function Userdeatils({navigation}) {
+  const c = console.log.bind(console);
   function useForceUpdate() {
     const [value, setValue] = useState(0); // integer state
     return () => setValue(value => value + 1); // update the state to force render
@@ -84,6 +84,7 @@ export default function Userdeatils({navigation}) {
   const [showAlert, setShowAlert] = useState(false);
   const [currency, setCurrency] = useState([]);
   const [currencyDefaultValue, setCurrencyDefaulValue] = useState({});
+  const [pickerCurrency, setPickerCurrency] = useState({});
 
   const getUserAllData = async () => {
     const userDatas = await getUserData();
@@ -173,6 +174,7 @@ export default function Userdeatils({navigation}) {
       .catch(e => console.log(e));
   };
   const updateCurrencyValue = e => {
+    console.log(177, e);
     if (e.id != null) {
       var url = SETCURRENCYVALUE + userDataLocal.id + '/' + e.id;
       fetch(url, {
@@ -355,18 +357,19 @@ export default function Userdeatils({navigation}) {
             />
             {currency.length > 0 && (
               <Picker
-                mode="dialog"
-                // selectedValue={attributeArray[i]}
+                mode="dropdown"
+                selectedValue={pickerCurrency}
                 onValueChange={e => {
-                  updateCurrencyValue(e);
-                  // addToAttributeArray(e, i);
-                  // forceUpdate();
+                  setPickerCurrency(e);
+                  setTimeout(() => {
+                    updateCurrencyValue(e);
+                  }, 1000);
                 }}
                 collapsable={false}
                 style={styles.pickerStyle}>
                 <Picker.Item
                   key={currencyDefaultValue?.id}
-                  value={null}
+                  value={currencyDefaultValue}
                   label={currencyDefaultValue?.code}
                 />
                 {currency?.map(res => {

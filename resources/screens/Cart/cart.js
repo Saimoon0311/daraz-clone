@@ -22,11 +22,9 @@ import {
   ADDTOCART,
   ADDTOWISHLIST,
   API_BASED_URL,
-  CART,
   CARTDELETE,
   deleteAllCartData,
   Images_API,
-  QUANTITYINCREASE,
   testCART,
 } from '../../config/url';
 import {getUserData} from '../../utils/utils';
@@ -64,6 +62,7 @@ export default function Cart({navigation}) {
   const [dummy, setDummy] = useState(1);
   const [isSelected, setSelection] = useState(false);
   const [checkBox, setCheckBox] = useState(false);
+  const [users, setUser] = useState();
 
   const translationGetters = {
     en: () => require('../../config/Translate/en.json'),
@@ -95,17 +94,16 @@ export default function Cart({navigation}) {
   const checkStatus = async () => {
     const user = await getUserData();
     if (user == null || user == undefined) {
-      // console.log(240);
       setCartdata(saveProduct);
       setIsLoggedIn(false);
       setLoading(false);
       notLogintotalprice(saveProduct);
     } else if (user !== null || user !== undefined) {
+      setUser(user);
       setIsLoggedIn(true);
       sendSaveCartData();
     }
   };
-  // console.log(4273, cartdata);
   const mapOnCartData = async () => {
     const user = await getUserData();
     saveProduct.map(res => {
@@ -122,9 +120,7 @@ export default function Cart({navigation}) {
         }),
       })
         .then(res => res.json())
-        .then(async json => {
-          // console.log(91, json);
-        })
+        .then(async json => {})
         .catch(err => {
           showMessage({
             type: 'danger',
@@ -171,7 +167,6 @@ export default function Cart({navigation}) {
     if (confirm) {
       const userId = await getUserData();
       const users = userId.id;
-      // console.log(48, userId?.id);
       setUser_id(users);
       fetch(`${testCART}/${users}`, {
         method: 'GET',
@@ -184,19 +179,11 @@ export default function Cart({navigation}) {
             setLoading(false);
           } else {
             setCartdata(json[0]);
-            // totalprice(json[0]);
             setLoading(false);
-            // console.log(54, json[0]);
-            // console.log(63, JSON?.parse(json[0][2]?.attributes));
           }
         })
         .catch(e => {
-          showMessage({
-            type: 'danger',
-            icon: 'danger',
-            message: 'Something want wrong',
-            backgroundColor: '#E9691D',
-          });
+          console.log(192, e);
         });
     } else {
       setCartdata([]);
@@ -374,13 +361,13 @@ export default function Cart({navigation}) {
     if (checkBox == true) {
       navigation.navigate('checkOut', {
         screenData: cartdata,
-        totalPrice: totalPriceShow.toFixed(2),
+        totalPrice: totalPriceShow,
       });
     } else {
       if (listSeleted.length > 0) {
         navigation.navigate('checkOut', {
           screenData: listSeleted,
-          totalPrice: totalPriceShow.toFixed(2),
+          totalPrice: totalPriceShow,
         });
       } else {
         showMessage({
@@ -437,12 +424,14 @@ export default function Cart({navigation}) {
                     marginLeft: 10,
                     marginBottom: hp('1'),
                   }}>
-                  {translate('Price :')} :
+                  {translate('Price :')}
                 </Text>
                 {item?.get_products?.is_discounted == 2 ? (
                   <View
                     style={{
                       flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      width: wp('45'),
                     }}>
                     <Text
                       style={{
@@ -450,14 +439,17 @@ export default function Cart({navigation}) {
                         color: '#512500',
                         textDecorationLine: 'line-through',
                       }}>
+                      {users?.currency.symbol}
                       {item?.get_products?.price}
                     </Text>
                     <Text style={styles.productDiscountPriceStyle}>
+                      {users?.currency.symbol}
                       {item?.get_products?.discounted_price}
                     </Text>
                   </View>
                 ) : (
                   <Text style={styles.productPriceStyle}>
+                    {users?.currency.symbol}
                     {item?.get_products?.price}
                   </Text>
                 )}
@@ -615,7 +607,7 @@ export default function Cart({navigation}) {
                       flexDirection: 'row',
                     }}>
                     <Text style={styles.logoutPriceValueContainer}>
-                      {item?.price}
+                      $ {item?.price}
                     </Text>
                     <Text
                       style={{
@@ -623,7 +615,7 @@ export default function Cart({navigation}) {
                         color: 'red',
                         marginLeft: wp('2'),
                       }}>
-                      {item?.discounted_price}
+                      $ {item?.discounted_price}
                     </Text>
                   </View>
                 ) : (
@@ -633,7 +625,7 @@ export default function Cart({navigation}) {
                       color: color.textColorRedCart,
                       marginBottom: hp('1'),
                     }}>
-                    {item?.price}
+                    $ {item?.price}
                   </Text>
                 )}
               </View>
@@ -947,7 +939,7 @@ export default function Cart({navigation}) {
                         {translate('Subtotal')}
                       </Text>
                       <Text style={styles.ty}>
-                        $ {totalPriceShow.toFixed(2)}
+                        {users?.currency.symbol} {totalPriceShow}
                       </Text>
                     </View>
                     <Text></Text>
@@ -969,7 +961,7 @@ export default function Cart({navigation}) {
                           styles.ty,
                           {color: color.textColorRedCart, fontWeight: 'bold'},
                         ]}>
-                        $ {totalPriceShow.toFixed(2)}
+                        {users?.currency.symbol} {totalPriceShow}
                       </Text>
                     </View>
                     <TouchableOpacity

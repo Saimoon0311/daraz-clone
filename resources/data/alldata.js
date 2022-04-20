@@ -26,7 +26,6 @@ import {showMessage} from 'react-native-flash-message';
 import {addtowishlist} from '../screens/Home/home';
 
 export default function Alldata(prop, {navigation}) {
-  // console.log(29,addtowishlist)
   const passedFunction = id => {
     prop.addtowishlist(id);
   };
@@ -34,7 +33,8 @@ export default function Alldata(prop, {navigation}) {
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
-          <TouchableOpacity onPress={() => prop.detailss(item)}>
+          <TouchableOpacity
+            onPress={() => prop.detailss(item, prop?.currencySign)}>
             <ImageBackground
               style={styles.im}
               imageStyle={{borderRadius: 20}}
@@ -91,22 +91,24 @@ export default function Alldata(prop, {navigation}) {
             {item.is_discounted == 2 ? (
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
                   width: wp('33'),
                   alignSelf: 'center',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  alignContent: 'center',
                 }}>
                 <Text
                   numberOfLines={1}
                   style={{
                     color: '#512500',
-                    fontSize: hp('2%'),
+                    fontSize: hp('2'),
                     fontWeight: 'bold',
                     textAlign: 'center',
                     textDecorationLine: 'line-through',
                     // alignSelf:"center"
                   }}>
-                  $ {item.price}
+                  {prop?.currencySign} {item.price}
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -117,7 +119,7 @@ export default function Alldata(prop, {navigation}) {
                     textAlign: 'center',
                   }}>
                   {' '}
-                  $ {item.discounted_price}
+                  {prop?.currencySign} {item.discounted_price}
                 </Text>
               </View>
             ) : (
@@ -131,11 +133,10 @@ export default function Alldata(prop, {navigation}) {
                   width: wp('30'),
                   alignSelf: 'center',
                 }}>
-                $ {item.price}
+                {prop?.currencySign} {item.price}
               </Text>
             )}
             <Text></Text>
-            {/* </View> */}
           </TouchableOpacity>
         </View>
         <Text></Text>
@@ -147,17 +148,11 @@ export default function Alldata(prop, {navigation}) {
     return (
       <ScrollView showsHorizontalScrollIndicator={false}>
         <View style={styles.box}>
-          {/* <TouchableOpacity onPress={() => prop.detailss(item)}> */}
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.image}`}}
-            // source={{
-            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-            // }}
-          ></ImageBackground>
+            source={{uri: `${Images_API}/${item?.image}`}}></ImageBackground>
           <Text style={styles.boxImageStyle}>{item?.name}</Text>
-          {/* </TouchableOpacity> */}
         </View>
       </ScrollView>
     );

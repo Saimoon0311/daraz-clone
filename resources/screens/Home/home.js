@@ -95,9 +95,11 @@ export default function Home({navigation}) {
   const [brand, setBrand] = useState();
   const [seacrhData, setSearchData] = useState('');
   const [id, setId] = useState();
+  const [userData, setUserData] = useState();
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
-  const detailss = item => {
-    navigation.navigate('Details', item);
+  const detailss = (item, currencySign) => {
+    console.log(101, currencySign);
+    navigation.navigate('Details', item, currencySign);
   };
   const [refreshing, setRefreshing] = useState(false);
 
@@ -108,11 +110,8 @@ export default function Home({navigation}) {
     setLoading(true);
     setAloading(true);
     setBloading(true);
-    // datacallss(isLoggedIn == true ? true : false), setRefreshing(false);
     await checkStatus();
     setRefreshing(false);
-    // wait(2000).then(() => {
-    // });
   }, []);
 
   const navigationProps = () => {
@@ -129,7 +128,6 @@ export default function Home({navigation}) {
       } else {
         console.log('Screen is not focused');
       }
-      // await datacallss();
     })();
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange());
@@ -146,15 +144,12 @@ export default function Home({navigation}) {
 
   const checkStatus = async () => {
     const user = await getUserData();
-    // console.log(236, user);
     if (user == null) {
-      // console.log(240);
       setIsLoggedIn(false);
       await datacallss(false);
     } else if (user !== null) {
-      // console.log(244);
       setIsLoggedIn(true);
-      console.log(118, user);
+      await setUserData(user);
       await datacallss(true);
     }
   };
@@ -190,7 +185,7 @@ export default function Home({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: 'Something went wrong.',
+          message: 'Something went wrong',
           backgroundColor: '#E9691D',
         });
       });
@@ -199,8 +194,6 @@ export default function Home({navigation}) {
   const datacallss = async isLogIn => {
     const user = await getUserData();
     let userId = user?.id;
-    // console.log(130, userId);
-    // console.log(131, isLogIn);
     setId(userId);
     fetch(isLogIn == true ? `${FEATURED}/${userId}` : featuredDefault)
       .then(response => response.json())
@@ -208,13 +201,13 @@ export default function Home({navigation}) {
         setData(json[0]), setLoading(false);
       })
       .catch(e => {
-        // setShowAlert(true);
-        showMessage({
-          type: 'danger',
-          icon: 'danger',
-          message: 'Something want wrong',
-          backgroundColor: '#E9691D',
-        });
+        // showMessage({
+        //   type: 'danger',
+        //   icon: 'danger',
+        //   message: 'Something went wrong',
+        //   backgroundColor: '#E9691D',
+        // });
+        console.log(201219, e);
       });
     fetch(isLogIn == true ? `${ARRIVALS}/${userId}` : newArrivalDefault)
       .then(response => response.json())
@@ -335,6 +328,7 @@ export default function Home({navigation}) {
               isLoading={isLoading}
               userid={id}
               addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
+              currencySign={isLoggedIn ? userData?.currency?.symbol : '$'}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
@@ -355,6 +349,7 @@ export default function Home({navigation}) {
               isLoading={aisLoading}
               userid={id}
               addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
+              currencySign={isLoggedIn ? userData?.currency?.symbol : '$'}
             />
           </NativeBaseProvider>
           <View style={styles.see}>
