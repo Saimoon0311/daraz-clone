@@ -169,7 +169,7 @@ export default function Home({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         } else if (
@@ -180,7 +180,7 @@ export default function Home({navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: json[0]?.message,
+            message: translate(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         }

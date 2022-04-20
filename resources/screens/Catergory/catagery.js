@@ -154,7 +154,7 @@ export default function cate({navigation}) {
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
           <View style={styles.search}>
             <TextInput
-              placeholder="Search..."
+              placeholder={translate('Search')}
               placeholderTextColor="#512500"
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}

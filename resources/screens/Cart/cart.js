@@ -437,7 +437,7 @@ export default function Cart({navigation}) {
                     marginLeft: 10,
                     marginBottom: hp('1'),
                   }}>
-                  Price :
+                  {translate('Price :')} :
                 </Text>
                 {item?.get_products?.is_discounted == 2 ? (
                   <View
