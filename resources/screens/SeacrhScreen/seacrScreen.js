@@ -97,18 +97,6 @@ export default function seacrhScreen({navigation}) {
       });
   };
 
-  useEffect(() => {
-    (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
-    })();
-    if (isFocused) {
-      checkStatus();
-    }
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, [isFocused]);
-
   const checkStatus = async () => {
     const user = await getUserData();
     if (user == null) {
@@ -247,13 +235,13 @@ export default function seacrhScreen({navigation}) {
           {item.is_discounted == 2 ? (
             <View
               style={{
-                paddingTop: hp('2%'),
                 width: wp('35%'),
-                display: 'flex',
+                flexDirection: 'row',
                 flexWrap: 'wrap',
                 alignContent: 'center',
                 alignItems: 'center',
                 alignSelf: 'center',
+                justifyContent: 'center',
               }}>
               <View
                 style={{
@@ -341,12 +329,17 @@ export default function seacrhScreen({navigation}) {
   };
   useEffect(() => {
     (async () => {
+      RNLocalize.addEventListener('change', handleLocalizationChange());
+
       if (isFocused) {
         await checkStatusForCartUpdate();
       } else {
         console.log('Screen is not focused');
       }
     })();
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
   }, [isFocused]);
   return (
     <View>

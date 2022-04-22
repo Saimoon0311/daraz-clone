@@ -71,5 +71,6 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     overflow: 'hidden',
     marginTop: Platform.OS == 'ios' ? hp('-5') : hp('2'),
+    borderRadius: 50,
   },
 });

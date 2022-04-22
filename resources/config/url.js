@@ -1,5 +1,5 @@
 export const API_BASED_URL_STOCK = 'https://moyenxpress.com/';
-export const API_BASED_URL = 'https://moyenxpress.com/public/api/';
+export const API_BASED_URL = 'https://moyenxpress.com/api/';
 export const Images_API = 'https://moyenxpress.com/public/products';
 
 export const getApi = endpoint => API_BASED_URL + endpoint;

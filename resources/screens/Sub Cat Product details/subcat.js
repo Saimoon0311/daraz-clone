@@ -373,10 +373,11 @@ export default function subcatdetails({route, navigation}) {
               style={{
                 width: wp('35%'),
                 alignSelf: 'center',
-                display: 'flex',
+                flexDirection: 'row',
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 alignContent: 'center',
+                justifyContent: 'center',
               }}>
               <View
                 style={{
@@ -501,10 +502,11 @@ export default function subcatdetails({route, navigation}) {
               style={{
                 width: wp('35'),
                 alignSelf: 'center',
-                display: 'flex',
+                flexDirection: 'row',
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 alignContent: 'center',
+                justifyContent: 'center',
               }}>
               <View
                 style={{
@@ -518,7 +520,7 @@ export default function subcatdetails({route, navigation}) {
                     textDecorationLine: 'line-through',
                   }}
                   numberOfLines={1}>
-                  {user?.currency?.id} {item?.get_products?.price}
+                  {user?.currency?.symbol} {item?.get_products?.price}
                 </Text>
               </View>
               <View
@@ -533,7 +535,8 @@ export default function subcatdetails({route, navigation}) {
                   }}
                   numberOfLines={1}>
                   {' '}
-                  {user?.currency?.id} {item?.get_products?.discounted_price}
+                  {user?.currency?.symbol}{' '}
+                  {item?.get_products?.discounted_price}
                 </Text>
               </View>
             </View>
@@ -546,7 +549,7 @@ export default function subcatdetails({route, navigation}) {
                 paddingTop: hp('2'),
                 textAlign: 'center',
               }}>
-              {user?.currency?.id} {item?.get_products?.price}
+              {user?.currency?.symbol} {item?.get_products?.price}
             </Text>
           )}
         </TouchableOpacity>
@@ -576,12 +579,12 @@ export default function subcatdetails({route, navigation}) {
   const checkFilterFunction = async () => {
     if (paramData?.screenData == 'subCat') {
       checkApiType = `child_category_id/${productData?.id}`;
-    } else if (paramData?.screenData == 'featured-data-all/') {
+    } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
       checkApiType = `featured/1`;
     } else if (paramData?.screenData == ALLNEWARRIVALS) {
       checkApiType = `newarrivals/0`;
-    } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
-      checkApiType = `alldata/0`;
+    } else if (paramData?.screenData == 'featured-data-all/') {
+      checkApiType = 'alldata/0';
     } else if (paramData?.screenData == 'search-products') {
       checkApiType = `search`;
       searchName = `&filter[name]=${getSearchData}`;
@@ -593,6 +596,7 @@ export default function subcatdetails({route, navigation}) {
     var userID = isLoggedIn == true ? user_id : '0';
     console.log(577, userID);
     await checkFilterFunction();
+    // var price = '0' + ',' + '29615';
     var price = start + ',' + end;
 
     var checkUrlType =
@@ -700,7 +704,7 @@ export default function subcatdetails({route, navigation}) {
                   marginLeft: wp('4'),
                   marginBottom: hp('2'),
                 }}>
-                {translate('Catergory :')} {catergory.name}
+                {translate('Category')} : {catergory.name}
               </Text>
             )}
 

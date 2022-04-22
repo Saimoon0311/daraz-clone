@@ -91,12 +91,13 @@ export default function Alldata(prop, {navigation}) {
             {item.is_discounted == 2 ? (
               <View
                 style={{
-                  width: wp('33'),
+                  width: wp('35'),
                   alignSelf: 'center',
-                  display: 'flex',
+                  flexDirection: 'row',
                   flexWrap: 'wrap',
                   alignItems: 'center',
                   alignContent: 'center',
+                  justifyContent: 'center',
                 }}>
                 <Text
                   numberOfLines={1}
@@ -106,7 +107,6 @@ export default function Alldata(prop, {navigation}) {
                     fontWeight: 'bold',
                     textAlign: 'center',
                     textDecorationLine: 'line-through',
-                    // alignSelf:"center"
                   }}>
                   {prop?.currencySign} {item.price}
                 </Text>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   im: {
     width: wp('40'),
-    height: hp('15'),
+    height: hp('12'),
     borderRadius: 30,
   },
   fea: {

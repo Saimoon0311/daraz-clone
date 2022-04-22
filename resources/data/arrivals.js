@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   },
   im: {
     width: wp('40'),
-    height: hp('15'),
+    height: hp('12'),
     borderRadius: 30,
   },
   fea: {

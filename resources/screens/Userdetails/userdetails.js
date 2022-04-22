@@ -187,6 +187,12 @@ export default function Userdeatils({navigation}) {
             console.log(180, json);
             setUserData(json?.data);
             setCurrencyDefaulValue(json.data.currency);
+            showMessage({
+              type: 'success',
+              icon: 'success',
+              message: 'Currency updated successfully',
+              backgroundColor: '#FF7E33',
+            });
           } else {
             console.log('kjabdjkabjfkadblkjb');
           }
@@ -357,7 +363,7 @@ export default function Userdeatils({navigation}) {
             />
             {currency.length > 0 && (
               <Picker
-                mode="dropdown"
+                mode="dialog"
                 selectedValue={pickerCurrency}
                 onValueChange={e => {
                   setPickerCurrency(e);
@@ -365,7 +371,7 @@ export default function Userdeatils({navigation}) {
                     updateCurrencyValue(e);
                   }, 1000);
                 }}
-                collapsable={false}
+                collapsable={true}
                 style={styles.pickerStyle}>
                 <Picker.Item
                   key={currencyDefaultValue?.id}

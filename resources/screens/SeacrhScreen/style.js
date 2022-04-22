@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   },
   im: {
     width: wp('41'),
-    height: hp('15'),
+    height: hp('12'),
     borderRadius: 30,
   },
   fea: {

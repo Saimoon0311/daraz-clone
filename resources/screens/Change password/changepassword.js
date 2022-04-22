@@ -245,7 +245,7 @@ export default function changepassword({navigation}) {
           </Text>
           <Text style={styles.noticstext}>
             {translate(
-              "It's a good idea to use a strong password that you're not using elsewhere.",
+              "It's a good idea to use a strong password that you're not using elsewhere",
             )}
           </Text>
         </View>

@@ -116,19 +116,21 @@ export default function cate({navigation}) {
       setIsLoggedIn(true);
     }
   };
+  var updateCart;
   useEffect(() => {
-    if (isFocused) {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
+    RNLocalize.addEventListener('change', handleLocalizationChange());
 
-      (async () => {
-        await checkStatus();
-        await apicall();
-      })();
-      return () => {
-        RNLocalize.removeEventListener('change', handleLocalizationChange());
-      };
+    (async () => {
+      await checkStatus();
+      await apicall();
+    })();
+    if (isFocused) {
+      updateCart = true;
     }
-  }, [isFocused]);
+    return () => {
+      RNLocalize.removeEventListener('change', handleLocalizationChange());
+    };
+  }, []);
   const getData = async (id, index) => {
     setClick(index);
     setSubloading(true);
@@ -183,6 +185,7 @@ export default function cate({navigation}) {
             <HomeCartIcon
               isLoggedIn={isLoggedIn}
               navigations={navigationProps}
+              updateCart={updateCart}
             />
           </View>
         </View>

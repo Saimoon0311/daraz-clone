@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
   },
   imm: {
     width: wp('88%'),
-    height: hp('40'),
+    height: hp('40.7'),
     borderRadius: Platform.OS == 'android' ? 5 : 20,
   },
   te: {
