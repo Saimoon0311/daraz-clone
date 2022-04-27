@@ -172,7 +172,7 @@ export default function Login({navigation}) {
             alignSelf: 'center',
           }}>
           <Image
-            source={require('../../images/logo.png')}
+            source={require('../../images/logo1.png')}
             style={{
               width: wp('20'),
               height: hp('8'),
