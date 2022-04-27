@@ -212,9 +212,9 @@ export default function Cart({navigation}) {
       var listSeleted = data.filter(item => item.seleted == true);
       var selectedTotal = 0;
       listSeleted.map(res => {
-        selectedTotal = selectedTotal + res.product_total;
+        selectedTotal = selectedTotal + Number(res.product_total);
       });
-      setTotalPrice(selectedTotal);
+      setTotalPrice(selectedTotal.toFixed(2));
     } else {
       totalprice();
     }
@@ -854,7 +854,6 @@ export default function Cart({navigation}) {
           <MaterialIcons
             name="delete-outline"
             size={30}
-            // color="#512500"
             color={cartdata.length > 0 ? '#512500' : '#FFDDC9'}
             style={{
               ...styles.icon,
