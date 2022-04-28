@@ -348,7 +348,7 @@ export default function Cart({navigation}) {
       cartdata.forEach(obj => {
         for (let property in obj) {
           if (property == 'product_total') {
-            sum += obj[property];
+            sum += Number(obj[property]);
           }
         }
       });
@@ -640,9 +640,6 @@ export default function Cart({navigation}) {
                     style={{
                       fontSize: hp('2'),
                       color: '#512500',
-
-                      // color: color.textColorRedCart,
-                      // fontWeight: 'bold',
                       marginLeft: 10,
                     }}>
                     Attribute :
