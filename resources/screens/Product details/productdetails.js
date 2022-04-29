@@ -714,7 +714,6 @@ export default function Details({route, navigation}) {
                   </View>
                 </TouchableOpacity>
               </View>
-
               <Text></Text>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.vendorLeftTextStyle}>
@@ -832,11 +831,6 @@ export default function Details({route, navigation}) {
               {allReviews.map(res => {
                 return (
                   <View style={{flexDirection: 'row'}}>
-                    {/* <Avatar
-                      // rounded
-                      size={50}
-                      source={require('../../images/avata.png')}
-                    /> */}
                     <Image
                       source={require('../../images/avata.png')}
                       resizeMode="contain"

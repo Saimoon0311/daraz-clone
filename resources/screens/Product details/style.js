@@ -182,6 +182,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: wp('20.5'),
     fontSize: hp('1.5'),
+    color: 'black',
   },
   followViewContainer: {
     flexDirection: 'row',
