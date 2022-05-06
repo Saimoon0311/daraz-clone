@@ -51,6 +51,7 @@
     "react-native-indicator": "^1.2.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-localization": "^2.3.1",
     "react-native-localize": "^2.2.1",
     "react-native-offline": "^6.0.0",
     "react-native-onboarding-swiper": "^1.2.0",

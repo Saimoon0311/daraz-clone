@@ -29,10 +29,11 @@ import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon'
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function setting({navigation}) {
   const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
+    en: () => require('../../config/Translate/en'),
     fr: () => require('../../config/Translate/fr.json'),
   };
   const translate = memoize(
@@ -276,6 +277,7 @@ export default function setting({navigation}) {
           />
           <Text style={styles.orte}>{translate('Saved Items')}</Text>
         </TouchableOpacity>
+
         <Text
           style={{
             ...styles.acc,
@@ -285,6 +287,26 @@ export default function setting({navigation}) {
           }}>
           {translate('My Settings')}
         </Text>
+        <TouchableOpacity
+          style={styles.shadow}
+          onPress={() => {
+            isLoggedIn
+              ? navigation.navigate('languageChange')
+              : showMessage({
+                  type: 'warning',
+                  icon: 'auto',
+                  message: translate('Kindly login first'),
+                  backgroundColor: '#E9691D',
+                });
+          }}>
+          <MaterialIcons
+            name="language"
+            size={20}
+            style={{marginRight: 20}}
+            color="gray"
+          />
+          <Text style={styles.orte}>{translate('Language/Currency')}</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.shadow}
           onPress={() => {

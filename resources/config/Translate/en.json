@@ -148,7 +148,10 @@
     "Register":"Register",
     "Attributes":"Attributes",
     "Attributes :":"Attributes",
-    "Select Attribute":"Select Attribute"
+    "Select Attribute":"Select Attribute",
+    "Language/Currency":"Language/Currency",
+    "LanguageChange" :"Language Change",
+    "Currency Change" :"Currency Change"
 
    
 

@@ -25,8 +25,8 @@ import {StatusBar} from 'react-native';
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
+import languageChange from '../screens/LanguageChange/languageCurrency';
 
-// import Home from "../screens/"
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
@@ -156,6 +156,7 @@ export default function Navigation() {
           <Stack.Screen name="changepassword" component={changepassword} />
           <Stack.Screen name="checkOut" component={checkOut} />
           <Stack.Screen name="OrderDetails" component={OrderDetails} />
+          <Stack.Screen name="languageChange" component={languageChange} />
           <Stack.Screen
             options={{
               title: `${translate('Login')} / ${translate('Register')}`,

@@ -50,9 +50,10 @@ export default function Userdeatils({navigation}) {
   const [dummy, setDummy] = useState(1);
 
   const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
+    en: () => require('../../config/Translate/en'),
     fr: () => require('../../config/Translate/fr.json'),
   };
+
   const translate = memoize(
     (key, config) => i18n.t(key, config),
     (key, config) => (config ? key + JSON.stringify(config) : key),
@@ -82,17 +83,7 @@ export default function Userdeatils({navigation}) {
   const [userDataLocal, setUserDataLocal] = useState();
   const [dummyState, setDummyState] = useState('Dummy');
   const [showAlert, setShowAlert] = useState(false);
-  const [currency, setCurrency] = useState([]);
-  const [currencyDefaultValue, setCurrencyDefaulValue] = useState({});
-  const [pickerCurrency, setPickerCurrency] = useState({});
 
-  const getUserAllData = async () => {
-    const userDatas = await getUserData();
-    const users = userId.id;
-  };
-  const ff = async () => {
-    const userDatas = await getUserData();
-  };
   const updatValue = (value, attribute) => {
     setDummyState(value);
     var data = userDataLocal;
@@ -166,49 +157,12 @@ export default function Userdeatils({navigation}) {
         setLoadingButton(false);
     }
   };
-  const getAllCurrency = () => {
-    fetch(GETALLCURRENCY)
-      .then(res => res.json())
-      .then(json => {
-        setCurrency(json);
-      })
-      .catch(e => console.log(e));
-  };
-  const updateCurrencyValue = e => {
-    console.log(177, e);
-    if (e.id != null) {
-      var url = SETCURRENCYVALUE + userDataLocal.id + '/' + e.id;
-      fetch(url, {
-        method: 'POST',
-        redirect: 'follow',
-      })
-        .then(res => res.json())
-        .then(async json => {
-          if (json.message == 'Updated Successfully') {
-            console.log(180, json);
-            setUserData(json?.data);
-            setCurrencyDefaulValue(json.data.currency);
-            showMessage({
-              type: 'success',
-              icon: 'success',
-              message: 'Currency updated successfully',
-              backgroundColor: '#FF7E33',
-            });
-          } else {
-            console.log('kjabdjkabjfkadblkjb');
-          }
-        });
-    }
-  };
+
   useEffect(() => {
     (async () => {
       RNLocalize.addEventListener('change', handleLocalizationChange());
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
-      console.log(197, userDatas);
-      setCurrencyDefaulValue(userDatas.currency);
-      console.log(199, currencyDefaultValue);
-      getAllCurrency();
     })();
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange());
@@ -362,36 +316,6 @@ export default function Userdeatils({navigation}) {
                 updatValue(text, 'country');
               }}
             />
-            {currency.length > 0 && (
-              <Picker
-                mode="dialog"
-                selectedValue={pickerCurrency}
-                onValueChange={e => {
-                  setPickerCurrency(e);
-                  setTimeout(() => {
-                    updateCurrencyValue(e);
-                  }, 1000);
-                }}
-                collapsable={true}
-                style={styles.pickerStyle}>
-                <Picker.Item
-                  key={currencyDefaultValue?.id}
-                  value={currencyDefaultValue}
-                  label={currencyDefaultValue?.code}
-                />
-                {currency?.map(res => {
-                  return (
-                    currencyDefaultValue?.code != res.code && (
-                      <Picker.Item
-                        key={res?.id}
-                        value={res}
-                        label={res?.code}
-                      />
-                    )
-                  );
-                })}
-              </Picker>
-            )}
 
             <TouchableOpacity
               onPress={() => ValidateProfileUpdate()}

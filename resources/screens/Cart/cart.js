@@ -50,7 +50,7 @@ export default function Cart({navigation}) {
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
   const [quantity, setQuantity] = useState(null);
-  const [totalPriceShow, setTotalPrice] = useState(0);
+  const [totalPriceShow, setTotalPrice] = useState('0.00');
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
@@ -65,7 +65,7 @@ export default function Cart({navigation}) {
   const [users, setUser] = useState();
 
   const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
+    en: () => require('../../config/Translate/en'),
     fr: () => require('../../config/Translate/fr.json'),
   };
   const translate = memoize(
@@ -196,7 +196,7 @@ export default function Cart({navigation}) {
       if (isFocused) {
         await checkStatus();
         setCheckBox(false);
-        setTotalPrice(0);
+        setTotalPrice('0.00');
         console.log(58, 'screen is Focused');
       } else {
         console.log(58, 'screen is not Focused');
@@ -210,7 +210,7 @@ export default function Cart({navigation}) {
   const selectedTotalPrice = async data => {
     if (data !== undefined && data !== []) {
       var listSeleted = data.filter(item => item.seleted == true);
-      var selectedTotal = 0;
+      var selectedTotal = 0.0;
       listSeleted.map(res => {
         selectedTotal = selectedTotal + Number(res.product_total);
       });
@@ -479,7 +479,7 @@ export default function Cart({navigation}) {
             </View>
             <TouchableOpacity>
               <CheckBox
-                tintColors={{true: 'yellow', false: 'red'}}
+                tintColors={{true: color.themColorPrimary, false: 'gray'}}
                 onTintColor={color.themColorPrimary}
                 onCheckColor={color.themColorPrimary}
                 disabled={false}
@@ -890,7 +890,7 @@ export default function Cart({navigation}) {
               {isLoggedIn == true && (
                 <View style={styles.insideContainer}>
                   <CheckBox
-                    tintColors={{true: 'yellow', false: 'red'}}
+                    tintColors={{true: color.themColorPrimary, false: 'gray'}}
                     onTintColor={color.themColorPrimary}
                     onCheckColor={color.themColorPrimary}
                     disabled={false}
@@ -898,7 +898,6 @@ export default function Cart({navigation}) {
                     onAnimationType="bounce"
                     offAnimationType="stroke"
                     boxType="circle"
-                    tintColors={'red'}
                     style={{...styles.checkBox, marginLeft: wp('0')}}
                     onValueChange={value => {
                       checkAllSelect(value);
