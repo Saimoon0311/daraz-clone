@@ -237,16 +237,16 @@ export default function Details({route, navigation}) {
     navigation.navigate('Cart');
   };
   const get_child_product = () => {
-    // fetch(`${SUBCATPRODUCTDATA}/${child_id}/${user_id}`)
-    fetch(`${SUBCATPRODUCTDATA}/81/${user_id}`)
+    fetch(`${SUBCATPRODUCTDATA}/88/${user_id}`)
       .then(res => res.json())
       .then(json => {
         setSubCatdata(json[0]);
         setSubCatLoading(false);
+        console.log(245, json);
       })
       .catch(err => {
         setSubCatLoading(true);
-        // console.log(err);
+        console.log(873487235, err);
       });
   };
 
@@ -457,11 +457,9 @@ export default function Details({route, navigation}) {
             subCatdata?.length > 0 && (
               <View>
                 <View style={{...styles.recentTextContainer}}>
-                  {/* <TouchableOpacity> */}
                   <Text style={{...styles.sliderText, color: 'grey'}}>
                     {translate('Related Products')}
                   </Text>
-                  {/* </TouchableOpacity> */}
                   {/* <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('subcatdetails', {

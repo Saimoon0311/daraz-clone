@@ -721,7 +721,6 @@ export default function OrderDetails({navigation}) {
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           titleStyle={{color: 'black'}}
-          messageStyle={{textAlign: 'center'}}
           cancelText={translate('Close')}
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}

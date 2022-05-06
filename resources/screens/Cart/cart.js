@@ -487,7 +487,6 @@ export default function Cart({navigation}) {
                 onAnimationType="bounce"
                 offAnimationType="stroke"
                 boxType="circle"
-                tintColors={'red'}
                 style={styles.checkBox}
                 onValueChange={() => onChangeCheckValue(item, index)}
               />

@@ -319,7 +319,7 @@ export default function Home({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: hp('24'), marginLeft: 30}}>
+          contentContainerStyle={{paddingBottom: hp('20'), marginLeft: 30}}>
           <Text style={styles.te}>{translate('Top sellers')}</Text>
           <NativeBaseProvider>
             <Alldata
@@ -382,7 +382,7 @@ export default function Home({navigation}) {
               <Text style={{color: '#E9691D'}}>See All</Text>
             </TouchableOpacity>
           </View> */}
-          <Text style={styles.te}>{translate('Brands')}</Text>
+          {/* <Text style={styles.te}>{translate('Brands')}</Text>
           <NativeBaseProvider>
             <Alldata
               detailss={detailss}
@@ -390,8 +390,7 @@ export default function Home({navigation}) {
               isLoading={bisLoading}
               isBrand={true}
             />
-            {/* <Alldata detailss={detailss} data={data} isLoading={isLoading} /> */}
-          </NativeBaseProvider>
+          </NativeBaseProvider> */}
           {/* <View style={styles.see}>
             <TouchableOpacity>
               <Text style={{color: '#E9691D'}}>See All</Text>

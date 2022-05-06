@@ -125,6 +125,7 @@ export default function Userdeatils({navigation}) {
           });
           setLoadingButton(false);
           setUserData(result?.data);
+          console.log(128, result?.data);
         } else {
           setShowAlert(true);
           setLoadingButton(false);
