@@ -571,6 +571,8 @@ export default function Cart({navigation}) {
                   <View
                     style={{
                       flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      width: wp('45'),
                     }}>
                     <Text style={styles.logoutPriceValueContainer}>
                       $ {item?.price}
@@ -765,7 +767,7 @@ export default function Cart({navigation}) {
           seleted: !res.seleted,
         };
       });
-      setTotalPrice(0);
+      setTotalPrice('0.00');
     }
   };
   const deleteAllCart = () => {

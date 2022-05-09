@@ -29,9 +29,11 @@ export default function Cartdetails({route, navigation}) {
   const item = route.params;
   const imm = item.get_products.images;
   const [starCount, setstarCount] = useState(4);
-  useEffect(async () => {
-    const user = await getUserData();
-    setUser(user);
+  useEffect(() => {
+    (async () => {
+      const user = await getUserData();
+      setUser(user);
+    })();
   }, []);
   const onStarRatingPress = rating => {
     setstarCount(rating);
@@ -96,6 +98,8 @@ export default function Cartdetails({route, navigation}) {
               <View
                 style={{
                   flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  width: wp('85'),
                 }}>
                 <Text style={styles.priceStyleContainerLeft}>
                   {languageCheck('Price :')}

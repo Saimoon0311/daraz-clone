@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 5,
     borderRadius: 10,

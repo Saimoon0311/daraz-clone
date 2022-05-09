@@ -1,72 +1,36 @@
 import React, {useState, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from '../screens/Login/login';
-import Signup from '../screens/Signup/signup';
 import MyTabs from './topbarnaviagtion';
-import mainstack from '../navigation/mainstack';
 import {useSelector} from 'react-redux';
 import MybottomTabs from './bottomtabnavigaton';
 import Details from '../screens/Product details/productdetails';
 import Cart from '../screens/Cart/cart';
 import Cartdetails from '../screens/Cardetails/cartdeatils';
-import Arrivals from '../data/arrivals';
 import Userdeatils from '../screens/Userdetails/userdetails';
 import subcatdetails from '../screens/Sub Cat Product details/subcat';
 import changepassword from '../screens/Change password/changepassword';
 import checkOut from '../screens/CheckOut/checkout';
 import OrderDetails from '../screens/OrderDetails/OrderDetails';
-import Home from '../screens/Home/home';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingScreen from '../screens/OnBoardScreen/OnboardingScreen';
 import Faq from '../screens/faq/Faq';
 import PrivacyPolicy from '../screens/privacyPolicy/PrivacyPolicy';
 import {StatusBar} from 'react-native';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
 import languageChange from '../screens/LanguageChange/languageCurrency';
+import {languageCheck} from '../config/languageChecker';
 
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
-  const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../config/Translate/en.json'),
-    fr: () => require('../config/Translate/fr.json'),
-  };
-  const languageCheck = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    languageCheck.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(null);
-
+  const [dummy, setDummy] = useState(1);
+  const {languageType} = useSelector(state => state.languageType);
   const userData = useSelector(state => state.auth.userData);
   const [isLoggedIn, setIsLoggedIn] = useState();
 
   useEffect(() => {
     (async () => {
       const appData = await AsyncStorage.getItem('isAppFirstLaunched');
-      RNLocalize.addEventListener('change', handleLocalizationChange());
 
       if (appData == null) {
         setIsAppFirstLaunched(true);
@@ -75,11 +39,9 @@ export default function Navigation() {
         setIsAppFirstLaunched(false);
       }
       await checkStatus();
+      setDummy(dummy + 1);
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, []);
+  }, [languageType]);
 
   const checkStatus = async () => {
     if (Object.keys(userData).length === 0) {
@@ -172,7 +134,6 @@ export default function Navigation() {
             name="MyTabs"
             component={MyTabs}
           />
-          {/* <Stack.Screen name="Home" component={Home} /> */}
         </Stack.Navigator>
       )}
     </>

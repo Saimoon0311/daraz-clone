@@ -9,47 +9,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../config/languageChecker';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function MyTabs() {
-  const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../config/Translate/en.json'),
-    fr: () => require('../config/Translate/fr.json'),
-  };
-  const languageCheck = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    languageCheck.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
-  useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, []);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({

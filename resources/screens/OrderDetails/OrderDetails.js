@@ -652,7 +652,7 @@ export default function OrderDetails({navigation}) {
             </TouchableOpacity>
           )}
         </View>
-        <AwesomeAlanguageCheck
+        <AwesomeAlert
           show={showAlert}
           showProgress={false}
           title={languageCheck('Warning!')}
@@ -679,7 +679,7 @@ export default function OrderDetails({navigation}) {
             setShowAlert(false);
           }}
         />
-        <AwesomeAlanguageCheck
+        <AwesomeAlert
           show={returnAlter}
           showProgress={false}
           title={languageCheck('Warning!')}
