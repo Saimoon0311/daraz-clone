@@ -36,39 +36,9 @@ import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon'
 import {useIsFocused} from '@react-navigation/native';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function subcatdetails({route, navigation}) {
-  const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const paramData = route?.params;
   const productData = route?.params?.item;
   const getSearchData = route?.params?.seacrhDatas;
@@ -265,7 +235,7 @@ export default function subcatdetails({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate(json[0]?.message),
+            message: languageCheck(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         } else if (
@@ -279,7 +249,7 @@ export default function subcatdetails({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: translate(json[0]?.message),
+            message: languageCheck(json[0]?.message),
             backgroundColor: '#E9691D',
           });
         }
@@ -288,24 +258,24 @@ export default function subcatdetails({route, navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: translate('Something went wrong.'),
+          message: languageCheck('Something went wrong.'),
           backgroundColor: '#E9691D',
         });
       });
   };
   const renderHeaderText = () => {
     if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
-      return <Text>{translate('Featured')}</Text>;
+      return <Text>{languageCheck('Featured')}</Text>;
     } else if (paramData?.screenData == ALLNEWARRIVALS) {
-      return <Text>{translate('New Arrivals')}</Text>;
+      return <Text>{languageCheck('New Arrivals')}</Text>;
     } else if (paramData?.screenData == 'subCat') {
       return <Text>{productData?.name}</Text>;
     } else if (paramData?.screenData == 'wishlist') {
-      return <Text>{translate('Wishlist')}</Text>;
+      return <Text>{languageCheck('Wishlist')}</Text>;
     } else if (paramData?.screenData == 'search-products') {
-      return <Text>{translate('Search Items')}</Text>;
+      return <Text>{languageCheck('Search Items')}</Text>;
     } else if (paramData?.screenData == 'featured-data-all/') {
-      return <Text>{translate('All Products')}</Text>;
+      return <Text>{languageCheck('All Products')}</Text>;
     }
   };
   const routeToLogin = () => {
@@ -325,7 +295,7 @@ export default function subcatdetails({route, navigation}) {
             imageStyle={{borderRadius: 20}}
             source={{uri: `${Images_API}/${item?.images[0]?.name}`}}>
             {item.featured == 1 ? (
-              <Text style={styles.fea}>{translate('Featured')}</Text>
+              <Text style={styles.fea}>{languageCheck('Featured')}</Text>
             ) : null}
             {item.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
@@ -456,7 +426,7 @@ export default function subcatdetails({route, navigation}) {
             // }}
           >
             {item?.get_products?.featured == 1 ? (
-              <Text style={styles.fea}>{translate('Featured')}</Text>
+              <Text style={styles.fea}>{languageCheck('Featured')}</Text>
             ) : null}
             {item?.get_products?.is_discounted == 2 ? (
               <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
@@ -627,15 +597,10 @@ export default function subcatdetails({route, navigation}) {
 
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
-
       if (isFocused) {
         await checkStatus();
       }
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, [isFocused]);
 
   return (
@@ -665,7 +630,7 @@ export default function subcatdetails({route, navigation}) {
           <TouchableOpacity
             onPress={() => setFilterModal(true)}
             style={styles.filterView}>
-            <Text style={styles.filterText}>{translate('Filter')}</Text>
+            <Text style={styles.filterText}>{languageCheck('Filter')}</Text>
             <Foundation size={35} color="#512500" name="filter" />
           </TouchableOpacity>
         )}
@@ -686,12 +651,14 @@ export default function subcatdetails({route, navigation}) {
           <View style={styles.imm}>
             <Ionicons name="cart" color="#E9691D" size={80} />
             <Text style={styles.tee}>
-              {translate('You have no items in this list')}
+              {languageCheck('You have no items in this list')}
             </Text>
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.goBack()}>
-              <Text style={styles.or}>{translate('Continue Shopping')}</Text>
+              <Text style={styles.or}>
+                {languageCheck('Continue Shopping')}
+              </Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -704,7 +671,7 @@ export default function subcatdetails({route, navigation}) {
                   marginLeft: wp('4'),
                   marginBottom: hp('2'),
                 }}>
-                {translate('Category')} : {catergory.name}
+                {languageCheck('Category')} : {catergory.name}
               </Text>
             )}
 

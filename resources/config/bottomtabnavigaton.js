@@ -26,47 +26,17 @@ import setting from '../screens/Setting/setting';
 import {color} from '../config/color';
 import seacrhScreen from '../screens/SeacrhScreen/seacrScreen';
 import Cart from '../screens/Cart/cart';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../config/languageChecker';
+import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 function MybottomTabs() {
   const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../config/Translate/en.json'),
-    fr: () => require('../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
+  const {languageType} = useSelector(state => state.languageType);
   useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, []);
+    setDummy(1);
+  }, [languageType]);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -91,7 +61,7 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="home" color={color} size={hp('3')} />
           ),
-          title: translate('Home'),
+          title: languageCheck('Home'),
           tabBarLabelStyle: {
             fontSize: hp('1.8'),
             fontWeight: 'bold',
@@ -110,7 +80,7 @@ function MybottomTabs() {
           tabBarIconStyle: {
             color: 'red',
           },
-          title: translate('Shop'),
+          title: languageCheck('Shop'),
           tabBarLabelStyle: {
             fontSize: hp('1.8'),
             fontWeight: 'bold',
@@ -140,7 +110,7 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="person" color={color} size={hp('3')} />
           ),
-          title: translate('Account'),
+          title: languageCheck('Account'),
           tabBarLabelStyle: {
             fontSize: hp('1.8'),
             fontWeight: 'bold',
@@ -155,7 +125,7 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="cart" color={color} size={hp('3')} />
           ),
-          title: translate('Cart'),
+          title: languageCheck('Cart'),
           tabBarLabelStyle: {
             fontSize: hp('1.8'),
             fontWeight: 'bold',
@@ -170,7 +140,7 @@ function MybottomTabs() {
           tabBarIcon: ({focused, color, size}) => (
             <Ionicons name="search" color={color} size={hp('3')} />
           ),
-          title: translate('Search'),
+          title: languageCheck('Search'),
           tabBarLabelStyle: {
             fontSize: hp('1.8'),
             fontWeight: 'bold',

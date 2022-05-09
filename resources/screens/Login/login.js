@@ -29,43 +29,12 @@ import {color} from '../../config/color';
 import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useDispatch} from 'react-redux';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Login({navigation}) {
   const dispatch = useDispatch();
   const [loadingButton, setLoadingButton] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [dummy, setDummy] = useState(1);
-
-  const isCarousel = React.useRef(null);
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
 
   const [show, setShow] = useState(false);
 
@@ -147,12 +116,6 @@ export default function Login({navigation}) {
       }
     });
   };
-  useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, []);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -193,7 +156,7 @@ export default function Login({navigation}) {
 
         <View style={{backgroundColor: color.primaryBackground}}>
           <TextInput
-            label={translate('Email *')}
+            label={languageCheck('Email *')}
             underlineColor="gray"
             value={email}
             autoCapitalize="none"
@@ -204,7 +167,7 @@ export default function Login({navigation}) {
           <Text style={{marginBottom: 13}}></Text>
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label={translate('Password *')}
+              label={languageCheck('Password *')}
               underlineColor="gray"
               value={password}
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -224,7 +187,7 @@ export default function Login({navigation}) {
         </View>
         <TouchableOpacity onPress={() => Linking.openURL(FORGETPASSWORD)}>
           <Text style={styles.forgotPasswordText}>
-            {translate('Forgot password?')}
+            {languageCheck('Forgot password?')}
           </Text>
         </TouchableOpacity>
         <View>
@@ -241,7 +204,9 @@ export default function Login({navigation}) {
               {loadingButton ? (
                 <ActivityIndicator color="white" size="small" />
               ) : (
-                <Text style={styles.loginButtonText}>{translate('Login')}</Text>
+                <Text style={styles.loginButtonText}>
+                  {languageCheck('Login')}
+                </Text>
               )}
             </View>
             <View
@@ -258,14 +223,14 @@ export default function Login({navigation}) {
               textAlign: 'center',
               color: '#512500',
             }}>
-            {translate('New on Moyen?')}
+            {languageCheck('New on Moyen?')}
           </Text>
         </View>
         <TouchableOpacity
           style={{...styles.ty, marginTop: hp('0')}}
           onPress={() => navigation.navigate('Signup')}>
           <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-            {translate('Create Account')}
+            {languageCheck('Create Account')}
           </Text>
         </TouchableOpacity>
         <View style={styles.bottomView}>
@@ -281,7 +246,9 @@ export default function Login({navigation}) {
           <TouchableOpacity
             style={styles.privacyContainer}
             onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
-            <Text style={styles.bottomText}>{translate('PrivacyPolicy')}</Text>
+            <Text style={styles.bottomText}>
+              {languageCheck('PrivacyPolicy')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

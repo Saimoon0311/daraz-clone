@@ -38,9 +38,7 @@ import types from '../../redux/type';
 import CheckBox from '@react-native-community/checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Cart({navigation}) {
   const {saveProduct} = useSelector(state => state.savePosts);
@@ -50,7 +48,7 @@ export default function Cart({navigation}) {
   const [user_id, setUser_id] = useState();
   const [total, setTotal] = useState('');
   const [quantity, setQuantity] = useState(null);
-  const [totalPriceShow, setTotalPrice] = useState(0);
+  const [totalPriceShow, setTotalPrice] = useState('0.00');
   const [showAlert, setShowAlert] = useState(false);
   const [nshowAlert, setNshowAlert] = useState(false);
   const [itemId, setItemId] = useState(null);
@@ -63,33 +61,6 @@ export default function Cart({navigation}) {
   const [isSelected, setSelection] = useState(false);
   const [checkBox, setCheckBox] = useState(false);
   const [users, setUser] = useState();
-
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
 
   const checkStatus = async () => {
     const user = await getUserData();
@@ -192,25 +163,21 @@ export default function Cart({navigation}) {
   useEffect(() => {
     (async () => {
       await checkStatus();
-      RNLocalize.addEventListener('change', handleLocalizationChange());
       if (isFocused) {
         await checkStatus();
         setCheckBox(false);
-        setTotalPrice(0);
+        setTotalPrice('0.00');
         console.log(58, 'screen is Focused');
       } else {
         console.log(58, 'screen is not Focused');
       }
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, [isFocused, saveProduct]);
 
   const selectedTotalPrice = async data => {
     if (data !== undefined && data !== []) {
       var listSeleted = data.filter(item => item.seleted == true);
-      var selectedTotal = 0;
+      var selectedTotal = 0.0;
       listSeleted.map(res => {
         selectedTotal = selectedTotal + Number(res.product_total);
       });
@@ -225,9 +192,9 @@ export default function Cart({navigation}) {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        title={translate('Remove from Cart!')}
+        title={languageCheck('Remove from Cart!')}
         titleStyle={{color: 'black'}}
-        message={translate(
+        message={languageCheck(
           'Are you sure you want to remove item from your cart',
         )}
         messageStyle={{color: 'gray', textAlign: 'center'}}
@@ -236,8 +203,8 @@ export default function Cart({navigation}) {
         closeOnHardwareBackPress={false}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText={translate('Yes')}
-        cancelText={translate('No')}
+        confirmText={languageCheck('Yes')}
+        cancelText={languageCheck('No')}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
         cancelButtonTextStyle={{fontSize: hp('2.2%')}}
@@ -281,7 +248,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate('Your Cart Has been deleted'),
+            message: languageCheck('Your Cart Has been deleted'),
             backgroundColor: '#E9691D',
           });
         setLoading(false);
@@ -299,7 +266,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate(json[0]?.message),
+            message: languageCheck(json[0]?.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -307,7 +274,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: translate(json[0]?.message),
+            message: languageCheck(json[0]?.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -373,7 +340,7 @@ export default function Cart({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'auto',
-          message: translate('Kindly select at least 1 item'),
+          message: languageCheck('Kindly select at least 1 item'),
           backgroundColor: '#E9691D',
         });
       }
@@ -424,7 +391,7 @@ export default function Cart({navigation}) {
                     marginLeft: 10,
                     marginBottom: hp('1'),
                   }}>
-                  {translate('Price :')}
+                  {languageCheck('Price :')}
                 </Text>
                 {item?.get_products?.is_discounted == 2 ? (
                   <View
@@ -479,7 +446,7 @@ export default function Cart({navigation}) {
             </View>
             <TouchableOpacity>
               <CheckBox
-                tintColors={{true: 'yellow', false: 'red'}}
+                tintColors={{true: color.themColorPrimary, false: 'gray'}}
                 onTintColor={color.themColorPrimary}
                 onCheckColor={color.themColorPrimary}
                 disabled={false}
@@ -487,7 +454,6 @@ export default function Cart({navigation}) {
                 onAnimationType="bounce"
                 offAnimationType="stroke"
                 boxType="circle"
-                tintColors={'red'}
                 style={styles.checkBox}
                 onValueChange={() => onChangeCheckValue(item, index)}
               />
@@ -529,7 +495,7 @@ export default function Cart({navigation}) {
               size={20}
               color="#B64400"
             />
-            <Text style={styles.remov}>{translate('Remove')}</Text>
+            <Text style={styles.remov}>{languageCheck('Remove')}</Text>
           </TouchableOpacity>
           <View style={styles.decrementViewButton}>
             {item?.quantity > 1 && (
@@ -814,7 +780,7 @@ export default function Cart({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate(json.message),
+            message: languageCheck(json.message),
             backgroundColor: '#E9691D',
           });
           getCartCall(true);
@@ -843,7 +809,7 @@ export default function Cart({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{translate('Carts')}</Text>
+        <Text style={styles.te}>{languageCheck('Carts')}</Text>
         <TouchableOpacity
           onPress={() => {
             setNshowAlert(true);
@@ -872,10 +838,10 @@ export default function Cart({navigation}) {
             <View style={styles.imm}>
               <Ionicons name="cart" color="#E9691D" size={80} />
               <Text numberOfLines={1} style={styles.tee}>
-                {translate('You have no items in the cart')}.
+                {languageCheck('You have no items in the cart')}.
               </Text>
               <Text style={{color: 'gray'}}>
-                {translate('Add items you want to shop')}
+                {languageCheck('Add items you want to shop')}
               </Text>
               <TouchableOpacity
                 style={styles.maior}
@@ -883,7 +849,9 @@ export default function Cart({navigation}) {
                 onPress={() => {
                   navigation.goBack();
                 }}>
-                <Text style={styles.or}>{translate('Continue Shopping')}</Text>
+                <Text style={styles.or}>
+                  {languageCheck('Continue Shopping')}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -891,7 +859,7 @@ export default function Cart({navigation}) {
               {isLoggedIn == true && (
                 <View style={styles.insideContainer}>
                   <CheckBox
-                    tintColors={{true: 'yellow', false: 'red'}}
+                    tintColors={{true: color.themColorPrimary, false: 'gray'}}
                     onTintColor={color.themColorPrimary}
                     onCheckColor={color.themColorPrimary}
                     disabled={false}
@@ -899,7 +867,6 @@ export default function Cart({navigation}) {
                     onAnimationType="bounce"
                     offAnimationType="stroke"
                     boxType="circle"
-                    tintColors={'red'}
                     style={{...styles.checkBox, marginLeft: wp('0')}}
                     onValueChange={value => {
                       checkAllSelect(value);
@@ -910,7 +877,7 @@ export default function Cart({navigation}) {
                       ...styles.selectText,
                       color: checkBox ? color.themColorPrimary : 'gray',
                     }}>
-                    {translate('Select All')}
+                    {languageCheck('Select All')}
                   </Text>
                 </View>
               )}
@@ -932,7 +899,7 @@ export default function Cart({navigation}) {
                   <View style={styles.box}>
                     <View style={{flexDirection: 'row'}}>
                       <Text style={{color: 'gray', fontSize: hp('2%')}}>
-                        {translate('Subtotal')}
+                        {languageCheck('Subtotal')}
                       </Text>
                       <Text style={styles.ty}>
                         {users?.currency.symbol} {totalPriceShow}
@@ -950,7 +917,7 @@ export default function Cart({navigation}) {
                           fontWeight: 'bold',
                           fontSize: hp('2%'),
                         }}>
-                        {translate('Total')}
+                        {languageCheck('Total')}
                       </Text>
                       <Text
                         style={[
@@ -968,7 +935,7 @@ export default function Cart({navigation}) {
                           : navigation.navigate('MyTabs');
                       }}>
                       <Text style={styles.or}>
-                        {translate('Complete your order')}
+                        {languageCheck('Complete your order')}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -1017,16 +984,16 @@ export default function Cart({navigation}) {
       <AwesomeAlert
         show={nshowAlert}
         showProgress={false}
-        title={translate('Warning!')}
-        message={translate('Are you sure you want to delete all product ?')}
+        title={languageCheck('Warning!')}
+        message={languageCheck('Are you sure you want to delete all product ?')}
         messageStyle={{color: 'gray', textAlign: 'center'}}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={true}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText={translate('Yes')}
-        cancelText={translate('No')}
+        confirmText={languageCheck('Yes')}
+        cancelText={languageCheck('No')}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
         cancelButtonTextStyle={{fontSize: hp('2.2%')}}

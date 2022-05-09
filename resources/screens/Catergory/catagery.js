@@ -34,39 +34,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {getUserData} from '../../utils/utils';
 import {useIsFocused} from '@react-navigation/native';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function cate({navigation}) {
   const [dummy, setDummy] = useState(1);
 
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [isLoading, setLoading] = useState(true);
   const [subloading, setSubloading] = useState(true);
   const [catdata, setCatdata] = useState();
@@ -97,7 +69,7 @@ export default function cate({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: translate('Please type something to search'),
+        message: languageCheck('Please type something to search'),
         backgroundColor: '#E9691D',
       });
     } else {
@@ -118,8 +90,6 @@ export default function cate({navigation}) {
   };
   var updateCart;
   useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-
     (async () => {
       await checkStatus();
       await apicall();
@@ -127,9 +97,6 @@ export default function cate({navigation}) {
     if (isFocused) {
       updateCart = true;
     }
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
   const getData = async (id, index) => {
     setClick(index);
@@ -144,7 +111,7 @@ export default function cate({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'auto',
-          message: translate('Issue while fetching categories'),
+          message: languageCheck('Issue while fetching categories'),
           backgroundColor: '#E9691D',
         });
       });
@@ -152,11 +119,11 @@ export default function cate({navigation}) {
   return (
     <View style={styles.mains}>
       <View style={styles.appbarStyle}>
-        <Text style={styles.head}>{translate('Category')}</Text>
+        <Text style={styles.head}>{languageCheck('Category')}</Text>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
           <View style={styles.search}>
             <TextInput
-              placeholder={translate('Search')}
+              placeholder={languageCheck('Search')}
               placeholderTextColor="#512500"
               style={styles.searchbar}
               onSubmitEditing={() => onSubmitSeacrhItem()}
@@ -246,7 +213,7 @@ export default function cate({navigation}) {
               style={styles.but}>
               <Text
                 style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
-                {translate('See All Product')}
+                {languageCheck('See All Product')}
               </Text>
               <Ionicons
                 name="chevron-forward-outline"

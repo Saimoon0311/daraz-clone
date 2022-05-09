@@ -58,40 +58,9 @@ import {WebView} from 'react-native-webview';
 import {textAlign, textColor} from 'styled-system';
 import {set} from 'immer/dist/internal';
 import * as Animatable from 'react-native-animatable';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function checkOut({navigation, route}) {
-  const [dummy, setDummy] = useState(1);
-
-  const isCarousel = React.useRef(null);
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   var itemOrder = route?.params?.screenData;
   var itemTotalPrice = route?.params?.totalPrice;
   var total = itemTotalPrice;
@@ -181,17 +150,12 @@ export default function checkOut({navigation, route}) {
 
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
-
       getStriperKey();
       showAlert();
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
       makeArrays();
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
 
   const CheckShippingDetail = user => {
@@ -522,7 +486,7 @@ export default function checkOut({navigation, route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{translate(t)}</Text>
+        <Text style={styles.te}>{languageCheck(t)}</Text>
         <Ionicons
           name="cart"
           size={30}
@@ -549,7 +513,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            {translate('Delivery')}
+            {languageCheck('Delivery')}
           </Text>
         </View>
         <View
@@ -562,7 +526,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            {translate('Summary')}
+            {languageCheck('Summary')}
           </Text>
         </View>
         <View
@@ -575,7 +539,7 @@ export default function checkOut({navigation, route}) {
                 ? styles.topButtonActiveText
                 : styles.topButtonInactiveText
             }>
-            {translate('Payment')}
+            {languageCheck('Payment')}
           </Text>
         </View>
       </View>
@@ -629,7 +593,7 @@ export default function checkOut({navigation, route}) {
           <Text style={styles.subtotalPrice}>125</Text>
         </View> */}
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
-          <Text style={styles.subtotalText}>{translate('Subtotal')}</Text>
+          <Text style={styles.subtotalText}>{languageCheck('Subtotal')}</Text>
           <Text style={styles.subtotalPrice}>
             {userDataLocal?.currency?.symbol} {itemTotalPrice}
           </Text>
@@ -644,7 +608,7 @@ export default function checkOut({navigation, route}) {
         />
         <View style={{flexDirection: 'row', marginBottom: hp('1')}}>
           <Text style={{...styles.subtotalText, color: color.themColorPrimary}}>
-            {translate('Total')}
+            {languageCheck('Total')}
           </Text>
           <Text
             style={{...styles.subtotalPrice, color: color.themColorPrimary}}>
@@ -658,10 +622,12 @@ export default function checkOut({navigation, route}) {
     return (
       <>
         <ScrollView>
-          <Text style={styles.centerText}>{translate('Shipping Details')}</Text>
+          <Text style={styles.centerText}>
+            {languageCheck('Shipping Details')}
+          </Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
-              label={translate('Full Name')}
+              label={languageCheck('Full Name')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -673,7 +639,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Address:')}
+              label={languageCheck('Address:')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -697,7 +663,7 @@ export default function checkOut({navigation, route}) {
               }}
             /> */}
             <TextInput
-              label={translate('City *')}
+              label={languageCheck('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -711,7 +677,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Country *')}
+              label={languageCheck('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -724,7 +690,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Number')}
+              label={languageCheck('Number')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -738,7 +704,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('ZipCode *')}
+              label={languageCheck('ZipCode *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -754,7 +720,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Note')}
+              label={languageCheck('Note')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -779,10 +745,12 @@ export default function checkOut({navigation, route}) {
           animation={'bounceInLeft'}
           // animation={'tada'}
         >
-          <Text style={styles.centerText}>{translate('Billing Address')}</Text>
+          <Text style={styles.centerText}>
+            {languageCheck('Billing Address')}
+          </Text>
           <View style={{...styles.box, paddingBottom: 30}}>
             <TextInput
-              label={translate('Full Name')}
+              label={languageCheck('Full Name')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -816,7 +784,7 @@ export default function checkOut({navigation, route}) {
               }}
             /> */}
             <TextInput
-              label={translate('City *')}
+              label={languageCheck('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -829,7 +797,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Country *')}
+              label={languageCheck('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -841,7 +809,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Number')}
+              label={languageCheck('Number')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -854,7 +822,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('ZipCode *')}
+              label={languageCheck('ZipCode *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -869,7 +837,7 @@ export default function checkOut({navigation, route}) {
               }}
             />
             <TextInput
-              label={translate('Note')}
+              label={languageCheck('Note')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={styles.text}
@@ -911,7 +879,7 @@ export default function checkOut({navigation, route}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: translate('Please first complete all shipping details'),
+        message: languageCheck('Please first complete all shipping details'),
         backgroundColor: '#E9691D',
       });
     }
@@ -922,7 +890,7 @@ export default function checkOut({navigation, route}) {
         <View>
           {shippingAddress()}
           <CheckBox
-            label={translate('Same as Shipping Address')}
+            label={languageCheck('Same as Shipping Address')}
             status={checkBox}
             onPress={() => {
               checkBox == 'checked' ? setCheckBox('unchecked') : setdetails();
@@ -959,7 +927,7 @@ export default function checkOut({navigation, route}) {
     return (
       <>
         <Text style={styles.centerText}>
-          {translate('Select Payment Method')}
+          {languageCheck('Select Payment Method')}
         </Text>
         <View style={styles.box}>
           <NativeBaseProvider>
@@ -1066,7 +1034,7 @@ export default function checkOut({navigation, route}) {
             style={styles.text}
           />
           <TextInput
-            label={translate('Number')}
+            label={languageCheck('Number')}
             editable={false}
             underlineColor="gray"
             keyboardType="number-pad"
@@ -1075,7 +1043,7 @@ export default function checkOut({navigation, route}) {
             value={userDataLocal?.phone_number}
           />
           <TextInput
-            label={translate('ZipCode *')}
+            label={languageCheck('ZipCode *')}
             editable={false}
             keyboardType="number-pad"
             underlineColor="gray"
@@ -1084,7 +1052,7 @@ export default function checkOut({navigation, route}) {
             style={styles.text}
           />
           <TextInput
-            label={translate('Note')}
+            label={languageCheck('Note')}
             underlineColor="gray"
             editable={false}
             theme={{colors: {primary: color.themColorPrimary}}}
@@ -1099,7 +1067,7 @@ export default function checkOut({navigation, route}) {
   const orderDetailsRenderdata = () => {
     return (
       <>
-        <Text style={styles.centerText}>{translate('Order Items')}</Text>
+        <Text style={styles.centerText}>{languageCheck('Order Items')}</Text>
         <View style={{...styles.box}}>{orderDetailsAlldata()}</View>
       </>
     );
@@ -1183,7 +1151,7 @@ export default function checkOut({navigation, route}) {
             <TouchableOpacity
               onPress={() => backProcessTopPayment()}
               style={styles.bottomBackButtonContainer}>
-              <Text style={styles.or}>{translate('Back')}</Text>
+              <Text style={styles.or}>{languageCheck('Back')}</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -1198,7 +1166,7 @@ export default function checkOut({navigation, route}) {
                 color={'white'}
               />
             ) : (
-              <Text style={styles.or}>{translate('Proceed')}</Text>
+              <Text style={styles.or}>{languageCheck('Proceed')}</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -1281,7 +1249,7 @@ export default function checkOut({navigation, route}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: translate('Please enter all delivery information'),
+        message: languageCheck('Please enter all delivery information'),
         backgroundColor: '#E9691D',
       });
     }
@@ -1434,12 +1402,12 @@ export default function checkOut({navigation, route}) {
               style={{width: wp('60'), height: hp('30'), marginBottom: hp('2')}}
             />
             <Text style={{color: color.themColorPrimary, fontSize: hp('3')}}>
-              {translate('Success')}
+              {languageCheck('Success')}
             </Text>
             <TouchableOpacity
               style={styles.maior}
               onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.or}>{translate('Back To Home')}</Text>
+              <Text style={styles.or}>{languageCheck('Back To Home')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -1481,14 +1449,14 @@ export default function checkOut({navigation, route}) {
         show={alert}
         showProgress={false}
         title="Alert!"
-        message={translate('Would like to same address from your last one')}
+        message={languageCheck('Would like to same address from your last one')}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText={translate('Yes')}
-        cancelText={translate('No')}
+        confirmText={languageCheck('Yes')}
+        cancelText={languageCheck('No')}
         messageStyle={{textAlign: 'center'}}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
@@ -1507,9 +1475,11 @@ export default function checkOut({navigation, route}) {
       <AwesomeAlert
         show={showWhatsApp}
         showProgress={false}
-        title={translate('Contact With Owner')}
+        title={languageCheck('Contact With Owner')}
         titleStyle={{color: 'black', fontWeight: 'bold'}}
-        message={translate('For complete your order please contact the owner!')}
+        message={languageCheck(
+          'For complete your order please contact the owner!',
+        )}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}

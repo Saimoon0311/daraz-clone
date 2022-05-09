@@ -148,5 +148,8 @@
 "Register":"S'inscrire",
 "Attributes":"Les attributs",
 "Attributes :":"Les attributs",
-"Select Attribute":"Sélectionnez l'attribut"
+"Select Attribute":"Sélectionnez l'attribut",
+"Language/Currency":"Langue/Devise",
+"LanguageChange":"Changement de langue",
+"Currency Change":"Changement de devise"
 }

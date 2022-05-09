@@ -50,40 +50,10 @@ import types from '../../redux/type';
 import {flexDirection, get, width} from 'styled-system';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Carousel from 'react-native-snap-carousel';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Details({route, navigation}) {
-  const [dummy, setDummy] = useState(1);
-
   const isCarousel = React.useRef(null);
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
 
   const child_id = route?.child_category_id;
   const item = route?.params;
@@ -188,16 +158,11 @@ export default function Details({route, navigation}) {
 
   var items = subCatdata;
   useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-
     (async () => {
       await checkStatus();
       getAllReviews();
       get_child_product();
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
 
   const checkStatus = async () => {
@@ -220,7 +185,7 @@ export default function Details({route, navigation}) {
     showMessage({
       type: 'success',
       icon: 'auto',
-      message: translate('Your Product Has Been Add To Cart'),
+      message: languageCheck('Your Product Has Been Add To Cart'),
       backgroundColor: '#E9691D',
     });
     // console.log(128, saveProduct);
@@ -237,16 +202,16 @@ export default function Details({route, navigation}) {
     navigation.navigate('Cart');
   };
   const get_child_product = () => {
-    // fetch(`${SUBCATPRODUCTDATA}/${child_id}/${user_id}`)
-    fetch(`${SUBCATPRODUCTDATA}/81/${user_id}`)
+    fetch(`${SUBCATPRODUCTDATA}/88/${user_id}`)
       .then(res => res.json())
       .then(json => {
         setSubCatdata(json[0]);
         setSubCatLoading(false);
+        console.log(245, json);
       })
       .catch(err => {
         setSubCatLoading(true);
-        // console.log(err);
+        console.log(873487235, err);
       });
   };
 
@@ -351,7 +316,7 @@ export default function Details({route, navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: translate('Some thing is wrong'),
+          message: languageCheck('Some thing is wrong'),
           backgroundColor: '#E9691D',
         });
       });
@@ -369,7 +334,7 @@ export default function Details({route, navigation}) {
       if (gotUndefined) {
         returnTopAlert(
           'danger',
-          translate(
+          languageCheck(
             'Kindly select the product attributes before adding to cart',
           ),
         );
@@ -379,7 +344,9 @@ export default function Details({route, navigation}) {
     } else {
       returnTopAlert(
         'danger',
-        translate('Kindly select the product attributes before adding to cart'),
+        languageCheck(
+          'Kindly select the product attributes before adding to cart',
+        ),
       );
     }
   };
@@ -405,7 +372,7 @@ export default function Details({route, navigation}) {
           showMessage({
             type: 'success',
             icon: 'auto',
-            message: translate('Your Product Has Been Add To Cart'),
+            message: languageCheck('Your Product Has Been Add To Cart'),
             backgroundColor: '#E9691D',
           });
           setLoading(false);
@@ -457,11 +424,9 @@ export default function Details({route, navigation}) {
             subCatdata?.length > 0 && (
               <View>
                 <View style={{...styles.recentTextContainer}}>
-                  {/* <TouchableOpacity> */}
                   <Text style={{...styles.sliderText, color: 'grey'}}>
-                    {translate('Related Products')}
+                    {languageCheck('Related Products')}
                   </Text>
-                  {/* </TouchableOpacity> */}
                   {/* <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('subcatdetails', {
@@ -508,7 +473,7 @@ export default function Details({route, navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{translate('Details')}</Text>
+        <Text style={styles.te}>{languageCheck('Details')}</Text>
 
         <View
           style={{
@@ -558,7 +523,7 @@ export default function Details({route, navigation}) {
           <View style={styles.box}>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>{item?.name}</Text>
             <Text style={styles.tep}>
-              {translate('Category')} {item?.getchildcategory?.name}
+              {languageCheck('Category')} {item?.getchildcategory?.name}
             </Text>
             {item?.is_discounted == 2 ? (
               <View
@@ -572,7 +537,7 @@ export default function Details({route, navigation}) {
                     fontWeight: 'bold',
                     marginTop: hp('0.5%'),
                   }}>
-                  {translate('Price :')}
+                  {languageCheck('Price :')}
                 </Text>
                 <Text
                   style={{
@@ -607,7 +572,7 @@ export default function Details({route, navigation}) {
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  {translate('Price :')}
+                  {languageCheck('Price :')}
                 </Text>
 
                 <Text
@@ -622,7 +587,7 @@ export default function Details({route, navigation}) {
             )}
             <Text style={styles.tep}>SKU : {item?.sku}</Text>
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-              {translate('Description :')}
+              {languageCheck('Description :')}
             </Text>
             <Text
               style={{
@@ -654,7 +619,7 @@ export default function Details({route, navigation}) {
                           <Picker.Item
                             key={i}
                             value={null}
-                            label={translate('Select Attribute')}
+                            label={languageCheck('Select Attribute')}
                           />
                           {res?.value?.map(res => {
                             return (
@@ -676,7 +641,7 @@ export default function Details({route, navigation}) {
             <View style={styles.box}>
               <View style={{flexDirection: 'row'}}>
                 <Text numberOfLines={2} style={styles.vendorName}>
-                  {translate('Vendor:')}{' '}
+                  {languageCheck('Vendor:')}{' '}
                   {item['get_shop']['get_vendor']['username']}
                 </Text>
                 <TouchableOpacity
@@ -691,9 +656,9 @@ export default function Details({route, navigation}) {
                           color={'white'}
                         />
                       ) : getFollow.status == 1 ? (
-                        translate('Unfollow')
+                        languageCheck('Unfollow')
                       ) : (
-                        translate('Follow')
+                        languageCheck('Follow')
                       )}
                     </Text>
                     {followLoader == false && getFollow.status == 1 ? (
@@ -717,7 +682,7 @@ export default function Details({route, navigation}) {
               <Text></Text>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.vendorLeftTextStyle}>
-                  {translate('Store Name:')}
+                  {languageCheck('Store Name:')}
                 </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['name']}
@@ -726,7 +691,7 @@ export default function Details({route, navigation}) {
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
                 <Text style={styles.vendorLeftTextStyle}>
-                  {translate('Address:')}{' '}
+                  {languageCheck('Address:')}{' '}
                 </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['get_vendor']['address_one'] +
@@ -736,7 +701,7 @@ export default function Details({route, navigation}) {
               <Text></Text>
               <View style={{flexDirection: 'row', width: wp('70')}}>
                 <Text style={styles.vendorLeftTextStyle}>
-                  {translate('Phone:')}{' '}
+                  {languageCheck('Phone:')}{' '}
                 </Text>
                 <Text style={styles.vendorRightText}>
                   {item['get_shop']['get_vendor']['phone_number']}
@@ -747,11 +712,11 @@ export default function Details({route, navigation}) {
 
           <View style={styles.box}>
             <Text style={{color: color.defaultcolor}}>
-              {translate('Submit Your Review')}
+              {languageCheck('Submit Your Review')}
             </Text>
             <Text></Text>
             <Text style={{color: 'gray'}}>
-              {translate(
+              {languageCheck(
                 'Your email address will not be published Required fields are marked',
               )}
             </Text>
@@ -771,21 +736,21 @@ export default function Details({route, navigation}) {
               multiline
               value={reviews}
               onChangeText={text => setreview(text)}
-              placeholder={translate('Write Your Reviews Here')}
+              placeholder={languageCheck('Write Your Reviews Here')}
               placeholderTextColor={'gray'}
             />
             <Text></Text>
             <TextInput
               style={styles.reviewInput}
               value={reviewsName}
-              placeholder={translate('Enter Your Name*')}
+              placeholder={languageCheck('Enter Your Name*')}
               onChangeText={text => setreviewName(text)}
               placeholderTextColor={'gray'}
             />
             <Text></Text>
             <TextInput
               style={styles.reviewInput}
-              placeholder={translate('Enter Your Email*')}
+              placeholder={languageCheck('Enter Your Email*')}
               value={reviewsEmail}
               autoCapitalize="none"
               onChangeText={text => setreviewEmail(text)}
@@ -800,7 +765,7 @@ export default function Details({route, navigation}) {
                   : showMessage({
                       type: 'warning',
                       icon: 'auto',
-                      message: translate('Kindly login to give a review'),
+                      message: languageCheck('Kindly login to give a review'),
                       backgroundColor: '#E9691D',
                     })
               }>
@@ -808,7 +773,7 @@ export default function Details({route, navigation}) {
                 <ActivityIndicator size={'small'} color={'white'} />
               ) : (
                 <Text style={{color: 'white', fontSize: hp('2')}}>
-                  {translate('Submit')}
+                  {languageCheck('Submit')}
                 </Text>
               )}
             </TouchableOpacity>
@@ -884,7 +849,7 @@ export default function Details({route, navigation}) {
               />
               <Text
                 style={{color: color.textColorRedCart, textAlign: 'center'}}>
-                {translate('No reviews yet')}
+                {languageCheck('No reviews yet')}
               </Text>
             </>
           )}
@@ -903,7 +868,7 @@ export default function Details({route, navigation}) {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
-                {translate('Out of stock')}
+                {languageCheck('Out of stock')}
               </Text>
             </View>
           </View>
@@ -948,7 +913,7 @@ export default function Details({route, navigation}) {
                         fontSize: 20,
                         fontWeight: 'bold',
                       }}>
-                      {translate('Add To Cart')}
+                      {languageCheck('Add To Cart')}
                     </Text>
                   </View>
                 </TouchableOpacity>

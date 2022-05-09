@@ -42,41 +42,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {G} from 'react-native-svg';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function OrderDetails({navigation}) {
-  const [dummy, setDummy] = useState(1);
-
-  const isCarousel = React.useRef(null);
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [activeSession, setActiveSession] = useState([]);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState([]);
@@ -107,7 +76,7 @@ export default function OrderDetails({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate(json.message),
+            message: languageCheck(json.message),
             backgroundColor: '#E9691D',
           });
           getOrderDetails();
@@ -115,7 +84,7 @@ export default function OrderDetails({navigation}) {
           showMessage({
             type: 'warning',
             icon: 'warning',
-            message: translate(json.message),
+            message: languageCheck(json.message),
             backgroundColor: '#E9691D',
           });
         }
@@ -124,20 +93,15 @@ export default function OrderDetails({navigation}) {
         showMessage({
           type: 'danger',
           icon: 'danger',
-          message: translate('Some thing is wrong'),
+          message: languageCheck('Some thing is wrong'),
           backgroundColor: '#E9691D',
         });
       });
   };
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
-
       getOrderDetails();
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
   const navigationProps = () => {
     navigation.navigate('Cart');
@@ -184,7 +148,7 @@ export default function OrderDetails({navigation}) {
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
             marginLeft: wp('3'),
           }}>
-          {translate('My Orders')}
+          {languageCheck('My Orders')}
         </Text>
         {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
@@ -232,7 +196,7 @@ export default function OrderDetails({navigation}) {
               // style={{...styles.iconStyle, marginLeft: wp('1')}}
             />
             <Text style={styles.noTextstyle}>
-              {translate('You have no orders to display')}
+              {languageCheck('You have no orders to display')}
             </Text>
           </View>
         )}
@@ -245,7 +209,7 @@ export default function OrderDetails({navigation}) {
       <View style={{...styles.parentCardStyle}}>
         <View style={styles.parentCardTopTag}>
           <Text style={styles.parentCardTopTagText}>
-            {translate('Order Details')}
+            {languageCheck('Order Details')}
           </Text>
         </View>
         <View style={styles.parentCardIconHolder}>
@@ -337,7 +301,7 @@ export default function OrderDetails({navigation}) {
         }}>
         <View style={styles.parentCardTopTag}>
           <Text style={styles.parentCardTopTagText}>
-            {translate('Product Details')}
+            {languageCheck('Product Details')}
           </Text>
         </View>
         {renderMultipleItems(item)?.map((res, i) => {
@@ -500,7 +464,7 @@ export default function OrderDetails({navigation}) {
         </View>
         <View style={{...styles.parentCardTopTag}}>
           <Text style={styles.parentCardTopTagText}>
-            {translate('Shipping Details')}
+            {languageCheck('Shipping Details')}
           </Text>
         </View>
         <View style={styles.parentCardIconHolder}>
@@ -672,22 +636,27 @@ export default function OrderDetails({navigation}) {
                 alignSelf: `flex-start`,
                 marginRight: 'auto',
               }}>
-              <Text style={styles.cancelText}>{translate('Return Order')}</Text>
+              <Text style={styles.cancelText}>
+                {languageCheck('Return Order')}
+              </Text>
             </TouchableOpacity>
           )}
           {item.status != 'completed' && (
             <TouchableOpacity
               onPress={() => cancelOrder(item)}
+              languageCheck
               style={styles.cancelViewContainer}>
-              <Text style={styles.cancelText}>{translate('Cancel Order')}</Text>
+              <Text style={styles.cancelText}>
+                {languageCheck('Cancel Order')}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
-        <AwesomeAlert
+        <AwesomeAlanguageCheck
           show={showAlert}
           showProgress={false}
-          title={translate('Warning!')}
-          message={translate('Are you sure want to cancel this order')}
+          title={languageCheck('Warning!')}
+          message={languageCheck('Are you sure want to cancel this order')}
           messageStyle={{textAlign: 'center'}}
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
@@ -695,8 +664,8 @@ export default function OrderDetails({navigation}) {
           showCancelButton={true}
           titleStyle={{color: 'black'}}
           showConfirmButton={true}
-          confirmText={translate('Yes')}
-          cancelText={translate('No')}
+          confirmText={languageCheck('Yes')}
+          cancelText={languageCheck('No')}
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}
@@ -710,19 +679,18 @@ export default function OrderDetails({navigation}) {
             setShowAlert(false);
           }}
         />
-        <AwesomeAlert
+        <AwesomeAlanguageCheck
           show={returnAlter}
           showProgress={false}
-          title={translate('Warning!')}
+          title={languageCheck('Warning!')}
           messageStyle={{textAlign: 'center'}}
-          message={translate(`Return policy are not available`)}
+          message={languageCheck(`Return policy are not available`)}
           contentContainerStyle={{width: wp('80%')}}
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
           titleStyle={{color: 'black'}}
-          messageStyle={{textAlign: 'center'}}
-          cancelText={translate('Close')}
+          cancelText={languageCheck('Close')}
           confirmButtonStyle={styles.buttonstyle}
           cancelButtonStyle={styles.buttonstyle}
           cancelButtonTextStyle={{fontSize: hp('2.2%')}}
