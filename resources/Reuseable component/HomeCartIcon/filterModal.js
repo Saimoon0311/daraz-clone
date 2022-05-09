@@ -29,7 +29,7 @@ export const FilterModal = props => {
     en: () => require('../../config/Translate/en.json'),
     fr: () => require('../../config/Translate/fr.json'),
   };
-  const translate = memoize(
+  const languageCheck = memoize(
     (key, config) => i18n.t(key, config),
     (key, config) => (config ? key + JSON.stringify(config) : key),
   );
@@ -39,7 +39,7 @@ export const FilterModal = props => {
       RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
       fallback;
 
-    translate.cache.clear();
+    languageCheck.cache.clear();
 
     i18n.translations = {[languageTag]: translationGetters[languageTag]()};
     i18n.locale = languageTag;
@@ -106,7 +106,9 @@ export const FilterModal = props => {
                 marginLeft: wp('4'),
                 marginBottom: Platform.OS == 'ios' ? hp('-6') : hp('-15'),
               }}>
-              <Text style={styles.headings}>{translate('Categories :')}</Text>
+              <Text style={styles.headings}>
+                {languageCheck('Categories :')}
+              </Text>
               <View style={styles.innerView}>
                 {catLoading == true ? (
                   <SkeletonPlaceholder>
@@ -156,7 +158,7 @@ export const FilterModal = props => {
               marginTop: Platform.OS == 'ios' ? hp('6') : hp('16'),
               marginLeft: wp('4'),
             }}>
-            <Text style={styles.headings}>{translate('Price :')}</Text>
+            <Text style={styles.headings}>{languageCheck('Price :')}</Text>
             <View style={{...styles.innerView, alignItems: 'center'}}>
               <TextInput
                 value={startingPrice}
@@ -184,7 +186,9 @@ export const FilterModal = props => {
                 props.setFilter(true);
               }}
               style={styles.bottomButton}>
-              <Text style={styles.buttonText}>{translate('Apply Filter')}</Text>
+              <Text style={styles.buttonText}>
+                {languageCheck('Apply Filter')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => clearFilter()}
@@ -192,7 +196,9 @@ export const FilterModal = props => {
                 ...styles.bottomButton,
                 backgroundColor: color.themColorPrimary,
               }}>
-              <Text style={styles.buttonText}>{translate('Clear Filter')}</Text>
+              <Text style={styles.buttonText}>
+                {languageCheck('Clear Filter')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

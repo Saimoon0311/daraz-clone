@@ -42,6 +42,19 @@ export default function languageChange({navigation}) {
   const [loadingPicker, setLoadingPicker] = useState(true);
   const [userDataLocal, setUserDataLocal] = useState();
   const [pickerLanguage, setPickerLanguage] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkStatus = async () => {
+    const user = await getUserData();
+    if (user == null) {
+      setIsLoggedIn(false);
+    } else if (user !== null) {
+      setIsLoggedIn(true);
+      setUserDataLocal(user);
+      setCurrencyDefaulValue(user.currency);
+      getAllCurrency();
+    }
+  };
 
   const updateCurrencyValue = e => {
     // console.log(177, e);
@@ -95,10 +108,7 @@ export default function languageChange({navigation}) {
   };
   useEffect(() => {
     (async () => {
-      const userDatas = await getUserData();
-      setUserDataLocal(userDatas);
-      setCurrencyDefaulValue(userDatas.currency);
-      getAllCurrency();
+      await checkStatus();
     })();
   }, []);
   return (
@@ -140,80 +150,78 @@ export default function languageChange({navigation}) {
             </Text>
           </View>
           <View style={styles.inputContainers}>
-            {!loadingPicker ? (
-              <Picker
-                mode="dialog"
-                onValueChange={e => {
-                  //   setPickerCurrency(e);
-                  setTimeout(() => {
-                    updateLanguageValue(e);
-                  }, 1000);
-                }}
-                collapsable={true}
-                style={styles.pickerStyle}>
-                <Picker.Item
-                  key={languageType?.code}
-                  value={languageType?.code}
-                  label={languageType?.label}
-                />
-                <Picker.Item
-                  key={languageType?.code == 'en' ? 'fr' : 'en'}
-                  value={languageType?.code == 'en' ? 'fr' : 'en'}
-                  label={languageType?.code == 'en' ? 'French' : 'English'}
-                />
-              </Picker>
-            ) : (
-              <View style={{alignSelf: 'center', marginTop: hp('2')}}>
-                <BubblesLoader size={50} color="#512500" dotRadius={10} />
+            <Picker
+              mode="dialog"
+              onValueChange={e => {
+                //   setPickerCurrency(e);
+                setTimeout(() => {
+                  updateLanguageValue(e);
+                }, 1000);
+              }}
+              collapsable={true}
+              style={styles.pickerStyle}>
+              <Picker.Item
+                key={languageType?.code}
+                value={languageType?.code}
+                label={languageType?.label}
+              />
+              <Picker.Item
+                key={languageType?.code == 'en' ? 'fr' : 'en'}
+                value={languageType?.code == 'en' ? 'fr' : 'en'}
+                label={languageType?.code == 'en' ? 'French' : 'English'}
+              />
+            </Picker>
+          </View>
+          {isLoggedIn && (
+            <>
+              <View style={styles.page}>
+                <Text
+                  style={{
+                    fontSize: wp('5'),
+                    color: color.defaultcolor,
+                    fontWeight: 'bold',
+                  }}>
+                  {languageCheck('Currency Change')}
+                </Text>
               </View>
-            )}
-          </View>
-          <View style={styles.page}>
-            <Text
-              style={{
-                fontSize: wp('5'),
-                color: color.defaultcolor,
-                fontWeight: 'bold',
-              }}>
-              {languageCheck('Currency Change')}
-            </Text>
-          </View>
-          <View style={styles.inputContainers}>
-            {!loadingPicker ? (
-              <Picker
-                mode="dialog"
-                selectedValue={pickerCurrency}
-                onValueChange={e => {
-                  setPickerCurrency(e);
-                  setTimeout(() => {
-                    updateCurrencyValue(e);
-                  }, 1000);
-                }}
-                collapsable={true}
-                style={styles.pickerStyle}>
-                <Picker.Item
-                  key={currencyDefaultValue?.id}
-                  value={currencyDefaultValue}
-                  label={currencyDefaultValue?.code}
-                />
-                {currency?.map(res => {
-                  return (
-                    currencyDefaultValue?.code != res.code && (
-                      <Picker.Item
-                        key={res?.id}
-                        value={res}
-                        label={res?.code}
-                      />
-                    )
-                  );
-                })}
-              </Picker>
-            ) : (
-              <View style={{alignSelf: 'center', marginTop: hp('2')}}>
-                <BubblesLoader size={50} color="#512500" dotRadius={10} />
+              <View style={styles.inputContainers}>
+                {!loadingPicker ? (
+                  <Picker
+                    mode="dialog"
+                    selectedValue={pickerCurrency}
+                    onValueChange={e => {
+                      setPickerCurrency(e);
+                      setTimeout(() => {
+                        updateCurrencyValue(e);
+                      }, 1000);
+                    }}
+                    collapsable={true}
+                    style={styles.pickerStyle}>
+                    <Picker.Item
+                      key={currencyDefaultValue?.id}
+                      value={currencyDefaultValue}
+                      label={currencyDefaultValue?.code}
+                    />
+                    {currency?.map(res => {
+                      return (
+                        currencyDefaultValue?.code != res.code && (
+                          <Picker.Item
+                            key={res?.id}
+                            value={res}
+                            label={res?.code}
+                          />
+                        )
+                      );
+                    })}
+                  </Picker>
+                ) : (
+                  <View style={{alignSelf: 'center', marginTop: hp('2')}}>
+                    <BubblesLoader size={50} color="#512500" dotRadius={10} />
+                  </View>
+                )}
               </View>
-            )}
-          </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </View>

@@ -173,4 +173,13 @@ export const fr = {
   'Language/Currency': 'Langue/Devise',
   LanguageChange: 'Changement de langue',
   'Currency Change': 'Changement de devise',
+  'Welcome To MoyenXpress': 'Bienvenue sur MoyenXpress.',
+  'Best Online Shopping Platform': "Meilleure plateforme d'achat en ligne.",
+  'Best Shopping Experience': 'Meilleure expérience de magasinage.',
+  'Let you shop milions of products with best online shopping Deals':
+    "Laissez-vous acheter des millions de produits avec les meilleures offres d'achat en ligne.",
+  'Best Reasonable Price': 'Meilleur prix raisonnable.',
+  'An exciting place for the whole family to shop':
+    'Un endroit passionnant pour toute la famille pour magasiner',
+  test: 'test',
 };

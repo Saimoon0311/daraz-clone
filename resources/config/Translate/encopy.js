@@ -168,4 +168,13 @@ export const en = {
   'Language/Currency': 'Language/Currency',
   LanguageChange: 'Language Change',
   'Currency Change': 'Currency Change',
+  'Welcome To MoyenXpress': 'Welcome To MoyenXpress.',
+  'Best Online Shopping Platform': 'Best Online Shopping Platform.',
+  'Best Shopping Experience': 'Best Shopping Experience.',
+  'Let you shop milions of products with best online shopping Deals':
+    'Let you shop milions of products with best online shopping Deals.',
+  'Best Reasonable Price': 'Best Reasonable Price',
+  'An exciting place for the whole family to shop':
+    'An exciting place for the whole family to shop',
+  test: 'test',
 };

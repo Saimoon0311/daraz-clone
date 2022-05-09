@@ -7,11 +7,11 @@ const initialState = {
 export default function languageSelector(state = initialState, action) {
   switch (action.type) {
     case types.CHANGELANGUAGE:
-      console.log(10, action.payload);
-      return (state = action.payload);
+      const data = action.payload;
+      return {languageType: data};
       break;
     default:
-      return state;
+      return {...state};
       break;
   }
 }

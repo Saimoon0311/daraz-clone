@@ -22,7 +22,7 @@ export default function MyTabs() {
     en: () => require('../config/Translate/en.json'),
     fr: () => require('../config/Translate/fr.json'),
   };
-  const translate = memoize(
+  const languageCheck = memoize(
     (key, config) => i18n.t(key, config),
     (key, config) => (config ? key + JSON.stringify(config) : key),
   );
@@ -32,7 +32,7 @@ export default function MyTabs() {
       RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
       fallback;
 
-    translate.cache.clear();
+    languageCheck.cache.clear();
 
     i18n.translations = {[languageTag]: translationGetters[languageTag]()};
     i18n.locale = languageTag;
@@ -70,7 +70,7 @@ export default function MyTabs() {
       <Tab.Screen
         name="Login"
         options={{
-          title: translate('Login'),
+          title: languageCheck('Login'),
           headerStyle: {
             backgroundColor: 'red',
             // color: 'black',
@@ -88,7 +88,7 @@ export default function MyTabs() {
       <Tab.Screen
         name="Signup"
         options={{
-          title: translate('Create Account'),
+          title: languageCheck('Create Account'),
           tabBarLabelStyle: {
             // backgroundColor: 'blue',
             fontWeight: 'bold',

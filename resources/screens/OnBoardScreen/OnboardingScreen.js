@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {color} from '../../config/color';
+import {languageCheck} from '../../config/languageChecker';
 
 const {width, height} = Dimensions.get('window');
 
@@ -21,21 +22,22 @@ const slides = [
   {
     id: '1',
     image: require('../../images/image1.png'),
-    title: 'Welcome To MoyenXpress',
-    subtitle: 'Best Online Shopping Platform.',
+    title: languageCheck('Welcome To MoyenXpress'),
+    subtitle: languageCheck('Best Online Shopping Platform'),
   },
   {
     id: '2',
     image: require('../../images/image2.png'),
-    title: 'Best Shopping Experience',
-    subtitle:
+    title: languageCheck('Best Shopping Experience'),
+    subtitle: languageCheck(
       'Let you shop milions of products with best online shopping Deals',
+    ),
   },
   {
     id: '3',
     image: require('../../images/image3.png'),
-    title: 'Best Reasonable Price',
-    subtitle: 'An exciting place for the whole family to shop.',
+    title: languageCheck('Best Reasonable Price'),
+    subtitle: languageCheck('An exciting place for the whole family to shop'),
   },
 ];
 

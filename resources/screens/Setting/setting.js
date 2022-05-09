@@ -26,38 +26,10 @@ import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {useIsFocused} from '@react-navigation/native';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function setting({navigation}) {
-  const translationGetters = {
-    en: () => require('../../config/Translate/en'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [names, setNames] = useState();
   const [users, setUsers] = useState();
   const [showAlert, setShowAlert] = useState(false);
@@ -96,7 +68,6 @@ export default function setting({navigation}) {
 
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
       await checkStatus();
       if (isFocused) {
         await checkStatus();
@@ -106,9 +77,6 @@ export default function setting({navigation}) {
       }
       // await datacallss();
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, [isFocused]);
   const onLogoutAlert = () => {
     setShowAlert(true);
@@ -134,7 +102,7 @@ export default function setting({navigation}) {
   const welcomeContainer = () => {
     return (
       <View style={styles.well}>
-        <Text style={{...styles.we}}>{translate('Welcome')}</Text>
+        <Text style={{...styles.we}}>{languageCheck('Welcome')}</Text>
         <Text
           style={{
             ...styles.we,
@@ -153,7 +121,7 @@ export default function setting({navigation}) {
           onPress={() => navigation.navigate('MyTabs')}
           style={styles.loginContainer}>
           <Text style={styles.loginText}>
-            {translate('Login')}/{translate('Signup')}
+            {languageCheck('Login')}/{languageCheck('Signup')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -190,7 +158,7 @@ export default function setting({navigation}) {
             fontWeight: 'bold',
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.5%'),
           }}>
-          {translate('My Account')}
+          {languageCheck('My Account')}
         </Text>
         <View
           style={{
@@ -212,7 +180,7 @@ export default function setting({navigation}) {
             marginTop: hp('3'),
             marginLeft: wp(Platform?.OS == 'ios' ? '-32' : '-36'),
           }}>
-          {translate('My Moyen Account')}
+          {languageCheck('My Moyen Account')}
         </Text>
         <TouchableOpacity
           style={styles.shadow}
@@ -222,7 +190,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate('Kindly login first'),
+                  message: languageCheck('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}>
@@ -232,7 +200,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>{translate('My Profile')}</Text>
+          <Text style={styles.orte}>{languageCheck('My Profile')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -241,7 +209,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate('Kindly login first'),
+                  message: languageCheck('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}
@@ -252,7 +220,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>{translate('Orders')}</Text>
+          <Text style={styles.orte}>{languageCheck('Orders')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -264,7 +232,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate('Kindly login first'),
+                  message: languageCheck('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}
@@ -275,7 +243,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>{translate('Saved Items')}</Text>
+          <Text style={styles.orte}>{languageCheck('Saved Items')}</Text>
         </TouchableOpacity>
 
         <Text
@@ -285,19 +253,20 @@ export default function setting({navigation}) {
             marginBottom: hp('1'),
             marginLeft: wp(Platform?.OS == 'ios' ? '-48' : '-53'),
           }}>
-          {translate('My Settings')}
+          {languageCheck('My Settings')}
         </Text>
         <TouchableOpacity
           style={styles.shadow}
           onPress={() => {
-            isLoggedIn
-              ? navigation.navigate('languageChange')
-              : showMessage({
-                  type: 'warning',
-                  icon: 'auto',
-                  message: translate('Kindly login first'),
-                  backgroundColor: '#E9691D',
-                });
+            // isLoggedIn
+            // ?
+            navigation.navigate('languageChange');
+            // : showMessage({
+            //     type: 'warning',
+            //     icon: 'auto',
+            //     message: languageCheck('Kindly login first'),
+            //     backgroundColor: '#E9691D',
+            //   });
           }}>
           <MaterialIcons
             name="language"
@@ -305,7 +274,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>{translate('Language/Currency')}</Text>
+          <Text style={styles.orte}>{languageCheck('Language/Currency')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.shadow}
@@ -315,7 +284,7 @@ export default function setting({navigation}) {
               : showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate('Kindly login first'),
+                  message: languageCheck('Kindly login first'),
                   backgroundColor: '#E9691D',
                 });
           }}>
@@ -325,7 +294,7 @@ export default function setting({navigation}) {
             style={{marginRight: 20}}
             color="gray"
           />
-          <Text style={styles.orte}>{translate('Change Password')}</Text>
+          <Text style={styles.orte}>{languageCheck('Change Password')}</Text>
         </TouchableOpacity>
         {isLoggedIn && (
           <TouchableOpacity style={styles.shadow} onPress={onLogoutAlert}>
@@ -335,7 +304,7 @@ export default function setting({navigation}) {
               style={{marginRight: 20}}
               color="gray"
             />
-            <Text style={styles.orte}>{translate('Logout')}</Text>
+            <Text style={styles.orte}>{languageCheck('Logout')}</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -343,8 +312,8 @@ export default function setting({navigation}) {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        title={translate('Warning!')}
-        message={translate(
+        title={languageCheck('Warning!')}
+        message={languageCheck(
           'Are you sure, yout want to logout from this device',
         )}
         contentContainerStyle={{width: wp('80%')}}
@@ -354,8 +323,8 @@ export default function setting({navigation}) {
         messageStyle={{textAlign: 'center'}}
         showCancelButton={true}
         showConfirmButton={true}
-        confirmText={translate('Yes')}
-        cancelText={translate('No')}
+        confirmText={languageCheck('Yes')}
+        cancelText={languageCheck('No')}
         confirmButtonStyle={styles.buttonstyle}
         cancelButtonStyle={styles.buttonstyle}
         cancelButtonTextStyle={{fontSize: hp('2.2%')}}
@@ -375,9 +344,9 @@ export default function setting({navigation}) {
       <AwesomeAlert
         show={showWhatsApp}
         showProgress={false}
-        title={translate('Contact With Admin')}
+        title={languageCheck('Contact With Admin')}
         titleStyle={{color: 'black', fontWeight: 'bold'}}
-        message={translate('Help For user To Contact Super Admin')}
+        message={languageCheck('Help For user To Contact Super Admin')}
         contentContainerStyle={{width: wp('80%')}}
         closeOnTouchOutside={false}
         messageStyle={{textAlign: 'center'}}
@@ -385,7 +354,7 @@ export default function setting({navigation}) {
         showCancelButton={true}
         showConfirmButton={true}
         confirmText="Whatsapp"
-        cancelText={translate('No')}
+        cancelText={languageCheck('No')}
         cancelButtonStyle={styles.buttonstyleCancelWhatapp}
         cancelButtonTextStyle={{fontSize: hp('1.9')}}
         confirmButtonTextStyle={{fontSize: hp('1.9')}}

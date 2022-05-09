@@ -32,39 +32,10 @@ import {styles} from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {HelperText, TextInput} from 'react-native-paper';
 import NetInfo from '@react-native-community/netinfo';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function changepassword({navigation}) {
   const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [current_password, setCurrent_password] = useState('');
   const [password, setPassword] = useState('');
   const [password_confirmation, setPassword_confirmation] = useState('');
@@ -190,14 +161,10 @@ export default function changepassword({navigation}) {
 
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
       const userId = await getUserData();
       const users = userId.id;
       setUser_ID(users);
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
 
   return (
@@ -220,7 +187,7 @@ export default function changepassword({navigation}) {
             marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
             marginLeft: wp('3'),
           }}>
-          {translate('Change Your Password')}
+          {languageCheck('Change Your Password')}
         </Text>
         <Ionicons
           name="cart"
@@ -241,17 +208,17 @@ export default function changepassword({navigation}) {
               color: color.defaultcolor,
               fontWeight: 'bold',
             }}>
-            {translate('Notice')}
+            {languageCheck('Notice')}
           </Text>
           <Text style={styles.noticstext}>
-            {translate(
+            {languageCheck(
               "It's a good idea to use a strong password that you're not using elsewhere",
             )}
           </Text>
         </View>
         <View style={styles.textinputview}>
           <TextInput
-            label={translate('Current Password *')}
+            label={languageCheck('Current Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
@@ -260,7 +227,7 @@ export default function changepassword({navigation}) {
             onChangeText={text => setCurrent_password(text)}
           />
           <TextInput
-            label={translate('New Password *')}
+            label={languageCheck('New Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
@@ -269,7 +236,7 @@ export default function changepassword({navigation}) {
             onChangeText={text => setPassword(text)}
           />
           <TextInput
-            label={translate('Confirm New Password *')}
+            label={languageCheck('Confirm New Password *')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
@@ -321,7 +288,7 @@ export default function changepassword({navigation}) {
                   alignSelf: 'center',
                   textAlign: 'center',
                 }}>
-                {translate('Change Your Password')}
+                {languageCheck('Change Your Password')}
               </Text>
             )}
           </View>

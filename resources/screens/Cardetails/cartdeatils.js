@@ -19,52 +19,19 @@ import {styles} from './style';
 import StarRating from 'react-native-star-rating';
 import Carousel from 'react-native-snap-carousel';
 import {getUserData} from '../../utils/utils';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Cartdetails({route, navigation}) {
   const [dummy, setDummy] = useState(1);
 
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const isCarousel = React.useRef(null);
   const [user, setUser] = useState();
   const item = route.params;
   const imm = item.get_products.images;
   const [starCount, setstarCount] = useState(4);
   useEffect(async () => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-
     const user = await getUserData();
     setUser(user);
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
   const onStarRatingPress = rating => {
     setstarCount(rating);
@@ -80,7 +47,7 @@ export default function Cartdetails({route, navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.te}>{translate('Details')}</Text>
+        <Text style={styles.te}>{languageCheck('Details')}</Text>
         <Ionicons
           name="cart"
           size={30}
@@ -131,7 +98,7 @@ export default function Cartdetails({route, navigation}) {
                   flexDirection: 'row',
                 }}>
                 <Text style={styles.priceStyleContainerLeft}>
-                  {translate('Price :')}
+                  {languageCheck('Price :')}
                 </Text>
                 <Text style={styles.priceStyleContainerRight}>
                   {user?.currency?.symbol} {item?.get_products?.price}
@@ -148,7 +115,7 @@ export default function Cartdetails({route, navigation}) {
                   flexDirection: 'row',
                 }}>
                 <Text style={styles.withoutDiscountStyle}>
-                  {translate('Price :')}
+                  {languageCheck('Price :')}
                 </Text>
 
                 <Text style={styles.withoutDiscountStyle}>
@@ -159,7 +126,7 @@ export default function Cartdetails({route, navigation}) {
             <Text style={styles.tep}>SKU : {item?.get_products?.sku}</Text>
 
             <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-              {translate('Description :')}
+              {languageCheck('Description :')}
             </Text>
             <Text style={styles.descriptionStyleContainer}>
               {item?.get_products?.description}
@@ -169,7 +136,7 @@ export default function Cartdetails({route, navigation}) {
             <View style={{...styles.box, marginTop: hp('3')}}>
               <View>
                 <Text style={[styles.tep, {fontWeight: 'bold'}]}>
-                  {translate('Attributes :')}{' '}
+                  {languageCheck('Attributes :')}{' '}
                 </Text>
                 {item?.attributes.map((res, i) => {
                   return (

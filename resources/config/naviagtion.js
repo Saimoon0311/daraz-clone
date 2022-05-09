@@ -36,7 +36,7 @@ export default function Navigation() {
     en: () => require('../config/Translate/en.json'),
     fr: () => require('../config/Translate/fr.json'),
   };
-  const translate = memoize(
+  const languageCheck = memoize(
     (key, config) => i18n.t(key, config),
     (key, config) => (config ? key + JSON.stringify(config) : key),
   );
@@ -46,7 +46,7 @@ export default function Navigation() {
       RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
       fallback;
 
-    translate.cache.clear();
+    languageCheck.cache.clear();
 
     i18n.translations = {[languageTag]: translationGetters[languageTag]()};
     i18n.locale = languageTag;
@@ -159,7 +159,7 @@ export default function Navigation() {
           <Stack.Screen name="languageChange" component={languageChange} />
           <Stack.Screen
             options={{
-              title: `${translate('Login')} / ${translate('Register')}`,
+              title: `${languageCheck('Login')} / ${languageCheck('Register')}`,
               headerShown: true,
               headerStyle: {
                 backgroundColor: '#FFDDC9',

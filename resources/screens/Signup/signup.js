@@ -27,39 +27,9 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import {color} from '../../config/color';
 import {useDispatch} from 'react-redux';
 import {Platform} from 'react-native';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Signup({navigation}) {
-  const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [loadingButton, setLoadingButton] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -164,7 +134,7 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate(responseData?.email[0]),
+                  message: languageCheck(responseData?.email[0]),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
@@ -172,7 +142,7 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate(responseData?.phone_number[0]),
+                  message: languageCheck(responseData?.phone_number[0]),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
@@ -182,7 +152,7 @@ export default function Signup({navigation}) {
                 showMessage({
                   type: 'warning',
                   icon: 'auto',
-                  message: translate('Something went wrong.'),
+                  message: languageCheck('Something went wrong.'),
                   backgroundColor: '#E9691D',
                 });
                 setLoadingButton(false);
@@ -193,7 +163,7 @@ export default function Signup({navigation}) {
               showMessage({
                 type: 'warning',
                 icon: 'auto',
-                message: translate('Something went wrong.'),
+                message: languageCheck('Something went wrong.'),
                 backgroundColor: '#E9691D',
               });
               setLoadingButton(false);
@@ -205,13 +175,6 @@ export default function Signup({navigation}) {
       }
     });
   };
-  useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
-  }, []);
   // const appViewPage = () => {
   //   {
   //     appUrl && (
@@ -251,7 +214,7 @@ export default function Signup({navigation}) {
             backgroundColor: color.primaryBackground,
           }}>
           <TextInput
-            label={translate('Enter Your Name*')}
+            label={languageCheck('Enter Your Name*')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%'), marginTop: hp('5')}]}
@@ -260,7 +223,7 @@ export default function Signup({navigation}) {
             onChangeText={text => setUsername(text)}
           />
           <TextInput
-            label={translate('Email *')}
+            label={languageCheck('Email *')}
             style={[styles.te, {width: wp('75%')}]}
             underlineColor="gray"
             autoCapitalize="none"
@@ -270,7 +233,7 @@ export default function Signup({navigation}) {
             onChangeText={text => setEmail(text)}
           />
           <TextInput
-            label={translate('Number')}
+            label={languageCheck('Number')}
             underlineColor="gray"
             theme={{colors: {primary: color.themColorPrimary}}}
             style={[styles.te, {width: wp('75%')}]}
@@ -281,7 +244,7 @@ export default function Signup({navigation}) {
           />
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label={translate('Password *')}
+              label={languageCheck('Password *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
@@ -300,7 +263,7 @@ export default function Signup({navigation}) {
           </View>
           <View style={{flexDirection: 'row'}}>
             <TextInput
-              label={translate('Confirm Password *')}
+              label={languageCheck('Confirm Password *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('75%')}]}
@@ -335,7 +298,7 @@ export default function Signup({navigation}) {
                 <ActivityIndicator color="white" size="small" />
               ) : (
                 <Text style={styles.createAccountText}>
-                  {translate('Create Account')}
+                  {languageCheck('Create Account')}
                 </Text>
               )}
             </View>
@@ -366,7 +329,7 @@ export default function Signup({navigation}) {
         <View style={{...styles.ty, marginTop: hp('3')}}>
           <View style={styles.ty}>
             <Text style={{fontSize: 14, textAlign: 'center', color: '#512500'}}>
-              {translate('Already Have An Account ?')}
+              {languageCheck('Already Have An Account ?')}
             </Text>
           </View>
 
@@ -374,7 +337,7 @@ export default function Signup({navigation}) {
             style={{...styles.ty, marginTop: hp('0')}}
             onPress={() => navigation.navigate('Login')}>
             <Text style={{fontSize: 18, textAlign: 'center', color: '#E9691D'}}>
-              {translate('Login')}
+              {languageCheck('Login')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -391,7 +354,9 @@ export default function Signup({navigation}) {
           <TouchableOpacity
             style={styles.privacyContainer}
             onPress={() => navigation.navigate('PrivacyPolicyScreen')}>
-            <Text style={styles.bottomText}>{translate('PrivacyPolicy')}</Text>
+            <Text style={styles.bottomText}>
+              {languageCheck('PrivacyPolicy')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -36,9 +36,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Picker, PickerIOS} from '@react-native-picker/picker';
 import Setting from '../Setting/setting';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
 
 export default function Userdeatils({navigation}) {
   const c = console.log.bind(console);
@@ -47,35 +45,6 @@ export default function Userdeatils({navigation}) {
     return () => setValue(value => value + 1); // update the state to force render
   }
   const forceUpdate = useForceUpdate();
-  const [dummy, setDummy] = useState(1);
-
-  const translationGetters = {
-    en: () => require('../../config/Translate/en'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-
-  const translate = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    translate.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
 
   const [userdataemail, setUserdataemail] = useState();
   // const [isLoading,setLoading] = useState(false);
@@ -111,7 +80,7 @@ export default function Userdeatils({navigation}) {
           showMessage({
             type: 'success',
             icon: 'success',
-            message: translate('Profile Updated Successfully'),
+            message: languageCheck('Profile Updated Successfully'),
             backgroundColor: '#E9691D',
           });
           setLoadingButton(false);
@@ -151,7 +120,7 @@ export default function Userdeatils({navigation}) {
       showMessage({
         type: 'warning',
         icon: 'warning',
-        message: translate('This field can not be empty'),
+        message: languageCheck('This field can not be empty'),
         backgroundColor: '#E9691D',
       }),
         setLoadingButton(false);
@@ -160,13 +129,9 @@ export default function Userdeatils({navigation}) {
 
   useEffect(() => {
     (async () => {
-      RNLocalize.addEventListener('change', handleLocalizationChange());
       const userDatas = await getUserData();
       setUserDataLocal(userDatas);
     })();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, []);
 
   return (
@@ -199,7 +164,7 @@ export default function Userdeatils({navigation}) {
             fontWeight: 'bold',
             marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
           }}>
-          {translate('User Profile')}
+          {languageCheck('User Profile')}
         </Text>
         <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
       </View>
@@ -215,12 +180,12 @@ export default function Userdeatils({navigation}) {
                 color: color.defaultcolor,
                 fontWeight: 'bold',
               }}>
-              {translate('Account Details')}
+              {languageCheck('Account Details')}
             </Text>
           </View>
           <View style={styles.inputContainers}>
             <TextInput
-              label={translate('Username *')}
+              label={languageCheck('Username *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -232,7 +197,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('Phone Number *')}
+              label={languageCheck('Phone Number *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -244,7 +209,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('City *')}
+              label={languageCheck('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -256,7 +221,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('Address One *')}
+              label={languageCheck('Address One *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -268,7 +233,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('Address Two *')}
+              label={languageCheck('Address Two *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -280,7 +245,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('Email address *')}
+              label={languageCheck('Email address *')}
               underlineColor="gray"
               editable={false}
               theme={{colors: {primary: color.themColorPrimary}}}
@@ -293,7 +258,7 @@ export default function Userdeatils({navigation}) {
               }}
             />
             <TextInput
-              label={translate('Zip Code *')}
+              label={languageCheck('Zip Code *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -306,7 +271,7 @@ export default function Userdeatils({navigation}) {
             />
 
             <TextInput
-              label={translate('Country *')}
+              label={languageCheck('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
               style={[styles.te, {width: wp('80%')}]}
@@ -333,7 +298,7 @@ export default function Userdeatils({navigation}) {
                   <ActivityIndicator color="white" size="small" />
                 ) : (
                   <Text style={styles.updateText}>
-                    {translate('Update Profile')}
+                    {languageCheck('Update Profile')}
                   </Text>
                 )}
               </View>
