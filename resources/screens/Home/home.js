@@ -292,20 +292,7 @@ export default function Home({navigation}) {
                   // marginLeft: wp('4'),
                 }}
               />
-              {/* <View
-                // onPress={() => setToggleSearchBar(!toggleSearchBar)}
-                style={{marginLeft: wp('10%')}}>
-                <Ionicons
-                  name="search"
-                  size={27}
-                  color={color.defaultBackgroundColor}
-                />
-              </View> */}
-              {/* <TouchableOpacity
-                onPress={() => navigation.navigate('Cart')}
-                style={{marginRight: wp('5%')}}>
-                <Ionicons name="cart" size={27} color={color.defaultcolor} />
-              </TouchableOpacity> */}
+
               <HomeCartIcon
                 isLoggedIn={isLoggedIn}
                 navigations={navigationProps}
