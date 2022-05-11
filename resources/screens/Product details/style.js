@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   main: {
     backgroundColor: color.defaultBackgroundColor,
   },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -18,11 +19,20 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '10' : '9'),
+    elevation: 21,
+    height: hp(Platform?.OS == 'ios' ? '10' : '7'),
+    alignItems: 'center',
+  },
+  te: {
+    textAlign: 'center',
+    fontSize: hp('2'),
+    color: '#512500',
+    fontWeight: 'bold',
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
   },
   icon: {
-    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2'),
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
     marginLeft: wp('3'),
   },
   box: {
@@ -43,13 +53,6 @@ export const styles = StyleSheet.create({
     width: wp('88%'),
     height: hp('40.7'),
     borderRadius: Platform.OS == 'android' ? 5 : 20,
-  },
-  te: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: '#512500',
-    fontWeight: 'bold',
-    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
   },
   tep: {
     color: '#512500',

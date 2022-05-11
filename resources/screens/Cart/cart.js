@@ -509,7 +509,7 @@ export default function Cart({navigation}) {
                 }>
                 <Ionicons
                   name="remove-circle-sharp"
-                  size={25}
+                  size={hp('3')}
                   color={color.themColorPrimary}
                   style={{
                     paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
@@ -529,7 +529,7 @@ export default function Cart({navigation}) {
               }>
               <Ionicons
                 name="add-circle-sharp"
-                size={25}
+                size={hp('3')}
                 color={color.themColorPrimary}
                 style={{
                   paddingTop: hp(Platform?.OS == 'ios' ? '2.2' : '2'),
@@ -571,6 +571,8 @@ export default function Cart({navigation}) {
                   <View
                     style={{
                       flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      width: wp('45'),
                     }}>
                     <Text style={styles.logoutPriceValueContainer}>
                       $ {item?.price}
@@ -765,7 +767,7 @@ export default function Cart({navigation}) {
           seleted: !res.seleted,
         };
       });
-      setTotalPrice(0);
+      setTotalPrice('0.00');
     }
   };
   const deleteAllCart = () => {
@@ -804,7 +806,7 @@ export default function Cart({navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
@@ -816,7 +818,7 @@ export default function Cart({navigation}) {
           }}>
           <MaterialIcons
             name="delete-outline"
-            size={30}
+            size={hp('3')}
             color={cartdata.length > 0 ? '#512500' : '#FFDDC9'}
             style={{
               ...styles.icon,

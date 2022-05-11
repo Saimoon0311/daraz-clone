@@ -17,16 +17,35 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 100,
   },
+  headerMainView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFDDC9',
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 21,
+    height: hp(Platform?.OS == 'ios' ? '10' : '7'),
+    alignItems: 'center',
+  },
+  te: {
+    textAlign: 'center',
+    fontSize: hp('2'),
+    color: '#512500',
+    fontWeight: 'bold',
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
+  },
   icon: {
-    // margin: 20,
-    marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
     marginLeft: wp('3'),
   },
   page: {
     marginTop: hp('5%'),
     marginBottom: hp('2%'),
   },
-  te: {
+  inputText: {
     backgroundColor: 'transparent',
     marginTop: hp('1%'),
   },

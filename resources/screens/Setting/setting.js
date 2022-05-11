@@ -101,13 +101,16 @@ export default function setting({navigation}) {
 
   const welcomeContainer = () => {
     return (
-      <View style={styles.well}>
+      <View style={{...styles.well, padding: hp('0.2')}}>
         <Text style={{...styles.we}}>{languageCheck('Welcome')}</Text>
         <Text
           style={{
             ...styles.we,
             color: 'white',
-            marginTop: hp('1%'),
+            marginTop: hp('0.3'),
+            fontWeight: '500',
+            letterSpacing: 1,
+            fontFamily: Platform.OS == 'ios' ? 'Iowan Old Style' : 'notoserif',
           }}>
           {stringName}
         </Text>
@@ -135,14 +138,14 @@ export default function setting({navigation}) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           backgroundColor: '#FFDDC9',
-          height: hp('10%'),
+          height: Platform.OS == 'ios' ? hp('10') : hp('7'),
         }}>
         <TouchableOpacity
           onPress={() => onWhatAppAlert()}
           style={styles.questionMarkContainer}>
           <Ionicons
             name="ios-logo-whatsapp"
-            size={30}
+            size={hp('3')}
             style={{
               marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
               marginLeft: wp('3'),
@@ -156,13 +159,15 @@ export default function setting({navigation}) {
             fontSize: 18,
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.5%'),
+            marginTop: hp(Platform?.OS == 'ios' ? '6' : '0'),
+            textAlignVertical: 'center',
           }}>
           {languageCheck('My Account')}
         </Text>
         <View
           style={{
-            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+            alignSelf: 'center',
           }}>
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>

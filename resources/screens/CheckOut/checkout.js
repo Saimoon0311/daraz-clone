@@ -481,7 +481,7 @@ export default function checkOut({navigation, route}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
@@ -489,7 +489,7 @@ export default function checkOut({navigation, route}) {
         <Text style={styles.te}>{languageCheck(t)}</Text>
         <Ionicons
           name="cart"
-          size={30}
+          size={hp('3')}
           color="#FFDDC9"
           style={{
             ...styles.icon,

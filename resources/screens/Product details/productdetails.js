@@ -468,7 +468,7 @@ export default function Details({route, navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={35}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
@@ -479,7 +479,7 @@ export default function Details({route, navigation}) {
           style={{
             ...styles.icon,
             marginLeft: wp('0'),
-            marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
           }}>
           <HomeCartIcon
             isLoggedIn={isLoggedIn}

@@ -14,14 +14,14 @@ export const styles = StyleSheet.create({
     marginRight: wp('5'),
   },
   well: {
-    padding: hp('1'),
+    padding: hp('0.8'),
     backgroundColor: '#CFA891',
   },
   we: {
     // color:"#E9691D",
     color: '#512500',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: hp('2'),
+    // fontWeight: 'bold',
     textAlign: 'center',
   },
   acc: {
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 5,
     borderRadius: 10,

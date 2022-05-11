@@ -121,5 +121,5 @@ export const styles = StyleSheet.create({
     marginTop: hp('2'),
     // marginBottom: hp('1'),
   },
-  filterText: {color: '#512500', fontSize: hp('2.5'), fontWeight: 'bold'},
+  filterText: {color: '#512500', fontSize: hp('2.3'), fontWeight: 'bold'},
 });

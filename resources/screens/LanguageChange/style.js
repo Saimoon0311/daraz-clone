@@ -10,11 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: color.defaultBackgroundColor,
     flex: 1,
   },
-  icon: {
-    // margin: 20,
-    marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
-    marginLeft: wp('3'),
-  },
+
   headerMainView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -23,8 +19,21 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '10' : '9'),
+    elevation: 21,
+    height: hp(Platform?.OS == 'ios' ? '10' : '7'),
+    alignItems: 'center',
+  },
+  te: {
+    textAlign: 'center',
+    fontSize: hp('2'),
+    color: '#512500',
+    fontWeight: 'bold',
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
+  },
+  icon: {
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
   },
   mainpage: {
     width: wp('80%'),

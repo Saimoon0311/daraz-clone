@@ -58,7 +58,7 @@ export const HomeCartIcon = props => {
     <TouchableOpacity
       onPress={() => props?.navigations()}
       style={{marginRight: wp('7')}}>
-      <Ionicons name="cart" size={27} color={color.defaultcolor} />
+      <Ionicons name="cart" size={hp('3')} color={color.defaultcolor} />
       <View
         style={{
           position: 'absolute',

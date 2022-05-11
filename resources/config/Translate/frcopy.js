@@ -36,7 +36,7 @@ export const fr = {
   Yes: 'Oui',
   No: 'Non',
   'Help For user To Contact Super Admin':
-    "Aide Pour l'utilisateur Pour contacter le super administrateur",
+    "Aide Pour l'utilisateur  \n Pour contacter le super administrateur",
   'Top sellers': 'meilleures ventes',
   'See All': 'Voir tout',
   'New Arrivals': 'Nouveaux produits',
