@@ -305,7 +305,7 @@ export default function Home({navigation}) {
                   screenData: ALLFEATUREDPRODUCTS,
                 })
               }>
-              <Text style={{color: '#E9691D'}}>{languageCheck('See All')}</Text>
+              <Text style={styles.seeAllText}>{languageCheck('See All')}</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.te}>{languageCheck('New Arrivals')}</Text>
@@ -326,7 +326,7 @@ export default function Home({navigation}) {
                   screenData: ALLNEWARRIVALS,
                 })
               }>
-              <Text style={{color: '#E9691D'}}>{languageCheck('See All')}</Text>
+              <Text style={styles.seeAllText}>{languageCheck('See All')}</Text>
             </TouchableOpacity>
           </View>
           {/* <Text style={styles.te}>Top sellers</Text>

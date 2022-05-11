@@ -440,7 +440,7 @@ export default function subcatdetails({route, navigation}) {
                 <Ionicons
                   style={{paddingTop: 13}}
                   name="heart"
-                  color="#B64400"
+                  color="#b64400"
                   size={30}
                 />
               </TouchableOpacity>
@@ -451,7 +451,7 @@ export default function subcatdetails({route, navigation}) {
                 <Ionicons
                   style={{paddingTop: 13}}
                   name="heart-outline"
-                  color="#B64400"
+                  color="#b64400"
                   size={30}
                 />
               </TouchableOpacity>
@@ -609,7 +609,7 @@ export default function subcatdetails({route, navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={35}
+            size={hp('3')}
             color="#512500"
             style={{...styles.icon, marginLeft: wp('3')}}
           />
@@ -620,7 +620,7 @@ export default function subcatdetails({route, navigation}) {
         <View
           style={{
             ...styles.icon,
-            marginTop: hp(Platform?.OS == 'ios' ? '5' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
           }}>
           <HomeCartIcon isLoggedIn={isLoggedIn} navigations={navigationProps} />
         </View>
@@ -631,7 +631,7 @@ export default function subcatdetails({route, navigation}) {
             onPress={() => setFilterModal(true)}
             style={styles.filterView}>
             <Text style={styles.filterText}>{languageCheck('Filter')}</Text>
-            <Foundation size={35} color="#512500" name="filter" />
+            <Foundation size={hp('2.5')} color="#512500" name="filter" />
           </TouchableOpacity>
         )}
       <FilterModal

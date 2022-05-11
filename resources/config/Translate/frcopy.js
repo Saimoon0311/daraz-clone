@@ -36,7 +36,7 @@ export const fr = {
   Yes: 'Oui',
   No: 'Non',
   'Help For user To Contact Super Admin':
-    "Aide Pour l'utilisateur Pour contacter le super administrateur",
+    "Aide Pour l'utilisateur  \n Pour contacter le super administrateur",
   'Top sellers': 'meilleures ventes',
   'See All': 'Voir tout',
   'New Arrivals': 'Nouvelles Arrivées',
@@ -123,7 +123,7 @@ export const fr = {
   'Confirm Password *': 'Confirmez le mot de passe *',
   'Already Have An Account ?': 'Vous avez déjà un compte ?',
   Signup: 'Inscrivez-vous',
-  Home: 'Domicile',
+  Home: 'Accueil',
   Shop: 'Boutique',
   Cart: 'Chariot',
   Account: 'Compte',

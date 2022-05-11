@@ -118,21 +118,12 @@ export default function languageChange({navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={35}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 18,
-            color: '#512500',
-            fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
-          }}>
-          {languageCheck('Language/Currency')}
-        </Text>
+        <Text style={styles.te}>{languageCheck('Language/Currency')}</Text>
         <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
       </View>
       <ScrollView

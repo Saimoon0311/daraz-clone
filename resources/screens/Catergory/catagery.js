@@ -35,8 +35,11 @@ import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon'
 import {getUserData} from '../../utils/utils';
 import {useIsFocused} from '@react-navigation/native';
 import {languageCheck} from '../../config/languageChecker';
+import {useSelector} from 'react-redux';
 
 export default function cate({navigation}) {
+  const {languageType} = useSelector(state => state.languageType);
+
   const [dummy, setDummy] = useState(1);
 
   const [isLoading, setLoading] = useState(true);
@@ -47,15 +50,16 @@ export default function cate({navigation}) {
   const [nshowAlert, setNshowAlert] = useState(false);
   const [seacrhData, setSearchData] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [firstParentCat, setFirstParentCat] = useState(1);
+  const [subCatStatusLength, setSubcatStatusLength] = useState(0);
   const isFocused = useIsFocused();
 
   const apicall = async () => {
     await fetch(CATEGORY)
       .then(response => response.json())
       .then(async json => {
-        setCatdata(json), setLoading(false);
-        getData(json[0].id, click);
+        var filterData = json.filter(item => item.status == '1');
+        setCatdata(filterData), setLoading(false);
+        getData(filterData[0].id, click);
       })
       .catch(error => {
         console.log(error);
@@ -106,6 +110,8 @@ export default function cate({navigation}) {
       .then(async response => await response.json())
       .then(json => {
         setSubcatdata(json), setSubloading(false);
+        let subCatData = json.filter(item => item.status == '0');
+        setSubcatStatusLength(subCatData.length);
       })
       .catch(error => {
         showMessage({
@@ -192,7 +198,9 @@ export default function cate({navigation}) {
                       onPress={() => getData(item.id, index)}>
                       <View>
                         <Text style={{...styles.cattext, fontSize: hp('1.6')}}>
-                          {item?.name}
+                          {languageType.code == 'en'
+                            ? item?.name
+                            : item?.name_fr}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -212,7 +220,11 @@ export default function cate({navigation}) {
               }
               style={styles.but}>
               <Text
-                style={{fontSize: 14, color: '#512500', marginLeft: 'auto'}}>
+                style={{
+                  fontSize: hp('1.7'),
+                  color: '#512500',
+                  marginLeft: 'auto',
+                }}>
                 {languageCheck('See All Product')}
               </Text>
               <Ionicons
@@ -232,11 +244,11 @@ export default function cate({navigation}) {
               }}>
               <BubblesLoader size={50} dotRadius={10} color="#512500" />
             </View>
-          ) : subcatdata?.length == 0 ? (
+          ) : subcatdata?.length == 0 ||
+            subcatdata.length == subCatStatusLength ? (
             <View
               style={{
                 alignSelf: 'center',
-                // backgroundColor:"green",
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginTop: hp('15'),
@@ -251,70 +263,67 @@ export default function cate({navigation}) {
               </Text>
             </View>
           ) : (
-            // <Text
-            // style={{
-            //   backgroundColor:"green",
-            //   width:wp('100')
-            // }}
-            // >hy</Text>
-            // console.log("hyfdfdfdfdf")
             <FlatList
               data={subcatdata}
-              // keyExtractor={item => item.key}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item}) => {
                 return (
                   <View style={styles.main}>
-                    <View style={styles.inside}>
-                      <Text
-                        style={{
-                          fontSize: hp('2'),
-                          color: '#512500',
-                          fontWeight: 'bold',
-                        }}>
-                        {item?.name}
-                      </Text>
-                      <View style={styles.multibox}>
-                        {
-                          <FlatList
-                            data={item.child_category}
-                            // keyExtractor={item => item.key}
-                            keyExtractor={(item, index) => index.toString()}
-                            numColumns={2}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({item}) => (
-                              <View
-                                style={{
-                                  flex: 1,
-                                  flexDirection: 'column',
-                                  margin: 3,
-                                  // backgroundColor: 'red',
-                                }}>
-                                <TouchableOpacity
-                                  style={styles.itss}
-                                  onPress={() =>
-                                    navigation.navigate('subcatdetails', {
-                                      item: item,
-                                      screenData: 'subCat',
-                                    })
-                                  }>
-                                  <View>
-                                    {/* <Image style={styles.img} source={require("../../images/yyy.png")} /> */}
-                                    <Text
-                                      numberOfLines={2}
-                                      style={styles.insidetext}>
-                                      {item?.name}
-                                    </Text>
+                    {item.status == '1' && (
+                      <View style={styles.inside}>
+                        <Text
+                          style={{
+                            fontSize: hp('2'),
+                            color: '#512500',
+                            fontWeight: 'bold',
+                          }}>
+                          {languageType.code == 'en'
+                            ? item?.name
+                            : item?.name_fr}
+                        </Text>
+                        <View style={styles.multibox}>
+                          {
+                            <FlatList
+                              data={item.child_category}
+                              keyExtractor={(item, index) => index.toString()}
+                              numColumns={2}
+                              showsVerticalScrollIndicator={false}
+                              renderItem={({item}) =>
+                                item.status == '1' && (
+                                  <View
+                                    style={{
+                                      flex: 1,
+                                      flexDirection: 'column',
+                                      margin: 3,
+                                    }}>
+                                    <TouchableOpacity
+                                      style={styles.itss}
+                                      onPress={() =>
+                                        navigation.navigate('subcatdetails', {
+                                          item: item,
+                                          screenData: 'subCat',
+                                        })
+                                      }>
+                                      <View>
+                                        <Text
+                                          numberOfLines={2}
+                                          style={styles.insidetext}>
+                                          {languageType.code == 'en'
+                                            ? item?.name
+                                            : item?.name_fr}
+                                        </Text>
+                                      </View>
+                                    </TouchableOpacity>
                                   </View>
-                                </TouchableOpacity>
-                              </View>
-                            )}
-                          />
-                        }
+                                )
+                              }
+                            />
+                          }
+                        </View>
                       </View>
-                    </View>
+                    )}
                   </View>
                 );
               }}

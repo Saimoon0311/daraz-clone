@@ -11,31 +11,30 @@ export const styles = StyleSheet.create({
     backgroundColor: color.defaultBackgroundColor,
     flex: 1,
   },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#FFDDC9',
-    // backgroundColor: 'red',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '11' : '9'),
-    // height: hp('9'),
-  },
-  icon: {
-    // margin: 20,
-
-    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2.7'),
+    elevation: 21,
+    height: hp(Platform?.OS == 'ios' ? '10' : '7'),
+    alignItems: 'center',
   },
   te: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: hp('2'),
     color: '#512500',
     fontWeight: 'bold',
-    marginTop: hp(Platform?.OS == 'ios' ? '6' : '3.7'),
-    width: wp('70'),
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
+  },
+  icon: {
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
   },
   loader: {
     justifyContent: 'center',
@@ -66,7 +65,7 @@ export const styles = StyleSheet.create({
   },
   im: {
     width: wp('41'),
-    height: hp('12'),
+    height: hp('13'),
     borderRadius: 30,
     // shadowColor: '#000',
     // width:354,
@@ -83,7 +82,7 @@ export const styles = StyleSheet.create({
   text: {
     color: '#512500',
     fontSize: 16,
-    paddingTop: hp('2%'),
+    paddingTop: hp('0.5'),
     paddingLeft: wp('2%'),
   },
   cart: {
@@ -165,5 +164,5 @@ export const styles = StyleSheet.create({
     marginTop: hp('2'),
     marginBottom: hp('-2'),
   },
-  filterText: {color: '#512500', fontSize: hp('2.5'), fontWeight: 'bold'},
+  filterText: {color: '#512500', fontSize: hp('2.3'), fontWeight: 'bold'},
 });

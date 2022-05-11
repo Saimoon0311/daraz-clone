@@ -36,7 +36,7 @@ export const en = {
   Yes: 'Yes',
   No: 'No',
   'Help For user To Contact Super Admin':
-    'Help For user To Contact Super Admin',
+    'Help For user  \n To Contact Super Admin',
   'Top sellers': 'Top sellers',
   'See All': 'See All',
   'New Arrivals': 'New Arrivals',

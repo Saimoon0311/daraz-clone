@@ -139,17 +139,7 @@ export default function OrderDetails({navigation}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 18,
-            color: '#512500',
-            fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '6' : '2.5'),
-            marginLeft: wp('3'),
-          }}>
-          {languageCheck('My Orders')}
-        </Text>
+        <Text style={styles.te}>{languageCheck('My Orders')}</Text>
         {/* <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Ionicons
             name="cart"
@@ -164,7 +154,7 @@ export default function OrderDetails({navigation}) {
         </TouchableOpacity> */}
         <View
           style={{
-            marginTop: hp(Platform?.OS == 'ios' ? '4.5' : '2'),
+            marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
           }}>
           <HomeCartIcon isLoggedIn={true} navigations={navigationProps} />
         </View>
@@ -329,7 +319,7 @@ export default function OrderDetails({navigation}) {
                       {res?.get_products?.is_discounted == 2
                         ? res?.get_products?.discounted_price
                         : res?.get_products?.price}{' '}
-                      x{res?.quantity}
+                      x {res?.quantity}
                     </Text>
                   </View>
                 </View>

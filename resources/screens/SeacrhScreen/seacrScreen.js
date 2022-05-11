@@ -347,7 +347,7 @@ export default function seacrhScreen({navigation}) {
           onPress={() => setFilterModal(true)}
           style={styles.filterView}>
           <Text style={styles.filterText}>{languageCheck('Filter')}</Text>
-          <Foundation size={35} color="#512500" name="filter" />
+          <Foundation size={hp('2.5')} color="#512500" name="filter" />
         </TouchableOpacity>
       )}
       <FilterModal

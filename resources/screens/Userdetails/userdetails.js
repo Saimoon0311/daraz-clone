@@ -136,36 +136,16 @@ export default function Userdeatils({navigation}) {
 
   return (
     <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: '#FFDDC9',
-          shadowColor: '#000',
-          shadowOffset: {width: 1, height: 3},
-          shadowOpacity: 0.4,
-          shadowRadius: 6,
-          elevation: 5,
-          height: hp(Platform?.OS == 'ios' ? '10' : '9'),
-        }}>
+      <View style={styles.headerMainView}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={35}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 18,
-            color: '#512500',
-            fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '5.5' : '3.5'),
-          }}>
-          {languageCheck('User Profile')}
-        </Text>
+        <Text style={styles.te}>{languageCheck('User Profile')}</Text>
         <Ionicons name="cart" size={30} color="#FFDDC9" style={styles.icon} />
       </View>
 
@@ -188,7 +168,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Username *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="default"
               value={userDataLocal?.username}
               selectionColor="#FF7E33"
@@ -200,7 +180,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Phone Number *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="number-pad"
               value={userDataLocal?.phone_number}
               selectionColor="#FF7E33"
@@ -212,7 +192,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('City *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="default"
               value={userDataLocal?.city}
               selectionColor="#FF7E33"
@@ -224,7 +204,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Address One *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="default"
               value={userDataLocal?.address_one}
               selectionColor="#FF7E33"
@@ -236,7 +216,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Address Two *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="default"
               value={userDataLocal?.address_two}
               selectionColor="#FF7E33"
@@ -249,7 +229,7 @@ export default function Userdeatils({navigation}) {
               underlineColor="gray"
               editable={false}
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="email-address"
               value={userDataLocal?.email}
               selectionColor="#FF7E33"
@@ -261,7 +241,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Zip Code *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               keyboardType="numeric"
               value={userDataLocal?.zipcode}
               selectionColor="#FF7E33"
@@ -274,7 +254,7 @@ export default function Userdeatils({navigation}) {
               label={languageCheck('Country *')}
               underlineColor="gray"
               theme={{colors: {primary: color.themColorPrimary}}}
-              style={[styles.te, {width: wp('80%')}]}
+              style={[styles.inputText, {width: wp('80%')}]}
               value={userDataLocal?.country}
               selectionColor="#FF7E33"
               onChangeText={text => {

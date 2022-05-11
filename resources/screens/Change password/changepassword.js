@@ -173,7 +173,7 @@ export default function changepassword({navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={hp('3')}
             color="#512500"
             style={styles.icon}
           />
@@ -181,17 +181,17 @@ export default function changepassword({navigation}) {
         <Text
           style={{
             textAlign: 'center',
-            fontSize: 18,
+            fontSize: hp('2'),
             color: '#512500',
             fontWeight: 'bold',
-            marginTop: hp(Platform?.OS == 'ios' ? '6' : '3'),
+            marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
             marginLeft: wp('3'),
           }}>
           {languageCheck('Change Your Password')}
         </Text>
         <Ionicons
           name="cart"
-          size={30}
+          size={hp('3')}
           color="#FFDDC9"
           style={{
             ...styles.icon,

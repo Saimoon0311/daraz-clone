@@ -74,17 +74,18 @@ export default function Alldata(prop, {navigation}) {
                 </TouchableOpacity>
               )}
             </ImageBackground>
-            <Text></Text>
+            {/* <Text></Text> */}
 
             <Text
               numberOfLines={1}
               style={{
                 color: '#512500',
-                fontSize: 14,
+                fontSize: hp('1.9'),
                 width: wp('30'),
                 fontWeight: 'bold',
                 textAlign: 'center',
                 alignSelf: 'center',
+                marginTop: hp('0.5'),
               }}>
               {item?.name}
             </Text>
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   },
   im: {
     width: wp('40'),
-    height: hp('12'),
+    height: hp('13'),
     borderRadius: 30,
   },
   fea: {

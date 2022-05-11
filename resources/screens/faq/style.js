@@ -19,15 +19,21 @@ export const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 5,
-    height: hp(Platform?.OS == 'ios' ? '10' : '8'),
+    elevation: 21,
+    height: hp(Platform?.OS == 'ios' ? '10' : '7'),
+    alignItems: 'center',
   },
-
-  icon: {
-    // margin: 20,
-    marginTop: hp(Platform?.OS == 'ios' ? '5' : '2'),
+  te: {
+    textAlign: 'center',
+    fontSize: hp('2'),
+    color: '#512500',
+    fontWeight: 'bold',
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
     marginLeft: wp('3'),
-    // marginLeft: wp(Platform?.OS == 'ios' ? '3' : '3'),
+  },
+  icon: {
+    marginTop: hp(Platform?.OS == 'ios' ? '4' : '0'),
+    marginLeft: wp('3'),
   },
   privacyPolicyText: {
     // marginLeft: wp('3'),

@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   te: {
-    fontSize: 18,
+    fontSize: hp('2'),
     fontWeight: 'bold',
     color: color.defaultcolor,
     marginTop: 9,
@@ -40,8 +40,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#F3F5F7',
     marginLeft: 'auto',
     marginRight: 22,
-    width: wp('20'),
-    height: hp('4.5'),
+    width: wp('15'),
+    height: hp('3'),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12,
@@ -86,4 +86,5 @@ export const styles = StyleSheet.create({
     paddingBottom: hp('1'),
     // color:"red"
   },
+  seeAllText: {color: '#E9691D', fontSize: hp('1.5')},
 });

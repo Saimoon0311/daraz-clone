@@ -44,7 +44,7 @@ export default function Cartdetails({route, navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
-            size={30}
+            size={hp('3')}
             color={color.defaultcolor}
             style={styles.icon}
           />
@@ -52,7 +52,7 @@ export default function Cartdetails({route, navigation}) {
         <Text style={styles.te}>{languageCheck('Details')}</Text>
         <Ionicons
           name="cart"
-          size={30}
+          size={hp('3')}
           color={color.cartIconsColor}
           style={{
             ...styles.icon,
