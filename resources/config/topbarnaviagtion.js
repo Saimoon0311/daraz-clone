@@ -12,6 +12,7 @@ import {
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
+import {languageCheck} from '../config/languageChecker';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -70,7 +71,7 @@ export default function MyTabs() {
       <Tab.Screen
         name="Login"
         options={{
-          title: languageCheck('Login'),
+          title: `${languageCheck('Login')}`,
           headerStyle: {
             backgroundColor: 'red',
             // color: 'black',
