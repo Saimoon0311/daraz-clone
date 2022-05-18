@@ -7,6 +7,8 @@ import thunk from 'redux-thunk';
 import saveProduct from './saveCartData';
 import store from '../store';
 import languageType from './languageSelector';
+import tourStatus from './checkTourStatus';
+import tourStatusLanguage from './checkTourLanguage';
 
 const persistConfig = {
   key: 'saveProduct',
@@ -18,10 +20,22 @@ const persistConfig1 = {
   storage: AsyncStorage,
   whitelist: 'languageType',
 };
+const persistConfig2 = {
+  key: 'tourStatus',
+  storage: AsyncStorage,
+  whitelist: 'tourStatus',
+};
+const persistConfig3 = {
+  key: 'tourStatusLanguage',
+  storage: AsyncStorage,
+  whitelist: 'tourStatusLanguage',
+};
 const appReducer = combineReducers({
   auth: auth,
   savePosts: persistReducer(persistConfig, saveProduct),
   languageType: persistReducer(persistConfig1, languageType),
+  tourStatus: persistReducer(persistConfig2, tourStatus),
+  tourStatusLanguage: persistReducer(persistConfig3, tourStatusLanguage),
 });
 export default rootReducer = (state, action) => {
   if (action.type == types.CLEAR_REDUX_STATE) {

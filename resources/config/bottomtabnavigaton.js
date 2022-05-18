@@ -28,10 +28,13 @@ import seacrhScreen from '../screens/SeacrhScreen/seacrScreen';
 import Cart from '../screens/Cart/cart';
 import {languageCheck} from '../config/languageChecker';
 import {useSelector} from 'react-redux';
+import {TourGuideZoneByPosition} from 'rn-tourguide';
 
 const Tab = createBottomTabNavigator();
 
 function MybottomTabs() {
+  const iconProps = {size: 40, color: '#888'};
+
   const [dummy, setDummy] = useState(1);
   const {languageType} = useSelector(state => state.languageType);
   useEffect(() => {
@@ -104,11 +107,31 @@ function MybottomTabs() {
         component={Deal}
       /> */}
       {/* </BlurView> */}
+
       <Tab.Screen
         name="setting"
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Ionicons name="person" color={color} size={hp('3')} />
+            <>
+              <TourGuideZoneByPosition
+                zone={3}
+                text={'You can change Language and currency from your setting.'}
+                shape={'rectangle_and_keep'}
+                isTourGuide
+                bottom={Platform.OS == 'ios' ? hp('-3') : hp('-6')}
+                width={wp('8')}
+                height={hp('7')}
+                left={Platform.OS == 'ios' ? wp('6') : wp('6')}
+                // iconProps
+                // borderRadius={16}
+              />
+              <Ionicons
+                {...iconProps}
+                name="person"
+                color={color}
+                size={hp('3')}
+              />
+            </>
           ),
           title: languageCheck('Account'),
           tabBarLabelStyle: {

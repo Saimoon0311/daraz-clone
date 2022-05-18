@@ -13,6 +13,9 @@
     "both": "react-native run-ios && react-native run-android"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-native-fontawesome": "^0.2.7",
     "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/checkbox": "^0.5.12",
@@ -69,7 +72,7 @@
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-star-rating": "^1.1.0",
-    "react-native-svg": "^12.1.1",
+    "react-native-svg": "^12.3.0",
     "react-native-svg-animated-linear-gradient": "^0.4.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^8.1.0",
@@ -80,6 +83,7 @@
     "redux": "^4.1.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
+    "rn-tourguide": "^3.2.0",
     "styled-components": "^5.3.1",
     "styled-system": "^5.1.5"
   },

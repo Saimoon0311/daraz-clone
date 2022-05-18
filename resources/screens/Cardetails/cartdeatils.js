@@ -64,7 +64,7 @@ export default function Cartdetails({route, navigation}) {
         contentContainerStyle={{
           paddingBottom: hp('10'),
         }}>
-        <View style={{margin: 20}}>
+        <View style={{margin: wp('1.5'), marginTop: hp('2')}}>
           <View style={{height: hp('45')}}>
             <Carousel
               data={imm}

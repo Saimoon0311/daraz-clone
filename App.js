@@ -7,36 +7,14 @@
  */
 
 import React, {useEffect, Component, useState} from 'react';
+import {Platform, Linking} from 'react-native';
 import {
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Alert,
-  LogBox,
-  Linking,
-} from 'react-native';
-import Navigation from './resources/config/naviagtion';
-import {NavigationContainer} from '@react-navigation/native';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FlashMessage from 'react-native-flash-message';
+  TourGuideProvider, // Main provider
+  useTourGuideController, // hook to start, etc.
+} from 'rn-tourguide';
 import {Provider, useDispatch} from 'react-redux';
 import {store, persistor} from './resources/redux/store';
-import {getUserData} from './resources/utils/utils';
-import {saveUserData} from './resources/redux/action/auth';
-import NetInfo from '@react-native-community/netinfo';
 import {checkVersionUrl, StripePKey} from './resources/config/url';
-import {StripeProvider, initStripe} from '@stripe/stripe-react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import AppTwo from './AppTwo';
 import DeviceInfo from 'react-native-device-info';
@@ -79,29 +57,31 @@ function App({navigation}) {
     checkVersion();
   }, []);
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AppTwo />
-        <AwesomeAlert
-          show={checkVersionStatus}
-          showProgress={false}
-          title="Warning!"
-          message={versionControl?.title}
-          contentContainerStyle={{width: wp('80%')}}
-          closeOnTouchOutside={false}
-          titleStyle={{color: 'black'}}
-          messageStyle={{color: 'gray'}}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          confirmText="Update"
-          confirmButtonColor="#DD6B55"
-          onConfirmPressed={() => {
-            Linking.openURL(url);
-          }}
-        />
-      </PersistGate>
-    </Provider>
+    <TourGuideProvider {...{borderRadius: 16}}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppTwo />
+          <AwesomeAlert
+            show={checkVersionStatus}
+            showProgress={false}
+            title="Warning!"
+            message={versionControl?.title}
+            contentContainerStyle={{width: wp('80%')}}
+            closeOnTouchOutside={false}
+            titleStyle={{color: 'black'}}
+            messageStyle={{color: 'gray'}}
+            closeOnHardwareBackPress={false}
+            showCancelButton={false}
+            showConfirmButton={true}
+            confirmText="Update"
+            confirmButtonColor="#DD6B55"
+            onConfirmPressed={() => {
+              Linking.openURL(url);
+            }}
+          />
+        </PersistGate>
+      </Provider>
+    </TourGuideProvider>
   );
 }
 

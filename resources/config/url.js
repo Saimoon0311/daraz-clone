@@ -56,6 +56,10 @@ export const deleteAllCartData = getApi('delete-an-order/');
 export const StripePKeyUrl = getApi('get-stripe-pk_key');
 export const GETALLCURRENCY = getApi('get-currency');
 export const SETCURRENCYVALUE = getApi('post-currency/');
+export const SubCatAllProduct = getApi('shop/sub-category-all-data/');
+export const SubCatAllProductsUserSkip = getApi(
+  'shop/sub-category-all-data-user-skip/',
+);
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 

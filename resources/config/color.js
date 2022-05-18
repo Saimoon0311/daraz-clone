@@ -10,7 +10,9 @@ export const color = {
   themColorPrimary: '#FF7E33',
   primaryBackground: 'white',
   cartIconsColor: '#FFDDC9',
+  borderColor: 'grey',
   // primaryBackground: '#FFECCE',
   // primaryTabBackground: 'white',
   primaryTabBackground: '#E6CEAB',
+  iphoneBoxColor: '#F4F5F7',
 };

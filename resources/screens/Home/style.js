@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     color: color.defaultcolor,
     marginTop: 9,
     marginBottom: 12,
+    marginLeft: wp('4'),
   },
   see: {
     marginTop: hp('2'),

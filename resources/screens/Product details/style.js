@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   box: {
     padding: 13,
-    marginTop: 20,
+    marginTop: hp('2'),
     backgroundColor: '#F3F5F7',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
@@ -45,14 +45,19 @@ export const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
+    width: wp('93'),
+    alignSelf: 'center',
   },
   container: {
     borderWidth: 0,
   },
   imm: {
-    width: wp('88%'),
+    width: Platform.OS == 'ios' ? wp('96') : wp('100'),
     height: hp('40.7'),
-    borderRadius: Platform.OS == 'android' ? 5 : 20,
+    // borderRadius: Platform.OS == 'android' ? 20 : 50,
+    overflow: 'hidden',
+    // backgroundColor: 'yellow',
+    // alignSelf: 'center',
   },
   tep: {
     color: '#512500',
@@ -90,7 +95,7 @@ export const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   optionsContainer: {
-    width: wp('90%'),
+    width: wp('93'),
     height: 'auto',
     paddingBottom: hp('5'),
     backgroundColor: '#F3F5F7',
@@ -242,7 +247,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    fontSize: hp('2.5'),
+    fontSize: hp('2.4'),
     width: wp('51'),
   },
 });
