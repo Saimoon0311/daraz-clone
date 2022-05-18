@@ -18,6 +18,7 @@ import PrivacyPolicy from '../screens/privacyPolicy/PrivacyPolicy';
 import {StatusBar} from 'react-native';
 import languageChange from '../screens/LanguageChange/languageCurrency';
 import {languageCheck} from '../config/languageChecker';
+import childCategoryProducts from '../screens/ChildCategoryProduct/childCategoryProducts';
 
 const Stack = createNativeStackNavigator();
 
@@ -119,6 +120,10 @@ export default function Navigation() {
           <Stack.Screen name="checkOut" component={checkOut} />
           <Stack.Screen name="OrderDetails" component={OrderDetails} />
           <Stack.Screen name="languageChange" component={languageChange} />
+          <Stack.Screen
+            name="childCategoryProducts"
+            component={childCategoryProducts}
+          />
           <Stack.Screen
             options={{
               title: `${languageCheck('Login')} / ${languageCheck('Register')}`,

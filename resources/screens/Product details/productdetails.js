@@ -489,7 +489,7 @@ export default function Details({route, navigation}) {
         </View>
       </View>
       <ScrollView>
-        <View style={{margin: 20}}>
+        <View style={{margin: wp('1.5'), marginTop: hp('2')}}>
           <View style={{height: hp('45')}}>
             <Carousel
               data={imm}
@@ -510,11 +510,21 @@ export default function Details({route, navigation}) {
               itemHeight={hp('100')}
               renderItem={({item}) => {
                 return (
-                  <Image
-                    resizeMode="contain"
-                    source={{uri: `${Images_API}/${item?.name}`}}
-                    style={styles.imm}
-                  />
+                  <View style={styles.imm}>
+                    <Image
+                      resizeMode="contain"
+                      source={{uri: `${Images_API}/${item?.name}`}}
+                      style={{
+                        overflow: 'hidden',
+                        width: wp('90'),
+                        borderRadius: Platform.OS == 'android' ? 5 : 30,
+                        height: hp('40.7'),
+                        borderColor: 'black',
+                        borderWidth: Platform.OS == 'ios' ? 0.3 : 0,
+                        alignSelf: 'center',
+                      }}
+                    />
+                  </View>
                 );
               }}
             />

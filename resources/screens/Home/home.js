@@ -3,11 +3,8 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
-  FlatList,
-  Alert,
   Animated,
   TextInput,
   SafeAreaView,
@@ -25,7 +22,6 @@ import {
   ARRIVALS,
   BRANDDATA,
   FEATURED,
-  GETPRODUCT,
   featuredDefault,
   newArrivalDefault,
   ALLNEWARRIVALS,
@@ -33,20 +29,21 @@ import {
 } from '../../config/url';
 import {NativeBaseProvider, Box, Center, AspectRatio} from 'native-base';
 import Alldata from '../../data/alldata';
-import NetInfo from '@react-native-community/netinfo';
-import Arrivals from '../../data/arrivals';
 import {color} from '../../config/color';
 import {styles} from './style';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {showMessage} from 'react-native-flash-message';
 import {getUserData} from '../../utils/utils';
 import {HomeCartIcon} from '../../Reuseable component/HomeCartIcon/homeCartIcon';
 import {useIsFocused} from '@react-navigation/native';
-import * as RNLocalize from 'react-native-localize';
-import i18n from 'i18n-js';
-import memoize from 'lodash.memoize';
 import {languageCheck} from '../../config/languageChecker';
+import {
+  TourGuideZone,
+  useTourGuideController, // hook to start, etc.
+  TourGuideZoneByPosition,
+} from 'rn-tourguide';
+import {useDispatch, useSelector} from 'react-redux';
+import types from '../../redux/type';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -54,6 +51,16 @@ const wait = timeout => {
 
 export default function Home({navigation}) {
   const isFocused = useIsFocused();
+  const iconProps = {size: 40, color: '#888'};
+  const {tourStatus} = useSelector(state => state.tourStatus);
+  const dispatch = useDispatch();
+  // Use Hooks to control!
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+  } = useTourGuideController();
 
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
   const [titleSearchValue, onChangeText] = useState('');
@@ -68,6 +75,7 @@ export default function Home({navigation}) {
   const [seacrhData, setSearchData] = useState('');
   const [id, setId] = useState();
   const [userData, setUserData] = useState();
+  const [dummy, setDummy] = useState(1);
   const searchBarAnim = useRef(new Animated.Value(-45)).current;
   const detailss = (item, currencySign) => {
     console.log(101, currencySign);
@@ -89,8 +97,29 @@ export default function Home({navigation}) {
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
-
+  const handleOnStart = () => console.log('start');
+  const handleOnStop = () => {
+    dispatch({type: types.TOURCOMPLETED}), navigation.navigate('setting');
+  };
+  const handleOnStepChange = () => console.log(`stepChange`);
+  const checkTourCompleted = () => {
+    eventEmitter.on('stop', handleOnStop);
+    eventEmitter.on('stepChange', handleOnStepChange);
+    if (tourStatus) {
+      eventEmitter.on('start', handleOnStart);
+      start();
+    } else if (!tourStatus) {
+      stop();
+      eventEmitter.off('start', handleOnStart);
+      eventEmitter.off('stop', handleOnStop);
+      eventEmitter.off('stepChange', handleOnStepChange);
+    }
+  };
   useEffect(() => {
+    checkTourCompleted();
+  }, [dummy]);
+  useEffect(() => {
+    console.log(118);
     (async () => {
       await checkStatus();
       if (isFocused) {
@@ -101,15 +130,11 @@ export default function Home({navigation}) {
     })();
   }, [isFocused]);
   const routeToLogin = () => {
-    // console.log(22222);
     navigation.navigate('MyTabs');
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{name: 'MyTabs'}],
-    // });
   };
 
   const checkStatus = async () => {
+    setDummy(dummy + 1);
     const user = await getUserData();
     if (user == null) {
       setIsLoggedIn(false);
@@ -119,6 +144,7 @@ export default function Home({navigation}) {
       await setUserData(user);
       await datacallss(true);
     }
+    setDummy(dummy + 1);
   };
   const addtowishlist = productid => {
     fetch(`${ADDTOWISHLIST}/${productid}/${id}`)
@@ -245,20 +271,33 @@ export default function Home({navigation}) {
             </View>
           ) : (
             <View style={styles.header}>
+              <TourGuideZoneByPosition
+                zone={1}
+                text={'You can check you Favourite Items here.'}
+                borderRadius={16}
+                shape={'rectangle_and_keep'}
+                isTourGuide
+                top={Platform.OS == 'ios' ? hp('6') : hp('2')}
+                width={wp('8')}
+                height={hp('5')}
+                // left={Platform.OS == 'ios' ? wp('6') : wp('6')}
+              />
               <TouchableOpacity
                 onPress={() => checkNavigationForFavourite()}
                 style={{marginLeft: wp('5'), alignSelf: 'center'}}>
                 <Ionicons name="heart" size={27} color={color.defaultcolor} />
               </TouchableOpacity>
-              <Image
-                source={require('../../images/Group66.png')}
-                style={{
-                  width: 81,
-                  height: 36.5,
-                  alignSelf: 'center',
-                  // marginLeft: wp('4'),
-                }}
-              />
+              <TouchableOpacity onPress={() => checkTourCompleted()}>
+                <Image
+                  source={require('../../images/Group66.png')}
+                  style={{
+                    width: 81,
+                    height: 36.5,
+                    alignSelf: 'center',
+                    // marginLeft: wp('4'),
+                  }}
+                />
+              </TouchableOpacity>
               {/* <View
                 // onPress={() => setToggleSearchBar(!toggleSearchBar)}
                 style={{marginLeft: wp('10%')}}>
@@ -273,10 +312,15 @@ export default function Home({navigation}) {
                 style={{marginRight: wp('5%')}}>
                 <Ionicons name="cart" size={27} color={color.defaultcolor} />
               </TouchableOpacity> */}
-              <HomeCartIcon
-                isLoggedIn={isLoggedIn}
-                navigations={navigationProps}
-              />
+              <TourGuideZone
+                zone={2}
+                text={'You can check you Cart Items here.'}
+                borderRadius={16}>
+                <HomeCartIcon
+                  isLoggedIn={isLoggedIn}
+                  navigations={navigationProps}
+                />
+              </TourGuideZone>
             </View>
           )}
         </Animated.View>
@@ -286,7 +330,7 @@ export default function Home({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: hp('20'), marginLeft: 30}}>
+          contentContainerStyle={{paddingBottom: hp('20')}}>
           <Text style={styles.te}>{languageCheck('Top sellers')}</Text>
           <NativeBaseProvider>
             <Alldata

@@ -60,6 +60,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     width: wp('60%'),
     borderRadius: 10,
+
     // backgroundColor: 'red',
   },
   multibox: {
@@ -78,8 +79,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#512500',
     padding: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: hp('0.5'),
+    marginTop: hp('0.5'),
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -120,10 +121,10 @@ export const styles = StyleSheet.create({
   sidebox: {
     borderColor: '#512500',
     borderWidth: 1,
-    paddingBottom: hp('2%'),
-    paddingTop: hp('2%'),
-    marginBottom: hp('2%'),
-    borderRadius: 10,
+    paddingBottom: hp('1'),
+    paddingTop: hp('1%'),
+    marginBottom: hp('1'),
+    borderRadius: 5,
     width: wp('30%'),
     paddingLeft: wp('3%'),
     paddingRight: wp('3%'),

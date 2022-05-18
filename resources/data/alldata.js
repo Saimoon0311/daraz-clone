@@ -171,7 +171,8 @@ export default function Alldata(prop, {navigation}) {
     <View>
       {prop.isLoading ? (
         <SkeletonPlaceholder>
-          <View style={{flexDirection: 'row', padding: 10}}>
+          <View
+            style={{flexDirection: 'row', padding: 10, paddingLeft: wp('4')}}>
             <View
               style={{...styles.box, height: hp('25%'), width: wp('40%')}}
             />
@@ -203,6 +204,9 @@ export default function Alldata(prop, {navigation}) {
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
+          style={{
+            paddingLeft: wp('4'),
+          }}
           renderItem={({item}) => {
             // return flatListRender(item);
             return checkSliderType(item);

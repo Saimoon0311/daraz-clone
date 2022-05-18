@@ -58,6 +58,7 @@ export default function setting({navigation}) {
     setUsers(userId);
   };
   const checkStatus = async () => {
+    setDummy(dummy + 1);
     const user = await getUserData();
     if (user == null) {
       setIsLoggedIn(false);
@@ -65,7 +66,6 @@ export default function setting({navigation}) {
       setIsLoggedIn(true);
     }
   };
-
   useEffect(() => {
     (async () => {
       await checkStatus();
@@ -281,6 +281,7 @@ export default function setting({navigation}) {
           />
           <Text style={styles.orte}>{languageCheck('Language/Currency')}</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.shadow}
           onPress={() => {

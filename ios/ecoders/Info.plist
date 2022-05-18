@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>The application would like to access your camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

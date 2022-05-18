@@ -36,6 +36,7 @@ import {getUserData} from '../../utils/utils';
 import {useIsFocused} from '@react-navigation/native';
 import {languageCheck} from '../../config/languageChecker';
 import {useSelector} from 'react-redux';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default function cate({navigation}) {
   const {languageType} = useSelector(state => state.languageType);
@@ -52,7 +53,10 @@ export default function cate({navigation}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [subCatStatusLength, setSubcatStatusLength] = useState(0);
   const isFocused = useIsFocused();
-
+  let sliceItem = [];
+  const spliceItem = child_category => {
+    sliceItem = child_category.slice(0, 4);
+  };
   const apicall = async () => {
     await fetch(CATEGORY)
       .then(response => response.json())
@@ -185,7 +189,7 @@ export default function cate({navigation}) {
               data={catdata}
               keyExtractor={item => item.key}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{paddingBottom: 160}}
+              contentContainerStyle={{paddingBottom: hp('20')}}
               renderItem={({item, index}) => {
                 return (
                   <View>
@@ -197,6 +201,12 @@ export default function cate({navigation}) {
                       }}
                       onPress={() => getData(item.id, index)}>
                       <View>
+                        <FontAwesome5
+                          name={item?.get_mobileicons?.code}
+                          color={'#512500'}
+                          size={hp('2')}
+                          style={{alignSelf: 'center', marginBottom: hp('0.8')}}
+                        />
                         <Text style={{...styles.cattext, fontSize: hp('1.6')}}>
                           {languageType.code == 'en'
                             ? item?.name
@@ -269,26 +279,103 @@ export default function cate({navigation}) {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item}) => {
+                const child_categoryLength = item.child_category;
                 return (
                   <View style={styles.main}>
                     {item.status == '1' && (
                       <View style={styles.inside}>
-                        <Text
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('subcatdetails', {
+                              item: item,
+                              screenData: 'sub-category-all-data/',
+                            })
+                          }
                           style={{
-                            fontSize: hp('2'),
-                            color: '#512500',
-                            fontWeight: 'bold',
+                            flexDirection: 'row',
+                            alignItems: 'center',
                           }}>
-                          {languageType.code == 'en'
-                            ? item?.name
-                            : item?.name_fr}
-                        </Text>
+                          <Text
+                            style={{
+                              fontSize: hp('2'),
+                              color: '#512500',
+                              fontWeight: 'bold',
+                            }}>
+                            {languageType.code == 'en'
+                              ? item?.name
+                              : item?.name_fr}
+                          </Text>
+                          <Ionicons
+                            name="md-arrow-forward"
+                            size={hp('3')}
+                            style={{marginLeft: 'auto'}}
+                            color="#512500"
+                          />
+                        </TouchableOpacity>
                         <View style={styles.multibox}>
-                          {
+                          {child_categoryLength.length > 4 ? (
+                            <>
+                              {spliceItem(child_categoryLength)}
+                              <FlatList
+                                data={sliceItem}
+                                keyExtractor={(item, index) => index.toString()}
+                                numColumns={2}
+                                initialNumToRender={4}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({item}) =>
+                                  item.status == '1' && (
+                                    <View
+                                      style={{
+                                        flex: 1,
+                                        flexDirection: 'column',
+                                        margin: 3,
+                                      }}>
+                                      <TouchableOpacity
+                                        style={styles.itss}
+                                        onPress={() =>
+                                          navigation.navigate('subcatdetails', {
+                                            item: item,
+                                            screenData: 'subCat',
+                                          })
+                                        }>
+                                        <View>
+                                          <Text
+                                            numberOfLines={2}
+                                            style={styles.insidetext}>
+                                            {languageType.code == 'en'
+                                              ? item?.name
+                                              : item?.name_fr}
+                                          </Text>
+                                        </View>
+                                      </TouchableOpacity>
+                                    </View>
+                                  )
+                                }
+                              />
+                              <TouchableOpacity
+                                onPress={() => {
+                                  console.log(338);
+                                }}
+                                style={{
+                                  alignSelf: 'flex-end',
+                                  marginTop: hp('1'),
+                                  marginRight: wp('2'),
+                                }}>
+                                <Text
+                                  style={{
+                                    color: color.themColorPrimary,
+                                    fontSize: hp('1.5'),
+                                  }}>
+                                  See All
+                                </Text>
+                              </TouchableOpacity>
+                            </>
+                          ) : (
                             <FlatList
                               data={item.child_category}
                               keyExtractor={(item, index) => index.toString()}
                               numColumns={2}
+                              initialNumToRender={4}
                               showsVerticalScrollIndicator={false}
                               renderItem={({item}) =>
                                 item.status == '1' && (
@@ -320,7 +407,7 @@ export default function cate({navigation}) {
                                 )
                               }
                             />
-                          }
+                          )}
                         </View>
                       </View>
                     )}

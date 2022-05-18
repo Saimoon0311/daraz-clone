@@ -23,6 +23,8 @@ import {
   filterProductUrl,
   Images_API,
   searchDataWithOutUserID,
+  SubCatAllProduct,
+  SubCatAllProductsUserSkip,
   SubCategoryDataWithOutUserID,
   SUBCATPRODUCTDATA,
 } from '../../config/url';
@@ -37,8 +39,10 @@ import {useIsFocused} from '@react-navigation/native';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {FilterModal} from '../../Reuseable component/HomeCartIcon/filterModal';
 import {languageCheck} from '../../config/languageChecker';
+import {useSelector} from 'react-redux';
 
 export default function subcatdetails({route, navigation}) {
+  const {languageType} = useSelector(state => state.languageType);
   const paramData = route?.params;
   const productData = route?.params?.item;
   const getSearchData = route?.params?.seacrhDatas;
@@ -118,11 +122,9 @@ export default function subcatdetails({route, navigation}) {
         // console.log(90, error);
       });
   };
-
   const getAllData = async confirm => {
     const user = await getUserData();
     const id = user?.id;
-    // console.log(111, confirm);
     fetch(
       confirm == true
         ? `${API_BASED_URL}${paramData?.screenData}${id}`
@@ -134,6 +136,29 @@ export default function subcatdetails({route, navigation}) {
       })
       .catch(error => {
         // console.log(error);
+        showMessage({
+          type: 'danger',
+          icon: 'danger',
+          message: 'Something want wrongs.',
+          backgroundColor: '#E9691D',
+        });
+      });
+  };
+  const SubCatAllProducts = async confirm => {
+    const user = await getUserData();
+    const id = user?.id;
+    fetch(
+      confirm == true
+        ? `${SubCatAllProduct}${productData?.id}/${id}`
+        : `${SubCatAllProductsUserSkip}${productData?.id}`,
+    )
+      .then(response => response.json())
+      .then(json => {
+        console.log(23854873254782352748, json);
+        setAllData(json[0]), setLoading(false);
+      })
+      .catch(error => {
+        console.log(163, error);
         showMessage({
           type: 'danger',
           icon: 'danger',
@@ -206,6 +231,9 @@ export default function subcatdetails({route, navigation}) {
     } else if (paramData?.screenData == ALLFEATUREDPRODUCTS) {
       setChecksubcat(true);
       await getAllFeaturedsData(confirm);
+    } else if (paramData?.screenData == 'sub-category-all-data/') {
+      setChecksubcat(false);
+      await SubCatAllProducts(confirm);
     }
   };
   const checkStatus = async () => {
@@ -276,6 +304,14 @@ export default function subcatdetails({route, navigation}) {
       return <Text>{languageCheck('Search Items')}</Text>;
     } else if (paramData?.screenData == 'featured-data-all/') {
       return <Text>{languageCheck('All Products')}</Text>;
+    } else if (paramData?.screenData == 'sub-category-all-data/') {
+      return (
+        <Text>
+          {languageType?.code == 'en'
+            ? paramData?.item?.name
+            : paramData?.item?.name_fr}
+        </Text>
+      );
     }
   };
   const routeToLogin = () => {
@@ -293,7 +329,9 @@ export default function subcatdetails({route, navigation}) {
           <ImageBackground
             style={styles.im}
             imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}>
+            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
+            // source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
+          >
             {item.featured == 1 ? (
               <Text style={styles.fea}>{languageCheck('Featured')}</Text>
             ) : null}
@@ -602,7 +640,17 @@ export default function subcatdetails({route, navigation}) {
       }
     })();
   }, [isFocused]);
+  const groupData = (items, groupLen) => {
+    const groups = [];
+    let i = 0;
 
+    while (i < items.length) {
+      groups.push(items.slice(i, (i += groupLen)));
+    }
+
+    return groups;
+  };
+  const groupedItems = groupData(allData, 5);
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -626,7 +674,9 @@ export default function subcatdetails({route, navigation}) {
         </View>
       </View>
       {paramData?.screenData != 'wishlist' &&
-        paramData?.screenData != 'search-products' && (
+        paramData?.screenData != 'search-products' &&
+        paramData?.screenData != 'sub-category-all-data/' &&
+        allData.length > 0 && (
           <TouchableOpacity
             onPress={() => setFilterModal(true)}
             style={styles.filterView}>

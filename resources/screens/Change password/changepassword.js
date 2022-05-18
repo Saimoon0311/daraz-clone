@@ -45,58 +45,50 @@ export default function changepassword({navigation}) {
 
   const passwordchange = async () => {
     setLoadingButton(true);
-    let netFlag = 0;
-    await NetInfo.fetch('wifi').then(async state => {
-      if (state.isConnected) {
-        netFlag = 1;
-        if (current_password == '') {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Your Currrent Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (password == '') {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Your New Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (password_confirmation == '') {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Correct Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (current_password == (password || password_confirmation)) {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter New Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else if (password != password_confirmation) {
-          showMessage({
-            type: 'warning',
-            icon: 'warning',
-            message: 'Please Enter Correct Password',
-            backgroundColor: '#E9691D',
-          }),
-            setLoadingButton(false);
-        } else {
-          passwordChangeRequest();
-          // console.log(userId)
-        }
-      } else {
-        setShowAlert(true);
-      }
-    });
+    if (current_password == '') {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter Your Currrent Password',
+        backgroundColor: '#E9691D',
+      }),
+        setLoadingButton(false);
+    } else if (password == '') {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter Your New Password',
+        backgroundColor: '#E9691D',
+      }),
+        setLoadingButton(false);
+    } else if (password_confirmation == '') {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter Correct Password',
+        backgroundColor: '#E9691D',
+      }),
+        setLoadingButton(false);
+    } else if (current_password == (password || password_confirmation)) {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter New Password',
+        backgroundColor: '#E9691D',
+      }),
+        setLoadingButton(false);
+    } else if (password != password_confirmation) {
+      showMessage({
+        type: 'warning',
+        icon: 'warning',
+        message: 'Please Enter Correct Password',
+        backgroundColor: '#E9691D',
+      }),
+        setLoadingButton(false);
+    } else {
+      passwordChangeRequest();
+      // console.log(userId)
+    }
   };
 
   const passwordChangeRequest = () => {

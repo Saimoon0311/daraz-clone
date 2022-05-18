@@ -37,24 +37,25 @@ export const styles = StyleSheet.create({
   },
   box: {
     padding: 13,
+    marginTop: hp('2'),
     backgroundColor: '#F3F5F7',
-    // backgroundColor: 'red',
     shadowColor: '#000',
     shadowOffset: {width: 1, height: 3},
     shadowOpacity: 0.4,
     shadowRadius: 2,
     elevation: 5,
     borderRadius: 10,
-    // marginTop:hp('10')
+    width: wp('93'),
+    alignSelf: 'center',
   },
   container: {
     borderWidth: 0,
   },
   imm: {
-    width: wp('90%'),
-    height: hp('40%'),
-    marginRight: 20,
-    borderRadius: 20,
+    width: wp('96'),
+    height: hp('40.7'),
+    borderRadius: Platform.OS == 'android' ? 20 : 20,
+    // alignSelf: 'center',
   },
 
   // te: {
