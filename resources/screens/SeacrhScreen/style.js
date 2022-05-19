@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
   head: {
     textAlign: 'center',
     marginBottom: hp(Platform?.OS == 'ios' ? '0' : '1'),
-
     fontWeight: '400',
     fontSize: 18,
     color: '#512500',

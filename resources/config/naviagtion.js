@@ -19,6 +19,7 @@ import {StatusBar} from 'react-native';
 import languageChange from '../screens/LanguageChange/languageCurrency';
 import {languageCheck} from '../config/languageChecker';
 import childCategoryProducts from '../screens/ChildCategoryProduct/childCategoryProducts';
+import allSubCat from '../screens/All Sub Cat Screen/allSubCat';
 
 const Stack = createNativeStackNavigator();
 
@@ -120,6 +121,7 @@ export default function Navigation() {
           <Stack.Screen name="checkOut" component={checkOut} />
           <Stack.Screen name="OrderDetails" component={OrderDetails} />
           <Stack.Screen name="languageChange" component={languageChange} />
+          <Stack.Screen name="allSubCat" component={allSubCat} />
           <Stack.Screen
             name="childCategoryProducts"
             component={childCategoryProducts}

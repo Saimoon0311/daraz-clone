@@ -137,7 +137,6 @@ export default function Alldata(prop, {navigation}) {
                 {prop?.currencySign} {item.price}
               </Text>
             )}
-            <Text></Text>
           </TouchableOpacity>
         </View>
         <Text></Text>
@@ -233,6 +232,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: '#ebeced',
     marginRight: 10,
+    paddingBottom: hp('0.5'),
+
     // shadowColor: '#000',
     // shadowOpacity: 0.6,
     // shadowRadius: 10,

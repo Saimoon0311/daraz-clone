@@ -17,7 +17,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CATEGORY, SUBCAT} from '../../config/url';
+import {CATEGORY, Images_API, SUBCAT, SubCat_Image_Api} from '../../config/url';
 import {
   CirclesLoader,
   PulseLoader,
@@ -37,6 +37,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {languageCheck} from '../../config/languageChecker';
 import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+// import notFoundImage from '../../images/notfound_0.png';
 
 export default function cate({navigation}) {
   const {languageType} = useSelector(state => state.languageType);
@@ -56,6 +57,13 @@ export default function cate({navigation}) {
   let sliceItem = [];
   const spliceItem = child_category => {
     sliceItem = child_category.slice(0, 4);
+  };
+  const SubCatImage = item => {
+    var requireImage =
+      'https://www.blankstyle.com/files/imagefield_default_images/notfound_0.png';
+    var urlImage = `${SubCat_Image_Api}${item?.cat_image}`;
+    var t = item.cat_image == null ? requireImage : urlImage;
+    return t;
   };
   const apicall = async () => {
     await fetch(CATEGORY)
@@ -125,6 +133,17 @@ export default function cate({navigation}) {
           backgroundColor: '#E9691D',
         });
       });
+  };
+  const checkChildCat = (child_category, child_categoryFrName, item) => {
+    // let filterChildId = child_categoryName.filter(
+    //   data => data.id == item.child_category[0].sub_category_id,
+    // );
+    console.log(3642387, child_category, 8348923, child_categoryFrName);
+    navigation.navigate('allSubCat', {
+      item: item,
+      name: child_category,
+      frName: child_categoryFrName,
+    });
   };
   return (
     <View style={styles.mains}>
@@ -280,6 +299,8 @@ export default function cate({navigation}) {
               contentContainerStyle={{paddingBottom: 160}}
               renderItem={({item}) => {
                 const child_categoryLength = item.child_category;
+                const child_categoryName = item.name;
+                const child_categoryFrName = item.name_fr;
                 return (
                   <View style={styles.main}>
                     {item.status == '1' && (
@@ -338,15 +359,23 @@ export default function cate({navigation}) {
                                             screenData: 'subCat',
                                           })
                                         }>
-                                        <View>
-                                          <Text
-                                            numberOfLines={2}
-                                            style={styles.insidetext}>
-                                            {languageType.code == 'en'
-                                              ? item?.name
-                                              : item?.name_fr}
-                                          </Text>
-                                        </View>
+                                        <Image
+                                          style={{
+                                            height: hp('10'),
+                                            marginBottom: hp('1'),
+                                            borderRadius: 10,
+                                            width: wp('20'),
+                                          }}
+                                          resizeMode="contain"
+                                          source={{uri: SubCatImage(item)}}
+                                        />
+                                        <Text
+                                          numberOfLines={1}
+                                          style={styles.insidetext}>
+                                          {languageType.code == 'en'
+                                            ? item?.name
+                                            : item?.name_fr}
+                                        </Text>
                                       </TouchableOpacity>
                                     </View>
                                   )
@@ -354,7 +383,11 @@ export default function cate({navigation}) {
                               />
                               <TouchableOpacity
                                 onPress={() => {
-                                  console.log(338);
+                                  checkChildCat(
+                                    child_categoryName,
+                                    child_categoryFrName,
+                                    item,
+                                  );
                                 }}
                                 style={{
                                   alignSelf: 'flex-end',
@@ -393,15 +426,23 @@ export default function cate({navigation}) {
                                           screenData: 'subCat',
                                         })
                                       }>
-                                      <View>
-                                        <Text
-                                          numberOfLines={2}
-                                          style={styles.insidetext}>
-                                          {languageType.code == 'en'
-                                            ? item?.name
-                                            : item?.name_fr}
-                                        </Text>
-                                      </View>
+                                      <Image
+                                        style={{
+                                          height: hp('10'),
+                                          marginBottom: hp('1'),
+                                          width: wp('20'),
+                                          borderRadius: 10,
+                                        }}
+                                        resizeMode="contain"
+                                        source={{uri: SubCatImage(item)}}
+                                      />
+                                      <Text
+                                        numberOfLines={1}
+                                        style={styles.insidetext}>
+                                        {languageType.code == 'en'
+                                          ? item?.name
+                                          : item?.name_fr}
+                                      </Text>
                                     </TouchableOpacity>
                                   </View>
                                 )

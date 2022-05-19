@@ -297,7 +297,11 @@ export default function subcatdetails({route, navigation}) {
     } else if (paramData?.screenData == ALLNEWARRIVALS) {
       return <Text>{languageCheck('New Arrivals')}</Text>;
     } else if (paramData?.screenData == 'subCat') {
-      return <Text>{productData?.name}</Text>;
+      return (
+        <Text>
+          {languageType?.code == 'en' ? productData.name : productData.name_fr}
+        </Text>
+      );
     } else if (paramData?.screenData == 'wishlist') {
       return <Text>{languageCheck('Wishlist')}</Text>;
     } else if (paramData?.screenData == 'search-products') {
@@ -596,8 +600,11 @@ export default function subcatdetails({route, navigation}) {
     } else if (paramData?.screenData == 'search-products') {
       checkApiType = `search`;
       searchName = `&filter[name]=${getSearchData}`;
+    } else if (paramData?.screenData == 'sub-category-all-data/') {
+      checkApiType = `subcategory/${paramData?.item?.id}`;
     }
   };
+  console.log(762345675, paramData?.item?.id);
   const categoryDataCall = async (category, start, end) => {
     setCategory(category), setStart(start);
     setEnd(end);
@@ -615,7 +622,7 @@ export default function subcatdetails({route, navigation}) {
         : `${
             filterProductUrl + userID
           }/${checkApiType}?filter[pricebetween]=${price}`;
-
+    console.log(checkUrlType);
     fetch(checkUrlType)
       .then(response => response.json())
       .then(json => {
@@ -675,7 +682,6 @@ export default function subcatdetails({route, navigation}) {
       </View>
       {paramData?.screenData != 'wishlist' &&
         paramData?.screenData != 'search-products' &&
-        paramData?.screenData != 'sub-category-all-data/' &&
         allData.length > 0 && (
           <TouchableOpacity
             onPress={() => setFilterModal(true)}

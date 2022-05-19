@@ -95,7 +95,17 @@ export default function Home({navigation}) {
     await checkStatus();
     setRefreshing(false);
   }, []);
-
+  const getShopData = () => {
+    fetch(BRANDDATA)
+      .then(res => res.json())
+      .then(json => {
+        setBrand(json[0]);
+        setBloading(false);
+      })
+      .catch(e => {
+        setBloading(true);
+      });
+  };
   const navigationProps = () => {
     navigation.navigate('Cart');
   };
@@ -209,13 +219,16 @@ export default function Home({navigation}) {
       .then(json => {
         setArrvals(json[0]), setAloading(false);
       });
-    fetch(BRANDDATA)
+    getShopData();
+    getRandomProducts(isLogIn, userId);
+  };
+  const getRandomProducts = (isLogIn, userId) => {
+    fetch(isLogIn == true ? `${RandomProducts}/${userId}` : RandomProducts)
       .then(response => response.json())
       .then(json => {
-        setBrand(json[0]), setBloading(false);
+        setArrvals(json[0]), setAloading(false);
       });
   };
-
   const onSubmitSeacrhItem = () => {
     if (seacrhData == '') {
       showMessage({
@@ -375,41 +388,7 @@ export default function Home({navigation}) {
               <Text style={styles.seeAllText}>{languageCheck('See All')}</Text>
             </TouchableOpacity>
           </View>
-          {/* <Text style={styles.te}>Top sellers</Text>
-          <NativeBaseProvider>
-            <Alldata
-              detailss={detailss}
-              data={data}
-              isLoading={isLoading}
-              userid={id}
-              addtowishlist={isLoggedIn ? addtowishlist : routeToLogin}
-            />
-          </NativeBaseProvider>
-          <View style={styles.see}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('subcatdetails', {
-                  screenData: ALLFEATUREDPRODUCTS,
-                })
-              }>
-              <Text style={{color: '#E9691D'}}>See All</Text>
-            </TouchableOpacity>
-          </View> */}
-          {/* <Text style={styles.te}>{languageCheck('Brands')}</Text>
-          <NativeBaseProvider>
-            <Alldata
-              detailss={detailss}
-              data={brand}
-              isLoading={bisLoading}
-              isBrand={true}
-            />
-          </NativeBaseProvider> */}
-          {/* <View style={styles.see}>
-            <TouchableOpacity>
-              <Text style={{color: '#E9691D'}}>See All</Text>
-            </TouchableOpacity>
-          </View> */}
-          <InterTopSeller />
+          <InterTopSeller data={brand} isLoading={bisLoading} />
           <DiscountElectronics
             detailss={detailss}
             data={data}

@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
     elevation: 9,
     backgroundColor: 'white',
     // backgroundColor: 'red',
-    height: hp('8%'),
+    // height: hp('8%'),
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -101,6 +101,8 @@ export const styles = StyleSheet.create({
     color: '#512500',
     textAlign: 'center',
     fontSize: hp('1.8'),
+    // backgroundColor: 'yellow',
+    // width: wp('10'),
   },
   cattext: {
     color: '#512500',

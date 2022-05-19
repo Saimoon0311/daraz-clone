@@ -1,6 +1,8 @@
 export const API_BASED_URL_STOCK = 'https://moyenxpress.com/';
 export const API_BASED_URL = 'https://moyenxpress.com/api/';
 export const Images_API = 'https://moyenxpress.com/public/products';
+export const SubCat_Image_Api =
+  'https://moyenxpress.com/products/child-category-images/';
 
 export const getApi = endpoint => API_BASED_URL + endpoint;
 
@@ -60,6 +62,7 @@ export const SubCatAllProduct = getApi('shop/sub-category-all-data/');
 export const SubCatAllProductsUserSkip = getApi(
   'shop/sub-category-all-data-user-skip/',
 );
+export const RandomProducts = getApi('random-products');
 // export const StripePKey =
 //   'pk_test_51JzIR5EyPVCLsOYzHfADwwDDXkZBsqTwRdoNbJzNzZNrsdqsOXfWaC6phXJ5Mz8MJk1GeEW8iWZNx1vimLbhJFyN00TyN94KRD';
 
