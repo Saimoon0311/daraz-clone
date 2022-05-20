@@ -87,7 +87,8 @@ export default function checkOut({navigation, route}) {
   const [showWhatsApp, setWhatsApp] = useState(false);
 
   const [accessToken, setAccessToken] = useState(
-    'A21AAKBmZiLik6FBLTkfSZO4V-MpBctwuippVrnH4iWO7hbw8fpwBgHFQzoUeEkfEFC41Rde9x7rHFImrFGdutJMfnJULklGw',
+    '',
+    // 'A21AAKBmZiLik6FBLTkfSZO4V-MpBctwuippVrnH4iWO7hbw8fpwBgHFQzoUeEkfEFC41Rde9x7rHFImrFGdutJMfnJULklGw',
   );
   const [approvalUrl, setApprovalUrl] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
@@ -224,8 +225,7 @@ export default function checkOut({navigation, route}) {
       .then(result => {
         console.log(160, result.access_token);
         setAccessToken(result.access_token);
-
-        startPayPalProcedureTwo();
+        startPayPalProcedureTwo(result.access_token);
       })
       .catch(error => {
         console.log(163, error);
@@ -233,15 +233,15 @@ export default function checkOut({navigation, route}) {
       });
   };
 
-  const startPayPalProcedureTwo = () => {
+  const startPayPalProcedureTwo = async access_token => {
     var myHeaders = new Headers();
     // myHeaders.append(
     //   'Authorization',
     //   'Bearer ' +
     //     'A21AAKBmZiLik6FBLTkfSZO4V-MpBctwuippVrnH4iWO7hbw8fpwBgHFQzoUeEkfEFC41Rde9x7rHFImrFGdutJMfnJULklGw',
     // );
-    console.log(277, accessToken);
-    myHeaders.append('Authorization', 'Bearer ' + accessToken);
+    console.log(277, access_token);
+    myHeaders.append('Authorization', 'Bearer ' + access_token);
     myHeaders.append('Content-Type', 'application/json');
 
     let amount = itemTotalPrice;

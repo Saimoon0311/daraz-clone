@@ -23,116 +23,111 @@ const DiscountElectronics = prop => {
   };
   const flatListRender = item => {
     return (
-      <View style={styles.box}>
-        <TouchableOpacity
-          onPress={() => prop.detailss(item, prop?.currencySign)}>
-          <ImageBackground
-            style={styles.im}
-            imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item.images[0]?.name}`}}>
-            {item.featured == 1 ? (
-              <View style={styles.fea}>
-                <Text style={styles.textStyle}>Featured</Text>
-              </View>
-            ) : null}
-            {item.is_discounted == 2 ? (
-              <View style={styles.fea}>
-                <Text style={[styles.textStyle, {backgroundColor: '#512500'}]}>
-                  {item.discounted_percentage}%OFF
-                </Text>
-              </View>
-            ) : null}
-            {item?.is_wishlisted == true ? (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => passedFunction(item?.id)}>
-                <Ionicons
-                  name="heart"
-                  color={color.themColorPrimary}
-                  size={30}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => passedFunction(item?.id)}>
-                <Ionicons
-                  name="heart-outline"
-                  color={color.themColorPrimary}
-                  size={30}
-                />
-              </TouchableOpacity>
-            )}
-          </ImageBackground>
-          {/* <Text></Text> */}
-
-          <Text
-            numberOfLines={1}
-            style={{
-              color: '#512500',
-              fontSize: hp('1.9'),
-              width: wp('30'),
-              fontWeight: 'bold',
-              textAlign: 'center',
-              alignSelf: 'center',
-              marginTop: hp('0.5'),
-            }}>
-            {item?.name}
-          </Text>
+      <TouchableOpacity
+        style={styles.box}
+        onPress={() => prop.detailss(item, prop?.currencySign)}>
+        <ImageBackground
+          style={styles.im}
+          imageStyle={{borderRadius: 20}}
+          source={{uri: `${Images_API}/${item.images[0]?.name}`}}>
+          {item.featured == 1 ? (
+            <View style={styles.fea}>
+              <Text style={styles.textStyle}>Featured</Text>
+            </View>
+          ) : null}
           {item.is_discounted == 2 ? (
-            <View
-              style={{
-                width: wp('35'),
-                alignSelf: 'center',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                alignContent: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text
-                numberOfLines={1}
-                style={{
-                  color: '#512500',
-                  fontSize: hp('2'),
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  textDecorationLine: 'line-through',
-                }}>
-                {prop?.currencySign} {item.price}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={{
-                  color: 'red',
-                  fontSize: hp('2%'),
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
-                {' '}
-                {prop?.currencySign} {item.discounted_price}
+            <View style={styles.fea}>
+              <Text style={[styles.textStyle, {backgroundColor: '#512500'}]}>
+                {item.discounted_percentage}%OFF
               </Text>
             </View>
+          ) : null}
+          {item?.is_wishlisted == true ? (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => passedFunction(item?.id)}>
+              <Ionicons name="heart" color={color.themColorPrimary} size={30} />
+            </TouchableOpacity>
           ) : (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => passedFunction(item?.id)}>
+              <Ionicons
+                name="heart-outline"
+                color={color.themColorPrimary}
+                size={30}
+              />
+            </TouchableOpacity>
+          )}
+        </ImageBackground>
+        {/* <Text></Text> */}
+
+        <Text
+          numberOfLines={1}
+          style={{
+            color: '#512500',
+            fontSize: hp('1.9'),
+            width: wp('30'),
+            fontWeight: 'bold',
+            textAlign: 'center',
+            alignSelf: 'center',
+            marginTop: hp('0.5'),
+          }}>
+          {item?.name}
+        </Text>
+        {item.is_discounted == 2 ? (
+          <View
+            style={{
+              width: wp('35'),
+              alignSelf: 'center',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              alignContent: 'center',
+              justifyContent: 'center',
+            }}>
             <Text
               numberOfLines={1}
               style={{
                 color: '#512500',
-                fontSize: hp('2%'),
+                fontSize: hp('2'),
                 fontWeight: 'bold',
                 textAlign: 'center',
-                width: wp('30'),
-                alignSelf: 'center',
+                textDecorationLine: 'line-through',
               }}>
               {prop?.currencySign} {item.price}
             </Text>
-          )}
-          {/* <Text></Text> */}
-        </TouchableOpacity>
-      </View>
+            <Text
+              numberOfLines={1}
+              style={{
+                color: 'red',
+                fontSize: hp('2%'),
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
+              {' '}
+              {prop?.currencySign} {item.discounted_price}
+            </Text>
+          </View>
+        ) : (
+          <Text
+            numberOfLines={1}
+            style={{
+              color: '#512500',
+              fontSize: hp('2%'),
+              fontWeight: 'bold',
+              textAlign: 'center',
+              width: wp('30'),
+              alignSelf: 'center',
+              paddingBottom: hp('1'),
+            }}>
+            {prop?.currencySign} {item.price}
+          </Text>
+        )}
+        {/* <Text></Text> */}
+      </TouchableOpacity>
     );
   };
-  let t = true;
   return (
     <View>
       <View>
@@ -231,7 +226,7 @@ const styles = StyleSheet.create({
   },
   im: {
     width: wp('40'),
-    height: hp('13'),
+    height: hp('15'),
     borderRadius: 30,
   },
   fea: {

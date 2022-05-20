@@ -328,254 +328,220 @@ export default function subcatdetails({route, navigation}) {
   };
   const renderCards = item => {
     return (
-      <View style={{...styles.box, marginLeft: wp('6%')}}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details', item)}>
-          <ImageBackground
-            style={styles.im}
-            imageStyle={{borderRadius: 20}}
-            source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
-            // source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
-          >
-            {item.featured == 1 ? (
-              <Text style={styles.fea}>{languageCheck('Featured')}</Text>
-            ) : null}
-            {item.is_discounted == 2 ? (
-              <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
-                {item.discounted_percentage}%OFF
-              </Text>
-            ) : null}
-            {item?.is_wishlisted == true ? (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => {
-                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
-                }}>
-                <Ionicons
-                  name="heart"
-                  color={color.themColorPrimary}
-                  size={30}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => {
-                  isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
-                }}>
-                <Ionicons
-                  name="heart-outline"
-                  color={color.themColorPrimary}
-                  size={30}
-                />
-              </TouchableOpacity>
-            )}
-            {/* <TouchableOpacity
+      <TouchableOpacity
+        style={{...styles.box, marginLeft: wp('6%')}}
+        onPress={() => navigation.navigate('Details', item)}>
+        <ImageBackground
+          style={styles.im}
+          imageStyle={{borderRadius: 20}}
+          source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
+          // source={{uri: `${Images_API}/${item?.images[0]?.name}`}}
+        >
+          {item.featured == 1 ? (
+            <Text style={styles.fea}>{languageCheck('Featured')}</Text>
+          ) : null}
+          {item.is_discounted == 2 ? (
+            <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
+              {item.discounted_percentage}%OFF
+            </Text>
+          ) : null}
+          {item?.is_wishlisted == true ? (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => {
+                isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+              }}>
+              <Ionicons name="heart" color={color.themColorPrimary} size={30} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => {
+                isLoggedIn == true ? addtowishlist(item?.id) : routeToLogin();
+              }}>
+              <Ionicons
+                name="heart-outline"
+                color={color.themColorPrimary}
+                size={30}
+              />
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.id)}>
               <Ionicons name="heart" color={color.themColorPrimary} size={30} />
             </TouchableOpacity> */}
-          </ImageBackground>
-          <View style={{width: wp('35%')}}>
-            <Text style={styles.text} numberOfLines={1}>
-              {item?.name}
-            </Text>
-          </View>
-          {item.is_discounted == 2 ? (
+        </ImageBackground>
+        <View style={{width: wp('35%')}}>
+          <Text style={styles.text} numberOfLines={1}>
+            {item?.name}
+          </Text>
+        </View>
+        {item.is_discounted == 2 ? (
+          <View style={styles.discounted_price_container}>
             <View
               style={{
-                width: wp('35%'),
-                alignSelf: 'center',
                 flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                alignContent: 'center',
-                justifyContent: 'center',
               }}>
-              <View
+              <Text
                 style={{
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  style={{
-                    color: '#512500',
-                    fontSize: hp('2%'),
-                    fontWeight: 'bold',
-                    textDecorationLine: 'line-through',
-                  }}
-                  numberOfLines={1}>
-                  {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: hp('2%'),
-                    fontWeight: 'bold',
-                  }}
-                  numberOfLines={1}>
-                  {' '}
-                  {isLoggedIn ? user?.currency?.symbol : '$'}{' '}
-                  {item.discounted_price}
-                </Text>
-              </View>
+                  color: '#512500',
+                  fontSize: hp('2%'),
+                  fontWeight: 'bold',
+                  textDecorationLine: 'line-through',
+                }}
+                numberOfLines={1}>
+                {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
+              </Text>
             </View>
-          ) : (
-            <Text
+            <View
               style={{
-                color: '#512500',
-                fontSize: hp('2%'),
-                fontWeight: 'bold',
-                paddingTop: hp('1'),
-                // paddingLeft: wp('2%'),
-                textAlign: 'center',
+                flexDirection: 'row',
               }}>
-              {/* $ {item.price} */}
-              {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
-            </Text>
-          )}
-        </TouchableOpacity>
-        <Text></Text>
-        {/* {item?.stock < 1 ? (
-          <Text style={styles.stock}>Out Of Stock</Text>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: hp('2%'),
+                  fontWeight: 'bold',
+                }}
+                numberOfLines={1}>
+                {' '}
+                {isLoggedIn ? user?.currency?.symbol : '$'}{' '}
+                {item.discounted_price}
+              </Text>
+            </View>
+          </View>
         ) : (
-          <TouchableOpacity
-            style={styles.cart}
-            onPress={() => addtocart(item?.id)}>
-            <Text style={styles.carttext}>Add to Cart</Text>
-          </TouchableOpacity>
-        )} */}
-      </View>
+          <Text
+            style={{
+              color: '#512500',
+              fontSize: hp('2%'),
+              fontWeight: 'bold',
+              paddingBottom: hp('1'),
+              // paddingLeft: wp('2%'),
+              textAlign: 'center',
+            }}>
+            {/* $ {item.price} */}
+            {isLoggedIn ? user?.currency?.symbol : '$'} {item.price}
+          </Text>
+        )}
+      </TouchableOpacity>
     );
   };
 
   const renderWishlistData = item => {
     return (
-      <View style={{...styles.box, marginLeft: wp('6%')}}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Details', item?.get_products)}>
-          <ImageBackground
-            style={styles.im}
-            imageStyle={{borderRadius: 20}}
-            source={{
-              uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
-            }}
-            // source={{
-            //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-            // }}
-          >
-            {item?.get_products?.featured == 1 ? (
-              <Text style={styles.fea}>{languageCheck('Featured')}</Text>
-            ) : null}
-            {item?.get_products?.is_discounted == 2 ? (
-              <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
-                {item?.get_products?.discounted_percentage}%OFF
-              </Text>
-            ) : null}
-            {item?.is_wishlisted == true ? (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => addtowishlist(item?.get_products?.id)}>
-                <Ionicons
-                  style={{paddingTop: 13}}
-                  name="heart"
-                  color="#b64400"
-                  size={30}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.icons}
-                onPress={() => addtowishlist(item?.get_products?.id)}>
-                <Ionicons
-                  style={{paddingTop: 13}}
-                  name="heart-outline"
-                  color="#b64400"
-                  size={30}
-                />
-              </TouchableOpacity>
-            )}
-            {/* <TouchableOpacity
+      <TouchableOpacity
+        style={{...styles.box, marginLeft: wp('6%')}}
+        onPress={() => navigation.navigate('Details', item?.get_products)}>
+        <ImageBackground
+          style={styles.im}
+          imageStyle={{borderRadius: 20}}
+          source={{
+            uri: `${Images_API}/${item?.get_products?.images[0]?.name}`,
+          }}
+          // source={{
+          //   uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+          // }}
+        >
+          {item?.get_products?.featured == 1 ? (
+            <Text style={styles.fea}>{languageCheck('Featured')}</Text>
+          ) : null}
+          {item?.get_products?.is_discounted == 2 ? (
+            <Text style={[styles.fea, {backgroundColor: '#512500'}]}>
+              {item?.get_products?.discounted_percentage}%OFF
+            </Text>
+          ) : null}
+          {item?.is_wishlisted == true ? (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => addtowishlist(item?.get_products?.id)}>
+              <Ionicons
+                style={{paddingTop: 13}}
+                name="heart"
+                color="#b64400"
+                size={30}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.icons}
+              onPress={() => addtowishlist(item?.get_products?.id)}>
+              <Ionicons
+                style={{paddingTop: 13}}
+                name="heart-outline"
+                color="#b64400"
+                size={30}
+              />
+            </TouchableOpacity>
+          )}
+          {/* <TouchableOpacity
               style={styles.icons}
               onPress={() => addtowishlist(item?.get_products?.id)}>
               <Ionicons name="heart" color={color.themColorPrimary} size={30} />
             </TouchableOpacity> */}
-          </ImageBackground>
-          <View style={{width: wp('35%')}}>
-            <Text style={styles.text} numberOfLines={1}>
-              {item?.get_products?.name}
-            </Text>
-          </View>
-          {item?.get_products?.is_discounted == 2 ? (
+        </ImageBackground>
+        <View style={{width: wp('35%')}}>
+          <Text style={styles.text} numberOfLines={1}>
+            {item?.get_products?.name}
+          </Text>
+        </View>
+        {item?.get_products?.is_discounted == 2 ? (
+          <View
+            style={{
+              width: wp('35'),
+              alignSelf: 'center',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              alignContent: 'center',
+              justifyContent: 'center',
+              paddingBottom: hp('1'),
+            }}>
             <View
               style={{
-                width: wp('35'),
-                alignSelf: 'center',
                 flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                alignContent: 'center',
-                justifyContent: 'center',
               }}>
-              <View
+              <Text
                 style={{
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  style={{
-                    color: '#512500',
-                    fontSize: hp('2%'),
-                    fontWeight: 'bold',
-                    textDecorationLine: 'line-through',
-                  }}
-                  numberOfLines={1}>
-                  {user?.currency?.symbol} {item?.get_products?.price}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: hp('2%'),
-                    fontWeight: 'bold',
-                  }}
-                  numberOfLines={1}>
-                  {' '}
-                  {user?.currency?.symbol}{' '}
-                  {item?.get_products?.discounted_price}
-                </Text>
-              </View>
+                  color: '#512500',
+                  fontSize: hp('2%'),
+                  fontWeight: 'bold',
+                  textDecorationLine: 'line-through',
+                }}
+                numberOfLines={1}>
+                {user?.currency?.symbol} {item?.get_products?.price}
+              </Text>
             </View>
-          ) : (
-            <Text
+            <View
               style={{
-                color: '#512500',
-                fontSize: hp('2%'),
-                fontWeight: 'bold',
-                paddingTop: hp('2'),
-                textAlign: 'center',
+                flexDirection: 'row',
               }}>
-              {user?.currency?.symbol} {item?.get_products?.price}
-            </Text>
-          )}
-        </TouchableOpacity>
-        <Text></Text>
-        {/* {item?.get_products?.stock < 1 ? (
-          <Text style={styles.stock}>Out Of Stock</Text>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: hp('2%'),
+                  fontWeight: 'bold',
+                }}
+                numberOfLines={1}>
+                {' '}
+                {user?.currency?.symbol} {item?.get_products?.discounted_price}
+              </Text>
+            </View>
+          </View>
         ) : (
-          <TouchableOpacity
-            style={styles.cart}
-            onPress={() => addtocart(item?.product_id)}>
-            <Text style={styles.carttext}>Add to Cart</Text>
-          </TouchableOpacity>
-        )} */}
-      </View>
+          <Text
+            style={{
+              color: '#512500',
+              fontSize: hp('2%'),
+              fontWeight: 'bold',
+              paddingBottom: hp('1'),
+              textAlign: 'center',
+            }}>
+            {user?.currency?.symbol} {item?.get_products?.price}
+          </Text>
+        )}
+      </TouchableOpacity>
     );
   };
 
@@ -604,12 +570,10 @@ export default function subcatdetails({route, navigation}) {
       checkApiType = `subcategory/${paramData?.item?.id}`;
     }
   };
-  console.log(762345675, paramData?.item?.id);
   const categoryDataCall = async (category, start, end) => {
     setCategory(category), setStart(start);
     setEnd(end);
     var userID = isLoggedIn == true ? user_id : '0';
-    console.log(577, userID);
     await checkFilterFunction();
     // var price = '0' + ',' + '29615';
     var price = start + ',' + end;
