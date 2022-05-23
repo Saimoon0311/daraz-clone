@@ -19,13 +19,11 @@ import {
 import {showMessage} from 'react-native-flash-message';
 import {color} from '../../config/color';
 import {styles} from './style';
-import * as RNLocalize from 'react-native-localize';
 import memoize from 'lodash.memoize';
 import {GETALLCURRENCY, SETCURRENCYVALUE} from '../../config/url';
 import {Picker, PickerIOS} from '@react-native-picker/picker';
 import {getUserData, setItem, setUserData} from '../../utils/utils';
 import {BubblesLoader} from 'react-native-indicator';
-import LocalizedStrings from 'react-native-localization';
 import {languageCheck} from '../../config/languageChecker';
 import {useDispatch, useSelector} from 'react-redux';
 import types from '../../redux/type';
