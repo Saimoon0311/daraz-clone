@@ -42,6 +42,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {StripePKey} from './resources/config/url';
 import {StripeProvider, initStripe} from '@stripe/stripe-react-native';
 import {PersistGate} from 'redux-persist/integration/react';
+import {Freeze} from 'react-freeze';
 
 const styles = StyleSheet.create({
   MainContainer: {
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function AppTwo({navigation}) {
+function AppTwo({freezingProp}) {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(true);
 
@@ -121,7 +122,7 @@ function AppTwo({navigation}) {
     );
 
     return (
-      <>
+      <Freeze freeze={freezingProp}>
         <StatusBar hidden={true} />
         {isVisible === true ? (
           Splash_Screen
@@ -131,7 +132,7 @@ function AppTwo({navigation}) {
           </NavigationContainer>
         )}
         <FlashMessage position="top" />
-      </>
+      </Freeze>
       //   </PersistGate>
       // </Provider>
     );
