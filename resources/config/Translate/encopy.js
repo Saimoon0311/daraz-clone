@@ -177,4 +177,6 @@ export const en = {
   'An exciting place for the whole family to shop':
     'An exciting place for the whole family to shop',
   test: 'test',
+  'International Top Sellers': 'International Top Sellers',
+  'Recent Products': 'Recent Products',
 };

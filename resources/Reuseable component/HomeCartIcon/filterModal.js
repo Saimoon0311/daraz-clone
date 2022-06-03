@@ -18,39 +18,14 @@ import {
 import {CATEGORY} from '../../config/url';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {color} from '../../config/color';
-import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize';
+import {languageCheck} from '../../config/languageChecker';
+import {useDispatch, useSelector} from 'react-redux';
 
 export const FilterModal = props => {
   const [dummy, setDummy] = useState(1);
 
-  const translationGetters = {
-    en: () => require('../../config/Translate/en.json'),
-    fr: () => require('../../config/Translate/fr.json'),
-  };
-  const languageCheck = memoize(
-    (key, config) => i18n.t(key, config),
-    (key, config) => (config ? key + JSON.stringify(config) : key),
-  );
-  const setI18nConfig = async () => {
-    const fallback = {languageTag: 'en'};
-    const {languageTag} =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-      fallback;
-
-    languageCheck.cache.clear();
-
-    i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-    i18n.locale = languageTag;
-  };
-  const handleLocalizationChange = () => {
-    setI18nConfig()
-      .then(() => setDummy(dummy + 1))
-      .catch(error => {
-        console.error(error);
-      });
-  };
   const [categories, setCategories] = useState([]);
   const [catLoading, setCatLoading] = useState(true);
   const [seletedCategory, setSeletedCategory] = useState(null);
@@ -81,13 +56,8 @@ export const FilterModal = props => {
   };
   var filter = props?.filterModal;
   useEffect(() => {
-    RNLocalize.addEventListener('change', handleLocalizationChange());
-
     setCatLoading(true);
     getCategoryData();
-    return () => {
-      RNLocalize.removeEventListener('change', handleLocalizationChange());
-    };
   }, [filter]);
 
   return (

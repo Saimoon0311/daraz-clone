@@ -23,8 +23,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {enableFreeze} from 'react-native-screens';
+import {Freeze} from 'react-freeze';
 
-function App({navigation}) {
+enableFreeze(true);
+function App({shouldSuspendRendering}) {
   const version = DeviceInfo.getVersion();
   const [checkVersionStatus, setCheckVersionStatus] = useState(false);
   const [versionControl, setVersionControl] = useState('');
@@ -60,7 +63,7 @@ function App({navigation}) {
     <TourGuideProvider {...{borderRadius: 16}}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppTwo />
+          <AppTwo freezingProp={false} />
           <AwesomeAlert
             show={checkVersionStatus}
             showProgress={false}

@@ -182,4 +182,6 @@ export const fr = {
   'An exciting place for the whole family to shop':
     'Un endroit passionnant pour toute la famille pour magasiner',
   test: 'test',
+  'International Top Sellers': 'Meilleures ventes internationales',
+  'Recent Products': 'Produits recents',
 };
