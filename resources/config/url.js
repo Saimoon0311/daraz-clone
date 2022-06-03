@@ -10,7 +10,6 @@ export const FORGETPASSWORD = API_BASED_URL_STOCK + 'forgot-password';
 
 export const LOGIN = getApi('login-api?');
 export const SIGNUP = getApi('sing-up-api');
-export const GETPRODUCT = getApi('get-product');
 export const testCART = getApi('get-cart-api-test');
 export const CARTDELETE = getApi('cart-delete');
 export const ADDTOCART = getApi('cart-data-api');
