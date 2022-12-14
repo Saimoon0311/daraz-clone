@@ -26,6 +26,7 @@ import {
   newArrivalDefault,
   ALLNEWARRIVALS,
   ALLFEATUREDPRODUCTS,
+  RandomProducts,
 } from '../../config/url';
 import {NativeBaseProvider, Box, Center, AspectRatio} from 'native-base';
 import Alldata from '../../data/alldata';
@@ -87,13 +88,15 @@ export default function Home({navigation}) {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setLoading(true);
     setAloading(true);
     setBloading(true);
-    await checkStatus();
-    setRefreshing(false);
+    wait(200).then(async () => {
+      setRefreshing(false);
+      await checkStatus();
+    });
   }, []);
   const getShopData = () => {
     fetch(BRANDDATA)
@@ -129,6 +132,7 @@ export default function Home({navigation}) {
   };
   useEffect(() => {
     checkTourCompleted();
+    // checkStatus();
   }, [dummy]);
   useEffect(() => {
     console.log(118);
@@ -137,6 +141,8 @@ export default function Home({navigation}) {
       if (isFocused) {
         await checkStatus();
       } else {
+        await checkStatus();
+
         console.log('Screen is not focused');
       }
     })();
@@ -151,8 +157,9 @@ export default function Home({navigation}) {
     if (user == null) {
       setIsLoggedIn(false);
       await datacallss(false);
-    } else if (user !== null) {
+    } else if (user != null) {
       setIsLoggedIn(true);
+      console.log(160, user, userData);
       await setUserData(user);
       await datacallss(true);
     }

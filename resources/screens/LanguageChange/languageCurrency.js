@@ -32,7 +32,6 @@ export default function languageChange({navigation}) {
   const dispatch = useDispatch();
   const {languageType} = useSelector(state => state.languageType);
   const c = console.log.bind(console);
-  c(34, languageType);
   const [dummy, setDummy] = useState(1);
   const [currency, setCurrency] = useState([]);
   const [pickerCurrency, setPickerCurrency] = useState({});

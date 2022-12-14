@@ -75,17 +75,7 @@ export default function Alldata(prop, {navigation}) {
           </ImageBackground>
           {/* <Text></Text> */}
 
-          <Text
-            numberOfLines={1}
-            style={{
-              color: '#512500',
-              fontSize: hp('1.9'),
-              width: wp('30'),
-              fontWeight: 'bold',
-              textAlign: 'center',
-              alignSelf: 'center',
-              marginTop: hp('0.5'),
-            }}>
+          <Text numberOfLines={1} style={styles.nameText}>
             {item?.name}
           </Text>
           {item.is_discounted == 2 ? (
@@ -123,16 +113,7 @@ export default function Alldata(prop, {navigation}) {
               </Text>
             </View>
           ) : (
-            <Text
-              numberOfLines={1}
-              style={{
-                color: '#512500',
-                fontSize: hp('2%'),
-                fontWeight: 'bold',
-                textAlign: 'center',
-                width: wp('30'),
-                alignSelf: 'center',
-              }}>
+            <Text numberOfLines={1} style={styles.priceText}>
               {prop?.currencySign} {item.price}
             </Text>
           )}
@@ -162,25 +143,70 @@ export default function Alldata(prop, {navigation}) {
       return flatListRender(item);
     }
   };
-
+  const placeholderView = () => {
+    return (
+      <View
+        style={{
+          ...styles.box,
+          height: hp('25%'),
+          width: wp('40%'),
+          backgroundColor: 'transparent',
+          borderWidth: 1.5,
+        }}>
+        <View
+          style={{
+            ...styles.im,
+            borderTopLeftRadius: 18,
+            borderTopRightRadius: 18,
+            borderRadius: 0,
+          }}
+        />
+        <View
+          style={{
+            ...styles.nameText,
+            backgroundColor: 'white',
+            width: wp('23'),
+            height: wp('5'),
+            borderRadius: 5,
+            marginTop: hp('1'),
+          }}
+        />
+        <View
+          style={{
+            ...styles.priceText,
+            backgroundColor: 'white',
+            width: wp('35'),
+            height: wp('5'),
+            borderRadius: 5,
+            marginTop: hp('1'),
+          }}
+        />
+        {/* <View
+          style={{
+            ...styles.priceText,
+            backgroundColor: 'white',
+            width: wp('35'),
+            height: wp('5'),
+            borderRadius: 5,
+            marginTop: hp('0.5'),
+          }}
+        /> */}
+      </View>
+    );
+  };
   return (
     <View>
       {prop.isLoading ? (
-        <SkeletonPlaceholder>
+        <SkeletonPlaceholder direction="left">
           <View
             style={{flexDirection: 'row', padding: 10, paddingLeft: wp('4')}}>
-            <View
-              style={{...styles.box, height: hp('25%'), width: wp('40%')}}
-            />
-            <View
-              style={{...styles.box, height: hp('25%'), width: wp('40%')}}
-            />
-            <View
-              style={{...styles.box, height: hp('25%'), width: wp('40%')}}
-            />
-            <View
-              style={{...styles.box, height: hp('25%'), width: wp('40%')}}
-            />
+            {placeholderView()}
+            {placeholderView()}
+            {placeholderView()}
+            {placeholderView()}
+            {placeholderView()}
+            {placeholderView()}
+            {placeholderView()}
           </View>
         </SkeletonPlaceholder>
       ) : prop?.data?.length == 0 ? (
@@ -213,6 +239,15 @@ export default function Alldata(prop, {navigation}) {
 const styles = StyleSheet.create({
   ic: {
     marginLeft: 'auto',
+  },
+  nameText: {
+    color: '#512500',
+    fontSize: hp('1.9'),
+    width: wp('30'),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+    marginTop: hp('0.5'),
   },
   te: {
     fontSize: 18,
@@ -278,5 +313,13 @@ const styles = StyleSheet.create({
     color: '#512500',
     fontSize: 20,
     marginBottom: 10,
+  },
+  priceText: {
+    color: '#512500',
+    fontSize: hp('2%'),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    width: wp('30'),
+    alignSelf: 'center',
   },
 });

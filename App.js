@@ -7,7 +7,7 @@
  */
 
 import React, {useEffect, Component, useState} from 'react';
-import {Platform, Linking} from 'react-native';
+import {Platform, Linking, TouchableOpacity} from 'react-native';
 import {
   TourGuideProvider, // Main provider
   useTourGuideController, // hook to start, etc.
@@ -56,6 +56,7 @@ function App({shouldSuspendRendering}) {
         console.log(60, err);
       });
   };
+
   useEffect(() => {
     checkVersion();
   }, []);

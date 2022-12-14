@@ -11,7 +11,6 @@ import {languageCheck} from '../config/languageChecker';
 
 const InterTopSeller = props => {
   var t = true;
-  console.log(14, props.isLoading);
   return (
     <View>
       <View>
